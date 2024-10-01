@@ -1,0 +1,15 @@
+@startuml
+
+package  OperationRequest #LightBlue{}
+
+package   OperationType #Brown {}
+
+package  Appointment #SeaGreen {}
+
+package  User #IndianRed{}
+
+package   SurgeryRoom #BlueViolet{
+
+}
+
+@enduml
