@@ -1,0 +1,6 @@
+@G74_HostAddress = http://localhost:5140
+
+GET {{G74_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

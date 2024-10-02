@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "MZBZFcysUk0=",
+  "dgSpecHash": "aUw9yq2dlL0=",
   "success": true,
-  "projectFilePath": "C:\\Users\\fox\\Documents\\sem5\\sem5pi-24-25-3NA_G74\\TodoApi\\TodoApi.csproj",
+  "projectFilePath": "C:\\Users\\fox\\Documents\\sem5\\sem5pi-24-25-3NA_G74\\src\\G74\\G74.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\fox\\.nuget\\packages\\microsoft.entityframeworkcore\\8.0.8\\microsoft.entityframeworkcore.8.0.8.nupkg.sha512",
     "C:\\Users\\fox\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\8.0.8\\microsoft.entityframeworkcore.abstractions.8.0.8.nupkg.sha512",

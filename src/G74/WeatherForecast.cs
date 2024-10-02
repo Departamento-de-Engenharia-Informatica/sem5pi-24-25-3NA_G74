@@ -1,4 +1,4 @@
-namespace TodoApi;
+namespace G74;
 
 public class WeatherForecast
 {
