@@ -20,10 +20,10 @@ jobs:
 
     # Navegar para a pasta correta onde está o .csproj
     - name: Restore dependencies
-      run: dotnet restore ./project/src/G74.csproj
+      run: dotnet restore ./sem5pi-24-25-3NA_G74/src/G74/G74.csproj
 
     - name: Build
-      run: dotnet build ./project/src/SeuProjeto.csproj --no-restore
+      run: dotnet build ./sem5pi-24-25-3NA_G74/src/G74/G74.csproj --no-restore
 
     - name: Test
-      run: dotnet test ./project/src/SeuProjeto.csproj --no-build --verbosity normal
+      run: dotnet test ./sem5pi-24-25-3NA_G74/src/G74/G74.csproj --no-build --verbosity normal
