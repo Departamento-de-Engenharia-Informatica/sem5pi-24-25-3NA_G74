@@ -1,6 +1,3 @@
-# This workflow will build a .NET project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
-
 name: .NET
 
 on:
@@ -11,18 +8,22 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
+    
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
+
+    # Navegar para a pasta correta onde está o .csproj
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore ./project/src/SeuProjeto.csproj
+
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build ./project/src/SeuProjeto.csproj --no-restore
+
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test ./project/src/SeuProjeto.csproj --no-build --verbosity normal
