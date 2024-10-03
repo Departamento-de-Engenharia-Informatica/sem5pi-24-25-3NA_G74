@@ -20,7 +20,7 @@ jobs:
 
     # Navegar para a pasta correta onde está o .csproj
     - name: Restore dependencies
-      run: dotnet restore ./project/src/SeuProjeto.csproj
+      run: dotnet restore ./project/src/G74.csproj
 
     - name: Build
       run: dotnet build ./project/src/SeuProjeto.csproj --no-restore
