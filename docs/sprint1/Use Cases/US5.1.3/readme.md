@@ -199,7 +199,9 @@ with a patient online profile, in other works, the patient must be known by the 
 
 - **Output data:**
     
+  - Confirmation of patient profile creation success or failure
   - Patient profile
 
+  
 ---
 
