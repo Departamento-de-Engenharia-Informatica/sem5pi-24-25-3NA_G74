@@ -95,6 +95,9 @@ in the backoffice data."
 >o Sensitive data (like medical history) must comply with GDPR, allowing patients
 to control their data access.
 
+> "Some anonymized data may be retained for legal or research purposes, but all identifiable information is erased."
+
+
 <br>
 
 **From the client clarifications:**
@@ -122,6 +125,11 @@ to control their data access.
 >
 >And that's why I was saying. The information that will have to be deleted, the other that will have to be anonymized. Okay.
 >Okay, I get it. I get it. Okay.
+
+> **Question:** The document states "Some anonymized data may be retained for legal or research purposes, but all identifiable information is erased". Which information should be retained?
+>
+> **Answer:** it is part of the team's responsibility in the scope of the GDPR module to define the policy
+
 
 
 > **Question:** "Can the same user have both a patient and a healthcare profile?" 
