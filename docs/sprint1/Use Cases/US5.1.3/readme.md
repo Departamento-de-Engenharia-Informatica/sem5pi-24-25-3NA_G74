@@ -123,6 +123,15 @@ to control their data access.
 >Yeah, it's not a different one. Yeah, because if it was a different one, I would know how to identify the patient. Yeah, exactly.
 >No, no, it's the same. You need to check it. Okay, good.
 
+
+> **Question**: "Professor, regarding the situation of the patient and him creating a user to associate with his data, here the UserStory says that it is the administrator who will have the possibility to create these patients in the system. And what is the UserStory that you are looking at? Excuse me, I was just asking you. I want to create a new patient profile in 5.1.8. Ok, so 5.1.8 is the administrator creating the patient record, if you want to think about it."
+>
+> **Answer:** "Okay. Really? 5.1.3, exactly, 5.1.3, is the person, who is also a patient, creating your user request. Right.
+And you already have to be registered as a patient in order to do the matos and then do the two-factor authentication. Ok, but what this 5.1.8 says is to create, it's almost like a form to fill in the patient's data. But the one who actually does it is the doctor in the consultation, is that it? I don't know if I fully understood the question.
+We do not do the consultation part in this system. Yes, yes. So, the administrator creates the patient record.
+For each patient individually? For each patient individually, yes. Okay. Imagine that it is the scenario in which you arrive at the hospital for the first time and when you are admitted to the hospital, the administrator will register, okay, it is Mr. António with social security number X and 11 E, with the corresponding taxpayer number, contacts X and 11 E. He creates the file so that the person can be treated as a patient at the hospital.
+Okay, so here we have to consider a generic administrator, anyone who does a patient record in terms of data? That's it. Okay, okay. That's it, thank you."
+
 >**Question:** "Q: Is it mandatory for patients to have a user account to schedule a surgery?"
 > 
 >**Answer:** "No, patients are not required to have a user account. The system administrator creates patient profiles."
@@ -177,6 +186,7 @@ with a patient online profile, in other works, the patient must be known by the 
 - **Input data:**
  
   - `Email`  (for system two-factor authentication)
+  - `Social Security Number`
   - `First Name`
   - `Last Name`
   - `Full Name`
