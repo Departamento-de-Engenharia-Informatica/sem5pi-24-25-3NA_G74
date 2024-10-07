@@ -11,7 +11,3 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
-
-# ASP.NET Core
-bin/
-obj/
