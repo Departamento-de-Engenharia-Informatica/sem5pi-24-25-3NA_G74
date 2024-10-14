@@ -25,9 +25,13 @@ alt success
 
 bo --> ui : Status Code 201, Patient created
 
+ui --> patient : Confirms registration success
+
 else failure
 
 bo --> ui:  Client/Server error Status Code
+
+ui --> patient: Informs registration failure
 
 end
 
