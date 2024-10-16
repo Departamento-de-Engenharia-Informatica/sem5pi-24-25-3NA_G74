@@ -19,7 +19,14 @@
 
 ### Context
 
+The system will enable hospitals and clinics to manage surgery appointments, and patient records. The patients will be
+managed by the backoffice module.
+
+The patients represent individuals receiving medical care and is a user of the system.
+
 ### User Story Description
+
+As a Patient, I want to update my user profile, so that I can change my personal details and preferences.
 
 ### Customer Specifications and Clarifications
 

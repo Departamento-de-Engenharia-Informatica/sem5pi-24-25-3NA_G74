@@ -1,0 +1,5 @@
+{
+    "dataworkspace.excludedProjects": [
+        "sem_pi5_G74/sem_pi5_G74.sqlproj"
+    ]
+}
