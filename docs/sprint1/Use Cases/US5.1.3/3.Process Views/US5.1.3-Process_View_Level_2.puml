@@ -31,16 +31,13 @@ else failure
 
 bo --> ui:  Client/Server error Status Code
 
-ui --> patient: Informs registration failure
-
-end
-
 deactivate bo
 
+ui --> patient: Informs registration failure
 
+deactivate ui
 
-
-
+end
 
 
 @enduml
