@@ -8,7 +8,7 @@ actor "Admin" as adm
 participant RouteUser as rt
 participant ControllerUser as ct
 participant jsonToDTO as jdto
-participant dtoUser as dto
+participant voUser as vo
 participant AppServiceUser as asu
 participant UserMapper as ifu
 participant "user : User" as u
@@ -26,12 +26,12 @@ activate ct
 ct --> ct : validate(json)
 ct --> jdto : mapToDTOUser(json)
 activate jdto
-jdto --> ct : UserDTO
+jdto --> vo : create(json)
 
 deactivate jdto
-ct --> asu : createUser(UserDTO)
+ct --> asu : createUser(voUser)
 activate asu
-asu --> ifu : create(UserDTO)
+asu --> ifu : create(voUser)
 activate ifu
 ifu --> u : create()
 deactivate ifu
