@@ -1,4 +1,4 @@
-namespace DDDSample1.Domain.Shared
+namespace G74.Domain.Shared
 {
     public interface IAggregateRoot
     {
