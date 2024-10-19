@@ -3,9 +3,8 @@
 
 ## Responsable: Rui Beloto (1121200)
 
-[Requirement Engineering](1.Requirement_Engineering.md)
+[1.Requirement_Engineering.md](1.Requirement_Engineering.md)
 
-[Analysis & Design](2.Analysis&Design.md)
+[2.Analysis&Design.md](2.Analysis%26Design.md)
 
-[Tests & Implementation ](3.Implementation&Tests.md)
-
+[3.Implementation&Tests.md](3.Implementation%26Tests.md)
