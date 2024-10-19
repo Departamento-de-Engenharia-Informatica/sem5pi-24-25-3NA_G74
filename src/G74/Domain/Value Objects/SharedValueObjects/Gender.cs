@@ -1,6 +1,6 @@
 ﻿using G74.Domain.Shared;
 
-namespace G74.Domain.Patient;
+namespace G74.Domain.Value_Objects.SharedValueObjects;
 
 public class Gender : IValueObject
 {

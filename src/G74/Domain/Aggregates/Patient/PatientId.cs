@@ -1,6 +1,6 @@
 ﻿using G74.Domain.Shared;
 
-namespace G74.Domain.Patient;
+namespace G74.Domain.Aggregates.Patient;
 
 public class PatientId : EntityId
 {
