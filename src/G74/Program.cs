@@ -1,10 +1,24 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore;
 
+namespace G74
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            CreateWebHostBuilder(args).Build().Run();   
+        }
+
+
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+            WebHost.CreateDefaultBuilder(args)
+                .UseStartup<Startup>();
+
+    }
+}
+
+
+/*
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,14 +43,10 @@ var app = builder.Build();
     app.UseHttpsRedirection();
 //}
 
-
-
-
-
-
-
 app.UseAuthorization();
 
 app.MapControllers();
 
 app.Run();
+
+*/
