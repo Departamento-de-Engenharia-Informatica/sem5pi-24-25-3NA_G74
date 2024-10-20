@@ -4,7 +4,6 @@ using G74.Adapters.Repositories;
 using G74.Domain.IRepositories;
 using G74.DTO;
 using G74.Infrastructure.Persistence;
-using G74.Infrastructure.Routes;
 using G74.Infrastructure.Shared;
 using G74.Mappers;
 using G74.Services;
@@ -65,7 +64,6 @@ public class Startup
     {
 
         services.AddTransient<JsonToDTO>();
-        services.AddScoped<RouteUser>();
         services.AddScoped<ControllerUser>();
         services.AddScoped<IRepoUser, RepoUser>();
         services.AddScoped<AppServiceUser>();

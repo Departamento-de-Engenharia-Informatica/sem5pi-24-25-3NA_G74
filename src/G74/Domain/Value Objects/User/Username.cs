@@ -4,7 +4,7 @@ public class Username
 {
     private string name { get; set; }
 
-    private Username(string username)
+    public Username(string username)
     {
         name = username;
     }

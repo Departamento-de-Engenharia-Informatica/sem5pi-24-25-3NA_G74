@@ -22,15 +22,18 @@ public class RepoUser : IRepoUser
         return _modelToData.MapToDataUser(user);
     }
 
-    private DataUser Save(DataUser dataUser)
+    public User Save(User user)
     {
-        return _iDbDriver.Save(dataUser);
+        DataUser dataUser = MapToDataUser(user);
+        
+        DataUser savedDataUser = _iDbDriver.Save(dataUser); 
+
+        return MapToModelUser(savedDataUser);
     }
 
     private User MapToModelUser(DataUser savedUser)
     {
-        return _modelToData.MapToModelUser(savedUser);
-        //TODO: Terminar implementaçao
+        return _modelToData.MapToUser(savedUser);
     }
     
 }

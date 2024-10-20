@@ -6,7 +6,7 @@ public class Email
 {
     private string email { get; set; }
 
-    private Email(string email)
+    public Email(string email)
     {
         if (!IsValidEmail(email))
         {
