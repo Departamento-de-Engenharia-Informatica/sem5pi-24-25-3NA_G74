@@ -1,6 +1,9 @@
+using G74.Domain.IRepositories;
+
 namespace G74.Adapters.Repositories;
 
-public class RepoUser
+public class RepoUser : IRepoUser
 {
     
+    //TODO:Terminar persistencia.
 }
