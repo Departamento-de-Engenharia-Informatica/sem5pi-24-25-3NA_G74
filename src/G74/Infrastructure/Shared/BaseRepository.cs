@@ -20,6 +20,12 @@ namespace G74.Infrastructure.Shared
             return await this._objs.ToListAsync();
         }
 
+        public async Task<int> CountAsync()
+        {
+            return await _objs.CountAsync();
+        }
+
+
         public async Task<TEntity> GetByIdAsync(TEntityId id)
         {
             //return await this._context.Categories.FindAsync(id);

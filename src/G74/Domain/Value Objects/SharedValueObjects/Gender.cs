@@ -4,7 +4,7 @@ namespace G74.Domain.Value_Objects.SharedValueObjects;
 
 public class Gender : IValueObject
 {
-    private string GenderDescription { get; }
+    public string GenderDescription { get; }
 
     public enum GenderEnum
     {

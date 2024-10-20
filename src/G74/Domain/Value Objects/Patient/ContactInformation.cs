@@ -7,14 +7,17 @@ public class ContactInformation : IValueObject
 {
     private string PhoneNumber { get; }
 
+    public Email EmailAddress { get; }
 
-    public ContactInformation(string phoneNumber)
+
+    public ContactInformation(string phoneNumber, Email emailAddress)
     {
-        //TODO: Check the necessary contact information validations
-
+        
         ContactInformationValidations(phoneNumber);
 
         PhoneNumber = phoneNumber;
+
+        EmailAddress = emailAddress;
     }
 
     private void ContactInformationValidations(string phoneNumber)

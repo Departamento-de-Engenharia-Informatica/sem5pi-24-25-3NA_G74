@@ -11,8 +11,7 @@ public class EmergencyContact : IValueObject
 
     public EmergencyContact(string phoneNumber)
     {
-        //TODO: Check the necessary emergency contact validations
-
+        
         EmergencyContactValidations(phoneNumber);
 
         PhoneNumber = phoneNumber;

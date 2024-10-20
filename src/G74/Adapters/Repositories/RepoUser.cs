@@ -1,5 +1,6 @@
 using G74.Domain.Aggregates.User;
 using G74.Domain.IRepositories;
+using G74.Domain.Value_Objects;
 using G74.DTO;
 using G74.Infrastructure.Persistence;
 using G74.Mappers;
@@ -35,5 +36,12 @@ public class RepoUser : IRepoUser
     {
         return _modelToData.MapToUser(savedUser);
     }
+
+    public User GetUserByEmail(Email email)
+    {
+        throw new NotImplementedException();
+        
+    }
+    
     
 }

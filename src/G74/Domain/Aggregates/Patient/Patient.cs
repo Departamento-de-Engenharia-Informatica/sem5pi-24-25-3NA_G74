@@ -1,5 +1,4 @@
 ﻿using G74.Domain.Aggregates.Patient;
-using G74.Domain.Aggregates.User;
 using G74.Domain.Shared;
 using G74.Domain.Value_Objects.Patient;
 using G74.Domain.Value_Objects.SharedValueObjects;
@@ -8,7 +7,6 @@ namespace G74.Domain;
 
 public class Patient : Entity<PatientId>, IAggregateRoot
 {
-    public User User { get; private set; }
     public Name Name { get; private set; }
 
     public MedicalRecordNumber MedicalRecordNumber { get; private set; }
@@ -26,19 +24,15 @@ public class Patient : Entity<PatientId>, IAggregateRoot
     public MedicalCondition MedicalCondition { get; private set; }
 
 
-    public Patient(User user, Name name, MedicalRecordNumber medicalRecordNumber, DateOfBirth dateOfBirth,
+    public Patient(Name name, MedicalRecordNumber medicalRecordNumber, DateOfBirth dateOfBirth,
         Gender gender,
-        ContactInformation contactInformation, EmergencyContact emergencyContact,
-        AppointmentHistory appointmentHistory, MedicalCondition medicalCondition)
+        ContactInformation contactInformation, EmergencyContact emergencyContact)
     {
-        User = user;
         Name = name;
         MedicalRecordNumber = medicalRecordNumber;
         DateOfBirth = dateOfBirth;
         Gender = gender;
         ContactInformation = contactInformation;
         EmergencyContact = emergencyContact;
-        AppointmentHistory = appointmentHistory;
-        MedicalCondition = medicalCondition;
     }
 }

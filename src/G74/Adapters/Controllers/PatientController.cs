@@ -1,6 +1,61 @@
-﻿namespace G74.Adapters.Controllers;
+﻿using G74.Domain;
+using G74.Domain.Aggregates.Patient;
+using G74.Services;
+using Microsoft.AspNetCore.Mvc;
 
-public class PatientController
+namespace G74.Adapters.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class PatientController : ControllerBase
 {
-    
+    private readonly IPatientAppService _patientAppService;
+
+    public PatientController(IPatientAppService patientAppService)
+    {
+        _patientAppService = patientAppService;
+    }
+
+    [HttpGet("{email}")]
+    public async Task<ActionResult<PatientDTO>> GetPatientByEmail(string email)
+    {
+        try
+        {
+            var patientDTO = await _patientAppService.GetPatientByEmail(email);
+            return Ok(patientDTO);
+        }
+        catch (InvalidOperationException e)
+        {
+            return NotFound(e.Message);
+        }
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<PatientDTO>> GetPatientById(long id)
+    {
+        try
+        {
+            var patientDTO = await _patientAppService.GetPatientById(id);
+            return Ok(patientDTO);
+        }
+        catch (InvalidOperationException e)
+        {
+            return NotFound(e.Message);
+        }
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<PatientDTO>> RegisterPatient([FromBody] PatientDTO receivedPatientDto)
+    {
+        try
+        {
+            PatientDTO patientReturntDTO = await _patientAppService.RegisterPatient(receivedPatientDto);
+            
+            return CreatedAtAction(nameof(GetPatientByEmail), patientReturntDTO);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 }
