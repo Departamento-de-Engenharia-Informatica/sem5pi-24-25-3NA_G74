@@ -1,5 +1,12 @@
 ﻿using System.Text.Json;
+using G74.Adapters.Controllers;
+using G74.Adapters.Repositories;
+using G74.Domain.IRepositories;
+using G74.DTO;
+using G74.Infrastructure.Persistence;
 using G74.Infrastructure.Shared;
+using G74.Mappers;
+using G74.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
@@ -21,7 +28,7 @@ public class Startup
             opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
                 .ReplaceService<IValueConverterSelector, StronglyEntityIdValueConverterSelector>()
                 .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole())));
-
+        
         ConfigureMyServices(serviceCollection);
 
         serviceCollection.AddControllers().AddJsonOptions(options =>
@@ -55,5 +62,13 @@ public class Startup
 
     public void ConfigureMyServices(IServiceCollection services)
     {
+
+        services.AddTransient<JsonToDTO>();
+        services.AddScoped<ControllerUser>();
+        services.AddScoped<IRepoUser, RepoUser>();
+        services.AddScoped<AppServiceUser>();
+        services.AddTransient<UserMapper>();
+        services.AddTransient<ModelToData>();
+        services.AddScoped<IDBDriver, DBDriver>();
     }
 }

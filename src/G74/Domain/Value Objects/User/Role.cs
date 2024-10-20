@@ -1,6 +1,10 @@
-namespace G74.Domain.Value_Objects;
+namespace G74.Domain.Value_Objects.User;
 
-public class Role
+public enum Role
 {
-    
+    Admin,
+    Doctor,
+    Nurse,
+    Technician,
+    Patient
 }
