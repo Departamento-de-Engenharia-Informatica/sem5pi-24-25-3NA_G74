@@ -24,7 +24,7 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection serviceCollection)
     {
-        serviceCollection.AddDbContext<BackofficeAppDbContext>(opt =>
+        serviceCollection.AddEndpointsApiExplorer().AddSwaggerGen().AddDbContext<BackofficeAppDbContext>(opt =>
             opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
                 .ReplaceService<IValueConverterSelector, StronglyEntityIdValueConverterSelector>()
                 .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole())));
@@ -42,7 +42,11 @@ public class Startup
     {
         if (env.IsDevelopment())
         {
-            app.UseDeveloperExceptionPage();
+
+            app.UseSwagger();
+            app.UseSwaggerUI();
+            
+            //app.UseDeveloperExceptionPage();
         }
         else
         {
