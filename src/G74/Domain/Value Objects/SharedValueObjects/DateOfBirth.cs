@@ -21,6 +21,15 @@ public class DateOfBirth : IValueObject
         DayOfBirth = dayOfBirth;
     }
 
+    public DateOfBirth(DateOfBirth other)
+    {
+        BirthDateValidations(other.YearOfBirth, other.MonthOfBirth, other.DayOfBirth);
+
+        YearOfBirth = other.YearOfBirth;
+        MonthOfBirth = other.MonthOfBirth;
+        DayOfBirth = other.DayOfBirth;
+    }
+
     private void BirthDateValidations(int yearOfBirth, int monthOfBirth, int dayOfBirth)
     {
         // DateTime will do the date validations

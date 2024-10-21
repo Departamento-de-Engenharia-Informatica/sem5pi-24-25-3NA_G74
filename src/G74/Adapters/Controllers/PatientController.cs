@@ -16,7 +16,7 @@ public class PatientController : ControllerBase
         _patientAppService = patientAppService;
     }
 
-    [HttpGet("{email}")]
+    [HttpGet("by-email/{email}")]
     public async Task<ActionResult<PatientDTO>> GetPatientByEmail(string email)
     {
         try
@@ -50,8 +50,34 @@ public class PatientController : ControllerBase
         try
         {
             PatientDTO patientReturntDTO = await _patientAppService.RegisterPatient(receivedPatientDto);
-            
+
             return CreatedAtAction(nameof(GetPatientByEmail), patientReturntDTO);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPut("{id}")]
+    public async Task<ActionResult<PatientDTO>> UpdatePatient(
+            long id,
+            [FromBody] PatientDTO updatedPatientDto
+        )
+    {
+        if (updatedPatientDto == null)
+        {
+            return BadRequest("Invalid patient data.");
+        }
+
+        try
+        {
+            var patientDTO = await _patientAppService.UpdatePatient(id, updatedPatientDto);
+            return Ok(patientDTO);
+        }
+        catch (InvalidOperationException e)
+        {
+            return NotFound(e.Message);
         }
         catch (Exception ex)
         {
