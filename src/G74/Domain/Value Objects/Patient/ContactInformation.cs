@@ -12,12 +12,22 @@ public class ContactInformation : IValueObject
 
     public ContactInformation(string phoneNumber, Email emailAddress)
     {
-        
+
         ContactInformationValidations(phoneNumber);
 
         PhoneNumber = phoneNumber;
 
         EmailAddress = emailAddress;
+    }
+
+    public ContactInformation(ContactInformation other)
+    {
+
+        ContactInformationValidations(other.PhoneNumber);
+
+        PhoneNumber = other.PhoneNumber;
+
+        EmailAddress = other.EmailAddress;
     }
 
     private void ContactInformationValidations(string phoneNumber)

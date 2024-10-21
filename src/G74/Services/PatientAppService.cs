@@ -5,6 +5,7 @@ using G74.Domain.Builders;
 using G74.Domain.DomainServices;
 using G74.Domain.IRepositories;
 using G74.Domain.Value_Objects.SharedValueObjects;
+using G74.Domain.Value_Objects.Patient;
 using G74.DTO;
 using G74.Mappers;
 
@@ -57,8 +58,53 @@ public class PatientAppService : IPatientAppService
 
     public async Task<PatientDTO> GetPatientById(long id)
     {
-        var existingPatient = await _patientRepository.GetPatientByIdAysnc(id);
+        var existingPatient = await _patientRepository.GetPatientByIdAsync(id);
 
         return PatientMapper.ToDTO(existingPatient);
+    }
+
+    public async Task<PatientDTO> UpdatePatient(long id, PatientDTO updatedPatientDto)
+    {
+        var existingPatient = await _patientRepository.GetPatientByIdAsync(id);
+
+        if (existingPatient == null)
+        {
+            throw new InvalidOperationException("Patient not found");
+        }
+
+        try
+        {
+            // Create value objects from DTO
+            var name = new Name(updatedPatientDto.Name.TheName);
+            var dateOfBirth = new DateOfBirth(updatedPatientDto.DateOfBirth);
+            var gender = new Gender(Enum.Parse<Gender.GenderEnum>(updatedPatientDto.Gender));
+            var contactInformation = new ContactInformation(updatedPatientDto.ContactInformation);
+            var emergencyContact = new EmergencyContact(updatedPatientDto.EmergencyContact);
+
+            // Update patient properties
+            existingPatient.UpdateName(name);
+            existingPatient.UpdateDateOfBirth(dateOfBirth);
+            existingPatient.UpdateGender(gender);
+            existingPatient.UpdateContactInformation(contactInformation);
+            existingPatient.UpdateEmergencyContact(emergencyContact);
+
+            // Save changes
+            await _patientRepository.Update(existingPatient);
+
+            // Log the changes
+            await LogPatientChanges(id, PatientMapper.ToDTO(existingPatient));
+
+            return PatientMapper.ToDTO(existingPatient);
+        }
+        catch (ArgumentException ex)
+        {
+            // Catch and rethrow any validation errors from the domain
+            throw new InvalidOperationException($"Invalid patient data: {ex.Message}", ex);
+        }
+    }
+
+    private static async Task LogPatientChanges(long patientId, PatientDTO updatedPatientDto)
+    {
+        // TODO: implement logging here. we're missing the dependency
     }
 }

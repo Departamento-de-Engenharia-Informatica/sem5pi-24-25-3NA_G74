@@ -58,4 +58,30 @@ public class PatientController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
+
+    [HttpPut("{id}")]
+    public async Task<ActionResult<PatientDTO>> UpdatePatient(
+            long id,
+            [FromBody] PatientDTO updatedPatientDto
+        )
+    {
+        if (updatedPatientDto == null)
+        {
+            return BadRequest("Invalid patient data.");
+        }
+
+        try
+        {
+            var patientDTO = await _patientAppService.UpdatePatient(id, updatedPatientDto);
+            return Ok(patientDTO);
+        }
+        catch (InvalidOperationException e)
+        {
+            return NotFound(e.Message);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 }
