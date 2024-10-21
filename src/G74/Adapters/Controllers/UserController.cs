@@ -14,15 +14,15 @@ namespace G74.Adapters.Controllers;
 public class UserController : ControllerBase
 {
     private readonly AppServiceUser _appServiceUser;
-    private readonly JsonToDTO _jsonToDto;
+    private readonly UserToDTO _userToDto;
 
-    public UserController(AppServiceUser appServiceUser, JsonToDTO jsonToDto)
+    public UserController(AppServiceUser appServiceUser, UserToDTO userToDto)
     {
         _appServiceUser = appServiceUser;
-        _jsonToDto = jsonToDto;
+        _userToDto = userToDto;
     }
 
-    public static bool ValidateJson(string json)
+  /*  public static bool ValidateJson(string json)
     {
         try
         {
@@ -44,29 +44,35 @@ public class UserController : ControllerBase
             return false;
         }
     }
-    
+    */
+  
     [HttpPost("register")]
-    public IActionResult RegisterNewUser([FromBody] string json)
+    public async Task<ActionResult<UserDTO>> RegisterNewUser([FromBody]UserDTO uDto)
     {
-        if (!ValidateJson(json))
+        try
         {
-            return BadRequest(new { message = "Invalid user data." });
+            var userDto = await _appServiceUser.Create(uDto);
+            return CreatedAtAction(nameof(GetUserByEmail), userDto);
         }
-
-        var voUser = MapToDtoUser(json);
-        var userSaved = _appServiceUser.Create(voUser);
-        var userJson = MapToJson(userSaved);
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
         
-        return Ok(new { message = "User successfully registered.", user = userJson });
+    }
+    
+    [HttpGet("by-email/{email}")]
+    public async Task<ActionResult<UserDTO>> GetUserByEmail(string email)
+    {
+        try
+        {
+            var userDto = await _appServiceUser.GetUserByEmail(email);
+            return Ok(userDto);
+        }
+        catch (InvalidOperationException e)
+        {
+            return NotFound(e.Message);
+        }
     }
 
-    private VoUser MapToDtoUser(string json)
-    {
-            return _jsonToDto.CreateVoUser(json);
-    }
-
-    private string MapToJson(User userSaved)
-    {
-        return _jsonToDto.CreateJson(userSaved);
-    }
 }

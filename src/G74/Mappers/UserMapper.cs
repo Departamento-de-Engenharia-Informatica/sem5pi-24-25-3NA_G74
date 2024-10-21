@@ -7,8 +7,8 @@ namespace G74.Mappers;
 
 public class UserMapper
 {
-    public static User Create(VoUser voUser)
+    public User Create(UserDTO userDto)
     {
-        return new User(voUser.Username, voUser.Role, voUser.Email);
+        return new User(userDto.Username, userDto.Role, userDto.Email);
     }
 }

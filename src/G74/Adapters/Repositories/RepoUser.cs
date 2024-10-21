@@ -3,6 +3,7 @@ using G74.Domain.IRepositories;
 using G74.Domain.Value_Objects;
 using G74.DTO;
 using G74.Mappers;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace G74.Adapters.Repositories;
@@ -33,11 +34,26 @@ public class RepoUser : GenericRepository<User>, IRepoUser
         }
     }
     
-    public User GetUserByEmail(Email email)
+    public async Task<User> GetUserByEmail(string email)
     {
-        throw new NotImplementedException();
-        
+        try {
+            DataUser dataUser = await _context.Set<DataUser>()
+                .FirstAsync(c => c.Email == email);
+
+            User user = _userToDataMapper.MapToUser(dataUser);
+
+            return user;
+        }
+        catch
+        {
+            return null;
+            throw;
+        }
     }
     
+    public async Task<bool> UserExists(string email)
+    {
+        return await _context.Set<DataUser>().AnyAsync(e => e.Email == email);
+    }
     
 }

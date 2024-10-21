@@ -16,9 +16,9 @@ public class UserToDataMapper
 
         DataUser dataUser = new DataUser
         (
-            user.GetUsername(user),
-            user.GetEmail(user),     
-            user.GetRole(user)    
+            user.GetUsername(),
+            user.GetEmail(),     
+            user.GetRole()    
         );
 
         return dataUser;

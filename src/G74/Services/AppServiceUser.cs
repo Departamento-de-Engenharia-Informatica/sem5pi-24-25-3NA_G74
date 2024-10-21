@@ -17,15 +17,24 @@ public class AppServiceUser
         _repoUser = repoUser;
     }
     
-    public User Create(VoUser voUser)
+    public async Task<UserDTO> Create(UserDTO uDto)
     {
-        User user = null;
-        user = UserMapper.Create(voUser);
-        return Save(user);
+        bool bExists = await _repoUser.UserExists(uDto.Email.ToString());
+        if(bExists) {
+            Console.WriteLine("User already exists with the given email.");
+            return null;
+        }
+        User user = _userMapper.Create(uDto);
+        User userSaved = await _repoUser.Save(user);
+        UserDTO userDto = UserToDTO.DomainToDTO(userSaved);
+        return userDto;
     }
+    
+    public async Task<UserDTO> GetUserByEmail(string email)
+    {
+        var existingUser = await _repoUser.GetUserByEmail(email);
 
-    public User Save(User user)
-    {
-        return _repoUser.Save(user);
+        return UserToDTO.DomainToDTO(existingUser);
     }
+    
 }

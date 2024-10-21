@@ -28,7 +28,7 @@ public class PatientAppService : IPatientAppService
 
     public async Task<PatientDTO> RegisterPatient(PatientDTO patientDto)
     {
-        User patientUser = _repoUser.GetUserByEmail(patientDto.ContactInformation.EmailAddress);
+        Task<User> patientUser = _repoUser.GetUserByEmail(patientDto.ContactInformation.EmailAddress.ToString());
 
         if (patientUser == null)
             throw new ArgumentException("There are no records of user with this email");

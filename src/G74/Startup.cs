@@ -66,7 +66,7 @@ public class Startup
     public void ConfigureMyServices(IServiceCollection services)
     {
 
-        services.AddTransient<JsonToDTO>();
+        services.AddTransient<UserToDTO>();
         services.AddScoped<UserController>();
         services.AddScoped<IRepoUser, RepoUser>();
         services.AddScoped<AppServiceUser>();

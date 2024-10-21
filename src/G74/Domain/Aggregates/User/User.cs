@@ -19,19 +19,19 @@ public class User
         this.email = email ?? throw new ArgumentNullException(nameof(email));
     }
     
-    public string GetUsername(User user)
+    public string GetUsername()
     {
-        return user.username.ToString();
+        return username.ToString();
     }
 
-    public string GetEmail(User user)
+    public string GetEmail()
     {
-        return user.email.ToString();
+        return email.ToString();
     }
 
-    public string GetRole(User user)
+    public string GetRole()
     {
-        return user.role.ToString();
+        return role.ToString();
     }
     
 }
