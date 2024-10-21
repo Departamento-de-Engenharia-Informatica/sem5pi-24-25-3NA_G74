@@ -2,41 +2,37 @@ using G74.Domain.Aggregates.User;
 using G74.Domain.IRepositories;
 using G74.Domain.Value_Objects;
 using G74.DTO;
-using G74.Infrastructure.Persistence;
 using G74.Mappers;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace G74.Adapters.Repositories;
 
-public class RepoUser : IRepoUser
+public class RepoUser : GenericRepository<User>, IRepoUser
 {
     private readonly UserToDataMapper _userToDataMapper;
-    private readonly IDBDriver _iDbDriver;
 
-    public RepoUser(UserToDataMapper userToDataMapper, IDBDriver iDbDriver)
+    public RepoUser(BackofficeAppDbContext context, UserToDataMapper userToDataMapper) : base(context!)
     {
         _userToDataMapper = userToDataMapper;
-        _iDbDriver = iDbDriver;
     }
 
-    private DataUser MapToDataUser(User user)
+    public async Task<User> Save(User user)
     {
-        return _userToDataMapper.MapToDataUser(user);
+        try
+        {
+            DataUser dataUser = _userToDataMapper.MapToDataUser(user);
+            EntityEntry<DataUser> userEntityEntry = _context.Set<DataUser>().Add(dataUser);
+            await _context.SaveChangesAsync();
+            DataUser savedData = userEntityEntry.Entity;
+            User userSaved = _userToDataMapper.MapToUser(savedData);
+            return userSaved;
+        }
+        catch
+        {
+            throw;
+        }
     }
-
-    public User Save(User user)
-    {
-        DataUser dataUser = MapToDataUser(user);
-        
-        DataUser savedDataUser = _iDbDriver.Save(dataUser); 
-
-        return MapToModelUser(savedDataUser);
-    }
-
-    private User MapToModelUser(DataUser savedUser)
-    {
-        return _userToDataMapper.MapToUser(savedUser);
-    }
-
+    
     public User GetUserByEmail(Email email)
     {
         throw new NotImplementedException();

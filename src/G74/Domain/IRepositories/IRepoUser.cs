@@ -5,7 +5,7 @@ namespace G74.Domain.IRepositories;
 
 public interface IRepoUser
 {
-    User Save(User user);
+    Task<User> Save(User user);
 
     User GetUserByEmail(Email email);
 

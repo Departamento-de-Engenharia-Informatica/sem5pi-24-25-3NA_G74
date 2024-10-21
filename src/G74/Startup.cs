@@ -3,7 +3,6 @@ using G74.Adapters.Controllers;
 using G74.Adapters.Repositories;
 using G74.Domain.IRepositories;
 using G74.DTO;
-using G74.Infrastructure.Persistence;
 using G74.Infrastructure.Shared;
 using G74.Mappers;
 using G74.Services;
@@ -73,6 +72,5 @@ public class Startup
         services.AddScoped<AppServiceUser>();
         services.AddTransient<UserMapper>();
         services.AddTransient<UserToDataMapper>();
-        services.AddScoped<IDBDriver, DBDriver>();
     }
 }

@@ -8,10 +8,11 @@ public class BackofficeAppDbContext : DbContext
 {
     public BackofficeAppDbContext(DbContextOptions options) : base(options)
     {
+        Database.EnsureCreated();
     }
 
-    public DbSet<Patient> Patients { get; set; }
-    public DbSet<DataUser> Users { get; set; }
+    public virtual DbSet<Patient> Patients { get; set; } = null!;
+    public virtual DbSet<DataUser> Users { get; set; } = null!;
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
