@@ -18,6 +18,6 @@ public class BackofficeAppDbContext : DbContext
     {
         modelBuilder.ApplyConfiguration(new PatientEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new UserEntityTypeConfiguration());
-
+        base.OnModelCreating(modelBuilder);
     }
 }
