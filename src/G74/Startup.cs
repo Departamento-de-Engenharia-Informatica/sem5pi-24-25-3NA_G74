@@ -68,11 +68,11 @@ public class Startup
     {
 
         services.AddTransient<JsonToDTO>();
-        services.AddScoped<ControllerUser>();
+        services.AddScoped<UserController>();
         services.AddScoped<IRepoUser, RepoUser>();
         services.AddScoped<AppServiceUser>();
         services.AddTransient<UserMapper>();
-        services.AddTransient<ModelToData>();
+        services.AddTransient<UserToDataMapper>();
         services.AddScoped<IDBDriver, DBDriver>();
     }
 }

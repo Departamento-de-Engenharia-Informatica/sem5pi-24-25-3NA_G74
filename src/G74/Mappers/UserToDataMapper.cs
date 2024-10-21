@@ -5,7 +5,7 @@ using G74.DTO;
 
 namespace G74.Mappers;
 
-public class ModelToData
+public class UserToDataMapper
 {
     public DataUser MapToDataUser(User user)
     {

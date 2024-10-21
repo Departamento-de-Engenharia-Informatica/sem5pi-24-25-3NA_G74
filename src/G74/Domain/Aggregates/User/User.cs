@@ -1,3 +1,5 @@
+using G74.Domain.Aggregates.Patient;
+using G74.Domain.Shared;
 using G74.Domain.Value_Objects;
 using G74.Domain.Value_Objects.User;
 using G74.DTO;
@@ -6,9 +8,9 @@ namespace G74.Domain.Aggregates.User;
 
 public class User
 {
-    private Username username { get; set; }
-    private Role role { get; set; }
-    private Email email { get; set; }
+    public Username username { get; set; }
+    public Role role { get; set; }
+    public Email email { get; set; }
 
     public User(Username username, Role role, Email email)
     {

@@ -11,12 +11,12 @@ namespace G74.Adapters.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ControllerUser : ControllerBase
+public class UserController : ControllerBase
 {
     private readonly AppServiceUser _appServiceUser;
     private readonly JsonToDTO _jsonToDto;
 
-    public ControllerUser(AppServiceUser appServiceUser, JsonToDTO jsonToDto)
+    public UserController(AppServiceUser appServiceUser, JsonToDTO jsonToDto)
     {
         _appServiceUser = appServiceUser;
         _jsonToDto = jsonToDto;
