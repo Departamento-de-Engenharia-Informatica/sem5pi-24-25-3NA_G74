@@ -19,4 +19,15 @@ public class Gender : IValueObject
     {
         GenderDescription = gender.ToString();
     }
+
+    public static Gender FromString(string genderStr)
+    {
+        
+        if (!Enum.TryParse<Gender.GenderEnum>(genderStr, true, out var gender))
+        {
+            throw new ArgumentException("Invalid gender");
+        }
+
+        return new Gender(gender);
+    }
 }

@@ -1,15 +1,19 @@
-﻿using G74.Domain;
-using G74.Domain.Aggregates.Patient;
+﻿using G74.DataModel;
+using G74.Domain;
 using G74.Domain.IRepositories;
 using G74.Infrastructure.Shared;
 
 namespace G74.Adapters.Repositories;
 
-public class PatientRepository : BaseRepository<Patient, PatientId>, IPatientRepository
+public class PatientRepository : BaseRepository<PatientDataModel, Guid>, IPatientRepository
 {
+
+    private readonly BackofficeAppDbContext _context;
 
     public PatientRepository(BackofficeAppDbContext context) : base(context.Patients)
     {
+
+        _context = context;
 
     }
 

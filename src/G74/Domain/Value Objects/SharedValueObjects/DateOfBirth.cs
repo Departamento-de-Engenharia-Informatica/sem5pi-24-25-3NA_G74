@@ -49,6 +49,20 @@ public class DateOfBirth : IValueObject
             throw new ArgumentException(DateInFutureMsg);
         }
     }
+    
+    public static DateOfBirth FromString(string dateOfBirthString)
+    {
+        var parts = dateOfBirthString.Split('-');
+        if (parts.Length != 3)
+            throw new FormatException("Date of birth must be in the format 'YYYY-MM-DD'.");
+
+        // Parse the components of the date
+        int year = int.Parse(parts[0]);
+        int month = int.Parse(parts[1]);
+        int day = int.Parse(parts[2]);
+
+        return new DateOfBirth(year, month, day);
+    }
 
     public string ShowFormattedDateOfBirth()
     {

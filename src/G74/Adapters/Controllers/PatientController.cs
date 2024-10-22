@@ -1,6 +1,4 @@
-﻿using G74.Domain;
-using G74.Domain.Aggregates.Patient;
-using G74.Services;
+﻿using G74.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace G74.Adapters.Controllers;

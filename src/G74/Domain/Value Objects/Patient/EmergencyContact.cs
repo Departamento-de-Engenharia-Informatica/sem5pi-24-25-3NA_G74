@@ -34,6 +34,19 @@ public class EmergencyContact : IValueObject
     {
         return Regex.IsMatch(phoneNumber, PhoneNumberValidationPattern);
     }
+    
+    public static EmergencyContact FromString(string phoneNumber)
+    {
+        if (string.IsNullOrWhiteSpace(phoneNumber))
+            throw new ArgumentNullException(nameof(phoneNumber), "Contact information cannot be null or empty.");
+
+        
+        return new EmergencyContact(phoneNumber);
+    }
+    
+    
+    
+    
 
     private const string InvalidPhoneNumberMsg = "Invalid portuguese phone number";
 

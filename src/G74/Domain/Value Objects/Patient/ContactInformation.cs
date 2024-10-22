@@ -43,4 +43,17 @@ public class ContactInformation : IValueObject
     private const string InvalidPhoneNumberMsg = "Invalid portuguese phone number";
 
     private const string PhoneNumberValidationPattern = @"^(\+351)? (9[1236][0-9]) ?([0-9]{3}) ?([0-9]{3})$";
+
+    public static ContactInformation FromString(string contactInfoStr)
+    {
+        var parts = contactInfoStr.Split(';');
+        if (parts.Length != 2)
+            throw new FormatException("Contact information must be in the format 'Phone;Email'.");
+
+            
+        var phone = parts[0].Trim(); 
+        var email = new Email((parts[1].Trim())); 
+
+        return new ContactInformation(phone, email);
+    }
 }

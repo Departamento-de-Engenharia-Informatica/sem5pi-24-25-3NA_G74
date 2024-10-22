@@ -1,35 +1,58 @@
-﻿using G74.Domain;
+﻿using G74.DataModel;
+using G74.Domain;
+using G74.Infrastructure.Converters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace G74.Adapters.Repositories;
 
-public class PatientEntityTypeConfiguration : IEntityTypeConfiguration<DataPatient>
+public class PatientEntityTypeConfiguration : IEntityTypeConfiguration<PatientDataModel>
 {
-    public void Configure(EntityTypeBuilder<DataPatient> builder)
+    public void Configure(EntityTypeBuilder<PatientDataModel> builder)
     {
-        builder.HasKey(u => u.Id);
+        
+        
+        builder.HasKey(p => p.Id);
 
-        builder.Property(u => u.Name)
-            .HasMaxLength(50)
-            .IsRequired();
+        builder.Property(p => p.MedicalRecordNumber)
+            .HasConversion(new MedicalRecordNumberConverter())
+            .IsRequired()
+            .HasColumnName("MedicalRecordNumber");
+        builder.Property(p => p.Name)
+            .HasConversion(new NameConverter())
+            .IsRequired()
+            .HasColumnName("Name");
+        builder.Property(p => p.DateOfBirth)
+            .HasConversion(new DateOfBirthConverter())
+            .IsRequired()
+            .HasColumnName("DateOfBirth");
+        builder.Property(p => p.Gender)
+            .HasConversion(new GenderConverter())
+            .IsRequired()
+            .HasColumnName("Gender");
+        builder.Property(p => p.ContactInformation)
+            .HasConversion(new ContactInformationConverter())
+            .IsRequired()
+            .HasColumnName("ContactInformation");
+        builder.Property(p => p.EmergencyContact)
+            .HasConversion(new EmergencyContactConverter())
+            .IsRequired()
+            .HasColumnName("EmergencyContact");
+        
+        
+        
 
-        builder.Property(u => u.Gender);
-
-        builder.Property(u => u.DateOfBirth);
-
-        builder.Property(u => u.ContactInformation);
-
-        builder.Property(u => u.EmergencyContact);
 
     }
-    /**
-    public Guid Id { get; set; }
-    public string Name { get; set; }
-    public string Gender { get; set; }
-    public string DateOfBirth { get; set; }
-    public string ContactInformation { get; set; }
-    public string EmergencyContact { get; set; }
+    /*
+    Name = patient.Name;
+    MedicalRecordNumber = patient.MedicalRecordNumber;
+    DateOfBirth = patient.DateOfBirth;
+    Gender = patient.Gender;
+    ContactInformation = patient.ContactInformation;
+    EmergencyContact = patient.EmergencyContact;
+    AppointmentHistory = patient.AppointmentHistory;
+    MedicalCondition = patient.MedicalCondition;
     */
     
 }

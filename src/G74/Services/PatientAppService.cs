@@ -1,12 +1,9 @@
-﻿using G74.Domain;
-using G74.Domain.Aggregates.Patient;
-using G74.Domain.Aggregates.User;
+﻿using G74.Domain.Aggregates.User;
 using G74.Domain.Builders;
 using G74.Domain.DomainServices;
 using G74.Domain.IRepositories;
-using G74.Domain.Value_Objects.SharedValueObjects;
 using G74.Domain.Value_Objects.Patient;
-using G74.DTO;
+using G74.Domain.Value_Objects.SharedValueObjects;
 using G74.Mappers;
 
 namespace G74.Services;

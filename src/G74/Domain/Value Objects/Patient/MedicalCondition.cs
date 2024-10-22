@@ -18,6 +18,7 @@ public class MedicalCondition : IValueObject
     {
         if (!string.IsNullOrWhiteSpace(medicalConditionDescription))
             throw new ArgumentException(MedicalConditionDescriptionNullOrWhiteSpaceMsg);
+        
 
     }
 

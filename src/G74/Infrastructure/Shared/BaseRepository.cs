@@ -6,7 +6,7 @@ namespace G74.Infrastructure.Shared
 {
     public class BaseRepository<TEntity, TEntityId> : IRepository<TEntity, TEntityId>
         where TEntity : Entity<TEntityId>
-        where TEntityId : EntityId
+    //    where TEntityId : EntityId
     {
         private readonly DbSet<TEntity> _objs;
 

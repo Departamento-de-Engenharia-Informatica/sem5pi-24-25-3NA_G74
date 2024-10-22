@@ -15,4 +15,14 @@ public class Name : IValueObject
     }
 
     private const string IsNullOrWithSpaceMsg = "Name cannot be empty or spaces";
+
+    public static Name FromString(string nameStr)
+    {
+        if (string.IsNullOrWhiteSpace(nameStr))
+        {
+            throw new ArgumentException("Name cannot be empty or spaces.");
+        }
+
+        return new Name(nameStr.Trim()); 
+    }
 }

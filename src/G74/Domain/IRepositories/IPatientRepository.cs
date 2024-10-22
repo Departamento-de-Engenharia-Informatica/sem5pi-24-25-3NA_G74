@@ -1,9 +1,9 @@
-﻿using G74.Domain.Aggregates.Patient;
+﻿using G74.DataModel;
 using G74.Domain.Shared;
 
 namespace G74.Domain.IRepositories;
 
-public interface IPatientRepository : IRepository<Patient, PatientId>
+public interface IPatientRepository : IRepository<PatientDataModel, Guid>
 {
 
     Task<Patient> Add(Patient patient);
