@@ -24,9 +24,13 @@ public class Patient : Entity<PatientId>, IAggregateRoot
     public MedicalCondition MedicalCondition { get; private set; }
 
 
-    public Patient(Name name, MedicalRecordNumber medicalRecordNumber, DateOfBirth dateOfBirth,
+    public Patient(Name name,
+        MedicalRecordNumber medicalRecordNumber,
+        DateOfBirth dateOfBirth,
         Gender gender,
-        ContactInformation contactInformation, EmergencyContact emergencyContact)
+        ContactInformation contactInformation,
+        EmergencyContact emergencyContact
+    )
     {
         Name = name;
         MedicalRecordNumber = medicalRecordNumber;

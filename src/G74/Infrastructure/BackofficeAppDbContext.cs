@@ -11,7 +11,7 @@ public class BackofficeAppDbContext : DbContext
         Database.EnsureCreated();
     }
 
-    public virtual DbSet<Patient> Patients { get; set; } = null!;
+    public virtual DbSet<DataPatient> Patients { get; set; } = null!;
     public virtual DbSet<DataUser> Users { get; set; } = null!;
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
