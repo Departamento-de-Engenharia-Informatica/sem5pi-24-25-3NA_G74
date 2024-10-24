@@ -2,7 +2,7 @@ namespace G74.Domain.Value_Objects;
 
 public class Username
 {
-    private string name { get; set; }
+    public string name { get; }
 
     public Username(string username)
     {

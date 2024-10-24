@@ -12,12 +12,12 @@ public class BackofficeAppDbContext : DbContext
     }
 
     public DbSet<PatientDataModel> Patients { get; set; } 
-    //public virtual DbSet<DataUser> Users { get; set; } = null!;
+    public DbSet<UserDataModel> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new PatientEntityTypeConfiguration());
-        //modelBuilder.ApplyConfiguration(new UserEntityTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new UserEntityTypeConfiguration());
         base.OnModelCreating(modelBuilder);
     }
 }

@@ -69,7 +69,7 @@ public class Startup
         services.AddScoped<IPatientAppService, PatientAppService>();
         services.AddScoped<IPatientRepository, PatientRepository>();
         services.AddScoped<IMedicalRecordNumberGenerator, MedicalRecordNumberGenerator>();
-        services.AddScoped<AppServiceUser>();
+        services.AddScoped<UserAppService>();
         services.AddTransient<UserMapper>();
         services.AddTransient<UserToDataMapper>();
     }

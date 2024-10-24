@@ -13,45 +13,21 @@ namespace G74.Adapters.Controllers;
 [Route("api/[controller]")]
 public class UserController : ControllerBase
 {
-    private readonly AppServiceUser _appServiceUser;
+    private readonly UserAppService _userAppService;
     private readonly UserToDTO _userToDto;
 
-    public UserController(AppServiceUser appServiceUser, UserToDTO userToDto)
+    public UserController(UserAppService userAppService, UserToDTO userToDto)
     {
-        _appServiceUser = appServiceUser;
+        _userAppService = userAppService;
         _userToDto = userToDto;
     }
-
-  /*  public static bool ValidateJson(string json)
-    {
-        try
-        {
-            var user = JsonSerializer.Deserialize<VoUser>(json);
-
-            
-            if (user == null)
-            {
-                return false;
-            }
-
-            
-            return !Username.VerifyUsername(user.Username.ToString()) &&
-                   !Email.IsValidEmail(user.Email.ToString()) &&
-                   Enum.IsDefined(typeof(Role), user.Role);
-        }
-        catch (JsonException)
-        {
-            return false;
-        }
-    }
-    */
   
     [HttpPost("register")]
     public async Task<ActionResult<UserDTO>> RegisterNewUser([FromBody]UserDTO uDto)
     {
         try
         {
-            var userDto = await _appServiceUser.Create(uDto);
+            var userDto = await _userAppService.Create(uDto);
             return CreatedAtAction(nameof(GetUserByEmail), userDto);
         }
         catch (Exception ex)
@@ -66,7 +42,7 @@ public class UserController : ControllerBase
     {
         try
         {
-            var userDto = await _appServiceUser.GetUserByEmail(email);
+            var userDto = await _userAppService.GetUserByEmail(email);
             return Ok(userDto);
         }
         catch (InvalidOperationException e)

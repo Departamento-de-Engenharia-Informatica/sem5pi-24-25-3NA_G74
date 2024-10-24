@@ -21,11 +21,11 @@ public class RepoUser : GenericRepository<User>, IRepoUser
     {
         try
         {
-            DataUser dataUser = _userToDataMapper.MapToDataUser(user);
-            EntityEntry<DataUser> userEntityEntry = _context.Set<DataUser>().Add(dataUser);
+            UserDataModel userDataModel = _userToDataMapper.MapToDataUser(user);
+            EntityEntry<UserDataModel> userEntityEntry = _context.Set<UserDataModel>().Add(userDataModel);
             await _context.SaveChangesAsync();
-            DataUser savedData = userEntityEntry.Entity;
-            User userSaved = _userToDataMapper.MapToUser(savedData);
+            UserDataModel savedUserData = userEntityEntry.Entity;
+            User userSaved = _userToDataMapper.MapToUser(savedUserData);
             return userSaved;
         }
         catch
@@ -37,10 +37,10 @@ public class RepoUser : GenericRepository<User>, IRepoUser
     public async Task<User> GetUserByEmail(string email)
     {
         try {
-            DataUser dataUser = await _context.Set<DataUser>()
+            UserDataModel userDataModel = await _context.Set<UserDataModel>()
                 .FirstAsync(c => c.Email == email);
 
-            User user = _userToDataMapper.MapToUser(dataUser);
+            User user = _userToDataMapper.MapToUser(userDataModel);
 
             return user;
         }
@@ -53,7 +53,7 @@ public class RepoUser : GenericRepository<User>, IRepoUser
     
     public async Task<bool> UserExists(string email)
     {
-        return await _context.Set<DataUser>().AnyAsync(e => e.Email == email);
+        return await _context.Set<UserDataModel>().AnyAsync(e => e.Email == email);
     }
     
 }

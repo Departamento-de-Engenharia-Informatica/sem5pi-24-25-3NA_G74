@@ -6,12 +6,12 @@ using G74.Mappers;
 
 namespace G74.Services;
 
-public class AppServiceUser
+public class UserAppService
 {
     private readonly UserMapper _userMapper;
     private readonly IRepoUser _repoUser;
 
-    public AppServiceUser(UserMapper userMapper, IRepoUser repoUser)
+    public UserAppService(UserMapper userMapper, IRepoUser repoUser)
     {
         _userMapper = userMapper;
         _repoUser = repoUser;

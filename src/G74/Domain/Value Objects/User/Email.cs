@@ -4,7 +4,7 @@ namespace G74.Domain.Value_Objects;
 
 public class Email
 {
-    private string email { get; set; }
+    public string email { get; }
 
     public Email(string email)
     {
