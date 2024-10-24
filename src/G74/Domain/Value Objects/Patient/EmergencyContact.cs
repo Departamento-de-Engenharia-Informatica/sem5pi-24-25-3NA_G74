@@ -43,15 +43,14 @@ public class EmergencyContact : IValueObject
         
         return new EmergencyContact(phoneNumber);
     }
-    
-    
-    
-    
+
+    public override string ToString()
+    {
+        return _phoneNumber;
+    }
+
 
     private const string InvalidPhoneNumberMsg = "Invalid portuguese phone number";
 
-    private const string PhoneNumberValidationPattern = @"^(\+351)? (9[1236][0-9]) ?([0-9]{3}) ?([0-9]{3})$";
-
-
-
+    private const string PhoneNumberValidationPattern = @"^(\+351)? ?(9[1236][0-9]) ?([0-9]{3}) ?([0-9]{3})$";
 }

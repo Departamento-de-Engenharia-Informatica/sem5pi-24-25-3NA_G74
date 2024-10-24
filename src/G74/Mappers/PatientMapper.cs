@@ -1,4 +1,5 @@
-﻿using G74.Domain;
+﻿using G74.DataModel;
+using G74.Domain;
 
 namespace G74.Mappers;
 
@@ -15,5 +16,13 @@ public class PatientMapper
     public static Patient toDomain(PatientDTO patientDto)
     {
         throw new NotImplementedException();
+    }
+
+    public static PatientDataModel ToDataModel(Patient patient)
+    {
+        ArgumentNullException.ThrowIfNull(patient, nameof(Patient));
+
+        return new PatientDataModel(patient);
+
     }
 }

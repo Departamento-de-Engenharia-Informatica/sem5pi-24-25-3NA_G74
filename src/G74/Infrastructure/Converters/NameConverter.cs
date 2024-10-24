@@ -8,7 +8,7 @@ public class NameConverter : ValueConverter<Name, string>
     public NameConverter()
         : base(
             v => v.ToString(),
-            v => Name.FromString(v)
+            v => new Name(v)
         )
     {
         

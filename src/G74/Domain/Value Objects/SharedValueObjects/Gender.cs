@@ -30,4 +30,10 @@ public class Gender : IValueObject
 
         return new Gender(gender);
     }
+
+
+    public override string ToString()
+    {
+        return GenderDescription;
+    }
 }

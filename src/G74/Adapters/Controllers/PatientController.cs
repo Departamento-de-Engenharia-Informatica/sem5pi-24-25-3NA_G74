@@ -1,4 +1,6 @@
-﻿using G74.Services;
+﻿using G74.Domain.Value_Objects.SharedValueObjects;
+using G74.DTO;
+using G74.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace G74.Adapters.Controllers;
@@ -43,18 +45,22 @@ public class PatientController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<PatientDTO>> RegisterPatient([FromBody] PatientDTO receivedPatientDto)
+    public async Task<ActionResult<PatientDTO>> RegisterPatient([FromBody] CreatePatientDTO receivedPatient)
     {
+
+        if (receivedPatient == null) return BadRequest("Invalid data, please input patient data");
+        
         try
         {
-            PatientDTO patientReturntDTO = await _patientAppService.RegisterPatient(receivedPatientDto);
+            PatientDTO patientReturnDto = await _patientAppService.RegisterPatient(receivedPatient);
 
-            return CreatedAtAction(nameof(GetPatientByEmail), patientReturntDTO);
+            return CreatedAtAction(nameof(RegisterPatient), patientReturnDto);
         }
         catch (Exception ex)
         {
             return BadRequest(ex.Message);
         }
+        
     }
 
     [HttpPut("{id}")]

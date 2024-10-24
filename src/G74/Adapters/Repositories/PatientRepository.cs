@@ -12,15 +12,13 @@ public class PatientRepository : BaseRepository<PatientDataModel, Guid>, IPatien
 
     public PatientRepository(BackofficeAppDbContext context) : base(context.Patients)
     {
-
         _context = context;
-
     }
-
-
-    public Task<Patient> Add(Patient patient)
+    
+    public async Task AddPatient(PatientDataModel patient)
     {
-        throw new NotImplementedException();
+        await AddAsync(patient);
+        await _context.SaveChangesAsync();
     }
 
     public Task<Patient> GetPatientByIdAsync(long id)

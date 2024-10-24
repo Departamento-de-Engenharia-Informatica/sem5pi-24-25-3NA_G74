@@ -42,7 +42,7 @@ public class ContactInformation : IValueObject
 
     private const string InvalidPhoneNumberMsg = "Invalid portuguese phone number";
 
-    private const string PhoneNumberValidationPattern = @"^(\+351)? (9[1236][0-9]) ?([0-9]{3}) ?([0-9]{3})$";
+    private const string PhoneNumberValidationPattern = @"^(\+351)? ?(9[1236][0-9]) ?([0-9]{3}) ?([0-9]{3})$";
 
     public static ContactInformation FromString(string contactInfoStr)
     {
@@ -55,5 +55,10 @@ public class ContactInformation : IValueObject
         var email = new Email((parts[1].Trim())); 
 
         return new ContactInformation(phone, email);
+    }
+
+    public override string ToString()
+    {
+        return $"{PhoneNumber};{EmailAddress.ToString()}";
     }
 }

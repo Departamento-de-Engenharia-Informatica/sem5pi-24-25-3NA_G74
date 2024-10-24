@@ -1,5 +1,4 @@
 ﻿using G74.DataModel;
-using G74.Domain;
 using G74.Infrastructure.Converters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -10,8 +9,6 @@ public class PatientEntityTypeConfiguration : IEntityTypeConfiguration<PatientDa
 {
     public void Configure(EntityTypeBuilder<PatientDataModel> builder)
     {
-        
-        
         builder.HasKey(p => p.Id);
 
         builder.Property(p => p.MedicalRecordNumber)
@@ -38,21 +35,9 @@ public class PatientEntityTypeConfiguration : IEntityTypeConfiguration<PatientDa
             .HasConversion(new EmergencyContactConverter())
             .IsRequired()
             .HasColumnName("EmergencyContact");
-        
-        
-        
 
+        builder.HasIndex(p => p.MedicalRecordNumber).IsUnique();
 
+        builder.HasIndex(p => p.ContactInformation).IsUnique();
     }
-    /*
-    Name = patient.Name;
-    MedicalRecordNumber = patient.MedicalRecordNumber;
-    DateOfBirth = patient.DateOfBirth;
-    Gender = patient.Gender;
-    ContactInformation = patient.ContactInformation;
-    EmergencyContact = patient.EmergencyContact;
-    AppointmentHistory = patient.AppointmentHistory;
-    MedicalCondition = patient.MedicalCondition;
-    */
-    
 }

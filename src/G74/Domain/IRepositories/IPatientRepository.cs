@@ -6,7 +6,7 @@ namespace G74.Domain.IRepositories;
 public interface IPatientRepository : IRepository<PatientDataModel, Guid>
 {
 
-    Task<Patient> Add(Patient patient);
+    Task AddPatient(PatientDataModel patient);
     Task<Patient> GetPatientByIdAsync(long id);
     Task<Patient> GetPatientByEmail(string email);
     Task<Patient> Update(Patient patient);
