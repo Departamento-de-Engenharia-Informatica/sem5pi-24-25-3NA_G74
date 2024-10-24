@@ -55,5 +55,9 @@ public class RepoUser : GenericRepository<User>, IRepoUser
     {
         return await _context.Set<DataUser>().AnyAsync(e => e.Email == email);
     }
-    
+
+    public Task<User> GetUserByEmail(object value)
+    {
+        throw new NotImplementedException();
+    }
 }

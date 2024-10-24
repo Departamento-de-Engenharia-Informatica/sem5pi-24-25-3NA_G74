@@ -114,4 +114,18 @@ public class PatientAppService : IPatientAppService
     {
         // TODO: implement logging here. we're missing the dependency
     }
+    public async Task<PatientDTO> GetPatientByMedicalRecordNumber(MedicalRecordNumber medicalRecordNumber){
+        if(medicalRecordNumber == null)
+            Console.WriteLine("Patient");
+        else{
+            Console.WriteLine("Cheguei aqui");
+            
+        }
+        var existingPatient = await _patientRepository.GetPatientByMedicalRecordNumber(medicalRecordNumber);
+        return PatientMapper.ToDTO(existingPatient);
+    }
+
+    
+
+   
 }

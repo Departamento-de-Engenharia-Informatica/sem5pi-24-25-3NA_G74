@@ -11,6 +11,13 @@ public class Priority : IValueObject
    } 
    public PriorityType PriorityDescription { get; private set;}
 
+   public Priority(PriorityType type){
+       PriorityDescription = type;
+   }
+
+    public Priority(string description){
+        PriorityDescription = (PriorityType)Enum.Parse(typeof(PriorityType), description);
+    }
    
 }
 

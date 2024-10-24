@@ -23,7 +23,8 @@ public class Patient : IAggregateRoot
     public MedicalCondition MedicalCondition { get; private set; }
 
 
-    public Patient(Name name,
+    public Patient(
+        Name name,
         MedicalRecordNumber medicalRecordNumber,
         DateOfBirth dateOfBirth,
         Gender gender,

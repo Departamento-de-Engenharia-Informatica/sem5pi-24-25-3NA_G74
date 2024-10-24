@@ -25,4 +25,26 @@ public class PatientMapper
         return new PatientDataModel(patient);
 
     }
+
+    public static Patient FromDataModelToDomain(PatientDataModel patientDataModel)
+    {
+        ArgumentNullException.ThrowIfNull(patientDataModel, nameof(patientDataModel));
+
+        /**
+        Name name,
+        MedicalRecordNumber medicalRecordNumber,
+        DateOfBirth dateOfBirth,
+        Gender gender,
+        ContactInformation contactInformation,
+        EmergencyContact emergencyContact
+        */
+        return new Patient(
+            patientDataModel.Name,
+            patientDataModel.MedicalRecordNumber,
+            patientDataModel.DateOfBirth,
+            patientDataModel.Gender,
+            patientDataModel.ContactInformation,
+            patientDataModel.EmergencyContact
+        );
+    }
 }
