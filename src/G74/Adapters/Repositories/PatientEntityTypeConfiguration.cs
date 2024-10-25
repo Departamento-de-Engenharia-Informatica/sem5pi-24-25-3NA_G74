@@ -38,14 +38,16 @@ public class PatientEntityTypeConfiguration : IEntityTypeConfiguration<PatientDa
             .IsRequired()
             .HasColumnName("EmergencyContact");
 
-        // Map ToDelete as a boolean column
-        builder.Property(p => p.DeletionInformation.ToDelete)
-            .IsRequired()
-            .HasColumnName("ToDelete");
+        // Configure DeletionInformation as an owned entity
+        builder.OwnsOne(p => p.DeletionInformation, deletion =>
+        {
+            deletion.Property(d => d.ToDelete)
+                .IsRequired()
+                .HasColumnName("ToDelete");
 
-        // Map DateToBeDeleted as a DateTime? column
-        builder.Property(p => p.DeletionInformation.DateToBeDeleted)
-            .HasColumnName("DateToBeDeleted");
+            deletion.Property(d => d.DateToBeDeleted)
+                .HasColumnName("DateToBeDeleted");
+        });
 
         builder.HasIndex(p => p.MedicalRecordNumber).IsUnique();
 

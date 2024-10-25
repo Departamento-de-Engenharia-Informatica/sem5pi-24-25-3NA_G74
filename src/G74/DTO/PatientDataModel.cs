@@ -20,6 +20,9 @@ public class PatientDataModel : Entity<Guid>
     public EmergencyContact EmergencyContact { get; private set; }
 
     public DeletionInformation DeletionInformation { get; private set; }
+    
+    public bool ToDelete => DeletionInformation?.ToDelete ?? false;
+    public DateTime? DateToBeDeleted => DeletionInformation?.DateToBeDeleted;
 
 
     protected PatientDataModel() : base(Guid.NewGuid())
