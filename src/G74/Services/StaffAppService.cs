@@ -4,11 +4,11 @@ using G74.DTO;
 
 namespace G74.Services;
 
-public class StaffService
+public class StaffAppService
 {
     private readonly IStaffRepository _staffRepository;
     
-    public StaffService(IStaffRepository staffRepository) {
+    public StaffAppService(IStaffRepository staffRepository) {
         _staffRepository = staffRepository;
     }
     

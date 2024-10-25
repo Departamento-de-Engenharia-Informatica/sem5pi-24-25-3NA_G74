@@ -36,7 +36,7 @@ public class StaffDto
     }
     
     // Method to convert to domain model with validation
-    public Staff ToDomain(StaffDto staffDto)
+    public static Staff ToDomain(StaffDto staffDto)
     {
         return new Staff(
             new LicenseNumber(staffDto.LicenseNumber),  // Validation happens in value objects

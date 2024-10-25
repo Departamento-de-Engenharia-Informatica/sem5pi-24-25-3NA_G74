@@ -2,6 +2,7 @@
 using G74.Domain.Aggregates.Staff;
 using G74.DTO;
 using G74.Infrastructure.Shared;
+using G74.Mappers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -9,12 +10,13 @@ namespace G74.Adapters.Repositories;
 
 public class StaffRepository : BaseRepository<StaffDataModel, Guid>, IStaffRepository
 {
-    StaffMapper _staffMapper;
+    private readonly StaffMapper _staffMapper;
     private readonly BackofficeAppDbContext _context;
     
     
-    public StaffRepository(StaffMapper mapper) : base(_context!)
+    public StaffRepository(BackofficeAppDbContext context, StaffMapper mapper) : base(context.Staff)
     {
+        _context = context;
         _staffMapper = mapper;
     }
     

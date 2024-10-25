@@ -2,7 +2,7 @@
 using G74.Domain.Factory;
 using G74.DTO;
 
-namespace DefaultNamespace;
+namespace G74.Mappers;
 
 public class StaffMapper
 {
@@ -15,11 +15,18 @@ public class StaffMapper
     
     public Staff ToDomain(StaffDataModel staffDataModel)
     {
-        Staff staffDomain = _staffFactory.NewStaff(staffDataModel.LicenseNumber, staffDataModel.Name,
-            staffDataModel.PhoneNumber, staffDataModel.ContactEmail, staffDataModel.StaffSpecialization);
-
-        //staffDomain.Id = staffDataModel.Id;
-
-        return staffDomain;
+        // Changed to instance method using _staffFactory
+        return _staffFactory.NewStaff(
+            staffDataModel.LicenseNumber,
+            staffDataModel.Name,
+            staffDataModel.PhoneNumber,
+            staffDataModel.ContactEmail,
+            staffDataModel.StaffSpecialization);
+    }
+    
+    // Add missing ToDataModel method
+    public StaffDataModel ToDataModel(Staff staff)
+    {
+        return new StaffDataModel(staff);
     }
 }
