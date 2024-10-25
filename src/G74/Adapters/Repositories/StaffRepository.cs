@@ -1,15 +1,19 @@
-﻿using G74.Adapters.Repositories;
-using G74.Mappers;
-using G74.Domain;
+﻿using DefaultNamespace;
+using G74.Domain.Aggregates.Staff;
+using G74.DTO;
+using G74.Infrastructure.Shared;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace DefaultNamespace;
+namespace G74.Adapters.Repositories;
 
-public class StaffRepository : GenericRepository<Staff>, IStaffRepository
+public class StaffRepository : BaseRepository<StaffDataModel, Guid>, IStaffRepository
 {
     StaffMapper _staffMapper;
+    private readonly BackofficeAppDbContext _context;
     
-    // TODO: public StaffRepository(?, context, StaffMapper mapper) : base(context!)
-    public StaffRepository(StaffMapper mapper) : base(context!)
+    
+    public StaffRepository(StaffMapper mapper) : base(_context!)
     {
         _staffMapper = mapper;
     }

@@ -1,4 +1,5 @@
 ﻿using G74.Domain;
+using G74.Domain.Aggregates.Staff;
 
 namespace DefaultNamespace;
 

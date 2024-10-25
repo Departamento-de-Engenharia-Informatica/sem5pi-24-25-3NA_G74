@@ -1,8 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using G74.Domain.IRepositories;
-using G74.Domain.IRepositories;
+﻿using DefaultNamespace;
+using G74.Domain.Aggregates.Staff;
+using G74.DTO;
 
-namespace DefaultNamespace;
+namespace G74.Services;
 
 public class StaffService
 {
@@ -12,38 +12,38 @@ public class StaffService
         _staffRepository = staffRepository;
     }
     
-    public async Task<StaffDTO> GetByLicenseNumber(string licenseNumber)
+    public async Task<StaffDto> GetByLicenseNumber(string licenseNumber)
     {    
         Staff staff =  await _staffRepository.GetStaffByLicenseNumberAsync(licenseNumber);
 
         if(staff != null)
         {
-            StaffDTO staffDTO = StaffDTO.FromDomain(staff);
+            StaffDto staffDTO = StaffDto.FromDomain(staff);
             return staffDTO;
         }
         return null;
     }
     
-    public async Task<StaffDTO> Add(StaffDTO staffDTO)
+    public async Task<StaffDto> Add(StaffDto staffDto)
     {
-        bool exists = await _staffRepository.StaffExists(staffDTO.LicenseNumber);
+        bool exists = await _staffRepository.StaffExists(staffDto.LicenseNumber);
         if(exists) {
             throw new Exception("Already exists");
         }
 
         try
         {
-            Staff staff = StaffDTO.ToDomain(staffDTO);
+            Staff staff = StaffDto.ToDomain(staffDto);
 
             Staff staffSaved = await _staffRepository.Add(staff);
 
-            StaffDTO staffDTO = StaffDTO.FromDomain(staffSaved);
+            StaffDto staffDtoResult = StaffDto.FromDomain(staffSaved);
 
-            return staffDTO;
+            return staffDtoResult;
         }
-        catch (Exception e)
+        catch
         {
-            throw e;
+            throw;
         }
     }
     

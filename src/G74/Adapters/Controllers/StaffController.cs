@@ -17,7 +17,7 @@ public class StaffController : ControllerBase
     
     // GET: api/Staff//license/682468
     [HttpGet("license/{licenseNumber}")]
-    public async Task<ActionResult<StaffDTO>> GetStaffByLicenseNumber(string licenseNumber)
+    public async Task<ActionResult<StaffDto>> GetStaffByLicenseNumber(string licenseNumber)
     {
         var staffDTO = await _staffService.GetByLicenseNumber(licenseNumber);
 
@@ -31,11 +31,11 @@ public class StaffController : ControllerBase
     // POST: api/Staff
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost]
-    public async Task<ActionResult<StaffDTO>> PostStaff(StaffDTO staffDTO)  
+    public async Task<ActionResult<StaffDto>> PostStaff(StaffDto staffDTO)  
     {
         try
         {
-            StaffDTO resultStaffDTO = await _staffService.Add(staffDTO);
+            StaffDto resultStaffDTO = await _staffService.Add(staffDTO);
             
             return CreatedAtAction(
                 nameof(GetStaffByLicenseNumber),
