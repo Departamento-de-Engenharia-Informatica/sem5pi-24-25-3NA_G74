@@ -1,0 +1,70 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor "Admin" as adm
+
+
+participant ControllerOperationRequest as ct
+participant jsonToDTO as jdto
+participant AppServicePatient as asu
+participant OperationRequestMapper as ifu
+participant "operationRequest : OperationRequest" as u
+participant IRepoOperationRequest as iru
+participant DomainToData as dtd
+participant DataPatient as du
+participant IDBDriver as dbd
+participant "savedPatient : DataPatient" as sdu
+participant "patientSaved : Patient" as us
+
+adm --> ct: POST regiter new OperationRequest
+
+
+activate ct
+ct --> ct : validate(json)
+ct --> jdto : mapToDTOOperationRequest(json)
+activate jdto
+
+
+deactivate jdto
+ct --> asu : createOperationRequest(operationDTO)
+activate asu
+asu --> ifu : create(operationDTO)
+activate ifu
+ifu --> u : create()
+deactivate ifu
+asu --> iru : save(operation)
+activate iru
+iru --> dtd : mapToDataOperationRequest(operation)
+activate dtd
+dtd --> u : getEmail()
+activate u
+dtd --> u : getUsername()
+dtd --> u : getRole()
+deactivate u
+dtd --> du : create(username, email, role)
+iru --> dbd : save(dataPatient)
+activate dbd
+dbd --> sdu : save(savedPatient)
+deactivate dbd
+deactivate asu
+iru --> dtd : mapToModel(savedPatient)
+deactivate iru
+dtd --> us
+deactivate dtd
+activate us
+ct --> jdto : mapToJSON(patientSaved)
+activate jdto
+jdto --> us : getUsername()
+jdto --> us : getEmail()
+jdto --> us : getRole()
+deactivate us
+jdto --> dto : create(username, email, role)
+activate dto
+deactivate jdto
+deactivate dto
+ct --> adm : return success
+
+
+@enduml

@@ -59,5 +59,9 @@ public class RepoUser : BaseRepository<UserDataModel, Guid>, IRepoUser
         return await _context.Users
             .AnyAsync(u => u.Email.email == email);
     }
-    
+
+    public Task<User> GetUserByEmail(object value)
+    {
+        throw new NotImplementedException();
+    }
 }
