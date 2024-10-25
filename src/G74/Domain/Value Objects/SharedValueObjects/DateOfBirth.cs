@@ -64,7 +64,7 @@ public class DateOfBirth : IValueObject
         return new DateOfBirth(year, month, day);
     }
 
-    public string ShowFormattedDateOfBirth()
+    public string ToFormattedDateOfBirthStr()
     {
         return $"{YearOfBirth:D4}-{MonthOfBirth:D2}-{DayOfBirth:D2}";
     }

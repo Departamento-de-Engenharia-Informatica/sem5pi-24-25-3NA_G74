@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using G74.Adapters.Controllers;
 using G74.Adapters.Repositories;
+using G74.Domain.DomainServices;
 using G74.Domain.IRepositories;
 using G74.DTO;
 using G74.Infrastructure.Shared;
@@ -30,11 +31,7 @@ public class Startup
         
         ConfigureMyServices(serviceCollection);
 
-        serviceCollection.AddControllers().AddJsonOptions(options =>
-        {
-            options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-            options.JsonSerializerOptions.WriteIndented = true;
-        });
+        serviceCollection.AddControllers();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -45,7 +42,7 @@ public class Startup
             app.UseSwagger();
             app.UseSwaggerUI();
             
-            //app.UseDeveloperExceptionPage();
+            app.UseDeveloperExceptionPage();
         }
         else
         {
@@ -69,8 +66,15 @@ public class Startup
         services.AddTransient<UserToDTO>();
         services.AddScoped<UserController>();
         services.AddScoped<IRepoUser, RepoUser>();
-        services.AddScoped<AppServiceUser>();
+        services.AddScoped<IPatientAppService, PatientAppService>();
+        services.AddScoped<IPatientRepository, PatientRepository>();
+        services.AddScoped<IMedicalRecordNumberGenerator, MedicalRecordNumberGenerator>();
+        services.AddScoped<UserAppService>();
         services.AddTransient<UserMapper>();
         services.AddTransient<UserToDataMapper>();
+        services.AddScoped<IAppServiceOperationRequest, AppServiceOperationRequest>();
+        services.AddTransient<IOperationRequestRepository, OperationRequestRepository>();
+        
+        
     }
 }

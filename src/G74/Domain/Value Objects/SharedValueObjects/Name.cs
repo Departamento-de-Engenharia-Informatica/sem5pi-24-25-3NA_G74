@@ -5,9 +5,9 @@ namespace G74.Domain.Value_Objects.SharedValueObjects;
 
 public class Name : IValueObject
 {
-    public String TheName { get; }
+    public string TheName { get; }
 
-    public Name(String name)
+    public Name(string name)
     {
         if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException(IsNullOrWithSpaceMsg);
 
@@ -25,4 +25,12 @@ public class Name : IValueObject
 
         return new Name(nameStr.Trim()); 
     }
+
+    public override string ToString()
+    {
+        return TheName;
+    }
+    
+    
+    
 }

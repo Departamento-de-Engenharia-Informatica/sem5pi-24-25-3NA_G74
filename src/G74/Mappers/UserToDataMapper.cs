@@ -7,40 +7,34 @@ namespace G74.Mappers;
 
 public class UserToDataMapper
 {
-    public DataUser MapToDataUser(User user)
+    public UserDataModel MapToDataUser(User user)
     {
         if (user == null)
         {
             throw new ArgumentNullException(nameof(user), "User cannot be null.");
         }
 
-        DataUser dataUser = new DataUser
+        UserDataModel userDataModel = new UserDataModel
         (
-            user.GetUsername(),
-            user.GetEmail(),     
-            user.GetRole()    
+            user    
         );
 
-        return dataUser;
+        return userDataModel;
     }
 
-    public User MapToUser(DataUser savedUser)
+    public User MapToUser(UserDataModel savedUser)
     {
         if (savedUser == null)
         {
             throw new ArgumentNullException(nameof(savedUser), "DataUser cannot be null.");
         }
         
-        if (!Enum.TryParse<Role>(savedUser.Role, true, out Role role))
-        {
-            throw new ArgumentException($"Invalid role: {savedUser.Role}");
-        }
         
         return new User
         (
-            new Username(savedUser.Username),  
-            role,     
-            new Email(savedUser.Email)
+            savedUser.Username,  
+            savedUser.Role,     
+            savedUser.Email
         );
     }
 }

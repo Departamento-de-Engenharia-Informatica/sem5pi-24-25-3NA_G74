@@ -7,8 +7,8 @@ public class DateOfBirthConverter : ValueConverter<DateOfBirth, string>
 {
     public DateOfBirthConverter()
         : base(
-            v => v.ShowFormattedDateOfBirth(), // Convert DateOfBirth to string
-            v => DateOfBirth.FromString(v) // Convert string back to DateOfBirth
+            v => v.ToFormattedDateOfBirthStr(), 
+            v => DateOfBirth.FromString(v) 
         )
     {
     }

@@ -2,8 +2,10 @@
 using G74.Domain.Builders;
 using G74.Domain.DomainServices;
 using G74.Domain.IRepositories;
+using G74.Domain.Value_Objects;
 using G74.Domain.Value_Objects.Patient;
 using G74.Domain.Value_Objects.SharedValueObjects;
+using G74.DTO;
 using G74.Mappers;
 
 namespace G74.Services;
@@ -23,25 +25,33 @@ public class PatientAppService : IPatientAppService
         _repoUser = repoUser;
     }
 
-    public async Task<PatientDTO> RegisterPatient(PatientDTO patientDto)
+    public async Task<PatientDTO> RegisterPatient(CreatePatientDTO patientDto)
     {
+        /*
         Task<User> patientUser = _repoUser.GetUserByEmail(patientDto.ContactInformation.EmailAddress.ToString());
 
         if (patientUser == null)
             throw new ArgumentException("There are no records of user with this email");
 
+        */
 
         if (!Enum.TryParse<Gender.GenderEnum>(patientDto.Gender, true, out var gender))
         {
             throw new ArgumentException("Invalid gender");
         }
 
-        var patient = await new PatientBuilder(_medicalRecordNumberGenerator, patientDto.Name,
-                patientDto.DateOfBirth, new Gender(gender), patientDto.ContactInformation, patientDto.EmergencyContact)
+        var patient = await new PatientBuilder(
+                _medicalRecordNumberGenerator, 
+                new Name(patientDto.Name),
+                new DateOfBirth(patientDto.DateOfBirth.YearOfBirth, patientDto.DateOfBirth.MonthOfBirth, patientDto.DateOfBirth.DayOfBirth), 
+                new Gender(gender), 
+                new ContactInformation(patientDto.ContactInformation.PhoneNumber, new Email(patientDto.ContactInformation.EmailAddress)), 
+                new EmergencyContact(patientDto.EmergencyContact.PhoneNumber))
             .Build();
 
+        var patientDataModel = PatientMapper.ToDataModel(patient);
 
-        await _patientRepository.Add(patient);
+        await _patientRepository.AddPatient(patientDataModel);
 
         return PatientMapper.ToDTO(patient);
     }
@@ -104,4 +114,18 @@ public class PatientAppService : IPatientAppService
     {
         // TODO: implement logging here. we're missing the dependency
     }
+    public async Task<PatientDTO> GetPatientByMedicalRecordNumber(MedicalRecordNumber medicalRecordNumber){
+        if(medicalRecordNumber == null)
+            Console.WriteLine("Patient");
+        else{
+            Console.WriteLine("Cheguei aqui");
+            
+        }
+        var existingPatient = await _patientRepository.GetPatientByMedicalRecordNumber(medicalRecordNumber);
+        return PatientMapper.ToDTO(existingPatient);
+    }
+
+    
+
+   
 }

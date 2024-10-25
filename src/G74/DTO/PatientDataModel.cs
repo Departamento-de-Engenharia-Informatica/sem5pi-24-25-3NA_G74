@@ -37,10 +37,6 @@ public class PatientDataModel : Entity<Guid>
         ContactInformation = patient.ContactInformation;
         EmergencyContact = patient.EmergencyContact;
         
-
-
-
-
     }
     
     

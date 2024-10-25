@@ -6,27 +6,29 @@ using G74.Mappers;
 
 namespace G74.Services;
 
-public class AppServiceUser
+public class UserAppService
 {
     private readonly UserMapper _userMapper;
     private readonly IRepoUser _repoUser;
+    private readonly UserToDTO _userToDto;
 
-    public AppServiceUser(UserMapper userMapper, IRepoUser repoUser)
+    public UserAppService(UserMapper userMapper, IRepoUser repoUser, UserToDTO userToDto)
     {
+        _userToDto = userToDto;
         _userMapper = userMapper;
         _repoUser = repoUser;
     }
     
     public async Task<UserDTO> Create(UserDTO uDto)
     {
-        bool bExists = await _repoUser.UserExists(uDto.Email.ToString());
+        /*bool bExists = await _repoUser.UserExists(uDto.Email.ToString());
         if(bExists) {
             Console.WriteLine("User already exists with the given email.");
             return null;
-        }
+        }*/
         User user = _userMapper.Create(uDto);
         User userSaved = await _repoUser.Save(user);
-        UserDTO userDto = UserToDTO.DomainToDTO(userSaved);
+        UserDTO userDto = _userToDto.DomainToDTO(userSaved);
         return userDto;
     }
     
@@ -34,7 +36,7 @@ public class AppServiceUser
     {
         var existingUser = await _repoUser.GetUserByEmail(email);
 
-        return UserToDTO.DomainToDTO(existingUser);
+        return _userToDto.DomainToDTO(existingUser);
     }
     
 }
