@@ -8,11 +8,9 @@ public interface IPatientRepository : IRepository<PatientDataModel, Guid>
 {
 
     Task AddPatient(PatientDataModel patient);
-    Task<Patient> GetPatientByIdAsync(long id);
-    Task<Patient> GetPatientByEmail(string email);
-    Task<Patient> Update(Patient patient);
+    Task<PatientDataModel?> GetPatientByMedicalRecordNumber(MedicalRecordNumber medicalRecordNumber);
+    Task UpdatePatient(PatientDataModel patient);
     Task<int> CountAsync();
-    Task<Patient> GetPatientByMedicalRecordNumber(MedicalRecordNumber medicalRecordNumber);
 
 
 }

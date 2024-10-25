@@ -5,7 +5,6 @@ namespace G74.Domain.DomainServices;
 
 public class MedicalRecordNumberGenerator : IMedicalRecordNumberGenerator
 {
-
     private IPatientRepository _patientRepository;
 
     public MedicalRecordNumberGenerator(IPatientRepository patientRepository)
@@ -13,8 +12,6 @@ public class MedicalRecordNumberGenerator : IMedicalRecordNumberGenerator
         _patientRepository = patientRepository;
 
     }
-    
-    
     public async Task<MedicalRecordNumber> GenerateMedicalNumber()
     {
         var totalNumberOfPatients = await _patientRepository.CountAsync();

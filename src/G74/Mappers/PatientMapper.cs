@@ -1,5 +1,6 @@
 ﻿using G74.DataModel;
 using G74.Domain;
+using G74.DTO;
 
 namespace G74.Mappers;
 
@@ -23,28 +24,17 @@ public class PatientMapper
         ArgumentNullException.ThrowIfNull(patient, nameof(Patient));
 
         return new PatientDataModel(patient);
-
     }
 
-    public static Patient FromDataModelToDomain(PatientDataModel patientDataModel)
+    public static CreatePatientDTO FromDataModelToCreatePatientDto(PatientDataModel patientDataModel)
     {
-        ArgumentNullException.ThrowIfNull(patientDataModel, nameof(patientDataModel));
+        ArgumentNullException.ThrowIfNull(patientDataModel);
 
-        /**
-        Name name,
-        MedicalRecordNumber medicalRecordNumber,
-        DateOfBirth dateOfBirth,
-        Gender gender,
-        ContactInformation contactInformation,
-        EmergencyContact emergencyContact
-        */
-        return new Patient(
-            patientDataModel.Name,
-            patientDataModel.MedicalRecordNumber,
-            patientDataModel.DateOfBirth,
-            patientDataModel.Gender,
-            patientDataModel.ContactInformation,
-            patientDataModel.EmergencyContact
-        );
+        return new CreatePatientDTO(patientDataModel.Name.TheName, patientDataModel.Gender.GenderDescription,
+            new DateOfBirthDTO(patientDataModel.DateOfBirth.YearOfBirth, patientDataModel.DateOfBirth.MonthOfBirth,
+                patientDataModel.DateOfBirth.DayOfBirth),
+            new ContactInformationDTO(patientDataModel.ContactInformation.PhoneNumber,
+                patientDataModel.ContactInformation.EmailAddress.email),
+            new EmergencyContactDTO(patientDataModel.EmergencyContact._phoneNumber));
     }
 }

@@ -27,17 +27,28 @@ public class PatientEntityTypeConfiguration : IEntityTypeConfiguration<PatientDa
             .HasConversion(new GenderConverter())
             .IsRequired()
             .HasColumnName("Gender");
+
         builder.Property(p => p.ContactInformation)
             .HasConversion(new ContactInformationConverter())
             .IsRequired()
             .HasColumnName("ContactInformation");
+
         builder.Property(p => p.EmergencyContact)
             .HasConversion(new EmergencyContactConverter())
             .IsRequired()
             .HasColumnName("EmergencyContact");
 
+        // Map ToDelete as a boolean column
+        builder.Property(p => p.DeletionInformation.ToDelete)
+            .IsRequired()
+            .HasColumnName("ToDelete");
+
+        // Map DateToBeDeleted as a DateTime? column
+        builder.Property(p => p.DeletionInformation.DateToBeDeleted)
+            .HasColumnName("DateToBeDeleted");
+
         builder.HasIndex(p => p.MedicalRecordNumber).IsUnique();
 
-        builder.HasIndex(p => p.ContactInformation).IsUnique();
+        
     }
 }

@@ -23,8 +23,7 @@ public class Patient : IAggregateRoot
     public MedicalCondition MedicalCondition { get; private set; }
 
 
-    public Patient(
-        Name name,
+    public Patient(Name name,
         MedicalRecordNumber medicalRecordNumber,
         DateOfBirth dateOfBirth,
         Gender gender,
@@ -40,33 +39,5 @@ public class Patient : IAggregateRoot
         EmergencyContact = emergencyContact;
     }
 
-    public void UpdateName(Name newName)
-    {
-        Name = newName
-               ?? throw new ArgumentNullException(nameof(newName));
-    }
-
-    public void UpdateDateOfBirth(DateOfBirth newDateOfBirth)
-    {
-        DateOfBirth = newDateOfBirth
-                      ?? throw new ArgumentNullException(nameof(newDateOfBirth));
-    }
-
-    public void UpdateGender(Gender newGender)
-    {
-        Gender = newGender
-                 ?? throw new ArgumentNullException(nameof(newGender));
-    }
-
-    public void UpdateContactInformation(ContactInformation newContactInformation)
-    {
-        ContactInformation = newContactInformation
-                             ?? throw new ArgumentNullException(nameof(newContactInformation));
-    }
-
-    public void UpdateEmergencyContact(EmergencyContact newEmergencyContact)
-    {
-        EmergencyContact = newEmergencyContact
-                           ?? throw new ArgumentNullException(nameof(newEmergencyContact));
-    }
+    
 }

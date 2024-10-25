@@ -6,7 +6,7 @@ namespace G74.Domain.Value_Objects.Patient;
 public class EmergencyContact : IValueObject
 {
 
-    private string _phoneNumber { get; }
+    public string _phoneNumber { get; }
 
 
     public EmergencyContact(string phoneNumber)

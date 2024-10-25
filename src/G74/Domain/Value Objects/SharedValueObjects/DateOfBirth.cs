@@ -5,11 +5,11 @@
 namespace G74.Domain.Value_Objects.SharedValueObjects;
 public class DateOfBirth : IValueObject
 {
-    private int YearOfBirth { get; }
+    public int YearOfBirth { get; }
 
-    private int MonthOfBirth { get; }
+    public int MonthOfBirth { get; }
 
-    private int DayOfBirth { get; }
+    public int DayOfBirth { get; }
 
 
     public DateOfBirth(int yearOfBirth, int monthOfBirth, int dayOfBirth)

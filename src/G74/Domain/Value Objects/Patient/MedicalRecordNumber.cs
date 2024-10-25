@@ -10,6 +10,7 @@ public class MedicalRecordNumber : IValueObject
 
     public MedicalRecordNumber(string medicalNumber)
     {
+        
         MedicalNumber = medicalNumber;
     }
 

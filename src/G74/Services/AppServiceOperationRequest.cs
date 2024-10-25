@@ -1,4 +1,5 @@
 
+using G74.Domain.IRepositories;
 using G74.Domain.Value_Objects.Patient;
 using G74.Domain.Value_Objects.SharedValueObjects;
 using G74.Services;
@@ -7,6 +8,7 @@ public class AppServiceOperationRequest : IAppServiceOperationRequest
 {
     private readonly IOperationRequestRepository _operationRepository;
     private readonly IPatientAppService _patientAppService;
+    private readonly IPatientRepository _patientRepository;
     
 
     public AppServiceOperationRequest(IOperationRequestRepository operationRepository)
@@ -31,7 +33,7 @@ public class AppServiceOperationRequest : IAppServiceOperationRequest
             Console.WriteLine("Pois");
         }
         
-        if(_patientAppService.GetPatientByMedicalRecordNumber(new MedicalRecordNumber(operationDto.MedicalRecordNumber))==null)
+        if(_patientRepository.GetPatientByMedicalRecordNumber(new MedicalRecordNumber(operationDto.MedicalRecordNumber)) == null)
         {
             throw new ArgumentException("No patient found with this medical record number");
         }
