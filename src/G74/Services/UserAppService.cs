@@ -21,11 +21,11 @@ public class UserAppService
     
     public async Task<UserDTO> Create(UserDTO uDto)
     {
-        /*bool bExists = await _repoUser.UserExists(uDto.Email.ToString());
+        bool bExists = await _repoUser.UserExists(uDto.Email);
         if(bExists) {
             Console.WriteLine("User already exists with the given email.");
             return null;
-        }*/
+        }
         User user = _userMapper.Create(uDto);
         User userSaved = await _repoUser.Save(user);
         UserDTO userDto = _userToDto.DomainToDTO(userSaved);

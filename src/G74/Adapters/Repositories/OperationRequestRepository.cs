@@ -1,4 +1,4 @@
-using G74.Infrastructure.Shared;
+/*using G74.Infrastructure.Shared;
 using Microsoft.EntityFrameworkCore;
 
 namespace G74.Adapters.Repositories
@@ -29,4 +29,4 @@ namespace G74.Adapters.Repositories
             throw new NotImplementedException();
         }
     }
-}
+}*/

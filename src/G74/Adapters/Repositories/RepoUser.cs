@@ -54,10 +54,10 @@ public class RepoUser : BaseRepository<UserDataModel, Guid>, IRepoUser
         }
     }
     
-    public async Task<bool> UserExists(string email)
+    public async Task<bool> UserExists(Email email)
     {
         return await _context.Users
-            .AnyAsync(u => u.Email.email == email);
+            .AnyAsync(u => u.Email.Equals(email));
     }
 
     public Task<User> GetUserByEmail(object value)

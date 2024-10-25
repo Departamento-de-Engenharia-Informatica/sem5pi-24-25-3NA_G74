@@ -73,7 +73,7 @@ public class Startup
         services.AddTransient<UserMapper>();
         services.AddTransient<UserToDataMapper>();
         services.AddScoped<IAppServiceOperationRequest, AppServiceOperationRequest>();
-        services.AddTransient<IOperationRequestRepository, OperationRequestRepository>();
+        //services.AddTransient<IOperationRequestRepository, OperationRequestRepository>();
         
         
     }

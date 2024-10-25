@@ -7,6 +7,6 @@ public interface IRepoUser
 {
     Task<User> Save(User user);
     Task<User> GetUserByEmail(string email);
-    Task<bool> UserExists(string email);
-    //Task<User> GetUserByEmail(object value);
+    Task<bool> UserExists(Email email);
+    Task<User> GetUserByEmail(object value);
 }
