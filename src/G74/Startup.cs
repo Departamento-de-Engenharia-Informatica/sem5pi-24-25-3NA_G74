@@ -30,7 +30,23 @@ public class Startup
                 .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole())));
         
         ConfigureMyServices(serviceCollection);
-
+        
+        serviceCollection.AddDistributedMemoryCache();
+        
+        serviceCollection.AddSession(options =>
+        {
+            options.IdleTimeout = TimeSpan.FromMinutes(30);
+            options.Cookie.HttpOnly = true;
+            options.Cookie.IsEssential = true;
+        });
+        
+        serviceCollection.AddAuthentication("UserSession")
+            .AddCookie("UserSession", options =>
+            {
+                options.LoginPath = "/api/auth/google-login"; 
+                options.LogoutPath = "/api/auth/logout"; 
+            });
+        
         serviceCollection.AddControllers();
     }
 
@@ -41,7 +57,6 @@ public class Startup
 
             app.UseSwagger();
             app.UseSwaggerUI();
-            
             app.UseDeveloperExceptionPage();
         }
         else
@@ -53,8 +68,10 @@ public class Startup
         app.UseHttpsRedirection();
 
         app.UseRouting();
-
+        app.UseSession();
+        app.UseAuthentication();
         app.UseAuthorization();
+
 
         app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
     }
@@ -73,8 +90,9 @@ public class Startup
         services.AddTransient<UserMapper>();
         services.AddTransient<UserToDataMapper>();
         services.AddScoped<IAppServiceOperationRequest, AppServiceOperationRequest>();
+        services.AddScoped<AuthController>();
         //services.AddTransient<IOperationRequestRepository, OperationRequestRepository>();
-        
-        
+
+
     }
 }
