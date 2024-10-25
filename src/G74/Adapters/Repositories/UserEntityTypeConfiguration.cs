@@ -25,11 +25,13 @@ public class UserEntityTypeConfiguration : IEntityTypeConfiguration<UserDataMode
             .IsRequired()
             .HasConversion(new EmailConverter())
             .IsRequired()
-            .HasMaxLength(100);
+            .HasMaxLength(100)
+            .HasColumnName("Email");
         
         builder.Property(u => u.Role)
             .IsRequired()
             .IsRequired()
-            .HasMaxLength(20);
+            .HasMaxLength(20)
+            .HasColumnName("Role");
     }
 }

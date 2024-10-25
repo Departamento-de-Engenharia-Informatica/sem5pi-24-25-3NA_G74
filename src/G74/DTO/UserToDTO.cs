@@ -10,10 +10,16 @@ using System.Text.Json;
 
 public class UserToDTO
 {
-    static public UserDTO DomainToDTO(User user) {
+    public UserDTO DomainToDTO(User user) {
 
-        UserDTO userDto = new UserDTO(new Username(user.GetUsername()), new Email(user.GetEmail()), user.role);
+        UserDTO userDto = new UserDTO(user.username.name, user.email.email, user.GetRole());
 
+        return userDto;
+    }
+
+    public UserDTO JsonToDTO(JsonUserDTO jsonUserDto)
+    {
+        UserDTO userDto = new UserDTO(jsonUserDto.Username, jsonUserDto.Email, jsonUserDto.Role);
         return userDto;
     }
 }

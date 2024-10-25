@@ -16,9 +16,7 @@ public class UserToDataMapper
 
         UserDataModel userDataModel = new UserDataModel
         (
-            user.GetUsername(),
-            user.GetEmail(),     
-            user.GetRole()    
+            user    
         );
 
         return userDataModel;
@@ -31,16 +29,12 @@ public class UserToDataMapper
             throw new ArgumentNullException(nameof(savedUser), "DataUser cannot be null.");
         }
         
-        if (!Enum.TryParse<Role>(savedUser.Role, true, out Role role))
-        {
-            throw new ArgumentException($"Invalid role: {savedUser.Role}");
-        }
         
         return new User
         (
-            new Username(savedUser.Username),  
-            role,     
-            new Email(savedUser.Email)
+            savedUser.Username,  
+            savedUser.Role,     
+            savedUser.Email
         );
     }
 }

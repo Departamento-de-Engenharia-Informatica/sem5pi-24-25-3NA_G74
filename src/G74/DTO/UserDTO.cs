@@ -5,14 +5,21 @@ namespace G74.DTO;
 
 public class UserDTO
 {
-    public Username Username { get; }
-    public Email Email { get; }
-    public Role Role { get; }
-
-    public UserDTO(Username username, Email email, Role role)
+    public Username Username { get; set; }
+    public Email Email { get; set; }
+    public Role Role { get; set; }
+    
+    public UserDTO(string username, string email, string role)
     {
-        Username = username ?? throw new ArgumentNullException(nameof(username));
-        Email = email ?? throw new ArgumentNullException(nameof(email));
-        Role = role;
+        Username = new Username(username);
+        Email = new Email(email);
+        if (Enum.TryParse(role, true, out Role parsedRole))
+        {
+            Role = parsedRole;
+        }
+        else
+        {
+            throw new ArgumentException("Invalid role value");
+        }
     }
 }

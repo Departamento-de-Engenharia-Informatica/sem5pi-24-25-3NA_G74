@@ -23,12 +23,13 @@ public class UserController : ControllerBase
     }
   
     [HttpPost("register")]
-    public async Task<ActionResult<UserDTO>> RegisterNewUser([FromBody]UserDTO uDto)
+    public async Task<ActionResult<UserDTO>> RegisterNewUser([FromBody]JsonUserDTO jsonUserDto)
     {
         try
         {
-            var userDto = await _userAppService.Create(uDto);
-            return CreatedAtAction(nameof(GetUserByEmail), userDto);
+            UserDTO uDto = _userToDto.JsonToDTO(jsonUserDto);
+            UserDTO userDto = await _userAppService.Create(uDto);
+            return CreatedAtAction(nameof(RegisterNewUser), userDto);
         }
         catch (Exception ex)
         {
