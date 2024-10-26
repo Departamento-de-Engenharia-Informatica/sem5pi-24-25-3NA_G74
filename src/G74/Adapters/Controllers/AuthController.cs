@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using System.Text;
 using G74.Domain.Value_Objects;
+using G74.Domain.Value_Objects.User;
 using G74.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;

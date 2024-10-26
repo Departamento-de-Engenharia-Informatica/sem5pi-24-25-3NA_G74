@@ -1,4 +1,5 @@
 using G74.Domain.Value_Objects;
+using G74.Domain.Value_Objects.User;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace G74.Infrastructure.Converters;
