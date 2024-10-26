@@ -9,6 +9,7 @@ using System.Security.Claims;
 using System.Text;
 using G74.Domain.Value_Objects;
 using G74.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 
 namespace G74.Adapters.Controllers
@@ -25,13 +26,18 @@ namespace G74.Adapters.Controllers
             _context = context;
             //_authAppService = authAppService;
         }
-
+        
+        [AllowAnonymous]
         [HttpPost("google-login")]
         public async Task<IActionResult> GoogleLogin([FromBody] GoogleLoginRequest request)
         {
             try
             {
                 var payload = await GoogleJsonWebSignature.ValidateAsync(request.Token);
+                Console.WriteLine("Token validado com sucesso. Informações do payload:");
+                Console.WriteLine($"Email: {payload.Email}");
+                Console.WriteLine($"Nome: {payload.Name}");
+                Console.WriteLine($"ID: {payload.Subject}");
                 Email loginEmail = new Email(payload.Email);
                 var userDataModel = await _context.Users.SingleOrDefaultAsync(u => u.Email.Equals(loginEmail));
                 
@@ -81,6 +87,10 @@ namespace G74.Adapters.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            foreach (var cookie in HttpContext.Request.Cookies.Keys)
+            {
+                HttpContext.Response.Cookies.Delete(cookie);
+            }
             return Ok(new { success = true, message = "Logout done successfully." });
         }
     }
