@@ -1,5 +1,4 @@
 
-using G74.Domain.IRepositories;
 using G74.Domain.Value_Objects.Patient;
 using G74.Domain.Value_Objects.SharedValueObjects;
 using G74.Services;
@@ -8,7 +7,6 @@ public class AppServiceOperationRequest : IAppServiceOperationRequest
 {
     private readonly IOperationRequestRepository _operationRepository;
     private readonly IPatientAppService _patientAppService;
-    private readonly IPatientRepository _patientRepository;
     
 
     public AppServiceOperationRequest(IOperationRequestRepository operationRepository)
@@ -33,10 +31,10 @@ public class AppServiceOperationRequest : IAppServiceOperationRequest
             Console.WriteLine("Pois");
         }
         
-        if(_patientRepository.GetPatientByMedicalRecordNumber(new MedicalRecordNumber(operationDto.MedicalRecordNumber)) == null)
-        {
-            throw new ArgumentException("No patient found with this medical record number");
-        }
+        // if(_patientAppService.GetPatientByMedicalRecordNumber(new MedicalRecordNumber(operationDto.MedicalRecordNumber))==null)
+        // { 
+        //     throw new ArgumentException("No patient found with this medical record number");
+        // }
 
         var operation = await new OperationRequestBuilder(
             new MedicalRecordNumber(operationDto.MedicalRecordNumber),
@@ -52,8 +50,37 @@ public class AppServiceOperationRequest : IAppServiceOperationRequest
         return OperationRequestMapper.ToDTO(operation);
     }
 
-    public Task<OperationRequestDTO> UpdateOperationRequest(long id, OperationRequestDTO updatedOperationDto)
+    public async Task<OperationRequestDTO> UpdateOperationRequest(Guid id, OperationRequestDTO updatedOperationDto)
     {
-        throw new NotImplementedException();
+        
+        if (updatedOperationDto == null)
+    {
+        throw new ArgumentNullException(nameof(updatedOperationDto), "Updated operation request data transfer object cannot be null");
     }
+    
+    var existingOperation = await _operationRepository.GetOperationRequestByIdAsync(id);
+    if (existingOperation == null)
+    {
+        throw new ArgumentException("No operation found with this ID");
+    }
+    Console.WriteLine("Operation");
+  
+    existingOperation.MedicalRecordNumber = new MedicalRecordNumber(updatedOperationDto.MedicalRecordNumber.MedicalNumber);
+    existingOperation.LicenceNumber = new LicenceNumber(updatedOperationDto.LicenceNumber.licenceNumber);
+    existingOperation.OperationType = new OperationType(
+        new Name(updatedOperationDto.OperationType.Name.ToString()),
+        new RequiredStaffBySpecialization(updatedOperationDto.OperationType.RequiredStaffBySpecialization.SpecializationStaffList),
+        updatedOperationDto.OperationType.EstimatedDuration
+    );
+    existingOperation.DeadlineDate = new DeadlineDate(updatedOperationDto.DeadlineDate.date);
+    existingOperation.Priority = new Priority(updatedOperationDto.Priority.PriorityDescription);
+
+    
+    await _operationRepository.Update(id,existingOperation);
+
+    
+    return OperationRequestMapper.ToDTO(existingOperation);
+    }
+
+   
 }

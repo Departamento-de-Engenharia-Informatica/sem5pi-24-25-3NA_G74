@@ -74,4 +74,26 @@ public class OperationRequestMapper
             new Priority(operationRequestDataModel.Priority)
         );
     }
+
+    public static OperationRequestDTO FromCreateDTOtoDTO(CreateOperationRequestDTO operationRequestDTO){
+        /**
+            public MedicalRecordNumber MedicalRecordNumber {get;private set; }
+            public LicenceNumber LicenceNumber {get;private set; }
+            public OperationType OperationType {get;private set; }
+            public DeadlineDate DeadlineDate {get;private set; }
+            public Priority Priority {get;private set; }
+        */
+        
+        return new OperationRequestDTO(
+           new MedicalRecordNumber( operationRequestDTO.MedicalRecordNumber),
+           new LicenceNumber(operationRequestDTO.LicenceNumber),
+           new OperationType(
+               new Name(operationRequestDTO.Name),
+               new RequiredStaffBySpecialization(operationRequestDTO.RequiredStaffBySpecialization),
+               operationRequestDTO.EstimatedDuration)
+           ,
+           new DeadlineDate(operationRequestDTO.DeadlineDate),
+           new Priority(operationRequestDTO.Priority)
+        );
+    }
 }

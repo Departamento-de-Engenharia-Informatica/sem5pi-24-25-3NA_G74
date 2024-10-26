@@ -2,16 +2,16 @@ using G74.Domain.Shared;
 
 public class DataOperationRequest : Entity<Guid>
 {
-    public string MedicalRecordNumber {get;private set; }
-    public string LicenceNumber {get;private set; }
-    public string NameOperationType {get;private set; }
-    public List<SpecializationStaff> RequiredStaffBySpecialization {get; private set;}
-    public int Seconds {get; private set; }
-    public int Minutes {get; private set; }
-    public int Hours {get; private set; }
-    public int Days {get; private set; }
-    public DateTime DeadlineDate {get;private set; }
-    public string Priority {get;private set; }
+    public string MedicalRecordNumber {get; set; }
+    public string LicenceNumber {get; set; }
+    public string NameOperationType {get; set; }
+    public List<SpecializationStaff> RequiredStaffBySpecialization {get;  set;}
+    public int Seconds {get;  set; }
+    public int Minutes {get;  set; }
+    public int Hours {get;  set; }
+    public int Days {get;  set; }
+    public DateTime DeadlineDate {get; set; }
+    public string Priority {get; set; }
 
     public DataOperationRequest(): base(Guid.NewGuid())  { }
     public DataOperationRequest(

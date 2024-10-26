@@ -35,4 +35,39 @@ public class OperationRequestController : ControllerBase
         
     }
 
+    [HttpPut("{id}")]
+    public async Task<ActionResult<OperationRequestDTO>> UpdateOperationRequest(
+            string id,
+            [FromBody] CreateOperationRequestDTO updatedOperationDto
+        )
+    {
+        
+        
+        if (updatedOperationDto == null)
+        {
+            return BadRequest("Invalid operation data.");
+        }
+        if (!Guid.TryParse(id, out Guid operationRequestId))
+        {
+            return BadRequest("Invalid ID format.");
+        }
+
+        try
+        {
+            
+            var patientDTO = await _appServiceOperationRequest.UpdateOperationRequest(operationRequestId,OperationRequestMapper.FromCreateDTOtoDTO(updatedOperationDto));
+            
+            return Ok(updatedOperationDto);
+        }
+        catch (InvalidOperationException e)
+        {
+            return NotFound(e.Message);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+
 }

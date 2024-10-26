@@ -117,7 +117,7 @@ public class Startup
         services.AddTransient<UserToDataMapper>();
         services.AddScoped<IAppServiceOperationRequest, AppServiceOperationRequest>();
         services.AddScoped<AuthController>();
-        //services.AddTransient<IOperationRequestRepository, OperationRequestRepository>();
+        services.AddTransient<IOperationRequestRepository, OperationRequestRepository>();
         services.AddScoped<GmailEmailService>();
         // Add Staff-related services
         services.AddScoped<IStaffRepository, StaffRepository>();
