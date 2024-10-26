@@ -79,8 +79,8 @@ public class PatientDataModel : Entity<Guid>
                            ?? throw new ArgumentNullException(nameof(newEmergencyContact));
     }
 
-    public void MarkForDeletion(int minutes)
+    public void MarkForDeletion(TimeSpan timeSpan)
     {
-        DeletionInformation = new DeletionInformation(true, TimeSpan.FromMinutes(minutes));
+        DeletionInformation = new DeletionInformation(true, timeSpan);
     }
 }

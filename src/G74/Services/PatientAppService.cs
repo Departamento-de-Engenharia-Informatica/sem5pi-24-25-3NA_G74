@@ -143,9 +143,27 @@ public class PatientAppService : IPatientAppService
             throw new InvalidOperationException("Patient not found");
         }
 
-        int time = _configuration.GetValue<int>("GPRD:RetainInfoInMinutes");
+        string time = _configuration.GetValue<string>("GPRD:RetainInfoPeriod") ?? "2m";
 
-        existingPatient.MarkForDeletion(time);
+        TimeSpan retainInfoPeriod;
+        if (time.EndsWith("m"))
+        {
+            retainInfoPeriod = TimeSpan.FromMinutes(double.Parse(time.TrimEnd('m')));
+        }
+        else if (time.EndsWith("h"))
+        {
+            retainInfoPeriod = TimeSpan.FromHours(double.Parse(time.TrimEnd('h')));
+        }
+        else if (time.EndsWith("d"))
+        {
+            retainInfoPeriod = TimeSpan.FromDays(double.Parse(time.TrimEnd('d')));
+        }
+        else
+        {
+            throw new ArgumentException("Invalid time format. Use 'm' for minutes, 'h' for hours, or 'd' for days.");
+        }
+        
+        existingPatient.MarkForDeletion(retainInfoPeriod);
 
         await _patientRepository.UpdatePatient(existingPatient);
     }

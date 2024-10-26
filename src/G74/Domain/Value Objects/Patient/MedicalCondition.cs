@@ -5,7 +5,7 @@ namespace G74.Domain.Value_Objects.Patient;
 public class MedicalCondition : IValueObject
 {
 
-    private string MedicalConditionsDescriptions { get; }
+    public string MedicalConditionsDescriptions { get; }
 
     public MedicalCondition(string medicalConditionsDescriptions)
     {
@@ -16,7 +16,7 @@ public class MedicalCondition : IValueObject
 
     private void MedicalConditionsValidations(string medicalConditionDescription)
     {
-        if (!string.IsNullOrWhiteSpace(medicalConditionDescription))
+        if (string.IsNullOrWhiteSpace(medicalConditionDescription))
             throw new ArgumentException(MedicalConditionDescriptionNullOrWhiteSpaceMsg);
         
 
