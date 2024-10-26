@@ -1,10 +1,8 @@
-using System.Text;
+﻿using System.Text;
 using System.Text.Json;
-using DefaultNamespace;
 using G74.Adapters.Controllers;
 using G74.Adapters.Repositories;
 using G74.Domain.DomainServices;
-using G74.Domain.Factory;
 using G74.Domain.IRepositories;
 using G74.DTO;
 using G74.Infrastructure.Shared;
@@ -34,26 +32,26 @@ public class Startup
             opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
                 .ReplaceService<IValueConverterSelector, StronglyEntityIdValueConverterSelector>()
                 .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole())));
-
+        
         ConfigureMyServices(serviceCollection);
-
+        
         serviceCollection.AddDistributedMemoryCache();
-
+        
         serviceCollection.AddSession(options =>
         {
             options.IdleTimeout = TimeSpan.FromMinutes(30);
             options.Cookie.HttpOnly = true;
             options.Cookie.IsEssential = true;
         });
-
+        
         serviceCollection.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
             {
-                options.LoginPath = "/api/auth/login";
-                options.LogoutPath = "/api/auth/logout";
-                options.AccessDeniedPath = "/api/auth/access-denied";
+                options.LoginPath = "/api/auth/login"; 
+                options.LogoutPath = "/api/auth/logout"; 
+                options.AccessDeniedPath = "/api/auth/access-denied"; 
             });
-
+        
         serviceCollection.AddAuthorization(options =>
         {
             options.AddPolicy("RequireAdministratorRole", policy => policy.RequireRole("Admin"));
@@ -62,7 +60,7 @@ public class Startup
             options.AddPolicy("RequireTechnicianRole", policy => policy.RequireRole("Technician"));
             options.AddPolicy("RequirePatientRole", policy => policy.RequireRole("Patient"));
         });
-
+        
         serviceCollection.AddControllers();
     }
 
@@ -109,13 +107,6 @@ public class Startup
         services.AddScoped<AuthController>();
         //services.AddTransient<IOperationRequestRepository, OperationRequestRepository>();
 
-        // Add Staff-related services
-        services.AddScoped<IStaffRepository, StaffRepository>();
-        services.AddScoped<StaffAppService>();
-        services.AddScoped<StaffFactory>();
-        services.AddScoped<StaffMapper>();
-        services.AddScoped<StaffController>();
-        services.AddTransient<StaffToDto>();
 
     }
 }

@@ -5,6 +5,7 @@ namespace G74.DTO;
 
 public class StaffDataModel : Entity<Guid>
 {
+    public long Id { get; set; }
     public string LicenseNumber { get; set; }
     public string Name { get; set; }
     public string PhoneNumber { get; set; }
@@ -19,7 +20,7 @@ public class StaffDataModel : Entity<Guid>
 
     public StaffDataModel(Staff staff) : base(Guid.NewGuid())
     {
-        // Id = staff.Id;
+        //Id = staff.Id;
         LicenseNumber = staff.LicenseNumber.Value;
         Name = staff.Name.TheName;
         PhoneNumber = staff.PhoneNumber.Value;
