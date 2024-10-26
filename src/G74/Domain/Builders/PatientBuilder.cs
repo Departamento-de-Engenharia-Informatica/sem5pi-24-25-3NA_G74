@@ -19,13 +19,9 @@ public class PatientBuilder
     private AppointmentHistory? _appointmentHistory;
 
 
-    public PatientBuilder(
-        IMedicalRecordNumberGenerator medicalRecordNumberGenerator,
-        Name name,
+    public PatientBuilder(IMedicalRecordNumberGenerator medicalRecordNumberGenerator, Name name,
         DateOfBirth dateOfBirth,
-        Gender gender, ContactInformation contactInformation,
-        EmergencyContact emergencyContact
-        )
+        Gender gender, ContactInformation contactInformation, EmergencyContact emergencyContact)
     {
         _medicalRecordNumberGenerator = medicalRecordNumberGenerator;
         _name = name;

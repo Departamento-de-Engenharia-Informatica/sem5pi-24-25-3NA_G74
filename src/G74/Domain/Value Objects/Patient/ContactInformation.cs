@@ -5,7 +5,7 @@ namespace G74.Domain.Value_Objects.Patient;
 
 public class ContactInformation : IValueObject
 {
-    private string PhoneNumber { get; }
+    public string PhoneNumber { get; }
 
     public Email EmailAddress { get; }
 
