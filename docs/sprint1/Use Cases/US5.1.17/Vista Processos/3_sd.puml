@@ -1,0 +1,78 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor "Admin" as adm
+
+
+participant ControllerOperationRequest as ct
+participant CreateOperationRequestDTO as cdto
+participant AppServiceOperationRequest as service
+participant OperationRequestBuilder as builder
+participant MedicalRecordNumber as mrn
+participant LicenceNumber as ln
+participant OperationType as op
+participant Name as name
+participant RequiredStaffBySpecialization as rss
+participant EstimatedDuration as ed
+participant DeadlineDate as dd
+participant Priority as pr
+participant OperationRequest as op
+participant OperationRequestMapper as mapper
+participant DataOperationRequest as data
+participant OperationRequestRepository as repository
+participant BackofficeAppDbContext as db
+
+adm -> ct: PUT [FormBody],id
+
+
+activate ct
+ct -> cdto : [FormBody] into cDTO
+ct -> service : UpdateOperationRequest(id,cDTO)
+activate service
+
+service -> repository : GetOperationRequestByIdAsync(id)
+activate repository
+repository -> db : FindAsync(id)
+activate db
+db --> repository : operationRequestDataModel
+
+repository -> mapper : FromDataModelToDomain(operationRequestDataModel)
+activate mapper
+mapper --> repository : operationRequest
+
+repository --> service : operationRequest
+deactivate repository
+
+service -> mrn : new Instance(operationRequestDataModel.MedicalRecordNumber)
+service -> ln : new Instance(operationRequestDataModel.LicenceNumber)
+service -> name : new Instance(operationRequestDataModel.OperationName)
+service -> rss : new Instance(operationRequestDataModel.RequiredStaffSpecialization)
+service -> op : new Instance(name,requiredStaffBySpecialization,estimatedDuration)
+service -> dd : new Instance(operationRequestDataModel.DeadlinesDate)
+service -> pr : new Instance(operationRequestDataModel.Priority)
+service -> op : operationRequestDataModel.set(all new values)
+service -> repository : Update(id,operationRequestDataModel)
+activate repository
+repository -> db : OperationRequests.Update(dataOperation)
+repository -> db : SaveChangesAsync()
+deactivate db
+repository -> mapper : FromDataModelToDomain(dataOperation)
+
+mapper --> repository : operation
+
+deactivate repository
+service -> mapper : ToDTO(existingOperation)
+mapper --> service : dto
+deactivate mapper 
+service --> ct : dto
+ct --> adm : 200 STATUS OK
+
+
+
+
+
+
+
+@enduml
