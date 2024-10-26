@@ -12,6 +12,10 @@ public class User
     public User(Username username, Role role, Email email)
     {
         this.username = username ?? throw new ArgumentNullException(nameof(username));
+        if (!Enum.IsDefined(typeof(Role), role))
+        {
+            throw new ArgumentException("Invalid role", nameof(role));
+        }
         this.role = role;
         this.email = email ?? throw new ArgumentNullException(nameof(email));
     }
