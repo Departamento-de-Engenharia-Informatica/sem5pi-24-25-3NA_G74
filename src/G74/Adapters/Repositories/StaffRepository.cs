@@ -3,6 +3,7 @@ using G74.Domain.Aggregates.Staff;
 using G74.DTO;
 using G74.Infrastructure.Shared;
 using G74.Mappers;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -51,9 +52,9 @@ public class StaffRepository : BaseRepository<StaffDataModel, Guid>, IStaffRepos
 
             return staffSaved;    
         }
-        catch
+        catch (Exception ex)
         {
-            throw;
+            throw ex.InnerException!;
         }
     }
     
