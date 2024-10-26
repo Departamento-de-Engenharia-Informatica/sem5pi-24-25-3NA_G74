@@ -7,64 +7,73 @@ actor "Admin" as adm
 
 
 participant ControllerOperationRequest as ct
-participant jsonToDTO as jdto
-participant AppServicePatient as asu
-participant OperationRequestMapper as ifu
-participant "operationRequest : OperationRequest" as u
-participant IRepoOperationRequest as iru
-participant DomainToData as dtd
-participant DataPatient as du
-participant IDBDriver as dbd
-participant "savedPatient : DataPatient" as sdu
-participant "patientSaved : Patient" as us
-
-adm --> ct: POST regiter new OperationRequest
+participant CreateOperationRequestDTO as cdto
+participant AppServiceOperationRequest as service
+participant OperationRequestBuilder as builder
+participant MedicalRecordNumber as mrn
+participant LicenceNumber as ln
+participant OperationType as op
+participant Name as name
+participant RequiredStaffBySpecialization as rss
+participant EstimatedDuration as ed
+participant DeadlineDate as dd
+participant Priority as pr
+participant OperationRequest as op
+participant OperationRequestMapper as mapper
+participant DataOperationRequest as data
+participant OperationRequestRepository as repository
+participant BackofficeAppDbContext as db
+adm -> ct: POST [FormBody]
 
 
 activate ct
-ct --> ct : validate(json)
-ct --> jdto : mapToDTOOperationRequest(json)
-activate jdto
+ct -> cdto : [FormBody] into cDTO
+ct -> service : RegisterOperationRequest(cDTO)
+activate service
+
+service -> mrn : new Instance(cDTO.MedicalRecordNumber)
+service -> ln : new Instance(cDTO.LicenceNumber)
+service -> name : new Instance(cDTO.OperationName)
+service -> rss : new Instance(cDTO.RequiredStaffSpecialization)
+service -> op : new Instance(name,requiredStaffBySpecialization,estimatedDuration)
+service -> dd : new Instance(cDTO.DeadlinesDate)
+service -> pr : new Instance(cDTO.Priority)
+service -> builder : new Instance(MedicalRecordNumber,LicenceNumber,OperationType,DeadlineDate,Priority)
+activate builder
+service -> builder : Build()
+builder -> op : new Instance(MedicalRecordNumber,LicenceNumber,OperationType,Deadline,Prioriry)
+builder --> service : operationRequest
+deactivate builder
+service -> mapper : ToDataModel(operationRequest)
+activate mapper
+mapper -> data : new Instance(operationRequest)
+mapper --> service : operationDataModel
+
+service -> repository : Add(operationDataModel)
+activate repository
+repository -> db : OperationRequests.Add(operationDataModel)
+activate db
+repository -> db : SaveChangesAsync()
+deactivate db
+repository -> mapper : FromDataModelToDomain(operationDataModel)
+mapper --> repository : operation
+service -> mapper : toDTO(operationDataModel)
+mapper --> service : operationDTO
+deactivate mapper
 
 
-deactivate jdto
-ct --> asu : createOperationRequest(operationDTO)
-activate asu
-asu --> ifu : create(operationDTO)
-activate ifu
-ifu --> u : create()
-deactivate ifu
-asu --> iru : save(operation)
-activate iru
-iru --> dtd : mapToDataOperationRequest(operation)
-activate dtd
-dtd --> u : getEmail()
-activate u
-dtd --> u : getUsername()
-dtd --> u : getRole()
-deactivate u
-dtd --> du : create(username, email, role)
-iru --> dbd : save(dataPatient)
-activate dbd
-dbd --> sdu : save(savedPatient)
-deactivate dbd
-deactivate asu
-iru --> dtd : mapToModel(savedPatient)
-deactivate iru
-dtd --> us
-deactivate dtd
-activate us
-ct --> jdto : mapToJSON(patientSaved)
-activate jdto
-jdto --> us : getUsername()
-jdto --> us : getEmail()
-jdto --> us : getRole()
-deactivate us
-jdto --> dto : create(username, email, role)
-activate dto
-deactivate jdto
-deactivate dto
-ct --> adm : return success
+
+deactivate repository
+service --> ct : DTO
+
+
+
+
+
+ct --> adm : 201 STATUS response
+
+
+
 
 
 @enduml
