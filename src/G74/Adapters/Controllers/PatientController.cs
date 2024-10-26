@@ -14,7 +14,7 @@ public class PatientController : ControllerBase
     private readonly IPatientAppService _patientAppService;
     //private readonly GmailEmailService _gmailEmailService;
 
-    public PatientController(IPatientAppService patientAppService)//, GmailEmailService gmailEmailService)
+    public PatientController(IPatientAppService patientAppService) //, GmailEmailService gmailEmailService)
     {
         _patientAppService = patientAppService;
         //_gmailEmailService = gmailEmailService;
@@ -38,6 +38,7 @@ public class PatientController : ControllerBase
         }
     }
 
+    //[Authorize(Roles = "Admin")]
     [HttpPut("{MedicalRecordNumber}")]
     public async Task<ActionResult<CreatePatientDTO>> UpdatePatient(
         string medicalRecordNumber,
@@ -46,7 +47,7 @@ public class PatientController : ControllerBase
     {
         if (string.IsNullOrWhiteSpace(medicalRecordNumber))
         {
-            return BadRequest(new { message = "Medical record number cannot be empty or white space"});
+            return BadRequest(new { message = "Medical record number cannot be empty or white space" });
         }
 
         if (updatedPatientInfo == null)
@@ -56,14 +57,15 @@ public class PatientController : ControllerBase
 
         try
         {
-            var currentPatient = await _patientAppService.GetPatientByMedicalRecordNumber(new MedicalRecordNumber(medicalRecordNumber));
+            var currentPatient =
+                await _patientAppService.GetPatientByMedicalRecordNumber(new MedicalRecordNumber(medicalRecordNumber));
             if (currentPatient == null)
             {
                 return NotFound(new { message = "Patient not found." });
             }
-            
+
             var patientDTO = await _patientAppService.UpdatePatient(medicalRecordNumber, updatedPatientInfo);
-            
+
             return Ok(new
             {
                 message = $"Patient with medical record number: {medicalRecordNumber} was updated successfully",
@@ -80,20 +82,20 @@ public class PatientController : ControllerBase
         }
     }
 
+    //[Authorize(Roles = "Admin")]
     [HttpDelete("{medicalRecordNumber}")]
     public async Task<IActionResult> DeletePatient(string medicalRecordNumber)
     {
-
         if (string.IsNullOrWhiteSpace(medicalRecordNumber))
         {
-            return BadRequest(new { message = "Medical Record Number cannot be empty or white space" });}
-        
+            return BadRequest(new { message = "Medical Record Number cannot be empty or white space" });
+        }
+
         try
         {
             await _patientAppService.MarkPatientToBeDeleted(medicalRecordNumber);
 
             return Ok(new { message = "Patient deletion with success" });
-
         }
         catch (Exception ex)
         {
@@ -101,6 +103,39 @@ public class PatientController : ControllerBase
         }
     }
 
-    
-    
+    //[Authorize(Roles = "Admin")]
+    [HttpGet("search")]
+    public async Task<IActionResult> ListPatientsByFilter([FromQuery] PatientFilterCriteriaDTO criteria)
+    {
+        if (!ModelState.IsValid)
+        {
+            // Log or return the model state errors
+            var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+            return BadRequest(new { message = "Model binding failed", errors });
+        }
+        
+        
+        if (criteria == null)
+        {
+            return BadRequest(new { message = "Search criteria cannot be null." });
+        }
+
+        try
+        {
+            var patients = await _patientAppService.SearchPatientsByFilters(criteria);
+
+            if (patients == null || !patients.Any())
+            {
+                return NotFound(new { message = "No patients found matching the search criteria." });
+            }
+
+            return Ok(patients);
+        }
+        catch (Exception ex)
+        {
+            string errorMessage = "An error occurred searching for patients: " + ex.Message;
+
+            return BadRequest(errorMessage);
+        }
+    }
 }

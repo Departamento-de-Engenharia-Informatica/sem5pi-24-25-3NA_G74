@@ -10,9 +10,24 @@ public class MedicalRecordNumber : IValueObject
 
     public MedicalRecordNumber(string medicalNumber)
     {
-        
+        if (!IsValidMedicalRecordNumber(medicalNumber)) throw new ArgumentException(InvalidMedicalNumberMsg);
+
         MedicalNumber = medicalNumber;
     }
 
-    
+    private bool IsValidMedicalRecordNumber(string medicalNumber)
+    {
+        // Matches "YYYYMMDDDDD" pattern, where MM is from 01 to 12 and DDDDD is a 5-digit number
+        return Regex.IsMatch(medicalNumber, MedicalRecordNumberValidationPattern);
+    }
+
+    private const string MedicalRecordNumberValidationPattern = @"^\d{4}(0[1-9]|1[0-2])\d{5}$";
+
+    private const string InvalidMedicalNumberMsg =
+        "Invalid medical record number format. Expected format: YYYYMMDDDDD.";
+
+    public override string ToString()
+    {
+        return MedicalNumber;
+    }
 }

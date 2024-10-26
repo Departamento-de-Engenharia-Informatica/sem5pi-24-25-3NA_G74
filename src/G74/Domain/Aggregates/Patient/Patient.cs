@@ -31,6 +31,7 @@ public class Patient : IAggregateRoot
         EmergencyContact emergencyContact
     )
     {
+        PatientValidations(name, medicalRecordNumber, dateOfBirth, gender, contactInformation, emergencyContact);
         Name = name;
         MedicalRecordNumber = medicalRecordNumber;
         DateOfBirth = dateOfBirth;
@@ -39,5 +40,27 @@ public class Patient : IAggregateRoot
         EmergencyContact = emergencyContact;
     }
 
-    
+    private void PatientValidations(Name name,
+        MedicalRecordNumber medicalRecordNumber,
+        DateOfBirth dateOfBirth,
+        Gender gender,
+        ContactInformation contactInformation,
+        EmergencyContact emergencyContact)
+    {
+        if (name == null)
+            throw new ArgumentNullException(nameof(name), "Name cannot be null creating a patient");
+        if (medicalRecordNumber == null)
+            throw new ArgumentNullException(nameof(medicalRecordNumber),
+                "Medical Record Number cannot be null creating a patient");
+        if (dateOfBirth == null)
+            throw new ArgumentNullException(nameof(dateOfBirth), "Date of Birth cannot be null creating a patient");
+        if (gender == null)
+            throw new ArgumentNullException(nameof(gender), "Gender cannot be null creating a patient");
+        if (contactInformation == null)
+            throw new ArgumentNullException(nameof(contactInformation),
+                "Contact information cannot be null creating a patient");
+        if (emergencyContact == null)
+            throw new ArgumentNullException(nameof(emergencyContact),
+                "Emergency contact cannot be null creating a patient");
+    }
 }

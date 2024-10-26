@@ -11,7 +11,7 @@ public class Name : IValueObject
     {
         if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException(IsNullOrWithSpaceMsg);
 
-        TheName = name;
+        TheName = name.Trim();
     }
 
     private const string IsNullOrWithSpaceMsg = "Name cannot be empty or spaces";
