@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using G74.Adapters.Repositories;
 using G74.Domain.Aggregates.User;
@@ -113,5 +114,6 @@ public class RepoUserTest
             Assert.Equal("Afonso", result.GetUsername());
             Assert.Equal("afonso@gmail.com", result.GetEmail());
         }
+   
 
 }
