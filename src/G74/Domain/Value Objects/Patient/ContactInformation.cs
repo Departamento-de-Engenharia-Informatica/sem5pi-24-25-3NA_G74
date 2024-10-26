@@ -11,6 +11,9 @@ public class ContactInformation : IValueObject
     public Email EmailAddress { get; }
 
 
+    public string Email => EmailAddress.email;
+
+
     public ContactInformation(string phoneNumber, Email emailAddress)
     {
 

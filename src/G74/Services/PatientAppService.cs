@@ -63,7 +63,8 @@ public class PatientAppService : IPatientAppService
     }
 
 
-    public async Task<CreatePatientDTO> UpdatePatient(string medicalRecordNumber, CreatePatientDTO updatedInfoPatientDto)
+    public async Task<CreatePatientDTO> UpdatePatient(string medicalRecordNumber,
+        CreatePatientDTO updatedInfoPatientDto)
     {
         var existingPatient =
             await _patientRepository.GetPatientByMedicalRecordNumber(new MedicalRecordNumber(medicalRecordNumber));
@@ -76,7 +77,7 @@ public class PatientAppService : IPatientAppService
         try
         {
             UpdatePatientHelper(updatedInfoPatientDto, existingPatient);
-            
+
             await _patientRepository.UpdatePatient(existingPatient);
 
             // Log the changes
@@ -92,11 +93,9 @@ public class PatientAppService : IPatientAppService
     }
 
 
-
     public void UpdatePatientHelper(CreatePatientDTO updatedInfoPatientInfoDto,
         PatientDataModel patientDataModelToUpdate)
     {
-        
         if (!string.IsNullOrWhiteSpace(updatedInfoPatientInfoDto.Name))
         {
             patientDataModelToUpdate.UpdateName(new Name(updatedInfoPatientInfoDto.Name));
@@ -145,13 +144,12 @@ public class PatientAppService : IPatientAppService
         }
 
         int time = _configuration.GetValue<int>("GPRD:RetainInfoInMinutes");
-        
+
         existingPatient.MarkForDeletion(time);
 
         await _patientRepository.UpdatePatient(existingPatient);
-
     }
-    
+
     private static async Task LogPatientChanges(long patientId, PatientDTO updatedPatientDto)
     {
         // TODO: implement logging here. we're missing the dependency
@@ -160,16 +158,18 @@ public class PatientAppService : IPatientAppService
     public async Task<PatientDTO> GetPatientByMedicalRecordNumber(MedicalRecordNumber medicalRecordNumber)
     {
         PatientDataModel patient = await _patientRepository.GetPatientByMedicalRecordNumber(medicalRecordNumber);
-        
+
         if (patient == null)
         {
-            throw new InvalidOperationException($"Patient with medical record number '{medicalRecordNumber}' not found.");
+            throw new InvalidOperationException(
+                $"Patient with medical record number '{medicalRecordNumber}' not found.");
         }
-        
-        var patientDto = new PatientDTO(            
+
+        var patientDto = new PatientDTO(
             patient.Name,
             patient.Gender.GenderDescription,
-            new DateOfBirth(patient.DateOfBirth.YearOfBirth, patient.DateOfBirth.MonthOfBirth, patient.DateOfBirth.DayOfBirth),
+            new DateOfBirth(patient.DateOfBirth.YearOfBirth, patient.DateOfBirth.MonthOfBirth,
+                patient.DateOfBirth.DayOfBirth),
             new ContactInformation(patient.ContactInformation.PhoneNumber, patient.ContactInformation.EmailAddress),
             new EmergencyContact(patient.EmergencyContact._phoneNumber))
         {
@@ -178,4 +178,27 @@ public class PatientAppService : IPatientAppService
         return patientDto;
     }
 
+    public async Task<IEnumerable<CreatePatientDTO>> SearchPatientsByFilters(PatientFilterCriteriaDTO criteria)
+    {
+        try
+        {
+            
+            var patientsDataModelList = await _patientRepository.SearchPatientsByFiltersAsync(criteria);
+
+            var patientsList = patientsDataModelList.Select(PatientMapper.FromDataModelToCreatePatientDto).ToList();
+
+            return patientsList;
+        }
+        catch (Exception ex)
+        {
+            
+            if (ex.InnerException != null)
+            {
+                
+            }
+            
+            
+            throw new Exception("An error occurred trying to search patients.", ex);
+        }
+    }
 }
