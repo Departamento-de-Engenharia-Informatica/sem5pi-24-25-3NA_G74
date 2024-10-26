@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Text;
+using System.Text.Json;
 using G74.Adapters.Controllers;
 using G74.Adapters.Repositories;
 using G74.Domain.DomainServices;
@@ -7,8 +8,11 @@ using G74.DTO;
 using G74.Infrastructure.Shared;
 using G74.Mappers;
 using G74.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Microsoft.IdentityModel.Tokens;
 
 namespace G74;
 
@@ -40,12 +44,19 @@ public class Startup
             options.Cookie.IsEssential = true;
         });
         
-        serviceCollection.AddAuthentication("UserSession")
-            .AddCookie("UserSession", options =>
+        serviceCollection.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options =>
             {
-                options.LoginPath = "/api/auth/google-login"; 
+                options.LoginPath = "/api/auth/login"; 
                 options.LogoutPath = "/api/auth/logout"; 
+                options.AccessDeniedPath = "/api/auth/access-denied"; 
             });
+        
+        serviceCollection.AddAuthorization(options =>
+        {
+            options.AddPolicy("RequireAdministratorRole", policy => policy.RequireRole("Admin"));
+            options.AddPolicy("RequirePatientRole", policy => policy.RequireRole("Patient"));
+        });
         
         serviceCollection.AddControllers();
     }

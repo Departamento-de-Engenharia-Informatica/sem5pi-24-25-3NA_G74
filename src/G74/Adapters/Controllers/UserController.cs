@@ -4,6 +4,7 @@ using G74.Domain.Value_Objects;
 using G74.Domain.Value_Objects.User;
 using G74.DTO;
 using G74.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace G74.Adapters.Controllers;
@@ -22,6 +23,7 @@ public class UserController : ControllerBase
         _userToDto = userToDto;
     }
   
+    [Authorize(Roles = "Admin")]
     [HttpPost("register")]
     public async Task<ActionResult<UserDTO>> RegisterNewUser([FromBody]JsonUserDTO jsonUserDto)
     {
