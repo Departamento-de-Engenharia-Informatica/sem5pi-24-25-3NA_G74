@@ -76,31 +76,6 @@ namespace G74.Adapters.Controllers
             
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
         }
-        
-        
-        /*private string GenerateJwtToken(UserDataModel userDataModel)
-        {
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, userDataModel.Id.ToString()),
-                new Claim(ClaimTypes.Email, userDataModel.Email.email),
-                new Claim(ClaimTypes.Role, userDataModel.Role.ToString())
-            };
-
-            
-            var secretKey = Convert.FromBase64String("c2VjcmV0S2V5MjAwQmFzZTY0U2VjdXJlQ3VzdG9tHANddai3ndaBFude"); 
-            var key = new SymmetricSecurityKey(secretKey);
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            var token = new JwtSecurityToken(
-                issuer: "localhost", 
-                audience: "localhost", 
-                claims: claims,
-                expires: DateTime.Now.AddMinutes(30), 
-                signingCredentials: creds);
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }*/
 
         [HttpPost("logout")]
         public async Task<IActionResult> Logout()

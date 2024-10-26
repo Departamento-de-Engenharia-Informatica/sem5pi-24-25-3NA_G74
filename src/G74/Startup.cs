@@ -55,6 +55,9 @@ public class Startup
         serviceCollection.AddAuthorization(options =>
         {
             options.AddPolicy("RequireAdministratorRole", policy => policy.RequireRole("Admin"));
+            options.AddPolicy("RequireDoctorRole", policy => policy.RequireRole("Doctor"));
+            options.AddPolicy("RequireNurseRole", policy => policy.RequireRole("Nurse"));
+            options.AddPolicy("RequireTechnicianRole", policy => policy.RequireRole("Technician"));
             options.AddPolicy("RequirePatientRole", policy => policy.RequireRole("Patient"));
         });
         
