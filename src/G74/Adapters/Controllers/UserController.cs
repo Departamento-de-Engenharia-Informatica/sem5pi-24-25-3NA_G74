@@ -31,6 +31,10 @@ public class UserController : ControllerBase
         {
             UserDTO uDto = _userToDto.JsonToDTO(jsonUserDto);
             UserDTO userDto = await _userAppService.Create(uDto);
+            if (userDto == null)
+            {
+                return new ConflictObjectResult(new { message = "User already exists with the given email." });
+            }
             return CreatedAtAction(nameof(RegisterNewUser), userDto);
         }
         catch (Exception ex)

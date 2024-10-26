@@ -11,12 +11,12 @@ namespace G74.Adapters.Controllers;
 public class PatientController : ControllerBase
 {
     private readonly IPatientAppService _patientAppService;
-    private readonly GmailEmailService _gmailEmailService;
+    //private readonly GmailEmailService _gmailEmailService;
 
-    public PatientController(IPatientAppService patientAppService, GmailEmailService gmailEmailService)
+    public PatientController(IPatientAppService patientAppService)//, GmailEmailService gmailEmailService)
     {
         _patientAppService = patientAppService;
-        _gmailEmailService = gmailEmailService;
+        //_gmailEmailService = gmailEmailService;
     }
 
 
@@ -60,7 +60,7 @@ public class PatientController : ControllerBase
             {
                 return NotFound(new { message = "Patient not found." });
             }
-            
+            /*
             var changes = new List<string>();
 
             if (currentPatient.ContactInformation.EmailAddress.email != updatedPatientInfo.ContactInformation.EmailAddress)
@@ -97,7 +97,7 @@ public class PatientController : ControllerBase
                     "Profile Update Notification", 
                     messageBody);
             }
-
+*/
             
             var patientDTO = await _patientAppService.UpdatePatient(medicalRecordNumber, updatedPatientInfo);
             

@@ -34,7 +34,7 @@ public class Startup
             opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
                 .ReplaceService<IValueConverterSelector, StronglyEntityIdValueConverterSelector>()
                 .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole())));
-
+    
         ConfigureMyServices(serviceCollection);
 
         serviceCollection.AddDistributedMemoryCache();
@@ -44,6 +44,8 @@ public class Startup
             options.IdleTimeout = TimeSpan.FromMinutes(30);
             options.Cookie.HttpOnly = true;
             options.Cookie.IsEssential = true;
+            options.Cookie.SameSite = SameSiteMode.Strict;
+            options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
         });
 
         serviceCollection.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -52,6 +54,13 @@ public class Startup
                 options.LoginPath = "/api/auth/login";
                 options.LogoutPath = "/api/auth/logout";
                 options.AccessDeniedPath = "/api/auth/access-denied";
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(30); 
+                options.SlidingExpiration = true; 
+                options.Events.OnSigningOut = context =>
+                {
+                    context.HttpContext.Response.Cookies.Delete(".AspNetCore.Cookies");
+                    return Task.CompletedTask;
+                };
             });
 
         serviceCollection.AddAuthorization(options =>
@@ -108,7 +117,7 @@ public class Startup
         services.AddScoped<IAppServiceOperationRequest, AppServiceOperationRequest>();
         services.AddScoped<AuthController>();
         //services.AddTransient<IOperationRequestRepository, OperationRequestRepository>();
-
+        services.AddScoped<GmailEmailService>();
         // Add Staff-related services
         services.AddScoped<IStaffRepository, StaffRepository>();
         services.AddScoped<StaffAppService>();
