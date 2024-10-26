@@ -25,7 +25,14 @@ public class PatientRepository : BaseRepository<PatientDataModel, Guid>, IPatien
 
     public async Task<PatientDataModel?> GetPatientByMedicalRecordNumber(MedicalRecordNumber medicalRecordNumber)
     {
-        return await _context.Patients.FirstOrDefaultAsync(x => x.MedicalRecordNumber.Equals(medicalRecordNumber));
+        var patient = await _context.Patients.FirstOrDefaultAsync(x => x.MedicalRecordNumber.Equals(medicalRecordNumber));
+
+        if (patient != null && patient.ToDelete == false)
+        {
+            return patient;
+        }
+
+        return null;
     }
 
     public Task<Patient> GetPatientByEmail(string email)
@@ -37,6 +44,22 @@ public class PatientRepository : BaseRepository<PatientDataModel, Guid>, IPatien
     public async Task UpdatePatient(PatientDataModel patient)
     {
         _context.Patients.Update(patient);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<List<PatientDataModel>> GetPatientsReadyForDeletion()
+    {
+        DateTime currentTime = DateTime.Now;
+        
+        return await _context.Patients
+            .Where(p => p.DeletionInformation.ToDelete && p.DeletionInformation.DateToBeDeleted <= currentTime)
+            .ToListAsync();
+        
+    }
+
+    public async Task DeletePatientDefinitive(PatientDataModel patient)
+    {
+        _context.Patients.Remove(patient);
         await _context.SaveChangesAsync();
     }
 

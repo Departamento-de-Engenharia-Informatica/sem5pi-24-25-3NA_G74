@@ -21,11 +21,12 @@ public class PatientAppService : IPatientAppService
 
 
     public PatientAppService(IPatientRepository patientRepository, IRepoUser repoUser,
-        IMedicalRecordNumberGenerator medicalRecordNumberGenerator)
+        IMedicalRecordNumberGenerator medicalRecordNumberGenerator, IConfiguration configuration)
     {
         _patientRepository = patientRepository;
         _medicalRecordNumberGenerator = medicalRecordNumberGenerator;
         _repoUser = repoUser;
+        _configuration = configuration;
     }
 
     public async Task<PatientDTO> RegisterPatient(CreatePatientDTO patientDto)

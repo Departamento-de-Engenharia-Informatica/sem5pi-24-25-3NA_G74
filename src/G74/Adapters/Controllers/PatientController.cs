@@ -2,6 +2,7 @@
 using G74.Domain.Value_Objects.SharedValueObjects;
 using G74.DTO;
 using G74.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace G74.Adapters.Controllers;
@@ -19,7 +20,7 @@ public class PatientController : ControllerBase
         //_gmailEmailService = gmailEmailService;
     }
 
-
+    //[Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<ActionResult<PatientDTO>> RegisterPatient([FromBody] CreatePatientDTO receivedPatient)
     {
@@ -60,44 +61,6 @@ public class PatientController : ControllerBase
             {
                 return NotFound(new { message = "Patient not found." });
             }
-            /*
-            var changes = new List<string>();
-
-            if (currentPatient.ContactInformation.EmailAddress.email != updatedPatientInfo.ContactInformation.EmailAddress)
-            {
-                changes.Add("Email");
-            }
-
-            if (currentPatient.ContactInformation.PhoneNumber != updatedPatientInfo.ContactInformation.PhoneNumber)
-            {
-                changes.Add("Phone Number");
-            }
-
-            if (currentPatient.Name.TheName != updatedPatientInfo.Name)
-            {
-                changes.Add("Name");
-            }
-
-            if (currentPatient.Gender != updatedPatientInfo.Gender)
-            {
-                changes.Add("Gender");
-            }
-
-            if (!currentPatient.DateOfBirth.Equals(updatedPatientInfo.DateOfBirth))
-            {
-                changes.Add("Date of Birth");
-            }
-            
-            if (changes.Any())
-            {
-                var changedFields = string.Join(", ", changes);
-                var messageBody = $"The following fields were updated: {changedFields}.";
-                
-                await _gmailEmailService.SendEmailAsync(currentPatient.ContactInformation.EmailAddress.email, 
-                    "Profile Update Notification", 
-                    messageBody);
-            }
-*/
             
             var patientDTO = await _patientAppService.UpdatePatient(medicalRecordNumber, updatedPatientInfo);
             

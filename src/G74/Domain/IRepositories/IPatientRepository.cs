@@ -12,5 +12,7 @@ public interface IPatientRepository : IRepository<PatientDataModel, Guid>
     Task UpdatePatient(PatientDataModel patient);
     Task<int> CountAsync();
 
+    Task<List<PatientDataModel>> GetPatientsReadyForDeletion();
 
+    Task DeletePatientDefinitive(PatientDataModel patient);
 }
