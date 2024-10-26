@@ -5,6 +5,7 @@ namespace G74.Domain.Aggregates.Staff;
 
 public class Staff
 {
+    public Guid Id {get; set;}
     public LicenseNumber LicenseNumber { get; private set; }
     public Name Name { get; private set; }
     public PhoneNumber PhoneNumber { get; private set; }

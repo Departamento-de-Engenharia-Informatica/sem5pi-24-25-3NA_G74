@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace G74.Migrations
 {
     [DbContext(typeof(BackofficeAppDbContext))]
-    partial class BackofficeAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241026005126_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -98,7 +101,7 @@ namespace G74.Migrations
 
                     b.Property<string>("ContactInformation")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("ContactInformation");
 
                     b.Property<string>("DateOfBirth")
@@ -128,37 +131,13 @@ namespace G74.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ContactInformation")
+                        .IsUnique();
+
                     b.HasIndex("MedicalRecordNumber")
                         .IsUnique();
 
                     b.ToTable("Patients");
-                });
-
-            modelBuilder.Entity("G74.DataModel.PatientDataModel", b =>
-                {
-                    b.OwnsOne("G74.Domain.Value_Objects.Patient.DeletionInformation", "DeletionInformation", b1 =>
-                        {
-                            b1.Property<Guid>("PatientDataModelId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<DateTime?>("DateToBeDeleted")
-                                .HasColumnType("datetime2")
-                                .HasColumnName("DateToBeDeleted");
-
-                            b1.Property<bool>("ToDelete")
-                                .HasColumnType("bit")
-                                .HasColumnName("ToDelete");
-
-                            b1.HasKey("PatientDataModelId");
-
-                            b1.ToTable("Patients");
-
-                            b1.WithOwner()
-                                .HasForeignKey("PatientDataModelId");
-                        });
-
-                    b.Navigation("DeletionInformation")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

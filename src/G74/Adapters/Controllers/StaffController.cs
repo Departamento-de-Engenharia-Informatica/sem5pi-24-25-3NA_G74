@@ -9,10 +9,12 @@ namespace G74.Adapters.Controllers;
 public class StaffController : ControllerBase
 {
     private readonly StaffAppService _staffAppService;
+    private readonly StaffToDto _staffToDto;
     
-    public StaffController(StaffAppService staffAppService)
+    public StaffController(StaffAppService staffAppService, StaffToDto staffToDto)
     {
         _staffAppService = staffAppService;
+        _staffToDto = staffToDto;
     }
     
     // GET: api/Staff//license/682468
@@ -28,25 +30,24 @@ public class StaffController : ControllerBase
         return Ok(staffDTO);
     }
     
-    // // POST: api/Staff
-    // // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-    // [HttpPost]
-    // public async Task<ActionResult<StaffDto>> RegisterStaff([FromBody]JsonStaffDTO jsonStaffDto)  
-    // {
-    //     try
-    //     {
-    //         
-    //         
-    //         StaffDto resultStaffDTO = await _staffAppService.Add(staffDTO);
-    //         
-    //         return CreatedAtAction(
-    //             nameof(GetStaffByLicenseNumber),
-    //             new { licenseNumber = staffDTO.LicenseNumber },
-    //             resultStaffDTO);
-    //     }
-    //     catch (Exception ex)
-    //     {
-    //         return BadRequest(ex.Message);
-    //     }
-    // }
+    // POST: api/Staff
+    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+    [HttpPost]
+    public async Task<ActionResult<StaffDto>> RegisterStaff([FromBody]JsonStaffDto jsonStaffDto)
+    {
+        try
+        {
+            StaffDto staffDto = _staffToDto.JsonToDto(jsonStaffDto);
+            StaffDto resultStaffDto = await _staffAppService.Add(staffDto);
+            
+            return CreatedAtAction(
+                nameof(GetStaffByLicenseNumber),
+                new { licenseNumber = resultStaffDto.LicenseNumber },
+                resultStaffDto);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 }
