@@ -1,14 +1,14 @@
 using G74.Domain.Aggregates.User;
-using NUnit.Framework;
+using JetBrains.Annotations;
+using Xunit;
 
 namespace G74.Tests.Domain.Aggregates.User;
 
-[TestFixture]
-[TestOf(typeof(G74.Domain.Aggregates.User.User))]
+[TestSubject(typeof(G74.Domain.Aggregates.User.User))]
 public class UserTest
 {
 
-    [Test]
+    [Fact]
     public void METHOD()
     {
         
