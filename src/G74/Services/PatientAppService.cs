@@ -154,4 +154,26 @@ public class PatientAppService : IPatientAppService
     {
         // TODO: implement logging here. we're missing the dependency
     }
+
+    public async Task<PatientDTO> GetPatientByMedicalRecordNumber(MedicalRecordNumber medicalRecordNumber)
+    {
+        PatientDataModel patient = await _patientRepository.GetPatientByMedicalRecordNumber(medicalRecordNumber);
+        
+        if (patient == null)
+        {
+            throw new InvalidOperationException($"Patient with medical record number '{medicalRecordNumber}' not found.");
+        }
+        
+        var patientDto = new PatientDTO(            
+            patient.Name,
+            patient.Gender.GenderDescription,
+            new DateOfBirth(patient.DateOfBirth.YearOfBirth, patient.DateOfBirth.MonthOfBirth, patient.DateOfBirth.DayOfBirth),
+            new ContactInformation(patient.ContactInformation.PhoneNumber, patient.ContactInformation.EmailAddress),
+            new EmergencyContact(patient.EmergencyContact._phoneNumber))
+        {
+        };
+
+        return patientDto;
+    }
+
 }

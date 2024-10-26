@@ -1,4 +1,5 @@
-﻿using G74.Domain.Value_Objects.SharedValueObjects;
+﻿using G74.Domain.Value_Objects.Patient;
+using G74.Domain.Value_Objects.SharedValueObjects;
 using G74.DTO;
 using G74.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,12 @@ namespace G74.Adapters.Controllers;
 public class PatientController : ControllerBase
 {
     private readonly IPatientAppService _patientAppService;
+    private readonly GmailEmailService _gmailEmailService;
 
-    public PatientController(IPatientAppService patientAppService)
+    public PatientController(IPatientAppService patientAppService, GmailEmailService gmailEmailService)
     {
         _patientAppService = patientAppService;
+        _gmailEmailService = gmailEmailService;
     }
 
 
@@ -52,7 +55,52 @@ public class PatientController : ControllerBase
 
         try
         {
+            var currentPatient = await _patientAppService.GetPatientByMedicalRecordNumber(new MedicalRecordNumber(medicalRecordNumber));
+            if (currentPatient == null)
+            {
+                return NotFound(new { message = "Patient not found." });
+            }
+            
+            var changes = new List<string>();
+
+            if (currentPatient.ContactInformation.EmailAddress.email != updatedPatientInfo.ContactInformation.EmailAddress)
+            {
+                changes.Add("Email");
+            }
+
+            if (currentPatient.ContactInformation.PhoneNumber != updatedPatientInfo.ContactInformation.PhoneNumber)
+            {
+                changes.Add("Phone Number");
+            }
+
+            if (currentPatient.Name.TheName != updatedPatientInfo.Name)
+            {
+                changes.Add("Name");
+            }
+
+            if (currentPatient.Gender != updatedPatientInfo.Gender)
+            {
+                changes.Add("Gender");
+            }
+
+            if (!currentPatient.DateOfBirth.Equals(updatedPatientInfo.DateOfBirth))
+            {
+                changes.Add("Date of Birth");
+            }
+            
+            if (changes.Any())
+            {
+                var changedFields = string.Join(", ", changes);
+                var messageBody = $"The following fields were updated: {changedFields}.";
+                
+                await _gmailEmailService.SendEmailAsync(currentPatient.ContactInformation.EmailAddress.email, 
+                    "Profile Update Notification", 
+                    messageBody);
+            }
+
+            
             var patientDTO = await _patientAppService.UpdatePatient(medicalRecordNumber, updatedPatientInfo);
+            
             return Ok(new
             {
                 message = $"Patient with medical record number: {medicalRecordNumber} was updated successfully",
@@ -89,6 +137,7 @@ public class PatientController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
+
     
     
 }
