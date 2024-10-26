@@ -1,4 +1,5 @@
-﻿using G74.DTO;
+﻿using System.ComponentModel.DataAnnotations;
+using G74.DTO;
 using G74.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,6 +16,15 @@ public class StaffController : ControllerBase
     {
         _staffAppService = staffAppService;
         _staffToDto = staffToDto;
+    }
+    
+    // GET: api/Staff/
+    [HttpGet]
+    public async Task<ActionResult<StaffDto>> GetStaff()
+    {
+        IEnumerable<StaffDto> staffDto = await _staffAppService.GetAll();
+
+        return Ok(staffDto);
     }
     
     // GET: api/Staff//license/682468
@@ -49,5 +59,33 @@ public class StaffController : ControllerBase
         {
             return BadRequest(ex.Message);
         }
+    }
+    
+    // PUT: api/Staff/license/{licenseNumber}
+    [HttpPut("license/{licenseNumber}")]
+    public async Task<ActionResult<StaffDto>> UpdateStaff(string licenseNumber, [FromBody] JsonStaffDto jsonStaffDto)
+    {
+        try
+        {
+            // maybe put this in service instead and just catch exception here instead
+            StaffDto? existingStaff = await _staffAppService.GetByLicenseNumber(licenseNumber);
+            if (existingStaff == null)
+            {
+                return NotFound($"Staff with license number {licenseNumber} not found.");
+            }
+            StaffDto staffDto = _staffToDto.JsonToDto(jsonStaffDto);
+            var staffDtoResult = await _staffAppService.Update(licenseNumber, staffDto);
+            
+            return Ok(staffDtoResult);
+        }
+        catch (ValidationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        // catch (Exception ex)
+        // {
+        //     // return StatusCode(500, "An error occurred while updating the staff profile.");
+        //     return StatusCode(500, ex.Message);
+        // }
     }
 }
