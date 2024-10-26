@@ -47,6 +47,17 @@ public class StaffDto
         );
     }
     
+    static public IEnumerable<StaffDto> FromDomain(IEnumerable<Staff> staffs)
+    {
+        List<StaffDto> staffsDto = new List<StaffDto>();
+
+        foreach( Staff staff in staffs ) {
+            StaffDto staffDto = FromDomain(staff);
+
+            staffsDto.Add(staffDto);
+        }
+        return staffsDto;
+    }
     
     
 }
