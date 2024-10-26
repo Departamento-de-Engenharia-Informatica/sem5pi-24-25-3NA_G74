@@ -1,0 +1,71 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor "Admin" as adm
+
+participant RouteUser as rt
+participant ControllerUser as ct
+participant jsonToDTO as jdto
+participant voUser as vo
+participant AppServiceUser as asu
+participant UserMapper as ifu
+participant "user : User" as u
+participant IRepoUser as iru
+participant DomainToData as dtd
+participant DataUser as du
+participant IDBDriver as dbd
+participant "savedUser : DataUser" as sdu
+participant "userSaved : User" as us
+
+adm --> rt : POST register new backoffice user
+activate rt
+rt --> ct : createUser(json)
+activate ct
+ct --> ct : validate(json)
+ct --> jdto : mapToDTOUser(json)
+activate jdto
+jdto --> vo : create(json)
+
+deactivate jdto
+ct --> asu : createUser(voUser)
+activate asu
+asu --> ifu : create(voUser)
+activate ifu
+ifu --> u : create()
+deactivate ifu
+asu --> iru : save(user)
+activate iru
+iru --> dtd : mapToDataUser(user)
+activate dtd
+dtd --> u : getEmail()
+activate u
+dtd --> u : getUsername()
+dtd --> u : getRole()
+deactivate u
+dtd --> du : create(username, email, role)
+iru --> dbd : save(dataUser)
+activate dbd
+dbd --> sdu : save(savedUser)
+deactivate dbd
+deactivate asu
+iru --> dtd : mapToModel(savedUser)
+deactivate iru
+dtd --> us
+deactivate dtd
+activate us
+ct --> jdto : mapToJSON(userSaved)
+activate jdto
+jdto --> us : getUsername()
+jdto --> us : getEmail()
+jdto --> us : getRole()
+deactivate us
+jdto --> dto : create(username, email, role)
+activate dto
+deactivate jdto
+deactivate dto
+ct --> rt : return success
+rt --> adm : confirm POST success
+
+@enduml
