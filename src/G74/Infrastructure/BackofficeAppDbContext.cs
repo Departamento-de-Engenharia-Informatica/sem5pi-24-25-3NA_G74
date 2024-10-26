@@ -14,12 +14,14 @@ public class BackofficeAppDbContext : DbContext
     public DbSet<PatientDataModel> Patients { get; set; } 
     public DbSet<UserDataModel> Users { get; set; }
     public DbSet<StaffDataModel> Staff { get; set; }
+    public DbSet<DataOperationRequest> OperationRequests { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new PatientEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new UserEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new StaffEntityTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new OperationRequestEntityTypeConfiguration());
         base.OnModelCreating(modelBuilder);
     }
 }

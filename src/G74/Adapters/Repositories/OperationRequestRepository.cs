@@ -1,4 +1,4 @@
-/*using G74.Infrastructure.Shared;
+using G74.Infrastructure.Shared;
 using Microsoft.EntityFrameworkCore;
 
 namespace G74.Adapters.Repositories
@@ -19,14 +19,48 @@ namespace G74.Adapters.Repositories
         }
 
 
-        public Task<OperationRequest> GetOperationRequestByIdAsync(long id)
+        public async Task<OperationRequest> GetOperationRequestByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var dataOperation = await _context.OperationRequests.FindAsync(id);
+    
+           
+            if (dataOperation == null)
+            {
+                return null;
+            }
+
+            
+            var operationRequest = OperationRequestMapper.FromDataModelToDomain(dataOperation);
+
+            return operationRequest;
+            
         }
 
-        public Task<OperationRequest> Update(OperationRequest patient)
+        public async Task<OperationRequest> Update(Guid id,OperationRequest operation)
         {
-            throw new NotImplementedException();
+            var dataOperation = await _context.OperationRequests.FindAsync(id);
+        if (dataOperation == null)
+        {
+            throw new ArgumentException("No operation found with this ID");
+        }
+
+        
+        dataOperation.MedicalRecordNumber = operation.MedicalRecordNumber.MedicalNumber;
+        dataOperation.LicenceNumber = operation.LicenceNumber.licenceNumber;
+        dataOperation.NameOperationType = operation.OperationType.Name.TheName;
+        dataOperation.RequiredStaffBySpecialization = operation.OperationType.RequiredStaffBySpecialization.SpecializationStaffList;
+        dataOperation.Seconds = operation.OperationType.EstimatedDuration.Seconds;
+        dataOperation.Minutes = operation.OperationType.EstimatedDuration.Minutes;
+        dataOperation.Hours = operation.OperationType.EstimatedDuration.Hours;
+        dataOperation.Days = operation.OperationType.EstimatedDuration.Days;
+        dataOperation.DeadlineDate = operation.DeadlineDate.date;
+        dataOperation.Priority = operation.Priority.PriorityDescription.ToString();
+        Console.WriteLine("Cheguei");
+       
+        _context.OperationRequests.Update(dataOperation);
+        await _context.SaveChangesAsync();
+
+        return OperationRequestMapper.FromDataModelToDomain(dataOperation);
         }
     }
-}*/
+}

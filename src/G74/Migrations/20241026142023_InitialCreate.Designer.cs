@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace G74.Migrations
 {
     [DbContext(typeof(BackofficeAppDbContext))]
-    [Migration("20241026005126_InitialCreate")]
+    [Migration("20241026142023_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -23,6 +23,62 @@ namespace G74.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("DataOperationRequest", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Days")
+                        .HasColumnType("int")
+                        .HasColumnName("Days");
+
+                    b.Property<DateTime>("DeadlineDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DeadLine Date");
+
+                    b.Property<int>("Hours")
+                        .HasColumnType("int")
+                        .HasColumnName("Hours");
+
+                    b.Property<string>("LicenceNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Licence Number");
+
+                    b.Property<string>("MedicalRecordNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Medical Record Number");
+
+                    b.Property<int>("Minutes")
+                        .HasColumnType("int")
+                        .HasColumnName("Minutes");
+
+                    b.Property<string>("NameOperationType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Name Operation Type");
+
+                    b.Property<string>("Priority")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Priority");
+
+                    b.Property<string>("RequiredStaffBySpecialization")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Required Staff By Specialization");
+
+                    b.Property<int>("Seconds")
+                        .HasColumnType("int")
+                        .HasColumnName("Seconds");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OperationRequests");
+                });
 
             modelBuilder.Entity("G74.DTO.StaffDataModel", b =>
                 {
@@ -101,7 +157,7 @@ namespace G74.Migrations
 
                     b.Property<string>("ContactInformation")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("ContactInformation");
 
                     b.Property<string>("DateOfBirth")
@@ -131,13 +187,37 @@ namespace G74.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ContactInformation")
-                        .IsUnique();
-
                     b.HasIndex("MedicalRecordNumber")
                         .IsUnique();
 
                     b.ToTable("Patients");
+                });
+
+            modelBuilder.Entity("G74.DataModel.PatientDataModel", b =>
+                {
+                    b.OwnsOne("G74.Domain.Value_Objects.Patient.DeletionInformation", "DeletionInformation", b1 =>
+                        {
+                            b1.Property<Guid>("PatientDataModelId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<DateTime?>("DateToBeDeleted")
+                                .HasColumnType("datetime2")
+                                .HasColumnName("DateToBeDeleted");
+
+                            b1.Property<bool>("ToDelete")
+                                .HasColumnType("bit")
+                                .HasColumnName("ToDelete");
+
+                            b1.HasKey("PatientDataModelId");
+
+                            b1.ToTable("Patients");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PatientDataModelId");
+                        });
+
+                    b.Navigation("DeletionInformation")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

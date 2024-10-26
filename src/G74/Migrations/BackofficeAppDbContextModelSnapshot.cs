@@ -21,6 +21,62 @@ namespace G74.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("DataOperationRequest", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Days")
+                        .HasColumnType("int")
+                        .HasColumnName("Days");
+
+                    b.Property<DateTime>("DeadlineDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DeadLine Date");
+
+                    b.Property<int>("Hours")
+                        .HasColumnType("int")
+                        .HasColumnName("Hours");
+
+                    b.Property<string>("LicenceNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Licence Number");
+
+                    b.Property<string>("MedicalRecordNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Medical Record Number");
+
+                    b.Property<int>("Minutes")
+                        .HasColumnType("int")
+                        .HasColumnName("Minutes");
+
+                    b.Property<string>("NameOperationType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Name Operation Type");
+
+                    b.Property<string>("Priority")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Priority");
+
+                    b.Property<string>("RequiredStaffBySpecialization")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Required Staff By Specialization");
+
+                    b.Property<int>("Seconds")
+                        .HasColumnType("int")
+                        .HasColumnName("Seconds");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OperationRequests");
+                });
+
             modelBuilder.Entity("G74.DTO.StaffDataModel", b =>
                 {
                     b.Property<Guid>("Id")
