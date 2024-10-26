@@ -1,6 +1,7 @@
 using G74.Domain.Aggregates.User;
 using G74.Domain.IRepositories;
 using G74.Domain.Value_Objects;
+using G74.Domain.Value_Objects.User;
 using G74.DTO;
 using G74.Infrastructure.Shared;
 using G74.Mappers;

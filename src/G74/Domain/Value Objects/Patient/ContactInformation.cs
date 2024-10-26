@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using G74.Domain.Shared;
+using G74.Domain.Value_Objects.User;
 
 namespace G74.Domain.Value_Objects.Patient;
 
