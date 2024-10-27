@@ -1,0 +1,54 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor "Doctor" as adm
+
+
+participant ControllerOperationRequest as ct
+participant AppServiceOperationRequest as service
+participant OperationRequest as op
+participant OperationRequestDTO as dto
+participant OperationRequestMapper as mapper
+participant OperationRequestRepository as repository
+participant BackofficeAppDbContext as db
+
+adm -> ct: GetAllOperationRequest()
+activate ct
+ct -> service : Read()
+activate service
+service -> repository : ReadAll()
+activate repository
+repository -> db : ToListAsync()
+activate db
+db --> repository : List<DataOperationRequest>
+deactivate db
+loop for each DataOperationRequest
+    repository -> mapper : FromDataModelToDomain(dataOperationRequest);
+    activate mapper
+    mapper -> op : new Instance(dataOperationRequest)
+    mapper --> repository : operation
+end
+repository --> service : List<OperationRequest>
+deactivate repository
+loop for each OperationRequest 
+    service -> mapper : toDTO(operation);
+    mapper -> dto : new Instance(dto)
+    mapper --> service : dto
+    deactivate mapper
+end
+service --> ct : List<OperationRequestDTO>
+deactivate service
+deactivate ct
+ct --> adm : 200 OK Status Code
+
+
+
+
+
+
+
+
+
+@enduml

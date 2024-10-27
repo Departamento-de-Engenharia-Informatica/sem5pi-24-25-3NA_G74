@@ -3,16 +3,15 @@
 
 autonumber
 
-actor "Admin" as adm
+actor "Doctor" as adm
 
 
 participant ControllerOperationRequest as ct
 participant CreateOperationRequestDTO as cdto
 participant AppServiceOperationRequest as service
-participant OperationRequestBuilder as builder
 participant MedicalRecordNumber as mrn
 participant LicenceNumber as ln
-participant OperationType as op
+participant OperationType as ot
 participant Name as name
 participant RequiredStaffBySpecialization as rss
 participant EstimatedDuration as ed
@@ -20,7 +19,6 @@ participant DeadlineDate as dd
 participant Priority as pr
 participant OperationRequest as op
 participant OperationRequestMapper as mapper
-participant DataOperationRequest as data
 participant OperationRequestRepository as repository
 participant BackofficeAppDbContext as db
 
@@ -49,7 +47,8 @@ service -> mrn : new Instance(operationRequestDataModel.MedicalRecordNumber)
 service -> ln : new Instance(operationRequestDataModel.LicenceNumber)
 service -> name : new Instance(operationRequestDataModel.OperationName)
 service -> rss : new Instance(operationRequestDataModel.RequiredStaffSpecialization)
-service -> op : new Instance(name,requiredStaffBySpecialization,estimatedDuration)
+service -> ed : new Instance(operationRequestDataModel.estimatedDuration)
+service -> ot : new Instance(name,requiredStaffBySpecialization,estimatedDuration)
 service -> dd : new Instance(operationRequestDataModel.DeadlinesDate)
 service -> pr : new Instance(operationRequestDataModel.Priority)
 service -> op : operationRequestDataModel.set(all new values)
