@@ -13,18 +13,18 @@ participant Backoffice as bo <<Container(C4)>>
 
 activate adm
 
-adm -> ui : Request new operation
+adm -> ui : Request update operation
 
 activate ui
 
-ui -> bo : POST request OperationRequest
+ui -> bo : PUT update OperationRequest
 
 activate bo
 
 
 alt success
 
-bo --> ui : Status Code 201, OperationRequest created
+bo --> ui : Status Code 200, OperationRequest updated
 
 else failure
 

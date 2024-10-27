@@ -15,9 +15,29 @@ public class AppServiceOperationRequest : IAppServiceOperationRequest
         
     }
 
+    public async Task<OperationRequestDTO> DeleteOperationRequest(Guid id)
+    {
+        var operation = await _operationRepository.Delete(id);
+        if(operation!=null){return OperationRequestMapper.ToDTO(operation);}else{throw new Exception("Operation Executed Not as Expected.");};
+    }
+
     public Task<OperationRequestDTO> GetOperationRequestById(long id)
     {
         throw new NotImplementedException();
+    }
+
+    public async Task<List<OperationRequestDTO>> Read()
+    {
+       var operationRequests = await _operationRepository.ReadAll();
+            var operationRequestsDTO = new List<OperationRequestDTO>();
+
+            foreach (var operationRequest in operationRequests)
+            {
+                var operationRequestDTO = OperationRequestMapper.ToDTO(operationRequest);
+                operationRequestsDTO.Add(operationRequestDTO);
+            }
+
+            return operationRequestsDTO;
     }
 
     public async Task<OperationRequestDTO> RegisterOperationRequest(CreateOperationRequestDTO operationDto)

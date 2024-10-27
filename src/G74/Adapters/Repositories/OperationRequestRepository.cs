@@ -18,6 +18,20 @@ namespace G74.Adapters.Repositories
             return  OperationRequestMapper.FromDataModelToDomain(operation);
         }
 
+        public async Task<OperationRequest> Delete(Guid id)
+        {
+            var operation = await _context.OperationRequests.FindAsync(id);
+
+            if (operation != null)
+            {
+                _context.OperationRequests.Remove(operation);
+                await _context.SaveChangesAsync();
+            }
+            else{
+                throw new ArgumentException("Id not found.");
+            }
+            return OperationRequestMapper.FromDataModelToDomain(operation);
+        }
 
         public async Task<OperationRequest> GetOperationRequestByIdAsync(Guid id)
         {
@@ -34,6 +48,20 @@ namespace G74.Adapters.Repositories
 
             return operationRequest;
             
+        }
+
+        public async Task<List<OperationRequest>> ReadAll(){
+        
+            var operationRequestDates = await _context.OperationRequests.ToListAsync();
+            var operationRequests = new List<OperationRequest>();
+
+            foreach (var operationRequestDate in operationRequestDates)
+            {
+                var operationRequest = OperationRequestMapper.FromDataModelToDomain(operationRequestDate);
+                operationRequests.Add(operationRequest);
+            }
+
+            return operationRequests;
         }
 
         public async Task<OperationRequest> Update(Guid id,OperationRequest operation)
