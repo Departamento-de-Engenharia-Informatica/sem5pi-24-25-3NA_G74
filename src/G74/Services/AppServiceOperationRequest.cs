@@ -1,4 +1,5 @@
 
+using G74.Domain.IRepositories;
 using G74.Domain.Value_Objects.Patient;
 using G74.Domain.Value_Objects.SharedValueObjects;
 using G74.Services;
@@ -7,12 +8,14 @@ public class AppServiceOperationRequest : IAppServiceOperationRequest
 {
     private readonly IOperationRequestRepository _operationRepository;
     private readonly IPatientAppService _patientAppService;
+    private readonly StaffAppService _staffService;
     
 
-    public AppServiceOperationRequest(IOperationRequestRepository operationRepository)
+    public AppServiceOperationRequest(IOperationRequestRepository operationRepository,IPatientAppService patientAppService, StaffAppService staffAppService)
     {
         _operationRepository = operationRepository;
-        
+        _patientAppService = patientAppService;
+        _staffService = staffAppService;
     }
 
     public async Task<OperationRequestDTO> DeleteOperationRequest(Guid id)
@@ -46,15 +49,21 @@ public class AppServiceOperationRequest : IAppServiceOperationRequest
         {
             throw new ArgumentException("Invalid priority");
         }
-
-        if(_patientAppService==null){
-            Console.WriteLine("Pois");
+        
+        
+        if( await _patientAppService.GetPatientByMedicalRecordNumber(new MedicalRecordNumber(operationDto.MedicalRecordNumber))==null)
+        { 
+            throw new ArgumentException("No patient found with this medical record number");
+        }
+        var staffDto = await _staffService.GetByLicenseNumber(operationDto.LicenceNumber);
+        if( staffDto==null){
+            throw new ArgumentException("No staff member with this Licence Number.");
+        }
+        if(staffDto.Status == "deactivated"){
+            throw new ArgumentException("Staff member with deactivated account");
         }
         
-        // if(_patientAppService.GetPatientByMedicalRecordNumber(new MedicalRecordNumber(operationDto.MedicalRecordNumber))==null)
-        // { 
-        //     throw new ArgumentException("No patient found with this medical record number");
-        // }
+        
 
         var operation = await new OperationRequestBuilder(
             new MedicalRecordNumber(operationDto.MedicalRecordNumber),
@@ -73,9 +82,23 @@ public class AppServiceOperationRequest : IAppServiceOperationRequest
     public async Task<OperationRequestDTO> UpdateOperationRequest(Guid id, OperationRequestDTO updatedOperationDto)
     {
         
-        if (updatedOperationDto == null)
+    if (updatedOperationDto == null)
     {
         throw new ArgumentNullException(nameof(updatedOperationDto), "Updated operation request data transfer object cannot be null");
+    }
+    if( await _patientAppService.GetPatientByMedicalRecordNumber(new MedicalRecordNumber(updatedOperationDto.MedicalRecordNumber.MedicalNumber  ))==null)
+    { 
+            throw new ArgumentException("No patient found with this medical record number");
+    }
+
+    var staffDto = await _staffService.GetByLicenseNumber(updatedOperationDto.LicenceNumber.licenceNumber);
+    if( staffDto==null)
+    {
+            throw new ArgumentException("No staff member with this Licence Number.");
+    }
+    if(staffDto.Status == "deactivated")
+    {
+            throw new ArgumentException("Staff member with deactivated account");
     }
     
     var existingOperation = await _operationRepository.GetOperationRequestByIdAsync(id);

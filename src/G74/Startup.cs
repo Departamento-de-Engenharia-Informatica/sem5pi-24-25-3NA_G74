@@ -90,7 +90,6 @@ public class Startup
         }
 
         app.UseHttpsRedirection();
-
         app.UseRouting();
         app.UseSession();
         app.UseAuthentication();
