@@ -20,7 +20,7 @@ public class PatientController : ControllerBase
         //_gmailEmailService = gmailEmailService;
     }
 
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<ActionResult<PatientDTO>> RegisterPatient([FromBody] CreatePatientDTO receivedPatient)
     {
@@ -38,7 +38,7 @@ public class PatientController : ControllerBase
         }
     }
 
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     [HttpPut("{MedicalRecordNumber}")]
     public async Task<ActionResult<CreatePatientDTO>> UpdatePatient(
         string medicalRecordNumber,
@@ -82,7 +82,7 @@ public class PatientController : ControllerBase
         }
     }
 
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{medicalRecordNumber}")]
     public async Task<IActionResult> DeletePatient(string medicalRecordNumber)
     {
@@ -103,7 +103,7 @@ public class PatientController : ControllerBase
         }
     }
 
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     [HttpGet("search")]
     public async Task<IActionResult> ListPatientsByFilter([FromQuery] PatientFilterCriteriaDTO criteria)
     {

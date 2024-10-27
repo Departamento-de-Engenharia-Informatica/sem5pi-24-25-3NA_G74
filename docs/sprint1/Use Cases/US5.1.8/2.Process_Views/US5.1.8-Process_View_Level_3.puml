@@ -1,0 +1,86 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor "Admin" as admin
+
+participant PatientRoute as route
+participant PatientController as controller
+participant "PatientAppService : IPatientAppService" as pservice
+participant PatientBuilder as builder
+participant "patient : Patient" as patient
+participant PatientMapper as mapper
+participant PatientDataModel as datamodel
+participant "PatientRepository : IPatientRepository" as irepo
+participant BackofficeAppDbContext as context
+participant "patientDto : PatientDTO" as patientdto
+
+
+admin -> route : POST register new patient profile
+
+activate route
+route -> controller : createsPatientDTO(json)
+activate controller
+controller -> pservice : RegisterPatient(receivedPatient : PatientDto)
+
+activate pservice 
+
+pservice ->  builder : build()
+
+activate builder
+
+builder -> patient : Patient(...)
+
+activate patient
+patient --> builder : patient
+deactivate patient
+
+builder --> pservice : patient
+
+deactivate builder
+
+pservice -> mapper : ToDataModel(patient)
+
+activate mapper
+mapper -> datamodel : PatientDataModel(patient)
+activate datamodel
+datamodel --> mapper : patientDataModel
+deactivate datamodel
+mapper --> pservice : patientDataModel
+deactivate mapper
+
+pservice -> irepo : AddPatient(patientDataModel)
+
+activate irepo
+
+irepo -> context : AddAsync(patient)
+activate context
+irepo -> context : SaveChangesAsync()
+deactivate context
+
+deactivate irepo
+
+pservice -> mapper : ToDTO(patient)
+activate mapper
+mapper -> patientdto : PatientDTO(...)
+activate patientdto
+patientdto --> mapper : patientDto
+deactivate patientdto
+mapper --> pservice : patientDto
+deactivate mapper
+
+pservice --> controller : patientdto
+
+deactivate pservice
+
+controller --> route : Status Code 200 and patientDto
+
+deactivate controller
+
+route --> admin : Confirms POST success \n and shows registered patient profile
+
+deactivate route
+
+
+@enduml
