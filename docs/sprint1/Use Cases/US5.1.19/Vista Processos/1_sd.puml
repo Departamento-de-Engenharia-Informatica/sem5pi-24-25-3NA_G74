@@ -1,0 +1,25 @@
+@startuml
+
+actor "Doctor" as doctor
+
+participant ":SARM" as sys
+
+activate doctor
+
+doctor -> sys : read all operation
+
+activate sys 
+
+alt success
+
+sys --> doctor : 200 OK Status
+
+else failure
+
+sys --> doctor : 404 Not Found
+
+
+end
+
+
+@enduml

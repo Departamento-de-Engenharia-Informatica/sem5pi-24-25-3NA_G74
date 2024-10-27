@@ -3,7 +3,7 @@
 
 autonumber
 
-actor "Admin" as adm
+actor "Doctor" as adm
 
 
 participant ControllerOperationRequest as ct

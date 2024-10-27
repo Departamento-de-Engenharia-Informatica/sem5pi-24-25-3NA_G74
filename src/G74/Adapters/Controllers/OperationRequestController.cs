@@ -55,7 +55,7 @@ public class OperationRequestController : ControllerBase
         try
         {
             
-            var patientDTO = await _appServiceOperationRequest.UpdateOperationRequest(operationRequestId,OperationRequestMapper.FromCreateDTOtoDTO(updatedOperationDto));
+            var operationDTO = await _appServiceOperationRequest.UpdateOperationRequest(operationRequestId,OperationRequestMapper.FromCreateDTOtoDTO(updatedOperationDto));
             
             return Ok(updatedOperationDto);
         }
@@ -69,5 +69,42 @@ public class OperationRequestController : ControllerBase
         }
     }
 
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<OperationRequestDTO>> DeleteOperationRequest(
+        string id
+    )
+    {
+        if (!Guid.TryParse(id, out Guid operationRequestId))
+        {
+            return BadRequest("Invalid ID format.");
+        }
+        try{
+            var operationDTO = await _appServiceOperationRequest.DeleteOperationRequest(operationRequestId);
+            return NoContent();
+        }
+        catch (InvalidOperationException e)
+        {
+            return NotFound(e.Message);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<OperationRequestDTO>> GetAllOperationRequest()
+    {
+        try{
+            var list = await _appServiceOperationRequest.Read();
+            return Ok(list);
+        }
+        catch (InvalidOperationException e)
+        {
+            return NotFound(e.Message);
+        }
+    }
 
 }

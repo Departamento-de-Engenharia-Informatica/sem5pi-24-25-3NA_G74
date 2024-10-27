@@ -18,7 +18,7 @@ public class MedicalRecordNumberGenerator : IMedicalRecordNumberGenerator
 
 
         string year = DateTime.Now.Year.ToString();
-        string month = DateTime.Now.Month.ToString();
+        string month = DateTime.Now.Month.ToString("D2");
 
         string sequentialNumber = (totalNumberOfPatients + 1).ToString("D5");
 

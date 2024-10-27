@@ -1,0 +1,52 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor "Docotr" as adm
+
+
+participant ControllerOperationRequest as ct
+participant AppServiceOperationRequest as service
+participant OperationRequest as op
+participant OperationRequestDTO as dto
+participant OperationRequestMapper as mapper
+participant OperationRequestRepository as repository
+participant BackofficeAppDbContext as db
+
+adm -> ct: Delete {id}
+activate ct
+ct -> service : DeleteOperationRequest(id)
+activate service
+service -> repository : Delete(id)
+activate repository
+repository -> db : FindAsync(id)
+activate db
+db --> repository : dataOperation
+repository -> db : Remove(dataOperation)
+repository -> db : SaveChangesAsync()
+deactivate db
+repository -> mapper : FromDataModelToDomain(dataOperation)
+activate mapper
+mapper -> op : new instance(dataOperation)
+mapper --> repository : operation
+
+
+repository --> service : operation
+deactivate repository
+service -> mapper : ToDTO(operation)
+mapper -> dto : new instance(operation)
+mapper --> service : dto
+deactivate mapper
+
+service --> ct : operationDTO
+deactivate service
+ct --> adm : 200 OK STATUS
+
+
+
+
+
+
+
+@enduml

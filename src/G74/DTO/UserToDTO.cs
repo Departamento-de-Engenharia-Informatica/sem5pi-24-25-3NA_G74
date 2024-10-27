@@ -12,6 +12,11 @@ public class UserToDTO
 {
     public UserDTO DomainToDTO(User user) {
 
+        if (user == null)
+        {
+            throw new ArgumentNullException(nameof(user), "User cannot be null.");
+        }
+        
         UserDTO userDto = new UserDTO(user.username.name, user.email.email, user.GetRole());
 
         return userDto;
@@ -19,6 +24,10 @@ public class UserToDTO
 
     public UserDTO JsonToDTO(JsonUserDTO jsonUserDto)
     {
+        if (jsonUserDto == null)
+        {
+            throw new ArgumentNullException(nameof(jsonUserDto), "JsonUserDTO cannot be null.");
+        }
         UserDTO userDto = new UserDTO(jsonUserDto.Username, jsonUserDto.Email, jsonUserDto.Role);
         return userDto;
     }

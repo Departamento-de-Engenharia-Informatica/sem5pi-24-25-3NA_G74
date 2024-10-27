@@ -14,7 +14,7 @@ public class PatientMapper
             patient.DateOfBirth, patient.ContactInformation, patient.EmergencyContact);
     }
 
-    public static Patient toDomain(PatientDTO patientDto)
+    public static Patient ToDomain(PatientDTO patientDto)
     {
         throw new NotImplementedException();
     }

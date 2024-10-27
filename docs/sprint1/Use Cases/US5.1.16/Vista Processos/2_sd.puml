@@ -3,7 +3,7 @@
 
 autonumber
 
-actor "Admin" as adm
+actor "Doctor" as adm
 
 
 box "<<Context (C4)>>\n Surgical Appointment and Resource Management"
