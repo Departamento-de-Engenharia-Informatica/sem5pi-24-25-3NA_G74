@@ -1,3 +1,4 @@
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using G74.Adapters.Controllers;
@@ -11,8 +12,10 @@ using G74.Domain.Value_Objects.User;
 using G74.DTO;
 using G74.Services;
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Moq;
 using Xunit;
@@ -99,4 +102,48 @@ public class PatientControllerTest : IClassFixture<WebApplicationFactory<G74.Sta
         Assert.Equal(400, notFoundResult.StatusCode);
     }
 
+    [Fact]
+    public async Task DeletePatient_ExistingPatient_DeletesSuccessfully()
+    {
+        var options = new DbContextOptionsBuilder<BackofficeAppDbContext>()
+            .UseInMemoryDatabase(databaseName: "TestDatabase")
+            .Options;
+
+        using (var context = new BackofficeAppDbContext(options))
+        {
+            var patient = new Patient(
+                new Name("Afonso"),
+                new MedicalRecordNumber("20241010101"),
+                new DateOfBirth(1990, 10, 1),
+                new Gender(Gender.GenderEnum.Male),
+                new ContactInformation("913283295", new Email("afonso@gmail.com")),
+                new EmergencyContact("931231422")
+            );
+
+            var existingPatient = new PatientDataModel(patient);
+            context.Patients.Add(existingPatient);
+            await context.SaveChangesAsync();
+        }
+
+        var response = await _client.DeleteAsync("/api/patients/20241010101");
+        
+        var okResult = Assert.IsType<HttpResponseMessage>(response);
+    }
+
+    [Fact]
+    public async Task DeletePatient_NonExistingPatient_ReturnsNotFound()
+    {
+        var response = await _client.DeleteAsync("/api/patients/non-existing-record-number");
+
+        Assert.Equal(404, (int)response.StatusCode);
+    }
+
+    [Fact]
+    public async Task DeletePatient_EmptyMedicalRecordNumber_ReturnsBadRequest()
+    {
+        var response = await _client.DeleteAsync("/api/patients/");
+
+        Assert.Equal(404, (int)response.StatusCode);
+    }
+    
 }
