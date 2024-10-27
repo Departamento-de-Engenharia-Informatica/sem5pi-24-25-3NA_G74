@@ -10,6 +10,7 @@ public class StaffDataModel : Entity<Guid>
     public string PhoneNumber { get; set; }
     public string ContactEmail { get; set; }
     public string StaffSpecialization { get; set; }
+    public string Status { get; set; }
 
     
     protected StaffDataModel() : base(Guid.NewGuid())
@@ -25,6 +26,7 @@ public class StaffDataModel : Entity<Guid>
         PhoneNumber = staff.PhoneNumber.Value;
         ContactEmail = staff.ContactEmail.Value;
         StaffSpecialization = staff.StaffSpecialization.Value;
+        Status = staff.Status.Value;
     }
     
     

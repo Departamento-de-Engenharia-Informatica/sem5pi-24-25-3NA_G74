@@ -11,16 +11,18 @@ public class StaffDto
     public string PhoneNumber { get; set; }
     public string ContactEmail { get; set; }
     public string StaffSpecialization { get; set; }
+    public string Status { get; set; }
 
     // Constructor for creating from primitive types (e.g., from API request)
     public StaffDto(string licenseNumber, string name, string phoneNumber, 
-        string contactEmail, string staffSpecialization)
+        string contactEmail, string staffSpecialization, string status)
     {
         LicenseNumber = licenseNumber;
         Name = name;
         PhoneNumber = phoneNumber;
         ContactEmail = contactEmail;
         StaffSpecialization = staffSpecialization;
+        Status = status;
     }
     
     // Constructor for creating from domain model (e.g., for API response)
@@ -31,7 +33,8 @@ public class StaffDto
             staff.Name.TheName,
             staff.PhoneNumber.Value,
             staff.ContactEmail.Value,
-            staff.StaffSpecialization.Value
+            staff.StaffSpecialization.Value,
+            staff.Status.Value
         );
     }
     
@@ -43,10 +46,22 @@ public class StaffDto
             new Name(staffDto.Name),
             new PhoneNumber(staffDto.PhoneNumber),
             new Email(staffDto.ContactEmail),
-            new StaffSpecialization(staffDto.StaffSpecialization)
+            new StaffSpecialization(staffDto.StaffSpecialization),
+            new Status(staffDto.Status)
         );
     }
     
+    static public IEnumerable<StaffDto> FromDomain(IEnumerable<Staff> staffs)
+    {
+        List<StaffDto> staffsDto = new List<StaffDto>();
+
+        foreach( Staff staff in staffs ) {
+            StaffDto staffDto = FromDomain(staff);
+
+            staffsDto.Add(staffDto);
+        }
+        return staffsDto;
+    }
     
     
 }

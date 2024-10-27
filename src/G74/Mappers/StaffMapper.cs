@@ -21,7 +21,23 @@ public class StaffMapper
             staffDataModel.Name,
             staffDataModel.PhoneNumber,
             staffDataModel.ContactEmail,
-            staffDataModel.StaffSpecialization);
+            staffDataModel.StaffSpecialization,
+            staffDataModel.Status);
+    }
+    
+    public IEnumerable<Staff> ToDomain(IEnumerable<StaffDataModel> staffsDataModel)
+    {
+
+        List<Staff> staffsDomain = new List<Staff>();
+
+        foreach(StaffDataModel staffDataModel in staffsDataModel)
+        {
+            Staff staffDomain = ToDomain(staffDataModel);
+
+            staffsDomain.Add(staffDomain);
+        }
+
+        return staffsDomain.AsEnumerable();
     }
     
     // Add missing ToDataModel method

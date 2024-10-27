@@ -2,7 +2,7 @@
 
 namespace G74.Domain.Value_Objects.Staff;
 
-public class LicenseNumber
+public class LicenseNumber : IValueObject
 {
     public string Value { get; }
 

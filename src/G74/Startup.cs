@@ -1,6 +1,5 @@
 using System.Text;
 using System.Text.Json;
-using DefaultNamespace;
 using G74.Adapters.Controllers;
 using G74.Adapters.Repositories;
 using G74.Domain.DomainServices;
