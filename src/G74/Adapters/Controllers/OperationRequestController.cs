@@ -1,5 +1,6 @@
 
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [Route("api/[controller]")]
@@ -13,6 +14,7 @@ public class OperationRequestController : ControllerBase
         _appServiceOperationRequest = appServiceOperationRequest;
     }
 
+    [Authorize(Roles = "Doctor")]  
     [HttpPost]
     public async Task<ActionResult<OperationRequestDTO>> RegisterOperationRequest([FromBody] CreateOperationRequestDTO receivedOperationRequest)
     {
@@ -35,6 +37,7 @@ public class OperationRequestController : ControllerBase
         
     }
 
+    [Authorize(Roles = "Doctor")]    
     [HttpPut("{id}")]
     public async Task<ActionResult<OperationRequestDTO>> UpdateOperationRequest(
             string id,
@@ -69,7 +72,7 @@ public class OperationRequestController : ControllerBase
         }
     }
 
-
+    [Authorize(Roles = "Doctor")]  
     [HttpDelete("{id}")]
     public async Task<ActionResult<OperationRequestDTO>> DeleteOperationRequest(
         string id
@@ -93,7 +96,8 @@ public class OperationRequestController : ControllerBase
         }
 
     }
-
+    
+    [Authorize(Roles = "Doctor")]  
     [HttpGet]
     public async Task<ActionResult<OperationRequestDTO>> GetAllOperationRequest()
     {
