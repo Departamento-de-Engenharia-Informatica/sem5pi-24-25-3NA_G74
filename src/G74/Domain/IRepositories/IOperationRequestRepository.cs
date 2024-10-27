@@ -7,4 +7,7 @@ public interface IOperationRequestRepository : IRepository<DataOperationRequest,
     Task<OperationRequest> GetOperationRequestByIdAsync(Guid id);
     Task<OperationRequest> Update(Guid id,OperationRequest patient);
     Task<int> CountAsync();
+    Task<OperationRequest> Delete(Guid id);
+
+    Task<List<OperationRequest>> ReadAll();
 }
