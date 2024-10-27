@@ -1,0 +1,43 @@
+﻿@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor "Patient" as patient
+
+
+box "<<Context (C4)>>\n Surgical Appointment and Resource Management"
+participant Visualization as ui <<Container(C4)>>
+participant Backoffice as bo <<Container(C4)>>
+
+
+activate patient
+
+patient -> ui : Asks to register for healthcare app
+
+activate ui
+
+ui -> bo : POST register Patient 
+
+activate bo
+
+alt success
+
+bo --> ui : Status Code 201, Patient created
+
+ui --> patient : Confirms registration success
+
+else failure
+
+bo --> ui:  Client/Server error Status Code
+
+deactivate bo
+
+ui --> patient: Informs registration failure
+
+deactivate ui
+
+end
+
+
+@enduml
