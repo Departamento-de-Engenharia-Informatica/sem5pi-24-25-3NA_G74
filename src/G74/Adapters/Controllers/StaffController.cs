@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using G74.DTO;
 using G74.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace G74.Adapters.Controllers;
@@ -19,6 +20,7 @@ public class StaffController : ControllerBase
     }
     
     // GET: api/Staff/
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     public async Task<ActionResult<StaffDto>> GetStaff()
     {
@@ -28,6 +30,7 @@ public class StaffController : ControllerBase
     }
     
     // GET: api/Staff//license/682468
+    [Authorize(Roles = "Admin")]
     [HttpGet("license/{licenseNumber}")]
     public async Task<ActionResult<StaffDto>> GetStaffByLicenseNumber(string licenseNumber)
     {
@@ -42,6 +45,7 @@ public class StaffController : ControllerBase
     
     // POST: api/Staff
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<ActionResult<StaffDto>> RegisterStaff([FromBody]JsonStaffDto jsonStaffDto)
     {
@@ -62,6 +66,7 @@ public class StaffController : ControllerBase
     }
     
     // PUT: api/Staff/license/{licenseNumber}
+    [Authorize(Roles = "Admin")]
     [HttpPut("license/{licenseNumber}")]
     public async Task<ActionResult<StaffDto>> UpdateStaff(string licenseNumber, [FromBody] JsonStaffDto jsonStaffDto)
     {
@@ -89,6 +94,7 @@ public class StaffController : ControllerBase
         // }
     }
     
+    [Authorize(Roles = "Admin")]
     [HttpPatch("license/{licenseNumber}/deactivate")]
     public async Task<ActionResult<StaffDto>> DeactivateStaff(string licenseNumber)
     {
