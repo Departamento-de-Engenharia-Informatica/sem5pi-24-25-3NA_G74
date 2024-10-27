@@ -21,7 +21,8 @@ public class StaffMapper
             staffDataModel.Name,
             staffDataModel.PhoneNumber,
             staffDataModel.ContactEmail,
-            staffDataModel.StaffSpecialization);
+            staffDataModel.StaffSpecialization,
+            staffDataModel.Status);
     }
     
     public IEnumerable<Staff> ToDomain(IEnumerable<StaffDataModel> staffsDataModel)

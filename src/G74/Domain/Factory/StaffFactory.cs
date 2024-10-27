@@ -7,9 +7,10 @@ namespace G74.Domain.Factory;
 public  class StaffFactory
 {
     public  Staff NewStaff(String licenseNumber, String name, String phoneNumber,
-        String contactEmail, String staffSpecialization)
+        String contactEmail, String staffSpecialization, String status)
     {
         return new Staff(new LicenseNumber(licenseNumber), new Name(name), new PhoneNumber(phoneNumber),
-            new Email(contactEmail), new StaffSpecialization(staffSpecialization));
+            new Email(contactEmail), new StaffSpecialization(staffSpecialization),
+            new Status(status));
     }
 }
