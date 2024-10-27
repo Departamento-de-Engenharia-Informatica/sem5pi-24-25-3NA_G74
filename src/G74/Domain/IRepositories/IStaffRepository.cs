@@ -15,4 +15,6 @@ public interface IStaffRepository
     Task<Staff> Update(string licenseNumber, Staff staff);
 
     Task<bool> StaffExists(string licenseNumber);
+    
+    Task<Staff> UpdateStatus(string licenseNumber, Staff staff);
 }

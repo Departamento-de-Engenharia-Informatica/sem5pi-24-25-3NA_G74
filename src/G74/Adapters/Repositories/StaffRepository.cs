@@ -117,5 +117,28 @@ public class StaffRepository : BaseRepository<StaffDataModel, Guid>, IStaffRepos
         }
     }
     
-    
+    public async Task<Staff> UpdateStatus(string licenseNumber, Staff staff)
+    {
+        try 
+        {
+            var existingStaffModel = await _context.Set<StaffDataModel>()
+                .FirstOrDefaultAsync(s => s.LicenseNumber == licenseNumber);
+            
+            if (existingStaffModel == null)
+            {
+                throw new Exception($"Staff with license number {licenseNumber} not found");
+            }
+            
+            // Update only the status
+            existingStaffModel.Status = staff.Status.Value;
+            
+            await _context.SaveChangesAsync();
+
+            return _staffMapper.ToDomain(existingStaffModel);
+        }
+        catch (Exception ex)
+        {
+            throw ex.InnerException!;
+        }
+    }
 }

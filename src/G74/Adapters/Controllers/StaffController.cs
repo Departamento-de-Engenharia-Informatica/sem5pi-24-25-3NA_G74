@@ -88,4 +88,22 @@ public class StaffController : ControllerBase
         //     return StatusCode(500, ex.Message);
         // }
     }
+    
+    [HttpPatch("license/{licenseNumber}/deactivate")]
+    public async Task<ActionResult<StaffDto>> DeactivateStaff(string licenseNumber)
+    {
+        try
+        {
+            var staffDto = await _staffAppService.Deactivate(licenseNumber);
+            if (staffDto == null)
+            {
+                return NotFound($"Staff with license number {licenseNumber} not found.");
+            }
+            return Ok(staffDto);
+        }
+        catch (ValidationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 }

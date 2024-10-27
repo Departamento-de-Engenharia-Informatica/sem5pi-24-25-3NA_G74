@@ -75,4 +75,17 @@ public class StaffAppService
         // }
     }
     
+    public async Task<StaffDto?> Deactivate(string licenseNumber)
+    {
+        Staff? staff = await _staffRepository.GetStaffByLicenseNumberAsync(licenseNumber);
+        if (staff == null)
+        {
+            return null;
+        }
+
+        staff.Deactivate();
+        Staff updatedStaff = await _staffRepository.UpdateStatus(licenseNumber, staff);
+        return StaffDto.FromDomain(updatedStaff);
+    }
+    
 }
