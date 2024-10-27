@@ -1,4 +1,4 @@
-# US 5.1.8 - As an Admin, I want to create a new patient profile, so that I can register their personal details and medical history.
+# US 5.1.10 - As an Admin, I want to delete a patient profile, so that I can remove patients who are no longer under care
 
 
 ## Responsable: Sérgio Cardoso (1210891)

@@ -1,0 +1,73 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor "Admin" as admin
+
+participant PatientRoute as route
+participant PatientController as controller
+participant "PatientAppService : IPatientAppService" as pservice
+participant PatientBuilder as builder
+participant "patient : Patient" as patient
+participant PatientMapper as mapper
+participant PatientDataModel as datamodel
+participant "PatientRepository : IPatientRepository" as irepo
+participant BackofficeAppDbContext as context
+participant "patientDto : PatientDTO" as patientdto
+participant IConfiguration as configfile
+
+
+admin -> route :  PUT delete patient profile
+
+activate route
+route -> controller : medicalRecordNumber
+activate controller
+controller -> pservice : MarkPatientToBeDeleted(medicalRecordNumber)
+
+activate pservice 
+
+pservice -> irepo : GetPatientByMedicalRecordNumber(medicalRecordNumber)
+
+activate irepo
+
+irepo -> context : FirstOrDefaultAsync(...)
+activate context
+context --> irepo : patientDataModel
+deactivate context
+irepo --> pservice : patientDataModel
+deactivate irepo
+
+pservice -> configfile : ["GPRD:RetainInfoPeriod"]
+
+activate configfile
+configfile --> pservice : retainInfoPeriod
+deactivate configfile
+
+pservice -> datamodel : patientDataModel.MarkForDeletion(retainInfoPeriod)
+
+activate datamodel
+datamodel -> datamodel : MarkForDeletion()
+deactivate datamodel
+
+pservice -> irepo : UpdatePatient(patientDataModel)
+
+activate irepo
+irepo -> context : Update(patient);
+activate context
+irepo -> context : SaveChangesAsync();
+deactivate context
+deactivate irepo
+
+deactivate pservice
+
+controller --> route : Status Code 200
+
+deactivate controller
+
+route --> admin : Confirms DELETE success
+
+deactivate route
+
+
+@enduml
