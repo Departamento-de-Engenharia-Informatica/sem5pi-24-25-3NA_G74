@@ -5,6 +5,8 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using G74.Adapters.Controllers;
+using G74.Adapters.Repositories;
+using G74.Domain.Aggregates.User;
 using G74.Domain.IRepositories;
 using G74.Domain.Value_Objects.User;
 using G74.DTO;
@@ -21,7 +23,7 @@ namespace G74.Tests.Adapters.Controllers;
 [TestSubject(typeof(UserController))]
 public class UserControllerTest : IClassFixture<WebApplicationFactory<G74.Startup>>
 {
-    /*
+    
     private readonly HttpClient _client;
 
     public UserControllerTest(WebApplicationFactory<G74.Startup> factory)
@@ -30,54 +32,88 @@ public class UserControllerTest : IClassFixture<WebApplicationFactory<G74.Startu
     }
     
     [Fact]
-    public async Task RegisterNewUser_ShouldReturnCreatedStatus_WhenUserIsNew()
+    public async Task RegisterNewUser_ValidJson_Success()
     {
-        // Arrange
-        var newUser = new
+        var mockRepoUser = new Mock<IRepoUser>();
+        
+        mockRepoUser.Setup(repo => repo.Save(It.IsAny<User>()))
+            .ReturnsAsync((User user) => user); 
+        
+        var userMapper = new UserMapper();
+        var userToDto = new UserToDTO();
+        var userAppService = new UserAppService(userMapper, mockRepoUser.Object, userToDto);
+        
+        var userController = new UserController(userAppService, userToDto);
+        
+        JsonUserDTO newUser = new JsonUserDTO
         {
-            Username = "Afonso",
-            Role.Admin,
-            Email = "afonso@gmail.com"
+            Email = "afonso@gmail.com",
+            Role = "Admin",
+            Username = "afonso"
         };
+        
+        var result = await userController.RegisterNewUser(newUser);
+        
+        var createdResult = Assert.IsType<CreatedAtActionResult>(result.Result);
+        
+        Assert.NotNull(createdResult.Value);
+    }
     
-        var jsonContent = new StringContent(JsonSerializer.Serialize(newUser), Encoding.UTF8, "application/json");
-
-        // Act
-        var response = await _client.PostAsync("/api/user/register", jsonContent);
-
-        // Assert
-        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-        var responseBody = await response.Content.ReadAsStringAsync();
-        Assert.Contains("afonso@gmail.com", responseBody);
+    [Fact]
+    public async Task RegisterNewUser_InvalidJson_Failure()
+    {
+        var mockRepoUser = new Mock<IRepoUser>();
+        
+        mockRepoUser.Setup(repo => repo.Save(It.IsAny<User>()))
+            .ReturnsAsync((User user) => user); 
+        
+        var userMapper = new UserMapper();
+        var userToDto = new UserToDTO();
+        var userAppService = new UserAppService(userMapper, mockRepoUser.Object, userToDto);
+        
+        var userController = new UserController(userAppService, userToDto);
+        
+        JsonUserDTO newUser = new JsonUserDTO
+        {
+            
+        };
+        
+        var result = await userController.RegisterNewUser(newUser);
+        
+        var createdResult = Assert.IsType<BadRequestObjectResult>(result.Result);
+        
+        Assert.NotNull(createdResult);
     }
 
     [Fact]
-    public async Task GetUserByEmail_ShouldReturnUser_WhenUserExists()
+    public async Task RegisterNewUser_ValidJson_ExistingUserFailure()
     {
-        // Arrange
-        var email = "afonso@gmail.com";
+        var mockRepoUser = new Mock<IRepoUser>();
+        
+        mockRepoUser.Setup(repo => repo.Save(It.IsAny<User>()))
+            .ReturnsAsync((User user) => user); 
+        
+        mockRepoUser.Setup(repo => repo.UserExists(It.Is<Email>(email => email.email == "afonso@gmail.com")))
+            .ReturnsAsync(true);
 
-        // Act
-        var response = await _client.GetAsync($"/api/user/by-email/{email}");
-
-        // Assert
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        var responseBody = await response.Content.ReadAsStringAsync();
-        Assert.Contains("afonso@gmail.com", responseBody);
+        var userMapper = new UserMapper();
+        var userToDto = new UserToDTO();
+        var userAppService = new UserAppService(userMapper, mockRepoUser.Object, userToDto);
+        
+        var userController = new UserController(userAppService, userToDto);
+        
+        JsonUserDTO newUser = new JsonUserDTO
+        {
+            Email = "afonso@gmail.com",
+            Role = "Admin",
+            Username = "afonso"
+        };
+        
+        var result = await userController.RegisterNewUser(newUser);
+        
+        var createdResult = Assert.IsType<ConflictObjectResult>(result.Result);
+        
+        Assert.NotNull(createdResult.Value);
     }
-
-    [Fact]
-    public async Task GetUserByEmail_ShouldReturnNotFound_WhenUserDoesNotExist()
-    {
-        // Arrange
-        var email = "afonso@gmail.com";
-
-        // Act
-        var response = await _client.GetAsync($"/api/user/by-email/{email}");
-
-        // Assert
-        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
-    }
-
-    */
+    
 }
