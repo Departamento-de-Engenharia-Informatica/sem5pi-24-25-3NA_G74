@@ -20,7 +20,7 @@ public class PatientController : ControllerBase
         //_gmailEmailService = gmailEmailService;
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,Patient")]
     [HttpPost]
     public async Task<ActionResult<PatientDTO>> RegisterPatient([FromBody] CreatePatientDTO receivedPatient)
     {
