@@ -1,4 +1,4 @@
-# US 5.1.8 - As an Admin, I want to create a new patient profile, so that I can register their personal details and medical history.
+# US 5.1.9 - As an Admin, I want to edit an existing patient profile, so that I can update their information when needed.
 
 
 ## Responsable: Sérgio Cardoso (1210891)

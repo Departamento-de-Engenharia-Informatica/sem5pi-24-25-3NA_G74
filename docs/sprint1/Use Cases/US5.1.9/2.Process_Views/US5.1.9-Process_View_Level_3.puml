@@ -1,0 +1,85 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor "Admin" as admin
+
+participant PatientRoute as route
+participant PatientController as controller
+participant "PatientAppService : IPatientAppService" as pservice
+participant PatientBuilder as builder
+participant "patient : Patient" as patient
+participant PatientMapper as mapper
+participant PatientDataModel as datamodel
+participant "PatientRepository : IPatientRepository" as irepo
+participant BackofficeAppDbContext as context
+participant "patientDto : PatientDTO" as patientdto
+
+
+admin -> route : PUT edit patient profile
+
+activate route
+route -> controller : createsPatientDTO(json), \nmedicalRecordNumber
+activate controller
+controller -> pservice : GetPatientByMedicalRecordNumber(medicalRecordNumber)
+
+activate pservice 
+
+pservice -> irepo : GetPatientByMedicalRecordNumber(medicalRecordNumber)
+
+activate irepo
+
+irepo -> context : FirstOrDefaultAsync(...)
+activate context
+context --> irepo : patientDataModel
+deactivate context
+irepo --> pservice : patientDataModel
+deactivate irepo
+
+pservice -> mapper : ToDomain(receivedPatientDto)
+activate mapper
+mapper -> patient : Patient(...)
+activate patient
+patient --> mapper : patient
+deactivate patient
+mapper --> pservice : patient
+deactivate mapper
+
+pservice -> pservice : UpdatePatientHelper(patient, patientDataModel)
+
+
+pservice -> irepo : UpdatePatient(patientDataModel)
+
+activate irepo
+irepo -> context : Update(patient);
+activate context
+irepo -> context : await _context.SaveChangesAsync();
+deactivate context
+deactivate irepo
+
+
+
+pservice -> mapper : ToDTO(patient)
+activate mapper
+mapper -> patientdto : PatientDTO(...)
+activate patientdto
+patientdto --> mapper : patientDto
+deactivate patientdto
+mapper --> pservice : patientDto
+deactivate mapper
+
+pservice --> controller : patientdto
+
+deactivate pservice
+
+controller --> route : Status Code 200 and patientDto
+
+deactivate controller
+
+route --> admin : Confirms PUT success \n and shows edited patient profile
+
+deactivate route
+
+
+@enduml
