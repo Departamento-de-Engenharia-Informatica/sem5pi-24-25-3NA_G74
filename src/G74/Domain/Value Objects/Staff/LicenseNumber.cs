@@ -16,7 +16,11 @@ public class LicenseNumber : IValueObject
 
     private bool IsValidLicense(string license)
     {
-        // TODO: validation
+        if (license == "")
+        {
+            return false;
+        }
+        
         return true;
     }
 }
