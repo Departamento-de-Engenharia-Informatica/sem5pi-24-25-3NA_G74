@@ -1,0 +1,60 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor "Admin" as admin
+
+participant PatientRoute as route
+participant PatientController as controller
+participant "PatientAppService : IPatientAppService" as pservice
+participant PatientBuilder as builder
+participant "patient : Patient" as patient
+participant PatientMapper as mapper
+participant PatientDataModel as datamodel
+participant "PatientRepository : IPatientRepository" as irepo
+participant BackofficeAppDbContext as context
+participant "patientDto : PatientDTO" as patientdto
+participant IConfiguration as configfile
+
+
+admin -> route :  GET search patient profiles
+
+activate route
+route -> controller : patientDto
+activate controller
+controller -> pservice : SearchPatientsByFilters(patientDto)
+
+activate pservice 
+
+
+pservice -> mapper : ToDomain(patientDto)
+activate mapper
+mapper --> pservice : patient
+deactivate mapper
+
+pservice -> mapper : ToDataModel(patient)
+activate mapper
+mapper --> pservice : patientDataModel
+deactivate mapper
+
+pservice -> irepo : SearchPatientsByFiltersAsync(patientDataModel)
+
+activate irepo
+irepo --> pservice : list of patients found
+deactivate irepo
+
+pservice --> controller : list of patients found
+
+deactivate pservice
+
+controller --> route : Status Code 200 \nand list of patients
+
+deactivate controller
+
+route --> admin : Confirms GET success and \nshows list of patients found
+
+deactivate route
+
+
+@enduml
