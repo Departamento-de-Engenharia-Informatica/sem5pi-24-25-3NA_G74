@@ -143,7 +143,7 @@ public class PatientAppService : IPatientAppService
             throw new InvalidOperationException("Patient not found");
         }
 
-        string time = _configuration.GetValue<string>("GPRD:RetainInfoPeriod") ?? "2m";
+        string time = _configuration["GPRD:RetainInfoPeriod"] ?? "2m";
 
         TimeSpan retainInfoPeriod;
         if (time.EndsWith("m"))
@@ -209,14 +209,7 @@ public class PatientAppService : IPatientAppService
         }
         catch (Exception ex)
         {
-            
-            if (ex.InnerException != null)
-            {
-                
-            }
-            
-            
-            throw new Exception("An error occurred trying to search patients.", ex);
+            throw new Exception($"An error occurred trying to search patients: {ex.Message}", ex);
         }
     }
 }

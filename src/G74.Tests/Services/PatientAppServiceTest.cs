@@ -22,150 +22,154 @@ namespace G74.Tests.Services;
 [TestSubject(typeof(PatientAppService))]
 public class PatientAppServiceTest
 {
+    [Fact]
+    public async Task UpdatePatient_ExistingPatient_UpdatesSuccessfully()
+    {
+        var options = new DbContextOptionsBuilder<BackofficeAppDbContext>()
+            .UseInMemoryDatabase(databaseName: "TestDatabase")
+            .Options;
 
-[Fact]
-public async Task UpdatePatient_ExistingPatient_UpdatesSuccessfully()
-{
-    var options = new DbContextOptionsBuilder<BackofficeAppDbContext>()
-        .UseInMemoryDatabase(databaseName: "TestDatabase")
-        .Options;
+        using var context = new BackofficeAppDbContext(options);
 
-    using var context = new BackofficeAppDbContext(options);
-    
-    Patient patient = new Patient(
-        new Name("Afonso"), 
-        new MedicalRecordNumber("20241010101"),
-        new DateOfBirth(1990, 10, 1), 
-        new Gender(Gender.GenderEnum.Male),
-        new ContactInformation("913283295", new Email("afonso@gmail.com")), 
-        new EmergencyContact("931231422")
-    );
+        Patient patient = new Patient(
+            new Name("Afonso"),
+            new MedicalRecordNumber("20241010101"),
+            new DateOfBirth(1990, 10, 1),
+            new Gender(Gender.GenderEnum.Male),
+            new ContactInformation("913283295", new Email("afonso@gmail.com")),
+            new EmergencyContact("931231422")
+        );
 
-    var existingPatient = new PatientDataModel(patient);
-    context.Patients.Add(existingPatient);
-    await context.SaveChangesAsync();
-    
-    var realRepo = new PatientRepository(context);
-    
-    var mockRepo = new Mock<IPatientRepository>();
-    mockRepo.Setup(repo => repo.GetPatientByMedicalRecordNumber(It.Is<MedicalRecordNumber>(m => m.MedicalNumber == "20241010101")))
-        .ReturnsAsync(existingPatient);
-    
-    var patientService = new PatientAppService(
-        mockRepo.Object,  
-        new Mock<IRepoUser>().Object,
-        new MedicalRecordNumberGenerator(mockRepo.Object),
-        new Mock<IConfiguration>().Object
-    );
-    
-    var updatedPatientDto = new CreatePatientDTO(
-        "Afonso", 
-        "male", 
-        new DateOfBirthDTO(1990, 10, 1),
-        new ContactInformationDTO("913283295", "afonso@gmail.com"), 
-        new EmergencyContactDTO("931231422")
-    );
-    
-    var result = await patientService.UpdatePatient("20241010101", updatedPatientDto);
-    
-    Assert.NotNull(result);
-    Assert.Equal("Afonso", result.Name);
-    
-    var updatedPatient = await context.Patients.FirstOrDefaultAsync(p => p.MedicalRecordNumber.MedicalNumber == "20241010101");
-    Assert.NotNull(updatedPatient);
-    Assert.Equal("Afonso", updatedPatient.Name.TheName);
-}
+        var existingPatient = new PatientDataModel(patient);
+        context.Patients.Add(existingPatient);
+        await context.SaveChangesAsync();
 
-[Fact]
-public async Task UpdatePatient_NonExistingPatient_ThrowsInvalidOperationException()
-{
-    var options = new DbContextOptionsBuilder<BackofficeAppDbContext>()
-        .UseInMemoryDatabase(databaseName: "TestDatabase")
-        .Options;
+        var realRepo = new PatientRepository(context);
 
-    using var context = new BackofficeAppDbContext(options);
-    
-    var mockRepo = new Mock<IPatientRepository>();
-    mockRepo.Setup(repo => repo.GetPatientByMedicalRecordNumber(It.IsAny<MedicalRecordNumber>()))
-        .ReturnsAsync((PatientDataModel)null); 
-    
-    var patientService = new PatientAppService(
-        mockRepo.Object,  
-        new Mock<IRepoUser>().Object,
-        new MedicalRecordNumberGenerator(mockRepo.Object),
-        new Mock<IConfiguration>().Object
-    );
-    
-    var updatedPatientDto = new CreatePatientDTO(
-        "NonExistent", 
-        "male", 
-        new DateOfBirthDTO(1990, 10, 1),
-        new ContactInformationDTO("913283295", "nonexistent@gmail.com"), 
-        new EmergencyContactDTO("931231422")
-    );
+        var mockRepo = new Mock<IPatientRepository>();
+        mockRepo.Setup(repo =>
+                repo.GetPatientByMedicalRecordNumber(It.Is<MedicalRecordNumber>(m => m.MedicalNumber == "20241010101")))
+            .ReturnsAsync(existingPatient);
 
-    var exception = await Assert.ThrowsAsync<ArgumentException>(
-        () => patientService.UpdatePatient("nonexistent-medical-number", updatedPatientDto)
-    );
-}
+        var patientService = new PatientAppService(
+            mockRepo.Object,
+            new Mock<IRepoUser>().Object,
+            new MedicalRecordNumberGenerator(mockRepo.Object),
+            new Mock<IConfiguration>().Object
+        );
 
-    /*
+        var updatedPatientDto = new CreatePatientDTO(
+            "Afonso",
+            "male",
+            new DateOfBirthDTO(1990, 10, 1),
+            new ContactInformationDTO("913283295", "afonso@gmail.com"),
+            new EmergencyContactDTO("931231422")
+        );
+
+        var result = await patientService.UpdatePatient("20241010101", updatedPatientDto);
+
+        Assert.NotNull(result);
+        Assert.Equal("Afonso", result.Name);
+
+        var updatedPatient =
+            await context.Patients.FirstOrDefaultAsync(p => p.MedicalRecordNumber.MedicalNumber == "20241010101");
+        Assert.NotNull(updatedPatient);
+        Assert.Equal("Afonso", updatedPatient.Name.TheName);
+    }
+
+    [Fact]
+    public async Task UpdatePatient_NonExistingPatient_ThrowsInvalidOperationException()
+    {
+        var options = new DbContextOptionsBuilder<BackofficeAppDbContext>()
+            .UseInMemoryDatabase(databaseName: "TestDatabase")
+            .Options;
+
+        using var context = new BackofficeAppDbContext(options);
+
+        var mockRepo = new Mock<IPatientRepository>();
+        mockRepo.Setup(repo => repo.GetPatientByMedicalRecordNumber(It.IsAny<MedicalRecordNumber>()))
+            .ReturnsAsync((PatientDataModel)null);
+
+        var patientService = new PatientAppService(
+            mockRepo.Object,
+            new Mock<IRepoUser>().Object,
+            new MedicalRecordNumberGenerator(mockRepo.Object),
+            new Mock<IConfiguration>().Object
+        );
+
+        var updatedPatientDto = new CreatePatientDTO(
+            "NonExistent",
+            "male",
+            new DateOfBirthDTO(1990, 10, 1),
+            new ContactInformationDTO("913283295", "nonexistent@gmail.com"),
+            new EmergencyContactDTO("931231422")
+        );
+
+        var exception = await Assert.ThrowsAsync<ArgumentException>(
+            () => patientService.UpdatePatient("nonexistent-medical-number", updatedPatientDto)
+        );
+    }
+
+    
     [Fact]
     public async Task MarkPatientToBeDeleted_ExistingPatient_MarksSuccessfully()
     {
         var options = new DbContextOptionsBuilder<BackofficeAppDbContext>()
             .UseInMemoryDatabase(databaseName: "TestDatabase")
             .Options;
-        
+
         using var context = new BackofficeAppDbContext(options);
 
-        
-            var patient = new Patient(
-                new Name("Afonso"), 
-                new MedicalRecordNumber("20241010101"),
-                new DateOfBirth(1990, 10, 1), 
-                new Gender(Gender.GenderEnum.Male),
-                new ContactInformation("913283295", new Email("afonso@gmail.com")), 
-                new EmergencyContact("931231422")
-            );
 
-            var existingPatient = new PatientDataModel(patient);
-            context.Patients.Add(existingPatient);
-            await context.SaveChangesAsync();
-        
-            
+        var patient = new Patient(
+            new Name("Afonso"),
+            new MedicalRecordNumber("20241010101"),
+            new DateOfBirth(1990, 10, 1),
+            new Gender(Gender.GenderEnum.Male),
+            new ContactInformation("913283295", new Email("afonso@gmail.com")),
+            new EmergencyContact("931231422")
+        );
+
+        var existingPatient = new PatientDataModel(patient);
+        context.Patients.Add(existingPatient);
+        await context.SaveChangesAsync();
+
+
         var mockRepo = new Mock<IPatientRepository>();
         var mockConfiguration = new Mock<IConfiguration>();
-        mockConfiguration.Setup(c => c["GPRD:RetainInfoPeriod"]).Returns("2m");
+        mockConfiguration.SetupGet(c => c["GPRD:RetainInfoPeriod"]).Returns("2m");
 
-        
-            mockRepo.Setup(repo => repo.GetPatientByMedicalRecordNumber(It.IsAny<MedicalRecordNumber>()))
-                .ReturnsAsync(context.Patients.FirstOrDefault(p => p.MedicalRecordNumber.MedicalNumber == "20241010101"));
 
-            var patientService = new PatientAppService(
-                mockRepo.Object,  
-                new Mock<IRepoUser>().Object,
-                new MedicalRecordNumberGenerator(mockRepo.Object),
-                mockConfiguration.Object
-            );
-            await patientService.MarkPatientToBeDeleted("20241010101");
-            
-            var updatedPatient = await context.Patients.FirstOrDefaultAsync(p => p.MedicalRecordNumber.MedicalNumber == "20241010101");
-            Assert.NotNull(updatedPatient);
-        
-    }*/
+
+        mockRepo.Setup(repo => repo.GetPatientByMedicalRecordNumber(It.IsAny<MedicalRecordNumber>()))
+            .ReturnsAsync(context.Patients.FirstOrDefault(p => p.MedicalRecordNumber.MedicalNumber == "20241010101"));
+
+        var patientService = new PatientAppService(
+            mockRepo.Object,
+            new Mock<IRepoUser>().Object,
+            new MedicalRecordNumberGenerator(mockRepo.Object),
+            mockConfiguration.Object
+        );
+        await patientService.MarkPatientToBeDeleted("20241010101");
+
+        var updatedPatient =
+            await context.Patients.FirstOrDefaultAsync(p => p.MedicalRecordNumber.MedicalNumber == "20241010101");
+        Assert.NotNull(updatedPatient);
+    }
+    
 
     [Fact]
     public async Task MarkPatientToBeDeleted_NonExistingPatient_ThrowsException()
     {
         var mockRepo = new Mock<IPatientRepository>();
 
-        var patientService = new PatientAppService(mockRepo.Object, new Mock<IRepoUser>().Object, new MedicalRecordNumberGenerator(mockRepo.Object), new Mock<IConfiguration>().Object);
-        
+        var patientService = new PatientAppService(mockRepo.Object, new Mock<IRepoUser>().Object,
+            new MedicalRecordNumberGenerator(mockRepo.Object), new Mock<IConfiguration>().Object);
+
         mockRepo.Setup(repo => repo.GetPatientByMedicalRecordNumber(It.IsAny<MedicalRecordNumber>()))
             .ReturnsAsync((PatientDataModel)null);
-        
-        await Assert.ThrowsAsync<ArgumentException>(() => patientService.MarkPatientToBeDeleted("non-existing-record-number"));
-    }
 
+        await Assert.ThrowsAsync<ArgumentException>(() =>
+            patientService.MarkPatientToBeDeleted("non-existing-record-number"));
+    }
 }

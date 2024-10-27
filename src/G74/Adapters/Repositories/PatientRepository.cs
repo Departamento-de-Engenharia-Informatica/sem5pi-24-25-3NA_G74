@@ -37,6 +37,26 @@ public class PatientRepository : BaseRepository<PatientDataModel, Guid>, IPatien
 
         return null;
     }
+    
+    public async Task<int> GetMaxMedicalRecordNumberSequentialPartAsync()
+    {
+        var patients = await _context.Patients.ToListAsync();
+
+        int maxNumber = 0;
+
+        foreach (var patient in patients)
+        {
+            // Parse the sequential part of the MedicalRecordNumber (last 5 digits)
+            var sequentialPart = int.Parse(patient.MedicalRecordNumber.MedicalNumber.Substring(6));
+
+            if (sequentialPart > maxNumber)
+            {
+                maxNumber = sequentialPart;
+            }
+        }
+
+        return maxNumber;
+    }
 
     public Task<Patient> GetPatientByEmail(string email)
     {

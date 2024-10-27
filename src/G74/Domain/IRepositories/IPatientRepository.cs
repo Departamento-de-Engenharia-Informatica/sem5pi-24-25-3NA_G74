@@ -17,4 +17,6 @@ public interface IPatientRepository : IRepository<PatientDataModel, Guid>
 
     Task DeletePatientDefinitive(PatientDataModel patient);
     Task<IEnumerable<PatientDataModel>> SearchPatientsByFiltersAsync(PatientFilterCriteriaDTO criteria);
+    
+    Task<int> GetMaxMedicalRecordNumberSequentialPartAsync();
 }

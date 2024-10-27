@@ -26,6 +26,21 @@ public class MedicalRecordNumber : IValueObject
     private const string InvalidMedicalNumberMsg =
         "Invalid medical record number format. Expected format: YYYYMMDDDDD.";
 
+    public override bool Equals(object obj)
+    {
+        if (obj is MedicalRecordNumber other)
+        {
+            return MedicalNumber == other.MedicalNumber;
+        }
+        return false;
+    }
+
+    public override int GetHashCode()
+    {
+        return MedicalNumber.GetHashCode();
+    }
+    
+    
     public override string ToString()
     {
         return MedicalNumber;

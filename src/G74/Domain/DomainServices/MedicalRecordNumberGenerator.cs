@@ -14,9 +14,8 @@ public class MedicalRecordNumberGenerator : IMedicalRecordNumberGenerator
     }
     public async Task<MedicalRecordNumber> GenerateMedicalNumber()
     {
-        var totalNumberOfPatients = await _patientRepository.CountAsync();
-
-
+        int totalNumberOfPatients = await _patientRepository.GetMaxMedicalRecordNumberSequentialPartAsync();
+        
         string year = DateTime.Now.Year.ToString();
         string month = DateTime.Now.Month.ToString("D2");
 
