@@ -38,7 +38,7 @@ public class PatientController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Patient")]
     [HttpPut("{MedicalRecordNumber}")]
     public async Task<ActionResult<CreatePatientDTO>> UpdatePatient(
         string medicalRecordNumber,
@@ -82,7 +82,7 @@ public class PatientController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Patient")]
     [HttpDelete("{medicalRecordNumber}")]
     public async Task<IActionResult> DeletePatient(string medicalRecordNumber)
     {
