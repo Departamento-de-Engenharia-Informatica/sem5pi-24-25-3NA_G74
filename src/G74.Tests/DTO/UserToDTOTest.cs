@@ -8,15 +8,15 @@ using Xunit;
 
 namespace G74.Tests.DTO;
 
-[TestSubject(typeof(UserToDTO))]
-public class UserToDTOTests
+[TestSubject(typeof(UserToDtoMapper))]
+public class UserToDtoMapperTests
 {
 
     [Fact]
     public void DomainToDTO_ValidUser_ReturnsUserDTO()
     {
         // Arrange
-        UserToDTO userToDto = new UserToDTO();
+        UserToDtoMapper userToDtoMapper = new UserToDtoMapper();
         var user = new User(
             new Username("Afonso"),
             Role.Admin,
@@ -24,7 +24,7 @@ public class UserToDTOTests
         );
 
         // Act
-        var result = userToDto.DomainToDTO(user);
+        var result = userToDtoMapper.UserToDto(user);
 
         // Assert
         Assert.NotNull(result);
@@ -37,39 +37,8 @@ public class UserToDTOTests
     public void DomainToDTO_NullUser_ThrowsArgumentNullException()
     {
         // Act & Assert
-        UserToDTO userToDto = new UserToDTO();
-        var ex = Assert.Throws<ArgumentNullException>(() => userToDto.DomainToDTO(null));
+        UserToDtoMapper userToDtoMapper = new UserToDtoMapper();
+        var ex = Assert.Throws<ArgumentNullException>(() => userToDtoMapper.UserToDto(null));
         Assert.Equal("User cannot be null. (Parameter 'user')", ex.Message);
-    }
-
-    [Fact]
-    public void JsonToDTO_ValidJsonUserDTO_ReturnsUserDTO()
-    {
-        // Arrange
-        UserToDTO userToDto = new UserToDTO();
-        var jsonUserDto = new JsonUserDTO
-        {
-            Username = "Afonso",
-            Email = "afonso@gmail.com",
-            Role = "Admin"
-        };
-
-        // Act
-        var result = userToDto.JsonToDTO(jsonUserDto);
-
-        // Assert
-        Assert.NotNull(result);
-        Assert.Equal("Afonso", result.Username.ToString());
-        Assert.Equal("afonso@gmail.com", result.Email.ToString());
-        Assert.Equal("Admin", result.Role.ToString());
-    }
-
-    [Fact]
-    public void JsonToDTO_NullJsonUserDTO_ThrowsArgumentNullException()
-    {
-        // Act & Assert
-        UserToDTO userToDto = new UserToDTO();
-        var ex = Assert.Throws<ArgumentNullException>(() => userToDto.JsonToDTO(null));
-        Assert.Equal("JsonUserDTO cannot be null. (Parameter 'jsonUserDto')", ex.Message);
     }
 }

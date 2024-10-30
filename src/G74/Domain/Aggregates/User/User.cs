@@ -5,9 +5,9 @@ namespace G74.Domain.Aggregates.User;
 
 public class User
 {
-    public Username username { get; set; }
-    public Role role { get; set; }
-    public Email email { get; set; }
+    public Username username { get; }
+    public Role role { get; }
+    public Email email { get; }
 
     public User(Username username, Role role, Email email)
     {

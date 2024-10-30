@@ -71,8 +71,8 @@ namespace G74.Adapters.Controllers
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, userDataModel.Id.ToString()),
-                new Claim(ClaimTypes.Email, userDataModel.Email.email),
-                new Claim(ClaimTypes.Role, userDataModel.Role.ToString())
+                new Claim(ClaimTypes.Email, userDataModel.Email),
+                new Claim(ClaimTypes.Role, userDataModel.Role)
             };
             
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

@@ -2,12 +2,9 @@ patient:
 pedro.lopes.patient@gmail.com
 pedrolopespatient
 
-admin:
+doctor:
 filipe.silva.ad@gmail.com
 filipesilvaad
 
-doctor:
-miguel.santos.doctor@gmail.com
-miguelsantos
 
 https://www.googleapis.com/auth/userinfo.email

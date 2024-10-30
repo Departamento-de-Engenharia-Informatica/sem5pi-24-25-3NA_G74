@@ -16,14 +16,11 @@ public class UserEntityTypeConfiguration : IEntityTypeConfiguration<UserDataMode
         builder.HasKey(u => u.Id);
 
         builder.Property(u => u.Username)
-            .HasConversion(new UsernameConverter())
             .HasMaxLength(50)
             .IsRequired()
             .HasColumnName("Username");
         
         builder.Property(u => u.Email)
-            .IsRequired()
-            .HasConversion(new EmailConverter())
             .IsRequired()
             .HasMaxLength(100)
             .HasColumnName("Email");

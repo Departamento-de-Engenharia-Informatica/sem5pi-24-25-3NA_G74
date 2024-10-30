@@ -24,7 +24,7 @@ public class StaffDataModel : Entity<Guid>
         LicenseNumber = staff.LicenseNumber.Value;
         Name = staff.Name.TheName;
         PhoneNumber = staff.PhoneNumber.Value;
-        ContactEmail = staff.ContactEmail.Value;
+        ContactEmail = staff.ContactEmail.email;
         StaffSpecialization = staff.StaffSpecialization.Value;
         Status = staff.Status.Value;
     }

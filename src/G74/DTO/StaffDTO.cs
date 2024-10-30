@@ -1,6 +1,7 @@
 ﻿using G74.Domain.Aggregates.Staff;
 using G74.Domain.Value_Objects.SharedValueObjects;
 using G74.Domain.Value_Objects.Staff;
+using G74.Domain.Value_Objects.User;
 
 namespace G74.DTO;
 
@@ -32,7 +33,7 @@ public class StaffDto
             staff.LicenseNumber.Value,
             staff.Name.TheName,
             staff.PhoneNumber.Value,
-            staff.ContactEmail.Value,
+            staff.ContactEmail.email,
             staff.StaffSpecialization.Value,
             staff.Status.Value
         );

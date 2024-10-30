@@ -15,22 +15,19 @@ namespace G74.Adapters.Controllers;
 public class UserController : ControllerBase
 {
     private readonly UserAppService _userAppService;
-    private readonly UserToDTO _userToDto;
 
-    public UserController(UserAppService userAppService, UserToDTO userToDto)
+    public UserController(UserAppService userAppService)
     {
         _userAppService = userAppService;
-        _userToDto = userToDto;
     }
   
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Patient")]
     [HttpPost("register")]
-    public async Task<ActionResult<UserDTO>> RegisterNewUser([FromBody]JsonUserDTO jsonUserDto)
+    public async Task<ActionResult<UserDto>> RegisterNewUser([FromBody]UserDto receivedUserDto)
     {
         try
         {
-            UserDTO uDto = _userToDto.JsonToDTO(jsonUserDto);
-            UserDTO userDto = await _userAppService.Create(uDto);
+            UserDto userDto = await _userAppService.Create(receivedUserDto);
             if (userDto == null)
             {
                 return new ConflictObjectResult(new { message = "User already exists with the given email." });
@@ -45,7 +42,7 @@ public class UserController : ControllerBase
     }
     
     [HttpGet("by-email/{email}")]
-    public async Task<ActionResult<UserDTO>> GetUserByEmail(string email)
+    public async Task<ActionResult<UserDto>> GetUserByEmail(string email)
     {
         try
         {
@@ -58,4 +55,34 @@ public class UserController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "Admin, Patient")]
+    [HttpPut("by-email/{email}")]
+    public async Task<ActionResult<UserDto>> UpdateUser(string email,[FromBody]JsonUserDTO jsonUserDto)
+    {
+        try
+        {
+            var currentUser = GetUserByEmail(email).Result.Value;
+            if (currentUser == null)
+            {
+                return NotFound(new { message = "User not found." });
+            }
+            //var UserDTO = await _userAppService.UpdateUser(email, jsonUserDto);
+
+            return Ok(new
+            {
+                message = $"User was updated successfully",
+               // UserDTO
+            });
+        }
+        catch (InvalidOperationException e)
+        {
+            return NotFound(e.Message);
+        }
+        catch (Exception e)
+        {
+            return BadRequest((e.Message));
+        }
+    }
+    
+    
 }

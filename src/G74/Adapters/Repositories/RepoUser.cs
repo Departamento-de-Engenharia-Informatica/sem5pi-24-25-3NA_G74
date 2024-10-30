@@ -10,14 +10,14 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace G74.Adapters.Repositories;
 
-public class RepoUser : BaseRepository<UserDataModel, Guid>, IRepoUser
+public class RepoUser : GenericRepository<User>, IRepoUser
 {
-    private readonly UserToDataMapper _userToDataMapper;
+    private readonly UserToDataModelMapper _userToDataModelMapper;
     private readonly BackofficeAppDbContext _context;
 
-    public RepoUser(BackofficeAppDbContext context, UserToDataMapper userToDataMapper) : base(context.Users)
+    public RepoUser(BackofficeAppDbContext context, UserToDataModelMapper userToDataModelMapper) : base(context!)
     {
-        _userToDataMapper = userToDataMapper;
+        _userToDataModelMapper = userToDataModelMapper;
         _context = context;
     }
 
@@ -25,12 +25,12 @@ public class RepoUser : BaseRepository<UserDataModel, Guid>, IRepoUser
     {
         try
         {
-            UserDataModel userDataModel = _userToDataMapper.MapToDataUser(user);
+            UserDataModel userDataModel = _userToDataModelMapper.MapToDataModel(user);
             EntityEntry<UserDataModel> userEntityEntry = _context.Set<UserDataModel>().Add(userDataModel);
             await _context.SaveChangesAsync();
-            UserDataModel savedUserData = userEntityEntry.Entity;
-            User userSaved = _userToDataMapper.MapToUser(savedUserData);
-            return userSaved;
+            UserDataModel savedUserDataModel = userEntityEntry.Entity;
+            User savedUser = _userToDataModelMapper.MapToUser(savedUserDataModel);
+            return savedUser;
         }
         catch
         {
@@ -42,9 +42,9 @@ public class RepoUser : BaseRepository<UserDataModel, Guid>, IRepoUser
     {
         try {
             UserDataModel userDataModel = await _context.Set<UserDataModel>()
-                .FirstAsync(c => c.Email.email == email);
+                .FirstAsync(c => c.Email == email);
 
-            User user = _userToDataMapper.MapToUser(userDataModel);
+            User user = _userToDataModelMapper.MapToUser(userDataModel);
 
             return user;
         }
@@ -55,14 +55,11 @@ public class RepoUser : BaseRepository<UserDataModel, Guid>, IRepoUser
         }
     }
     
-    public async Task<bool> UserExists(Email email)
+    public async Task<bool> UserExists(string email)
     {
         return await _context.Users
             .AnyAsync(u => u.Email.Equals(email));
     }
 
-    public Task<User> GetUserByEmail(object value)
-    {
-        throw new NotImplementedException();
-    }
+
 }

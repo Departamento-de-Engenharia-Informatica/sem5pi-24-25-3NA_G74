@@ -1,6 +1,7 @@
 using G74.Domain.Aggregates.Staff;
 using G74.Domain.Value_Objects.SharedValueObjects;
 using G74.Domain.Value_Objects.Staff;
+using G74.Domain.Value_Objects.User;
 
 namespace G74.Domain.Factory;
 
