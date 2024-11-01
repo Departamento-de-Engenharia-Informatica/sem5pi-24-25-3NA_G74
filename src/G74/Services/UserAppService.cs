@@ -36,35 +36,26 @@ public class UserAppService
 
         return _userToDtoMapper.UserToDto(existingUser);
     }
-    /*
-    public async Task<UserDto> UpdatePatient(string email,
-        JsonUserDTO jsonUserDto)
+    
+    public async Task<UserDto> UpdateUser(UserDto receivedUserDto, UserDto currentUserDto)
     {
-        var existingPatient =
-            await _repoUser.GetUserByEmail(email);
-
-        if (existingPatient == null)
+        if (currentUserDto == null)
         {
-            throw new InvalidOperationException("Patient not found");
+            throw new ArgumentNullException(nameof(currentUserDto), "Current user data cannot be null.");
         }
 
-        try
-        {
-            UpdateUserHelper(jsonUserDto, existingPatient);
+        string oldEmail = currentUserDto.Email;
+        
+        UserDto updatedUserDto = _userToDtoMapper.Create(
+            username: receivedUserDto.Username ?? currentUserDto.Username,
+            email: receivedUserDto.Email ?? currentUserDto.Email,
+            role: receivedUserDto.Role ?? currentUserDto.Role
+        );
+        User updatedUser = _userToDtoMapper.DtoToUser(updatedUserDto);
+        User savedUser = await _repoUser.UpdateUser(updatedUser, oldEmail);
+        UserDto userDto = _userToDtoMapper.UserToDto(savedUser);
 
-            await _patientRepository.UpdatePatient(existingPatient);
-
-            // Log the changes
-            //await LogPatientChanges(id, PatientMapper.ToDTO(existingPatient));
-
-            return PatientMapper.FromDataModelToCreatePatientDto(existingPatient);
-        }
-        catch (ArgumentException ex)
-        {
-            // Catch and rethrow any validation errors from the domain
-            throw new InvalidOperationException($"Invalid patient data: {ex.Message}", ex);
-        }
+        return userDto;
     }
     
-    */
 }

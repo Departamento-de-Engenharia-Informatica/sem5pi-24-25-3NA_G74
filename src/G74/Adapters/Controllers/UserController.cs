@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text.Json;
 using G74.Domain.Aggregates.User;
 using G74.Domain.Value_Objects;
@@ -41,11 +42,16 @@ public class UserController : ControllerBase
         
     }
     
-    [HttpGet("by-email/{email}")]
-    public async Task<ActionResult<UserDto>> GetUserByEmail(string email)
+    [HttpGet("by-email")]
+    public async Task<ActionResult<UserDto>> GetLoggedUserByEmail()
     {
         try
         {
+            var email = HttpContext.User.FindFirstValue(ClaimTypes.Email);
+            if (string.IsNullOrEmpty(email))
+            {
+                return Unauthorized(new { success = false, message = "User is not authenticated." });
+            }
             var userDto = await _userAppService.GetUserByEmail(email);
             return Ok(userDto);
         }
@@ -56,27 +62,23 @@ public class UserController : ControllerBase
     }
 
     [Authorize(Roles = "Admin, Patient")]
-    [HttpPut("by-email/{email}")]
-    public async Task<ActionResult<UserDto>> UpdateUser(string email,[FromBody]JsonUserDTO jsonUserDto)
+    [HttpPut("update")]
+    public async Task<ActionResult<UserDto>> UpdateUser([FromBody]UserDto receivedUserDto)
     {
         try
         {
-            var currentUser = GetUserByEmail(email).Result.Value;
-            if (currentUser == null)
+            var currentUserDto = GetLoggedUserByEmail().Result.Value;
+            if (currentUserDto == null)
             {
                 return NotFound(new { message = "User not found." });
             }
-            //var UserDTO = await _userAppService.UpdateUser(email, jsonUserDto);
+            var userDto = await _userAppService.UpdateUser(receivedUserDto, currentUserDto);
 
             return Ok(new
             {
-                message = $"User was updated successfully",
-               // UserDTO
+                message = $"User was updated successfully.", 
+                userDto
             });
-        }
-        catch (InvalidOperationException e)
-        {
-            return NotFound(e.Message);
         }
         catch (Exception e)
         {

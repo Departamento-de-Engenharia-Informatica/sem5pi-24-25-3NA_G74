@@ -36,4 +36,10 @@ public class UserToDtoMapper
         User user = new User(new Username(userDto.Username), role, new Email(userDto.Email));
         return user;
     }
+
+    public UserDto Create(string username, string email, string role)
+    {
+        UserDto userDto = new UserDto(username, email, role);
+        return userDto;
+    }
 }
