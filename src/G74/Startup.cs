@@ -103,7 +103,7 @@ public class Startup
     public void ConfigureMyServices(IServiceCollection services)
     {
 
-        services.AddTransient<UserToDTO>();
+        services.AddTransient<UserToDtoMapper>();
         services.AddScoped<UserController>();
         services.AddScoped<IRepoUser, RepoUser>();
         services.AddScoped<IPatientAppService, PatientAppService>();
@@ -113,8 +113,7 @@ public class Startup
         services.AddScoped<IMedicalRecordNumberGenerator, MedicalRecordNumberGenerator>();
         services.AddHostedService<PatientDeletionService>();
         services.AddScoped<UserAppService>();
-        services.AddTransient<UserMapper>();
-        services.AddTransient<UserToDataMapper>();
+        services.AddTransient<UserToDataModelMapper>();
         services.AddScoped<IAppServiceOperationRequest, AppServiceOperationRequest>();
         services.AddScoped<AuthController>();
         services.AddTransient<IOperationRequestRepository, OperationRequestRepository>();

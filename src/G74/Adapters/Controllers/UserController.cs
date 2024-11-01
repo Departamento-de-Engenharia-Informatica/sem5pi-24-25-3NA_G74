@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text.Json;
 using G74.Domain.Aggregates.User;
 using G74.Domain.Value_Objects;
@@ -15,22 +16,19 @@ namespace G74.Adapters.Controllers;
 public class UserController : ControllerBase
 {
     private readonly UserAppService _userAppService;
-    private readonly UserToDTO _userToDto;
 
-    public UserController(UserAppService userAppService, UserToDTO userToDto)
+    public UserController(UserAppService userAppService)
     {
         _userAppService = userAppService;
-        _userToDto = userToDto;
     }
   
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Patient")]
     [HttpPost("register")]
-    public async Task<ActionResult<UserDTO>> RegisterNewUser([FromBody]JsonUserDTO jsonUserDto)
+    public async Task<ActionResult<UserDto>> RegisterNewUser([FromBody]UserDto receivedUserDto)
     {
         try
         {
-            UserDTO uDto = _userToDto.JsonToDTO(jsonUserDto);
-            UserDTO userDto = await _userAppService.Create(uDto);
+            UserDto userDto = await _userAppService.Create(receivedUserDto);
             if (userDto == null)
             {
                 return new ConflictObjectResult(new { message = "User already exists with the given email." });
@@ -44,11 +42,16 @@ public class UserController : ControllerBase
         
     }
     
-    [HttpGet("by-email/{email}")]
-    public async Task<ActionResult<UserDTO>> GetUserByEmail(string email)
+    [HttpGet("by-email")]
+    public async Task<ActionResult<UserDto>> GetLoggedUserByEmail()
     {
         try
         {
+            var email = HttpContext.User.FindFirstValue(ClaimTypes.Email);
+            if (string.IsNullOrEmpty(email))
+            {
+                return Unauthorized(new { success = false, message = "User is not authenticated." });
+            }
             var userDto = await _userAppService.GetUserByEmail(email);
             return Ok(userDto);
         }
@@ -58,4 +61,50 @@ public class UserController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "Patient")]
+    [HttpPut("update")]
+    public async Task<ActionResult<UserDto>> UpdateUser([FromBody]UserDto receivedUserDto)
+    {
+        try
+        {
+            var currentUserDto = GetLoggedUserByEmail().Result.Value;
+            if (currentUserDto == null)
+            {
+                return NotFound(new { message = "User not found." });
+            }
+            var userDto = await _userAppService.UpdateUser(receivedUserDto, currentUserDto);
+
+            return Ok(new
+            {
+                message = $"User was updated successfully.", 
+                userDto
+            });
+        }
+        catch (Exception e)
+        {
+            return BadRequest((e.Message));
+        }
+    }
+    
+    [Authorize(Roles = "Patient")]
+    [HttpDelete("delete")]
+    public async Task<IActionResult> DeleteUser()
+    {
+        var currentUserDto = GetLoggedUserByEmail().Result.Value;
+        if (currentUserDto == null)
+        {
+            return NotFound(new { message = "User not found." });
+        }
+        try
+        {
+            await _userAppService.MarkUserToBeDeleted(currentUserDto);
+
+            return Ok(new { message = "User delete with success" });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+    
 }

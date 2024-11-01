@@ -1,13 +1,14 @@
 using G74.Domain.Aggregates.User;
+using G74.Domain.Shared;
 using G74.Domain.Value_Objects;
 using G74.Domain.Value_Objects.User;
 using G74.DTO;
 
 namespace G74.Mappers;
 
-public class UserToDataMapper
+public class UserToDataModelMapper
 {
-    public UserDataModel MapToDataUser(User user)
+    public UserDataModel MapToDataModel(User user)
     {
         if (user == null)
         {
@@ -28,13 +29,16 @@ public class UserToDataMapper
         {
             throw new ArgumentNullException(nameof(savedUser), "DataUser cannot be null.");
         }
-        
+        if (!Enum.TryParse<Role>(savedUser.Role, true, out var role))
+        {
+            throw new BusinessRuleValidationException("Invalid role.");
+        }
         
         return new User
         (
-            savedUser.Username,  
-            savedUser.Role,     
-            savedUser.Email
+            new Username(savedUser.Username),
+            role,
+            new Email(savedUser.Email)
         );
     }
 }

@@ -22,7 +22,7 @@ public class RepoUserTest
 {
 
         private readonly Mock<BackofficeAppDbContext> _mockContext;
-        private readonly Mock<UserToDataMapper> _mockMapper;
+        private readonly Mock<UserToDataModelMapper> _mockMapper;
         private readonly RepoUser _repoUser;
 
         [Fact]
@@ -70,11 +70,11 @@ public class RepoUserTest
             // Arrange
             var email = new Email("existinguser@gmail.com");
             var mockRepoUser = new Mock<IRepoUser>();
-            mockRepoUser.Setup(repo => repo.UserExists(email))
+            mockRepoUser.Setup(repo => repo.UserExists(email.email))
                 .ReturnsAsync(true);
 
             // Act
-            var result = await mockRepoUser.Object.UserExists(email);
+            var result = await mockRepoUser.Object.UserExists(email.email);
 
             // Assert
             Assert.True(result);
@@ -86,11 +86,11 @@ public class RepoUserTest
             // Arrange
             var email = new Email("nonexistentuser@gmail.com");
             var mockRepoUser = new Mock<IRepoUser>();
-            mockRepoUser.Setup(repo => repo.UserExists(email))
+            mockRepoUser.Setup(repo => repo.UserExists(email.email))
                 .ReturnsAsync(false);
 
             // Act
-            var result = await mockRepoUser.Object.UserExists(email);
+            var result = await mockRepoUser.Object.UserExists(email.email);
 
             // Assert
             Assert.False(result);

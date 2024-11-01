@@ -9,15 +9,15 @@ using Xunit;
 
 namespace G74.Tests.Mappers;
 
-[TestSubject(typeof(UserToDataMapper))]
-public class UserToDataMapperTest
+[TestSubject(typeof(UserToDataModelMapper))]
+public class UserToDataModelMapperTest
 {
 
         [Fact]
         public void MapToDataUser_ValidUser_ReturnsUserDataModel()
         {
             // Arrange
-            UserToDataMapper userToDataMapper = new UserToDataMapper();
+            UserToDataModelMapper userToDataModelMapper = new UserToDataModelMapper();
             var user = new User(
                 new Username("Afonso"),
                 Role.Admin,
@@ -25,7 +25,7 @@ public class UserToDataMapperTest
             );
 
             // Act
-            var result = userToDataMapper.MapToDataUser(user);
+            var result = userToDataModelMapper.MapToDataModel(user);
 
             // Assert
             Assert.NotNull(result);
@@ -38,8 +38,8 @@ public class UserToDataMapperTest
         public void MapToDataUser_NullUser_ThrowsArgumentNullException()
         {
             // Act & Assert
-            UserToDataMapper userToDataMapper = new UserToDataMapper();
-            var ex = Assert.Throws<ArgumentNullException>(() => userToDataMapper.MapToDataUser(null));
+            UserToDataModelMapper userToDataModelMapper = new UserToDataModelMapper();
+            var ex = Assert.Throws<ArgumentNullException>(() => userToDataModelMapper.MapToDataModel(null));
             Assert.Equal("User cannot be null. (Parameter 'user')", ex.Message);
         }
 
@@ -47,7 +47,7 @@ public class UserToDataMapperTest
         public void MapToUser_ValidUserDataModel_ReturnsUser()
         {
             // Arrange
-            UserToDataMapper userToDataMapper = new UserToDataMapper();
+            UserToDataModelMapper userToDataModelMapper = new UserToDataModelMapper();
             User user = new User(
                 new Username("Afonso"),
                 Role.Admin,
@@ -56,7 +56,7 @@ public class UserToDataMapperTest
             var userDataModel = new UserDataModel(user);
 
             // Act
-            var result = userToDataMapper.MapToUser(userDataModel);
+            var result = userToDataModelMapper.MapToUser(userDataModel);
 
             // Assert
             Assert.NotNull(result);
@@ -69,8 +69,8 @@ public class UserToDataMapperTest
         public void MapToUser_NullUserDataModel_ThrowsArgumentNullException()
         {
             // Act & Assert
-            UserToDataMapper userToDataMapper = new UserToDataMapper();
-            var ex = Assert.Throws<ArgumentNullException>(() => userToDataMapper.MapToUser(null));
+            UserToDataModelMapper userToDataModelMapper = new UserToDataModelMapper();
+            var ex = Assert.Throws<ArgumentNullException>(() => userToDataModelMapper.MapToUser(null));
             Assert.Equal("DataUser cannot be null. (Parameter 'savedUser')", ex.Message);
         }
     
