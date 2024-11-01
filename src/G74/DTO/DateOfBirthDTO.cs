@@ -7,8 +7,11 @@ public class DateOfBirthDTO
     public int MonthOfBirth { get; set; }
 
     public int DayOfBirth { get; set; }
-    
-    public DateOfBirthDTO() { }
+
+    public DateOfBirthDTO()
+    {
+    }
+
 
     public DateOfBirthDTO(int yearOfBirth, int monthOfBirth, int dayOfBirth)
     {

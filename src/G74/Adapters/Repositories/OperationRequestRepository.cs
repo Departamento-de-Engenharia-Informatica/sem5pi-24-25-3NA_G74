@@ -75,7 +75,7 @@ namespace G74.Adapters.Repositories
         
         dataOperation.MedicalRecordNumber = operation.MedicalRecordNumber.MedicalNumber;
         dataOperation.LicenceNumber = operation.LicenceNumber.licenceNumber;
-        dataOperation.NameOperationType = operation.OperationType.Name.TheName;
+        dataOperation.NameOperationType = operation.OperationType.Name.Value;
         dataOperation.RequiredStaffBySpecialization = operation.OperationType.RequiredStaffBySpecialization.SpecializationStaffList;
         dataOperation.Seconds = operation.OperationType.EstimatedDuration.Seconds;
         dataOperation.Minutes = operation.OperationType.EstimatedDuration.Minutes;

@@ -1,22 +1,23 @@
-﻿using G74.DataModel;
-using G74.Domain.Shared;
+﻿using G74.Adapters.Repositories;
 using G74.Domain.Value_Objects.Patient;
 using G74.DTO;
 
 namespace G74.Domain.IRepositories;
 
-public interface IPatientRepository : IRepository<PatientDataModel, Guid>
+public interface IPatientRepository : IGenericRepository<Patient>
 {
+    Task<Patient> AddPatient(Patient patient);
+    Task<Patient?> GetPatientByMedicalRecordNumber(MedicalRecordNumber medicalRecordNumber);
+    Task<Patient?> UpdatePatient(Patient patient);
 
-    Task AddPatient(PatientDataModel patient);
-    Task<PatientDataModel?> GetPatientByMedicalRecordNumber(MedicalRecordNumber medicalRecordNumber);
-    Task UpdatePatient(PatientDataModel patient);
-    Task<int> CountAsync();
+    Task MarkPatientToBeDeleted(Patient patient, TimeSpan retainInfoPeriod);
 
-    Task<List<PatientDataModel>> GetPatientsReadyForDeletion();
+    Task<IEnumerable<Patient>> GetPatientsReadyForDeletion();
 
-    Task DeletePatientDefinitive(PatientDataModel patient);
-    Task<IEnumerable<PatientDataModel>> SearchPatientsByFiltersAsync(PatientFilterCriteriaDTO criteria);
-    
+    Task DeletePatientDefinitive(Patient patient);
+
+    Task<IEnumerable<Patient>> SearchPatientsByFiltersAsync(string? name,
+        string? gender, string? phoneNumber, string? email, DateOfBirthDTO? dateOfBirth);
+
     Task<int> GetMaxMedicalRecordNumberSequentialPartAsync();
 }

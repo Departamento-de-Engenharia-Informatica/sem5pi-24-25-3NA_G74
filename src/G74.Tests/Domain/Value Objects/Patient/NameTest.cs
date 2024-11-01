@@ -17,7 +17,7 @@ public class NameTest
         var name = new Name(input);
 
         // Assert
-        Assert.Equal(input.Trim(), name.TheName);
+        Assert.Equal(input.Trim(), name.Value);
     }
 
     [Theory]
@@ -41,7 +41,7 @@ public class NameTest
         var name = Name.FromString(input);
 
         // Assert
-        Assert.Equal(input.Trim(), name.TheName);
+        Assert.Equal(input.Trim(), name.Value);
     }
 
     [Theory]

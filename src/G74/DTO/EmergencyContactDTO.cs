@@ -1,11 +1,16 @@
-﻿namespace G74.DTO;
+﻿using G74.Domain.Value_Objects.SharedValueObjects;
+
+namespace G74.DTO;
 
 public class EmergencyContactDTO
 {
-    public string PhoneNumber { get; init; }
+    public string Name { get; set; }
+    public string PhoneNumber { get; set; }
 
-    public EmergencyContactDTO(string phoneNumber)
+    public EmergencyContactDTO(string name, string phoneNumber)
     {
+        Name = name;
+
         PhoneNumber = phoneNumber;
     }
 }

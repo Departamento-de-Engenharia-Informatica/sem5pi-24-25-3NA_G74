@@ -21,7 +21,7 @@ public class DataOperationRequest : Entity<Guid>
     {
         MedicalRecordNumber = request.MedicalRecordNumber.MedicalNumber;
         LicenceNumber = request.LicenceNumber.licenceNumber;
-        NameOperationType = request.OperationType.Name.TheName;
+        NameOperationType = request.OperationType.Name.Value;
         RequiredStaffBySpecialization = request.OperationType.RequiredStaffBySpecialization.SpecializationStaffList;
         Seconds = request.OperationType.EstimatedDuration.Seconds;
         Minutes = request.OperationType.EstimatedDuration.Minutes;

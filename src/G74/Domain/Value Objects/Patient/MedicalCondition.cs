@@ -4,25 +4,28 @@ namespace G74.Domain.Value_Objects.Patient;
 
 public class MedicalCondition : IValueObject
 {
+    public string Description { get; }
 
-    public string MedicalConditionsDescriptions { get; }
+    private const string MedicalConditionDescriptionNullOrWhiteSpaceMsg = "Medical condition cannot be empty or spaces";
 
     public MedicalCondition(string medicalConditionsDescriptions)
     {
-        MedicalConditionsValidations(medicalConditionsDescriptions);
-
-        MedicalConditionsDescriptions = medicalConditionsDescriptions;
+        Description = MedicalConditionsValidations(medicalConditionsDescriptions);
     }
 
-    private void MedicalConditionsValidations(string medicalConditionDescription)
+    private static string MedicalConditionsValidations(string medicalConditionDescription)
     {
         if (string.IsNullOrWhiteSpace(medicalConditionDescription))
-            throw new ArgumentException(MedicalConditionDescriptionNullOrWhiteSpaceMsg);
-        
+            throw new BusinessRuleValidationException(MedicalConditionDescriptionNullOrWhiteSpaceMsg);
 
+        return medicalConditionDescription.Trim();
     }
 
-    private const string MedicalConditionDescriptionNullOrWhiteSpaceMsg = "Medical condition cannot be empty or spaces";
-    
-    
+    public override string ToString() => Description;
+
+    public bool Equals(MedicalCondition? other) => other != null && Description == other.Description;
+
+    public override bool Equals(object? obj) => obj is MedicalCondition other && Equals(other);
+
+    public override int GetHashCode() => Description.GetHashCode();
 }

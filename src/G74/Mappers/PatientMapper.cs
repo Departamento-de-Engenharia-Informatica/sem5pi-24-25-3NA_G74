@@ -1,40 +1,57 @@
 ﻿using G74.DataModel;
 using G74.Domain;
+using G74.Domain.Value_Objects.Patient;
+using G74.Domain.Value_Objects.SharedValueObjects;
+using G74.Domain.Value_Objects.Staff;
+using G74.Domain.Value_Objects.User;
 using G74.DTO;
 
 namespace G74.Mappers;
 
 public class PatientMapper
 {
-    public static PatientDTO ToDTO(Patient patient)
+    public PatientDTO ToDTO(Patient patient)
     {
         ArgumentNullException.ThrowIfNull(patient);
 
-        return new PatientDTO(patient.Name, patient.Gender.GenderDescription,
-            patient.DateOfBirth, patient.ContactInformation, patient.EmergencyContact);
+        DateOfBirthDTO dateOfBirthDto = new DateOfBirthDTO(patient.DateOfBirth.dateOfBirth.Year,
+            patient.DateOfBirth.dateOfBirth.Month,
+            patient.DateOfBirth.dateOfBirth.Day);
+
+        ContactInformationDTO contactInformationDto = new ContactInformationDTO(patient.ContactInformation.PhoneNumber,
+            patient.ContactInformation.EmailAddress.email);
+
+        EmergencyContactDTO emergencyContactDto =
+            new EmergencyContactDTO(patient.EmergencyContact.Name.Value, patient.EmergencyContact.PhoneNumber);
+
+
+        return new PatientDTO(patient.Name.Value, patient.Gender.GenderDescription, dateOfBirthDto,
+            contactInformationDto, emergencyContactDto);
     }
 
-    public static Patient ToDomain(PatientDTO patientDto)
+
+    public Patient ToDomain(PatientDTO patientDto, string medicalRecordNumber)
     {
-        throw new NotImplementedException();
-    }
+        ArgumentNullException.ThrowIfNull(patientDto);
+        ArgumentNullException.ThrowIfNull(medicalRecordNumber);
 
-    public static PatientDataModel ToDataModel(Patient patient)
-    {
-        ArgumentNullException.ThrowIfNull(patient, nameof(Patient));
+        Name name = new Name(patientDto.Name);
 
-        return new PatientDataModel(patient);
-    }
+        MedicalRecordNumber medicalnumber = new MedicalRecordNumber(medicalRecordNumber);
 
-    public static CreatePatientDTO FromDataModelToCreatePatientDto(PatientDataModel patientDataModel)
-    {
-        ArgumentNullException.ThrowIfNull(patientDataModel);
+        DateOfBirth dateOfBirth = new DateOfBirth(patientDto.DateOfBirth.YearOfBirth,
+            patientDto.DateOfBirth.MonthOfBirth, patientDto.DateOfBirth.DayOfBirth);
 
-        return new CreatePatientDTO(patientDataModel.Name.TheName, patientDataModel.Gender.GenderDescription,
-            new DateOfBirthDTO(patientDataModel.DateOfBirth.YearOfBirth, patientDataModel.DateOfBirth.MonthOfBirth,
-                patientDataModel.DateOfBirth.DayOfBirth),
-            new ContactInformationDTO(patientDataModel.ContactInformation.PhoneNumber,
-                patientDataModel.ContactInformation.EmailAddress.email),
-            new EmergencyContactDTO(patientDataModel.EmergencyContact._phoneNumber));
+        Gender gender = Gender.FromString(patientDto.Gender);
+
+        Email email = new Email(patientDto.ContactInformation.EmailAddress);
+
+        ContactInformation contactInformation =
+            new ContactInformation(patientDto.ContactInformation.PhoneNumber, email);
+
+        EmergencyContact emergencyContact = new EmergencyContact(patientDto.EmergencyContact.PhoneNumber,
+            new Name(patientDto.EmergencyContact.Name));
+
+        return new Patient(name, medicalnumber, dateOfBirth, gender, contactInformation, emergencyContact);
     }
 }

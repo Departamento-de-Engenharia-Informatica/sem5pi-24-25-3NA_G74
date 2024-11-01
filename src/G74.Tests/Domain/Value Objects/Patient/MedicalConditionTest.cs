@@ -16,7 +16,7 @@ public class MedicalConditionTest
         var medicalCondition = new MedicalCondition(validDescription);
 
         // Assert
-        Assert.Equal(validDescription, medicalCondition.MedicalConditionsDescriptions);
+        Assert.Equal(validDescription, medicalCondition.Description);
     }
 
     [Theory]

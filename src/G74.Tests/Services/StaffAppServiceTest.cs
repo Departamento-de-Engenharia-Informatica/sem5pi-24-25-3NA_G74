@@ -6,6 +6,7 @@ using G74.Domain.Aggregates.Staff;
 using G74.Domain.IRepositories;
 using G74.Domain.Value_Objects.SharedValueObjects;
 using G74.Domain.Value_Objects.Staff;
+using G74.Domain.Value_Objects.User;
 using G74.DTO;
 using G74.Services;
 using JetBrains.Annotations;
@@ -65,9 +66,9 @@ public class StaffAppServiceTest
         Assert.All(staffDtos, dto => 
         {
             Assert.Equal(_validStaff.LicenseNumber.Value, dto.LicenseNumber);
-            Assert.Equal(_validStaff.Name.TheName, dto.Name);
+            Assert.Equal(_validStaff.Name.Value, dto.Name);
             Assert.Equal(_validStaff.PhoneNumber.Value, dto.PhoneNumber);
-            Assert.Equal(_validStaff.ContactEmail.Value, dto.ContactEmail);
+            Assert.Equal(_validStaff.ContactEmail.email, dto.ContactEmail);
             Assert.Equal(_validStaff.StaffSpecialization.Value, dto.StaffSpecialization);
             Assert.Equal(_validStaff.Status.Value, dto.Status);
         });

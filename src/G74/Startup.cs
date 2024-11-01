@@ -108,6 +108,8 @@ public class Startup
         services.AddScoped<IRepoUser, RepoUser>();
         services.AddScoped<IPatientAppService, PatientAppService>();
         services.AddScoped<IPatientRepository, PatientRepository>();
+        services.AddTransient<PatientDataModelMapper>();
+        services.AddTransient<PatientMapper>();
         services.AddScoped<IMedicalRecordNumberGenerator, MedicalRecordNumberGenerator>();
         services.AddHostedService<PatientDeletionService>();
         services.AddScoped<UserAppService>();

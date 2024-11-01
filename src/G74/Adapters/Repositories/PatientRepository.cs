@@ -2,171 +2,233 @@
 using G74.Domain;
 using G74.Domain.IRepositories;
 using G74.Domain.Value_Objects.Patient;
-using G74.Domain.Value_Objects.SharedValueObjects;
-using G74.Domain.Value_Objects.User;
 using G74.DTO;
-using G74.Infrastructure.Shared;
+using G74.Mappers;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace G74.Adapters.Repositories;
 
-public class PatientRepository : BaseRepository<PatientDataModel, Guid>, IPatientRepository
+public class PatientRepository : GenericRepository<Patient>, IPatientRepository
 {
-    private readonly BackofficeAppDbContext _context;
+    private readonly PatientDataModelMapper _patientMapper;
 
-    public PatientRepository(BackofficeAppDbContext context) : base(context.Patients)
+    public PatientRepository(BackofficeAppDbContext context, PatientDataModelMapper mapper) : base(context!)
     {
-        _context = context;
+        _patientMapper = mapper;
     }
 
-    public async Task AddPatient(PatientDataModel patient)
+    public async Task<Patient?> GetPatientByMedicalRecordNumber(MedicalRecordNumber medicalRecordNumber)
     {
-        await AddAsync(patient);
-        await _context.SaveChangesAsync();
-    }
+        var patientDataModel =  GetPatientDataModelByMedicalRecordNumber(medicalRecordNumber).Result;
 
-    public async Task<PatientDataModel?> GetPatientByMedicalRecordNumber(MedicalRecordNumber medicalRecordNumber)
-    {
-        var patient =
-            await _context.Patients.FirstOrDefaultAsync(x => x.MedicalRecordNumber.Equals(medicalRecordNumber));
-
-        if (patient != null && patient.ToDelete == false)
+        if (patientDataModel != null && patientDataModel.MarkedForDeletion == false)
         {
-            return patient;
+            return _patientMapper.ToDomain(patientDataModel);
         }
 
         return null;
     }
-    
-    public async Task<int> GetMaxMedicalRecordNumberSequentialPartAsync()
+
+    private async Task<PatientDataModel?> GetPatientDataModelByMedicalRecordNumber(
+        MedicalRecordNumber medicalRecordNumber)
     {
-        var patients = await _context.Patients.ToListAsync();
+        var patientDataModel =
+            await _context.Set<PatientDataModel>().FirstOrDefaultAsync(x =>
+                x.MedicalRecordNumber.Equals(medicalRecordNumber.MedicalNumber));
 
-        int maxNumber = 0;
+        return patientDataModel;
+    }
 
-        foreach (var patient in patients)
+    public async Task<Patient> AddPatient(Patient patient)
+    {
+        PatientDataModel patientDataModel = _patientMapper.ToDataModel(patient);
+
+        EntityEntry<PatientDataModel> patientDataModelEntityEntry =
+            _context.Set<PatientDataModel>().Add(patientDataModel);
+
+        await _context.SaveChangesAsync();
+
+        PatientDataModel patientDataModelSaved = patientDataModelEntityEntry.Entity;
+
+        return _patientMapper.ToDomain(patientDataModelSaved);
+    }
+
+
+    public async Task<Patient?> UpdatePatient(Patient patient)
+    {
+        PatientDataModel patientDataModel = await _context.Set<PatientDataModel>()
+            .FirstAsync(p => p.MedicalRecordNumber == patient.MedicalRecordNumber.MedicalNumber);
+
+        _patientMapper.UpdateDataModel(patientDataModel, patient);
+
+        _context.Entry(patientDataModel).State = EntityState.Modified;
+
+        await _context.SaveChangesAsync();
+
+        return patient;
+    }
+
+    public async Task MarkPatientToBeDeleted(Patient patient, TimeSpan retainInfoPeriod)
+    {
+        PatientDataModel patientDataModel = await _context.Set<PatientDataModel>()
+            .FirstAsync(p => p.MedicalRecordNumber == patient.MedicalRecordNumber.MedicalNumber);
+
+        patientDataModel.MarkForDeletion(retainInfoPeriod);
+
+        _context.Entry(patientDataModel).State = EntityState.Modified;
+
+        await _context.SaveChangesAsync();
+    }
+
+
+    public async Task<IEnumerable<Patient>> GetPatientsReadyForDeletion()
+    {
+        DateTime currentTime = DateTime.UtcNow;
+
+        var patientDataModels = _context.Set<PatientDataModel>()
+            .Where(p => p.MarkedForDeletion && p.DateToBeDeleted <= currentTime)
+            .ToListAsync().Result.AsEnumerable();
+
+        return _patientMapper.ToDomain(patientDataModels);
+    }
+
+    public async Task DeletePatientDefinitive(Patient patient)
+    {
+        var patientDataModelToRemove = GetPatientDataModelByMedicalRecordNumber(patient.MedicalRecordNumber).Result;
+
+        if (patientDataModelToRemove != null)
         {
-            // Parse the sequential part of the MedicalRecordNumber (last 5 digits)
-            var sequentialPart = int.Parse(patient.MedicalRecordNumber.MedicalNumber.Substring(6));
+            _context.Set<PatientDataModel>().Remove(patientDataModelToRemove);
+            await _context.SaveChangesAsync();
+        }
+    }
 
-            if (sequentialPart > maxNumber)
-            {
-                maxNumber = sequentialPart;
-            }
+
+    public async Task<IEnumerable<Patient>> SearchPatientsByFiltersAsync(string? name,
+        string? gender, string? phoneNumber, string? email, DateOfBirthDTO? dateOfBirth)
+    {
+        IQueryable<PatientDataModel> myQueryable = _context.Set<PatientDataModel>();
+        
+        if (name != null && name.Length > 0)
+        {
+            myQueryable = ApplyNameFilter(myQueryable, name);
         }
 
-        return maxNumber;
-    }
+        if (gender != null && gender.Length > 0)
+        {
+            myQueryable = ApplyGenderFilter(myQueryable, gender);
+        }
 
-    public Task<Patient> GetPatientByEmail(string email)
-    {
-        throw new NotImplementedException();
-    }
+        if (phoneNumber != null && phoneNumber.Length > 0)
+        {
+            myQueryable = ApplyPhoneNumberFilter(myQueryable, phoneNumber);
+        }
 
-    public async Task UpdatePatient(PatientDataModel patient)
-    {
-        _context.Patients.Update(patient);
-        await _context.SaveChangesAsync();
-    }
+        if (email != null && email.Length > 0)
+        {
+            myQueryable = ApplyEmailFilter(myQueryable, email);
+        }
 
-    public async Task<List<PatientDataModel>> GetPatientsReadyForDeletion()
-    {
-        DateTime currentTime = DateTime.Now;
-
-        return await _context.Patients
-            .Where(p => p.DeletionInformation.ToDelete && p.DeletionInformation.DateToBeDeleted <= currentTime)
-            .ToListAsync();
-    }
-
-    public async Task DeletePatientDefinitive(PatientDataModel patient)
-    {
-        _context.Patients.Remove(patient);
-        await _context.SaveChangesAsync();
-    }
-
-
-    public async Task<IEnumerable<PatientDataModel>> SearchPatientsByFiltersAsync(PatientFilterCriteriaDTO criteria)
-    {
-        IQueryable<PatientDataModel> myQueryable = _context.Patients;
-
-        myQueryable = ApplyNameFilter(myQueryable, criteria.Name);
-        myQueryable = ApplyContactInformationFilter(myQueryable, criteria.Email, criteria.PhoneNumber);
-        
-        myQueryable = ApplyMedicalRecordNumberFilter(myQueryable, criteria.MedicalRecordNumber);
-        //myQueryable = ApplyDateOfBirthFilter(myQueryable, criteria.DateOfBirth);
-        myQueryable = ApplyGenderFilter(myQueryable, criteria.Gender);
+        if (dateOfBirth != null)
+        {
+            myQueryable = ApplyDateOfBirthFilter(myQueryable, dateOfBirth);
+        }
 
         var patientsFound = await myQueryable.ToListAsync();
 
-        return patientsFound;
+        return _patientMapper.ToDomain(patientsFound);
     }
 
+    
     private IQueryable<PatientDataModel> ApplyNameFilter(IQueryable<PatientDataModel> query, string name)
     {
         if (!string.IsNullOrEmpty(name))
         {
-            return query.Where(p => p.Name.Equals(new Name(name)));
+            return query.Where(p => p.PatientName.Equals(name));
         }
 
         return query;
     }
 
-
-    private static IQueryable<PatientDataModel> ApplyContactInformationFilter(IQueryable<PatientDataModel> query, string email, string phoneNumber)
-    {
-        if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(phoneNumber))
-        {
-            return query.Where(p => p.ContactInformation.Equals(ContactInformation.FromString($"{phoneNumber};{email}")));
-        }
-
-        return query;
-    }
 
     private static IQueryable<PatientDataModel> ApplyPhoneNumberFilter(IQueryable<PatientDataModel> query,
         string phoneNumber)
     {
         if (!string.IsNullOrEmpty(phoneNumber))
         {
-            return query.Where(p => p.ContactInformation.PhoneNumber.Equals(phoneNumber));
+            return query.Where(p => p.PersonalPhoneNumber.Equals(phoneNumber));
         }
 
         return query;
     }
 
-    private static IQueryable<PatientDataModel> ApplyMedicalRecordNumberFilter(IQueryable<PatientDataModel> query,
-        string medicalRecordNumber)
+    private static IQueryable<PatientDataModel> ApplyEmailFilter(IQueryable<PatientDataModel> query,
+        string email)
     {
-        if (!string.IsNullOrEmpty(medicalRecordNumber))
+        if (!string.IsNullOrEmpty(email))
         {
-            return query.Where(p => p.MedicalRecordNumber.Equals(new MedicalRecordNumber(medicalRecordNumber)));
+            return query.Where(p => p.PersonalEmail.Equals(email));
         }
 
         return query;
     }
-    // NOT USED
-    private static IQueryable<PatientDataModel> ApplyDateOfBirthFilter(IQueryable<PatientDataModel> query,
-        DateOfBirthDTO dateOfBirthDto)
-    {
-        if (dateOfBirthDto != null)
-        {
-            query = query.Where(p => p.YearOfBirth == dateOfBirthDto.YearOfBirth);
-            query = query.Where(p => p.MonthOfBirth == dateOfBirthDto.MonthOfBirth);
-            query = query.Where(p => p.DayOfBirth == dateOfBirthDto.DayOfBirth);
-        }
-
-        return query;
-    }
-
 
     private static IQueryable<PatientDataModel> ApplyGenderFilter(IQueryable<PatientDataModel> query, string gender)
     {
         if (!string.IsNullOrEmpty(gender))
         {
-            Gender theGender = Gender.FromString(gender);
-
-            return query.Where(p => p.Gender.Equals(theGender));
+            return query.Where(p => p.PatientGender.Equals(gender));
         }
 
         return query;
+    }
+
+    private static IQueryable<PatientDataModel> ApplyDateOfBirthFilter(IQueryable<PatientDataModel> query,
+        DateOfBirthDTO dateOfBirth)
+    {
+        if (dateOfBirth.YearOfBirth != null && dateOfBirth.MonthOfBirth != null && dateOfBirth.DayOfBirth != null)
+        {
+            if (dateOfBirth.YearOfBirth != 0 && dateOfBirth.MonthOfBirth != 0 && dateOfBirth.DayOfBirth != 0)
+            {
+                DateOnly searchDateTime =
+                    new DateOnly(dateOfBirth.YearOfBirth, dateOfBirth.MonthOfBirth, dateOfBirth.DayOfBirth);
+
+                return query.Where(p => p.BirthDate.Equals(searchDateTime));
+            }
+        }
+
+        return query;
+    }
+
+
+    // Version letting the database do the work
+    public async Task<int> GetMaxMedicalRecordNumberSequentialPartAsync()
+    {
+        var dates = await _context.Set<PatientDataModel>()
+            .Select(p => p.MedicalRecordNumber.Substring(0, 6))
+            .ToListAsync();
+
+        var latestDate = dates
+            .Select(mrn => new
+            {
+                Year = int.Parse(mrn.Substring(0, 4)),
+                Month = int.Parse(mrn.Substring(4, 2))
+            })
+            .OrderByDescending(d => d.Year)
+            .ThenByDescending(d => d.Month)
+            .FirstOrDefault();
+
+        if (latestDate == null) return 0;
+
+        // Switching to client-side evaluation with AsEnumerable() here
+        var maxSequentialNumber = _context.Set<PatientDataModel>()
+            .AsEnumerable()
+            .Where(p => p.MedicalRecordNumber.StartsWith($"{latestDate.Year}{latestDate.Month:D2}"))
+            .Select(p => int.Parse(p.MedicalRecordNumber.Substring(6)))
+            .DefaultIfEmpty(0)
+            .Max();
+
+        return maxSequentialNumber;
     }
 }

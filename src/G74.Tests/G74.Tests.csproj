@@ -19,5 +19,10 @@
   <ItemGroup>
     <ProjectReference Include="..\G74\G74.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Domain\Aggregates\Patient\" />
+    <Folder Include="Domain\Builders\" />
+  </ItemGroup>
   
 </Project>

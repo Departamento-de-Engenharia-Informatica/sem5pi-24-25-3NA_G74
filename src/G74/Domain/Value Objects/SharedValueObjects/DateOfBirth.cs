@@ -1,75 +1,72 @@
 ﻿using G74.Domain.Shared;
 
 
-
 namespace G74.Domain.Value_Objects.SharedValueObjects;
-public class DateOfBirth : IValueObject
+
+public class DateOfBirth : IValueObject, IEquatable<DateOfBirth>
 {
-    public int YearOfBirth { get; }
+    public DateTime dateOfBirth { get; }
 
-    public int MonthOfBirth { get; }
-
-    public int DayOfBirth { get; }
-
+    private const string InvalidDateMsg = "Invalid date provided";
+    private const string DateInFutureMsg = "Date of birth cannot be in the future";
 
     public DateOfBirth(int yearOfBirth, int monthOfBirth, int dayOfBirth)
     {
-        BirthDateValidations(yearOfBirth, monthOfBirth, dayOfBirth);
-
-        YearOfBirth = yearOfBirth;
-        MonthOfBirth = monthOfBirth;
-        DayOfBirth = dayOfBirth;
+        dateOfBirth = BirthDateValidations(yearOfBirth, monthOfBirth, dayOfBirth);
     }
 
     public DateOfBirth(DateOfBirth other)
     {
-        BirthDateValidations(other.YearOfBirth, other.MonthOfBirth, other.DayOfBirth);
+        BirthDateValidations(other.dateOfBirth.Year, other.dateOfBirth.Month, other.dateOfBirth.Day);
 
-        YearOfBirth = other.YearOfBirth;
-        MonthOfBirth = other.MonthOfBirth;
-        DayOfBirth = other.DayOfBirth;
+        dateOfBirth = other.dateOfBirth;
     }
 
-    private void BirthDateValidations(int yearOfBirth, int monthOfBirth, int dayOfBirth)
+    public static DateTime BirthDateValidations(int yearOfBirth, int monthOfBirth, int dayOfBirth)
     {
-        // DateTime will do the date validations
-        DateTime dateOfBirth;
+        DateTime validateDateTime;
+
         try
         {
-            dateOfBirth = new DateTime(yearOfBirth, monthOfBirth, dayOfBirth);
+            validateDateTime = new DateTime(yearOfBirth, monthOfBirth, dayOfBirth);
         }
-        catch (ArgumentOutOfRangeException)
+        catch (ArgumentOutOfRangeException ex)
         {
-            throw new ArgumentException(InvalidDateMsg);
+            throw new BusinessRuleValidationException(InvalidDateMsg, ex.Message);
         }
 
-        // To ensure that the date of birth is not in the future
-        if (dateOfBirth > DateTime.Today)
+        if (validateDateTime > DateTime.UtcNow)
         {
-            throw new ArgumentException(DateInFutureMsg);
+            throw new BusinessRuleValidationException(DateInFutureMsg);
         }
+
+        return validateDateTime;
     }
-    
+
     public static DateOfBirth FromString(string dateOfBirthString)
     {
-        var parts = dateOfBirthString.Split('-');
-        if (parts.Length != 3)
-            throw new FormatException("Date of birth must be in the format 'YYYY-MM-DD'.");
+        var parts = dateOfBirthString.Split(new[] { ',', '/' });
 
-        // Parse the components of the date
-        int year = int.Parse(parts[0]);
-        int month = int.Parse(parts[1]);
-        int day = int.Parse(parts[2]);
+        if (parts.Length != 3
+            || !int.TryParse(parts[0], out int year)
+            || !int.TryParse(parts[1], out int month)
+            || !int.TryParse(parts[2], out int day))
+        {
+            throw new BusinessRuleValidationException(
+                "Date of birth must be in the format 'YYYY-MM-DD' or 'YYYY/MM/DD'.");
+        }
 
         return new DateOfBirth(year, month, day);
     }
 
     public string ToFormattedDateOfBirthStr()
     {
-        return $"{YearOfBirth:D4}-{MonthOfBirth:D2}-{DayOfBirth:D2}";
+        return $"{dateOfBirth.Year:D4}-{dateOfBirth.Month:D2}-{dateOfBirth.Day:D2}";
     }
 
+    public bool Equals(DateOfBirth? other) => other != null && dateOfBirth == other.dateOfBirth;
 
-    private const string InvalidDateMsg = "Invalid date provided";
-    private const string DateInFutureMsg = "Date of birth cannot be in the future";
+    public override bool Equals(object? obj) => obj is DateOfBirth other && Equals(other);
+
+    public override int GetHashCode() => dateOfBirth.GetHashCode();
 }

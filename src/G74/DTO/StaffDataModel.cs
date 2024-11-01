@@ -22,9 +22,9 @@ public class StaffDataModel : Entity<Guid>
     {
         // Id = staff.Id;
         LicenseNumber = staff.LicenseNumber.Value;
-        Name = staff.Name.TheName;
+        Name = staff.Name.Value;
         PhoneNumber = staff.PhoneNumber.Value;
-        ContactEmail = staff.ContactEmail.Value;
+        ContactEmail = staff.ContactEmail.email;
         StaffSpecialization = staff.StaffSpecialization.Value;
         Status = staff.Status.Value;
     }

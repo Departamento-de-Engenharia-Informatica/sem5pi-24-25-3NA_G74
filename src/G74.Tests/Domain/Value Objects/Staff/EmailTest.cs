@@ -1,4 +1,5 @@
 using G74.Domain.Value_Objects.Staff;
+using G74.Domain.Value_Objects.User;
 using JetBrains.Annotations;
 using Xunit;
 

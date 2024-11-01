@@ -5,9 +5,11 @@ namespace G74.Services;
 
 public interface IPatientAppService
 {
-    Task<PatientDTO> RegisterPatient(CreatePatientDTO patientDto);
-    Task<CreatePatientDTO> UpdatePatient(string medicalRecordNumber, CreatePatientDTO updatedInfoPatientDto);
+    Task<PatientDTO> RegisterPatient(PatientDTO patientDto);
+    Task<PatientDTO> UpdatePatientLimited(string medicalRecordNumber, PatientDTO updatedInfoPatientDto);
     Task MarkPatientToBeDeleted(string medicalRecordNumber);
-    Task<PatientDTO> GetPatientByMedicalRecordNumber(MedicalRecordNumber medicalRecordNumber);
-    Task<IEnumerable<CreatePatientDTO>> SearchPatientsByFilters(PatientFilterCriteriaDTO criteria);
+    Task<PatientDTO?> GetPatientByMedicalRecordNumber(MedicalRecordNumber medicalRecordNumber);
+    Task<IEnumerable<PatientDTO>> SearchPatientsByFilters(PatientDTO criteria);
 }
+
+

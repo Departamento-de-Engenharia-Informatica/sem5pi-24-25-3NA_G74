@@ -2,85 +2,94 @@
 using G74.Domain.Shared;
 using G74.Domain.Value_Objects.Patient;
 using G74.Domain.Value_Objects.SharedValueObjects;
+using G74.Domain.Value_Objects.User;
 
 namespace G74.DataModel;
 
 public class PatientDataModel : Entity<Guid>
 {
-    public Name Name { get; private set; }
+    public string PatientName { get; set; }
 
-    public MedicalRecordNumber MedicalRecordNumber { get; private set; }
+    public string MedicalRecordNumber { get; set; }
 
-    public DateOfBirth DateOfBirth { get; private set; }
+    public string PatientGender { get; set; }
 
-    public Gender Gender { get; private set; }
+    public DateOnly BirthDate { get; set; }
 
-    public ContactInformation ContactInformation { get; private set; }
+    public string PersonalPhoneNumber { get; set; }
 
-    public EmergencyContact EmergencyContact { get; private set; }
+    public string PersonalEmail { get; set; }
 
-    public DeletionInformation DeletionInformation { get; private set; }
+    public string EmergencyContactName { get; set; }
 
-    public bool ToDelete => DeletionInformation?.ToDelete ?? false;
-    public DateTime? DateToBeDeleted => DeletionInformation?.DateToBeDeleted;
+    public string EmergencyContactPhoneNumber { get; set; }
 
-    // Individual properties for easier filtering
-    public int YearOfBirth => DateOfBirth.YearOfBirth;
-    public int MonthOfBirth => DateOfBirth.MonthOfBirth;
-    public int DayOfBirth => DateOfBirth.DayOfBirth;
+    public bool MarkedForDeletion { get; set; }
 
-    public string PhoneNumber => ContactInformation.PhoneNumber;
-    public string Email => ContactInformation.Email;
-    
-
+    public DateTime? DateToBeDeleted { get; set; }
 
     protected PatientDataModel() : base(Guid.NewGuid())
     {
     }
 
-    public PatientDataModel(Patient patient) : base(Guid.NewGuid())
+    public PatientDataModel(string patientName, string medicalRecordNumber, string patientGender,
+        DateOnly birthDate, string personalPhoneNumber, string personalEmail, string emergencyContactName,
+        string emergencyContactPhoneNumber) : base(Guid.NewGuid())
     {
-        Name = patient.Name;
-        MedicalRecordNumber = patient.MedicalRecordNumber;
-        DateOfBirth = patient.DateOfBirth;
-        Gender = patient.Gender;
-        ContactInformation = patient.ContactInformation;
-        EmergencyContact = patient.EmergencyContact;
-        DeletionInformation = new DeletionInformation(false, TimeSpan.FromMinutes(0));
+        PatientName = patientName;
+        MedicalRecordNumber = medicalRecordNumber;
+        PatientGender = patientGender;
+        BirthDate = birthDate;
+        PersonalPhoneNumber = personalPhoneNumber;
+        PersonalEmail = personalEmail;
+        EmergencyContactName = emergencyContactName;
+        EmergencyContactPhoneNumber = emergencyContactPhoneNumber;
+        MarkedForDeletion = false;
+        DateToBeDeleted = null;
+    }
+    
+    public void UpdateName(string newName)
+    {
+        PatientName = Name.ValidateAndTrimName(newName);
     }
 
-    public void UpdateName(Name newName)
+    public void UpdateGender(string newGender)
     {
-        Name = newName
-               ?? throw new ArgumentNullException(nameof(newName));
+        PatientGender = Gender.FromString(newGender).GenderDescription;
     }
 
-    public void UpdateDateOfBirth(DateOfBirth newDateOfBirth)
+    public void UpdateDateOfBirth(int year, int month, int day)
     {
-        DateOfBirth = newDateOfBirth
-                      ?? throw new ArgumentNullException(nameof(newDateOfBirth));
+        BirthDate = new DateOnly(year,month,day);
     }
 
-    public void UpdateGender(Gender newGender)
+    public void UpdatePersonalPhoneNumber(string newPersonalPhoneNumber)
     {
-        Gender = newGender
-                 ?? throw new ArgumentNullException(nameof(newGender));
+        PersonalPhoneNumber = ContactInformation.ValidatePhoneNumber(newPersonalPhoneNumber);
     }
 
-    public void UpdateContactInformation(ContactInformation newContactInformation)
+    public void UpdatePersonalEmail(string newPersonalEmail)
     {
-        ContactInformation = newContactInformation
-                             ?? throw new ArgumentNullException(nameof(newContactInformation));
+        PersonalEmail = Email.ValidateEmail(newPersonalEmail).email;
     }
 
-    public void UpdateEmergencyContact(EmergencyContact newEmergencyContact)
+    public void UpdateEmergencyContactName(string newEmergencyContactName)
     {
-        EmergencyContact = newEmergencyContact
-                           ?? throw new ArgumentNullException(nameof(newEmergencyContact));
+        EmergencyContactName = Name.ValidateAndTrimName(newEmergencyContactName);
     }
 
-    public void MarkForDeletion(TimeSpan timeSpan)
+    public void UpdateEmergencyContactPhoneNumber(string newEmergencyContactPhoneNumber)
     {
-        DeletionInformation = new DeletionInformation(true, timeSpan);
+        EmergencyContactPhoneNumber = EmergencyContact.ValidatePhoneNumber(newEmergencyContactPhoneNumber);
+    }
+
+
+    public void MarkForDeletion(TimeSpan timeToDeletion)
+    {
+        if (timeToDeletion != null)
+        {
+            MarkedForDeletion = true;
+            DateToBeDeleted = DateTime.UtcNow.Add(timeToDeletion);
+        }
     }
 }

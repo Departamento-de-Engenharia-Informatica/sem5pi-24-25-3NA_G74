@@ -12,17 +12,15 @@ namespace G74.Adapters.Controllers;
 public class PatientController : ControllerBase
 {
     private readonly IPatientAppService _patientAppService;
-    //private readonly GmailEmailService _gmailEmailService;
 
-    public PatientController(IPatientAppService patientAppService) //, GmailEmailService gmailEmailService)
+    public PatientController(IPatientAppService patientAppService)
     {
         _patientAppService = patientAppService;
-        //_gmailEmailService = gmailEmailService;
     }
 
-    [Authorize(Roles = "Admin,Patient")]
+    //[Authorize(Roles = "Admin,Patient")]
     [HttpPost]
-    public async Task<ActionResult<PatientDTO>> RegisterPatient([FromBody] CreatePatientDTO receivedPatient)
+    public async Task<ActionResult<PatientDTO>> RegisterPatient([FromBody] PatientDTO receivedPatient)
     {
         if (receivedPatient == null) return BadRequest("Invalid data, please input patient data");
 
@@ -38,41 +36,24 @@ public class PatientController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "Patient")]
-    [HttpPut("{MedicalRecordNumber}")]
-    public async Task<ActionResult<CreatePatientDTO>> UpdatePatient(
+    //[Authorize(Roles = "Admin")]
+    [HttpPatch("{MedicalRecordNumber}")]
+    public async Task<ActionResult<PatientDTO>> UpdatePatientLimited(
         string medicalRecordNumber,
-        [FromBody] CreatePatientDTO updatedPatientInfo
+        [FromBody] PatientDTO updatedPatientInfo
     )
     {
-        if (string.IsNullOrWhiteSpace(medicalRecordNumber))
-        {
-            return BadRequest(new { message = "Medical record number cannot be empty or white space" });
-        }
-
-        if (updatedPatientInfo == null)
-        {
-            return BadRequest("Invalid patient data.");
-        }
-
         try
         {
-            var currentPatient =
-                await _patientAppService.GetPatientByMedicalRecordNumber(new MedicalRecordNumber(medicalRecordNumber));
-            if (currentPatient == null)
-            {
-                return NotFound(new { message = "Patient not found." });
-            }
-
-            var patientDTO = await _patientAppService.UpdatePatient(medicalRecordNumber, updatedPatientInfo);
+            var patientDto = await _patientAppService.UpdatePatientLimited(medicalRecordNumber, updatedPatientInfo);
 
             return Ok(new
             {
                 message = $"Patient with medical record number: {medicalRecordNumber} was updated successfully",
-                patientDTO
+                patientDTO = patientDto
             });
         }
-        catch (InvalidOperationException e)
+        catch (Exception e) when (e is InvalidOperationException or ArgumentNullException)
         {
             return NotFound(e.Message);
         }
@@ -82,7 +63,7 @@ public class PatientController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "Patient")]
+    //[Authorize(Roles = "Admin,Patient")]
     [HttpDelete("{medicalRecordNumber}")]
     public async Task<IActionResult> DeletePatient(string medicalRecordNumber)
     {
@@ -103,28 +84,15 @@ public class PatientController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "Admin")]
-    [HttpGet("search")]
-    public async Task<IActionResult> ListPatientsByFilter([FromQuery] PatientFilterCriteriaDTO criteria)
+    //[Authorize(Roles = "Admin")]
+    [HttpGet("find")]
+    public async Task<IActionResult> ListPatientsByFilter([FromQuery] PatientDTO criteria)
     {
-        if (!ModelState.IsValid)
-        {
-            // Log or return the model state errors
-            var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-            return BadRequest(new { message = "Model binding failed", errors });
-        }
-        
-        
-        if (criteria == null)
-        {
-            return BadRequest(new { message = "Search criteria cannot be null." });
-        }
-
         try
         {
             var patients = await _patientAppService.SearchPatientsByFilters(criteria);
 
-            if (patients == null || !patients.Any())
+            if (!patients.Any())
             {
                 return NotFound(new { message = "No patients found matching the search criteria." });
             }

@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using G74.Domain.Shared;
 
 namespace G74.Domain.Value_Objects.User;
 
@@ -19,6 +20,11 @@ public class Email
     {
         var emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
         return Regex.IsMatch(email, emailPattern);
+    }
+    
+    public static Email ValidateEmail(string email)
+    {
+        return new Email(email);
     }
     
     public override bool Equals(object obj)

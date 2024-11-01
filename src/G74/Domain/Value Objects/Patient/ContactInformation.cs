@@ -10,43 +10,41 @@ public class ContactInformation : IValueObject
 
     public Email EmailAddress { get; }
 
+    private const string InvalidPhoneNumberMsg = "Invalid portuguese phone number";
 
-    public string Email => EmailAddress.email;
+    private const string PhoneNumberValidationPattern = @"^(\+351)? ?(9[1236][0-9]) ?([0-9]{3}) ?([0-9]{3})$";
+
+    private string Email => EmailAddress.email;
 
 
     public ContactInformation(string phoneNumber, Email emailAddress)
     {
-
-        ContactInformationValidations(phoneNumber);
-
-        PhoneNumber = phoneNumber;
+        PhoneNumber = ValidatePhoneNumber(phoneNumber);
 
         EmailAddress = emailAddress;
     }
 
     public ContactInformation(ContactInformation other)
     {
-
-        ContactInformationValidations(other.PhoneNumber);
+        ValidatePhoneNumber(other.PhoneNumber);
 
         PhoneNumber = other.PhoneNumber;
 
         EmailAddress = other.EmailAddress;
     }
 
-    private void ContactInformationValidations(string phoneNumber)
+    public static string ValidatePhoneNumber(string phoneNumber)
     {
         if (!IsValidPhoneNumber(phoneNumber)) throw new ArgumentException(InvalidPhoneNumberMsg);
+
+        return phoneNumber;
     }
 
-    private bool IsValidPhoneNumber(string phoneNumber)
+    private static bool IsValidPhoneNumber(string phoneNumber)
     {
         return Regex.IsMatch(phoneNumber, PhoneNumberValidationPattern);
     }
 
-    private const string InvalidPhoneNumberMsg = "Invalid portuguese phone number";
-
-    private const string PhoneNumberValidationPattern = @"^(\+351)? ?(9[1236][0-9]) ?([0-9]{3}) ?([0-9]{3})$";
 
     public static ContactInformation FromString(string contactInfoStr)
     {
@@ -54,15 +52,29 @@ public class ContactInformation : IValueObject
         if (parts.Length != 2)
             throw new FormatException("Contact information must be in the format 'Phone;Email'.");
 
-            
-        var phone = parts[0].Trim(); 
-        var email = new Email((parts[1].Trim())); 
+        var phoneNumber = parts[0];
+        Email email;
+        try
+        {
+            email = new Email((parts[1].Trim()));
+        }
+        catch (ArgumentException ex)
+        {
+            throw new BusinessRuleValidationException(ex.Message);
+        }
 
-        return new ContactInformation(phone, email);
+        return new ContactInformation(phoneNumber, email);
     }
 
     public override string ToString()
     {
-        return $"{PhoneNumber};{EmailAddress.ToString()}";
+        return $"{PhoneNumber};{Email}";
     }
+
+    public bool Equals(ContactInformation? other) =>
+        other != null && PhoneNumber == other.PhoneNumber && Email.Equals(other.Email);
+
+    public override bool Equals(object? obj) => obj is ContactInformation other && Equals(other);
+
+    public override int GetHashCode() => HashCode.Combine(PhoneNumber, Email);
 }

@@ -1,22 +1,25 @@
 ﻿using G74.Domain;
 using G74.Domain.Value_Objects.Patient;
 using G74.Domain.Value_Objects.SharedValueObjects;
+using G74.DTO;
 
 public class PatientDTO
 {
-    public Name Name { get; set; }
+    public string? Name { get; set; }
 
-    public string Gender { get; set; }
+    public string? Gender { get; set; }
 
-    public DateOfBirth DateOfBirth { get; set; }
+    public DateOfBirthDTO? DateOfBirth { get; set; }
 
-    public ContactInformation ContactInformation { get; set; }
+    public ContactInformationDTO? ContactInformation { get; set; }
 
-    public EmergencyContact EmergencyContact { get; set; }
+    public EmergencyContactDTO? EmergencyContact { get; set; }
 
+    public PatientDTO() { }
 
-    public PatientDTO(Name name, string gender, DateOfBirth dateOfBirth,
-        ContactInformation contactInformation, EmergencyContact emergencyContact)
+    public PatientDTO(string? name = null, string? gender = null, DateOfBirthDTO? dateOfBirth = null,
+        ContactInformationDTO? contactInformation = null,
+        EmergencyContactDTO? emergencyContact = null)
     {
         Name = name;
         Gender = gender;
