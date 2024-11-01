@@ -11,11 +11,13 @@ public class UserAppService
 {
     private readonly IRepoUser _repoUser;
     private readonly UserToDtoMapper _userToDtoMapper;
+    private readonly IConfiguration _configuration;
 
-    public UserAppService(IRepoUser repoUser, UserToDtoMapper userToDtoMapper)
+    public UserAppService(IRepoUser repoUser, UserToDtoMapper userToDtoMapper, IConfiguration configuration)
     {
         _userToDtoMapper = userToDtoMapper;
         _repoUser = repoUser;
+        _configuration = configuration;
     }
     
     public async Task<UserDto> Create(UserDto receivedUserDto)
@@ -57,5 +59,34 @@ public class UserAppService
 
         return userDto;
     }
-    
+
+    public async Task MarkUserToBeDeleted(UserDto currentUserDto)
+    {
+        TimeSpan retainInfoPeriod = GetRetainInfoPeriod();
+        User user = _userToDtoMapper.DtoToUser(currentUserDto);
+        _repoUser.MarkUserToBeDeleted(user, retainInfoPeriod);
+    }
+
+    public TimeSpan GetRetainInfoPeriod()
+    {
+        string time = _configuration["GPRD:RetainInfoPeriod"] ?? "2m";
+        TimeSpan retainInfoPeriod;
+        if (time.EndsWith("m"))
+        {
+            retainInfoPeriod = TimeSpan.FromMinutes(double.Parse(time.TrimEnd('m')));
+        }
+        else if (time.EndsWith("h"))
+        {
+            retainInfoPeriod = TimeSpan.FromHours(double.Parse(time.TrimEnd('h')));
+        }
+        else if (time.EndsWith("d"))
+        {
+            retainInfoPeriod = TimeSpan.FromDays(double.Parse(time.TrimEnd('d')));
+        }
+        else
+        {
+            throw new ArgumentException("Invalid time format. Use 'm' for minutes, 'h' for hours, or 'd' for days.");
+        }
+        return retainInfoPeriod;
+    }
 }

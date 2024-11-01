@@ -1,6 +1,7 @@
 using G74.Domain.Aggregates.User;
 using G74.Domain.IRepositories;
 using G74.Domain.Value_Objects;
+using G74.Domain.Value_Objects.Patient;
 using G74.Domain.Value_Objects.User;
 using G74.DTO;
 using G74.Infrastructure.Shared;
@@ -82,6 +83,25 @@ public class RepoUser : GenericRepository<User>, IRepoUser
         catch
         {
             return null;
+            throw;
+        }
+    }
+
+    public async Task MarkUserToBeDeleted(User user, TimeSpan retainInfoPeriod)
+    {
+        try
+        {
+            var userDataModel = await _context.Users.SingleOrDefaultAsync(u => u.Email == user.GetEmail());
+            if (userDataModel == null)
+            {
+                throw new KeyNotFoundException("User not found.");
+            }
+            var deletionInfo = new DeletionInformation(true, retainInfoPeriod);
+            _context.Entry(userDataModel).Property(u => u.DeletionInformation).CurrentValue = deletionInfo;
+            await _context.SaveChangesAsync();
+        }
+        catch
+        {
             throw;
         }
     }

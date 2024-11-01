@@ -61,7 +61,7 @@ public class UserController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "Admin, Patient")]
+    [Authorize(Roles = "Patient")]
     [HttpPut("update")]
     public async Task<ActionResult<UserDto>> UpdateUser([FromBody]UserDto receivedUserDto)
     {
@@ -86,5 +86,25 @@ public class UserController : ControllerBase
         }
     }
     
+    [Authorize(Roles = "Patient")]
+    [HttpDelete("delete")]
+    public async Task<IActionResult> DeleteUser()
+    {
+        var currentUserDto = GetLoggedUserByEmail().Result.Value;
+        if (currentUserDto == null)
+        {
+            return NotFound(new { message = "User not found." });
+        }
+        try
+        {
+            await _userAppService.MarkUserToBeDeleted(currentUserDto);
+
+            return Ok(new { message = "User delete with success" });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
     
 }

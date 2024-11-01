@@ -11,4 +11,5 @@ public interface IRepoUser
     Task<User> GetUserByEmail(string email);
     Task<bool> UserExists(string email);
     Task<User> UpdateUser(User updatedUser, string oldEmail);
+    Task MarkUserToBeDeleted(User user, TimeSpan retainInfoPeriod);
 }
