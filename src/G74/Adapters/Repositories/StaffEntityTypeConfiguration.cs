@@ -1,5 +1,5 @@
 using G74.DTO;
-using G74.Infrastructure.Converters;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
