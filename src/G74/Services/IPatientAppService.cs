@@ -7,9 +7,8 @@ public interface IPatientAppService
 {
     Task<PatientDTO> RegisterPatient(PatientDTO patientDto);
     Task<PatientDTO> UpdatePatientLimited(string medicalRecordNumber, PatientDTO updatedInfoPatientDto);
+    Task<PatientDTO> UpdatePatientComplete(string medicalRecordNumber, PatientDTO updatedInfoPatientDto);
     Task MarkPatientToBeDeleted(string medicalRecordNumber);
     Task<PatientDTO?> GetPatientByMedicalRecordNumber(MedicalRecordNumber medicalRecordNumber);
     Task<IEnumerable<PatientDTO>> SearchPatientsByFilters(PatientDTO criteria);
 }
-
-

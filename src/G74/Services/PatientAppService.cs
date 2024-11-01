@@ -76,6 +76,50 @@ public class PatientAppService : IPatientAppService
         return _patientMapper.ToDTO(updatedPatient);
     }
 
+    public async Task<PatientDTO> UpdatePatientComplete(string medicalRecordNumber,
+        PatientDTO updatedInfoPatientDto)
+    {
+        var patient = _patientRepository.GetPatientByMedicalRecordNumber(new MedicalRecordNumber(medicalRecordNumber))
+            .Result;
+
+        ArgumentNullException.ThrowIfNull(patient);
+
+        if (updatedInfoPatientDto.Name != null)
+        {
+            patient.UpdateName(new Name(updatedInfoPatientDto.Name));
+        }
+
+        if (updatedInfoPatientDto.DateOfBirth != null)
+        {
+            DateOfBirth newDateOfBirth = new DateOfBirth(updatedInfoPatientDto.DateOfBirth.YearOfBirth,
+                updatedInfoPatientDto.DateOfBirth.MonthOfBirth, updatedInfoPatientDto.DateOfBirth.DayOfBirth);
+
+            patient.UpdateDateOfBirth(newDateOfBirth);
+        }
+
+        if (updatedInfoPatientDto.ContactInformation != null)
+        {
+            patient.UpdateContactInformation(new ContactInformation(
+                updatedInfoPatientDto.ContactInformation.PhoneNumber,
+                new Email(updatedInfoPatientDto.ContactInformation.EmailAddress)));
+        }
+
+        if (updatedInfoPatientDto.EmergencyContact != null)
+        {
+            patient.UpdateEmergencyContact(new EmergencyContact(updatedInfoPatientDto.EmergencyContact.PhoneNumber,
+                new Name(updatedInfoPatientDto.EmergencyContact.Name)));
+        }
+        
+        var updatedPatient = _patientRepository.UpdatePatient(patient).Result;
+
+        if (updatedPatient == null)
+        {
+            throw new InvalidOperationException("Could not update patient info");
+        }
+
+        return _patientMapper.ToDTO(updatedPatient);
+    }
+
 
     public async Task MarkPatientToBeDeleted(string medicalRecordNumber)
     {
