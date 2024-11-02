@@ -29,6 +29,17 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection serviceCollection)
     {
+        serviceCollection.AddCors(options =>
+        {
+            options.AddPolicy("AllowAngularApp",
+                builder => builder
+                    .WithOrigins("http://localhost:4200") 
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials());
+        });
+        
+        
         serviceCollection.AddEndpointsApiExplorer().AddSwaggerGen().AddDbContext<BackofficeAppDbContext>(opt =>
             opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
                 .ReplaceService<IValueConverterSelector, StronglyEntityIdValueConverterSelector>()
@@ -89,6 +100,8 @@ public class Startup
             app.UseHsts();
         }
 
+        app.UseCors("AllowAngularApp");
+        
         app.UseHttpsRedirection();
         app.UseRouting();
         app.UseSession();
