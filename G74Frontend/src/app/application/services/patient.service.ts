@@ -3,21 +3,33 @@ import { Observable } from 'rxjs';
 import { Patient } from '../../domain/models/patient.model';
 import { PatientRepository } from '../../infrastructure/repositories/patient-repository';
 
+
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class PatientService {
+    constructor(private patientRepository: PatientRepository) { }
 
-  /*
-  constructor(private userRepository: UserRepository) {}
+    createPatientProfile(patient: Patient): Observable<Patient> {
+        return this.patientRepository.createPatientProfile(patient);
+    }
 
-  loadUsers(): Observable<User[]> {
-    return this.userRepository.getUsers();
-  }
+    updatePatientProfile(patient: Patient, medicalRecordNumber: string): Observable<Patient> {
+        return this.patientRepository.updatePatientProfile(patient, medicalRecordNumber);
+    }
 
-  getUser(id: string): Observable<User> {
-    return this.userRepository.getUserById(id);
-  }
+    markPatientProfileAsDeleted(medicalRecordNumber: string): Observable<any> {
+        return this.patientRepository.markPatientProfileAsDeleted(medicalRecordNumber);
+    }
 
-  */
 }
+
+
+
+
+
+
+
+
+
+

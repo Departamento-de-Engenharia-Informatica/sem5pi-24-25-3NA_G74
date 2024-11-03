@@ -1,9 +1,6 @@
-using System.ComponentModel.DataAnnotations;
 using G74.Domain.Aggregates.User;
 using G74.Domain.Shared;
-using G74.Domain.Value_Objects;
 using G74.Domain.Value_Objects.Patient;
-using G74.Domain.Value_Objects.User;
 
 namespace G74.DTO;
 
