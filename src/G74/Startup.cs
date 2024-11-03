@@ -1,5 +1,3 @@
-using System.Text;
-using System.Text.Json;
 using G74.Adapters.Controllers;
 using G74.Adapters.Repositories;
 using G74.Domain.DomainServices;
@@ -10,10 +8,8 @@ using G74.Infrastructure.Shared;
 using G74.Mappers;
 using G74.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Microsoft.IdentityModel.Tokens;
 
 namespace G74;
 

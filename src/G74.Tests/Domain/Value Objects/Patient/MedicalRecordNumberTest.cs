@@ -1,4 +1,5 @@
 using System;
+using G74.Domain.Shared;
 using G74.Domain.Value_Objects.Patient;
 using Xunit;
 
@@ -7,9 +8,9 @@ namespace G74.Tests.Domain.Value_Objects.Patient;
 public class MedicalRecordNumberTest
 {
     [Theory]
-    [InlineData("20231000001")]  // Valid record for October 2023, first patient
-    [InlineData("20231212345")]  // Valid record for December 2023, sequential 12345
-    [InlineData("20230154321")]  // Valid record for January 2023, sequential 54321
+    [InlineData("202310000001")]  // Valid record for October 2023, first patient
+    [InlineData("202312012345")]  // Valid record for December 2023, sequential 12345
+    [InlineData("202301054321")]  // Valid record for January 2023, sequential 54321
     public void Constructor_ValidMedicalRecordNumber_CreatesInstance(string validNumber)
     {
         // Act
@@ -29,15 +30,15 @@ public class MedicalRecordNumberTest
     public void Constructor_InvalidMedicalRecordNumber_ThrowsArgumentException(string invalidNumber)
     {
         // Act & Assert
-        var exception = Assert.Throws<ArgumentException>(() => new MedicalRecordNumber(invalidNumber));
-        Assert.Equal("Invalid medical record number format. Expected format: YYYYMMDDDDD.", exception.Message);
+        var exception = Assert.Throws<BusinessRuleValidationException>(() => new MedicalRecordNumber(invalidNumber));
+        Assert.Equal("Invalid medical record number format. Expected format: YYYYMMnnnnnn.", exception.Message);
     }
 
     [Fact]
     public void ToString_ReturnsMedicalNumber()
     {
         // Arrange
-        var validNumber = "20231000001";
+        var validNumber = "202310000001";
         var medicalRecordNumber = new MedicalRecordNumber(validNumber);
 
         // Act

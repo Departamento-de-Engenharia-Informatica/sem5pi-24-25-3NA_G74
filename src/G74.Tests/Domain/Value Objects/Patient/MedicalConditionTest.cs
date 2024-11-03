@@ -1,4 +1,5 @@
 using System;
+using G74.Domain.Shared;
 using G74.Domain.Value_Objects.Patient;
 using Xunit;
 
@@ -26,7 +27,7 @@ public class MedicalConditionTest
     public void Constructor_InvalidDescription_ThrowsArgumentException(string invalidDescription)
     {
         // Act & Assert
-        var exception = Assert.Throws<ArgumentException>(() => new MedicalCondition(invalidDescription));
+        var exception = Assert.Throws<BusinessRuleValidationException>(() => new MedicalCondition(invalidDescription));
         Assert.Equal("Medical condition cannot be empty or spaces", exception.Message);
     }
 }

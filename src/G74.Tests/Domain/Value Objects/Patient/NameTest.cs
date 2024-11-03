@@ -1,4 +1,5 @@
 using System;
+using G74.Domain.Shared;
 using G74.Domain.Value_Objects.SharedValueObjects;
 
 namespace G74.Tests.Domain.Value_Objects.Patient;
@@ -27,7 +28,7 @@ public class NameTest
     public void Constructor_InvalidName_ThrowsArgumentException(string input)
     {
         // Act & Assert
-        var exception = Assert.Throws<ArgumentException>(() => new Name(input));
+        var exception = Assert.Throws<BusinessRuleValidationException>(() => new Name(input));
         Assert.Equal("Name cannot be empty or spaces", exception.Message);
     }
 
@@ -51,8 +52,8 @@ public class NameTest
     public void FromString_InvalidName_ThrowsArgumentException(string input)
     {
         // Act & Assert
-        var exception = Assert.Throws<ArgumentException>(() => Name.FromString(input));
-        Assert.Equal("Name cannot be empty or spaces.", exception.Message);
+        var exception = Assert.Throws<BusinessRuleValidationException>(() => Name.FromString(input));
+        Assert.Equal("Name cannot be empty or spaces", exception.Message);
     }
 
     [Theory]

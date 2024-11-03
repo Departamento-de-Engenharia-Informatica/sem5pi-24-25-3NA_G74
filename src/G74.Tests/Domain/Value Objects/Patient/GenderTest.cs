@@ -1,4 +1,5 @@
 using System;
+using G74.Domain.Shared;
 using G74.Domain.Value_Objects.SharedValueObjects;
 
 namespace G74.Tests.Domain.Value_Objects.Patient;
@@ -31,7 +32,7 @@ public class GenderTest
     public void FromString_InvalidString_ThrowsArgumentException(string input)
     {
         // Act & Assert
-        var exception = Assert.Throws<ArgumentException>(() => Gender.FromString(input));
+        var exception = Assert.Throws<BusinessRuleValidationException>(() => Gender.FromString(input));
         Assert.Equal("Invalid gender", exception.Message);
     }
 
