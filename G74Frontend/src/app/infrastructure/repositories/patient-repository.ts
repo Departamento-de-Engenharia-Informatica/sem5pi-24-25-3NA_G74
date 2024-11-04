@@ -25,7 +25,7 @@ export class PatientRepository implements IPatientRepository {
     );
   }
 
-  updatePatientProfile(patient: Patient, medicalRecordNumber: string): Observable<Patient> {
+  updatePatientProfile(patient: Partial<Patient>, medicalRecordNumber: string): Observable<Patient> {
     const url = `${this.apiUrl}${medicalRecordNumber}`;
     return this.http.patch<Patient>(url, patient);
   }

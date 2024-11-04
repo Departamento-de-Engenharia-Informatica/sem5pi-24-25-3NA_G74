@@ -14,7 +14,7 @@ export class PatientService {
         return this.patientRepository.createPatientProfile(patient);
     }
 
-    updatePatientProfile(patient: Patient, medicalRecordNumber: string): Observable<Patient> {
+    updatePatientProfile(patient: Partial<Patient>, medicalRecordNumber: string): Observable<Patient> {
         return this.patientRepository.updatePatientProfile(patient, medicalRecordNumber);
     }
 

@@ -8,6 +8,11 @@ public class ContactInformationDTO
 
     public string EmailAddress { get; init; }
 
+    public ContactInformationDTO()
+    {
+        
+    }
+    
     public ContactInformationDTO(string phoneNumber, string emailAddress)
     {
         PhoneNumber = phoneNumber;

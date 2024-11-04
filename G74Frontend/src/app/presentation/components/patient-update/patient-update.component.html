@@ -1,0 +1,21 @@
+<h2>Update Patient Profile</h2>
+<form (ngSubmit)="onSubmit()" #patientForm="ngForm">
+  <label for="medicalRecordNumber">Medical Record Number:</label>
+  <input type="text" id="medicalRecordNumber" [(ngModel)]="medicalRecordNumber" name="medicalRecordNumber" required>
+
+  <label for="name">Name:</label>
+  <input type="text" id="name" [(ngModel)]="patient.name" name="name">
+
+  <label for="dateOfBirth">Date of Birth:</label>
+  <input type="date" id="dateOfBirth" [(ngModel)]="dateOfBirthInput" name="dateOfBirth">
+
+  <label for="phoneNumber">Phone Number:</label>
+  <input type="text" id="phoneNumber" [(ngModel)]="phoneNumber" name="phoneNumber">
+
+  <label for="emailAddress">Email Address:</label>
+  <input type="email" id="emailAddress" [(ngModel)]="emailAddress" name="emailAddress">
+
+  <button type="submit">Update Patient</button>
+</form>
+
+<p *ngIf="message">{{ message }}</p>

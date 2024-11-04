@@ -7,6 +7,11 @@ public class EmergencyContactDTO
     public string Name { get; set; }
     public string PhoneNumber { get; set; }
 
+    public EmergencyContactDTO()
+    {
+        
+    }
+    
     public EmergencyContactDTO(string name, string phoneNumber)
     {
         Name = name;
