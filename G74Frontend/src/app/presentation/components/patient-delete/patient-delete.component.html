@@ -1,0 +1,21 @@
+<h2>Delete Patient Profile</h2>
+
+<form (ngSubmit)="onSubmit()" #deleteForm="ngForm">
+  <label for="medicalRecordNumber">Medical Record Number:</label>
+  <input
+    type="text"
+    id="medicalRecordNumber"
+    [(ngModel)]="medicalRecordNumber"
+    name="medicalRecordNumber"
+    required
+    #medicalRecordNumberField="ngModel"
+  />
+  
+  <div *ngIf="deleteForm.submitted && medicalRecordNumberField.invalid">
+    <small style="color: red;">Medical record number is required</small>
+  </div>
+
+  <button type="submit">Delete Patient</button>
+</form>
+
+<p *ngIf="message">{{ message }}</p>

@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { PatientCreateComponent } from './presentation/components/patient-create/patient-create.component';
 import { PatientUpdateComponent } from './presentation/components/patient-update/patient-update.component';
+import { PatientDeleteComponent } from './presentation/components/patient-delete/patient-delete.component';
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule } from '@angular/forms';  // Import FormsModule
 
@@ -11,7 +12,8 @@ import { FormsModule } from '@angular/forms';  // Import FormsModule
   declarations: [
     AppComponent,
     PatientCreateComponent,  // Add the component here
-    PatientUpdateComponent
+    PatientUpdateComponent,
+    PatientDeleteComponent
   ],
   imports: [
     BrowserModule,

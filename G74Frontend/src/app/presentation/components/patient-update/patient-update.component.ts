@@ -48,7 +48,7 @@ export class PatientUpdateComponent {
       delete this.patient.contactInformation;
     }
 
-    this.patientService.updatePatientProfile(this.patient,this.medicalRecordNumber,).pipe(
+    this.patientService.updatePatientProfile(this.patient,this.medicalRecordNumber).pipe(
       catchError(error => {
         console.error('Error updating patient profile:', error);
         this.message = `Failed to update patient profile. ${error?.error?.message || 'Please try again.'}`;
