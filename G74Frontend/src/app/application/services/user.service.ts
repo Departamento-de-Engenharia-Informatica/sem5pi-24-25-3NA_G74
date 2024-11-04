@@ -18,4 +18,8 @@ export class UserService {
     return this.userRepository.updateUser(user);
   }
 
+  markUserAsDeleted(): Observable<any>{
+    return this.userRepository.markUserAsDeleted();
+  }
+
 }

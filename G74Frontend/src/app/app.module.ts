@@ -7,7 +7,9 @@ import { PatientUpdateComponent } from './presentation/components/patient-update
 import { PatientDeleteComponent } from './presentation/components/patient-delete/patient-delete.component';
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule } from '@angular/forms';
-import {RegisterUserComponent} from './presentation/components/register-user/register-user.component';  // Import FormsModule
+import {RegisterUserComponent} from './presentation/components/register-user/register-user.component';
+import {UpdateUserComponent} from './presentation/components/update-user/update-user.component';
+import {DeleteUserComponent} from './presentation/components/delete-user/delete-user.component';  // Import FormsModule
 
 @NgModule({
   declarations: [
@@ -15,7 +17,9 @@ import {RegisterUserComponent} from './presentation/components/register-user/reg
     PatientCreateComponent,  // Add the component here
     PatientUpdateComponent,
     PatientDeleteComponent,
-    RegisterUserComponent
+    RegisterUserComponent,
+    UpdateUserComponent,
+    DeleteUserComponent
   ],
   imports: [
     BrowserModule,

@@ -8,12 +8,6 @@ import {User} from '../../../domain/models/user.model';
 
 @Component({
   selector: 'app-update-user',
-  standalone: true,
-  imports: [
-    FormsModule,
-    NgIf,
-    ReactiveFormsModule
-  ],
   templateUrl: './update-user.component.html',
   styleUrl: './update-user.component.css'
 })
