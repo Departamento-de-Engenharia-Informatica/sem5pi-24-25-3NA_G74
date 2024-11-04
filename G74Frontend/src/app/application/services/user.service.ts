@@ -13,4 +13,9 @@ export class UserService {
   registerUser(user: User): Observable<User> {
     return this.userRepository.registerUser(user);
   }
+
+  updateUser(user: Partial<User>): Observable<User>{
+    return this.userRepository.updateUser(user);
+  }
+
 }

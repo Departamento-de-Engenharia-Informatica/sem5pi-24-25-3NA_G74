@@ -1,0 +1,16 @@
+<h2>Update user profile!</h2>
+<form (ngSubmit)="onSubmit()">
+  <div>
+    <label for="username">Username:</label>
+    <input id="username" name="username" [(ngModel)]="user.username" required />
+  </div>
+
+  <div>
+    <label for="email">Email:</label>
+    <input id="email" name="email" [(ngModel)]="user.email" type="email" required />
+  </div>
+
+  <button type="submit">Update</button>
+</form>
+
+<div *ngIf="message">{{ message }}</div>
