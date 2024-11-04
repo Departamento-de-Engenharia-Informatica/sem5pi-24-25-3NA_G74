@@ -6,14 +6,16 @@ import { PatientCreateComponent } from './presentation/components/patient-create
 import { PatientUpdateComponent } from './presentation/components/patient-update/patient-update.component';
 import { PatientDeleteComponent } from './presentation/components/patient-delete/patient-delete.component';
 import { AppRoutingModule } from './app-routing.module';
-import { FormsModule } from '@angular/forms';  // Import FormsModule
+import { FormsModule } from '@angular/forms';
+import {RegisterUserComponent} from './presentation/components/register-user/register-user.component';  // Import FormsModule
 
 @NgModule({
   declarations: [
     AppComponent,
     PatientCreateComponent,  // Add the component here
     PatientUpdateComponent,
-    PatientDeleteComponent
+    PatientDeleteComponent,
+    RegisterUserComponent
   ],
   imports: [
     BrowserModule,
