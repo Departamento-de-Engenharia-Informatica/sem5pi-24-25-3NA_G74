@@ -62,7 +62,7 @@ public class UserController : ControllerBase
     }
 
     [Authorize(Roles = "Patient")]
-    [HttpPut("update")]
+    [HttpPatch("update")]
     public async Task<ActionResult<UserDto>> UpdateUser([FromBody]UserDto receivedUserDto)
     {
         try
