@@ -1,3 +1,4 @@
+using G74.Infrastructure;
 using G74.Infrastructure.Shared;
 using Microsoft.EntityFrameworkCore;
 

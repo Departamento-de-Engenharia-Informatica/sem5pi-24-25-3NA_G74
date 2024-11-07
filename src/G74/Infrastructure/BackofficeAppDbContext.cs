@@ -1,9 +1,10 @@
 using G74.Adapters.Repositories;
 using G74.DataModel;
-using G74.Domain;
-using G74.Domain.Aggregates.User;
+using G74.Domain.Aggregates.Staff;
 using G74.DTO;
 using Microsoft.EntityFrameworkCore;
+
+namespace G74.Infrastructure;
 
 public class BackofficeAppDbContext : DbContext
 {
@@ -13,7 +14,7 @@ public class BackofficeAppDbContext : DbContext
 
     public DbSet<PatientDataModel> Patients { get; set; }
     public DbSet<UserDataModel> Users { get; set; }
-    public DbSet<StaffDataModel> Staff { get; set; }
+    public DbSet<Staff> Staff { get; set; }
     public DbSet<DataOperationRequest> OperationRequests { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -8,14 +8,14 @@ public class AppServiceOperationRequest : IAppServiceOperationRequest
 {
     private readonly IOperationRequestRepository _operationRepository;
     private readonly IPatientAppService _patientAppService;
-    private readonly StaffAppService _staffService;
+    private readonly StaffService _staffService;
     
 
-    public AppServiceOperationRequest(IOperationRequestRepository operationRepository,IPatientAppService patientAppService, StaffAppService staffAppService)
+    public AppServiceOperationRequest(IOperationRequestRepository operationRepository,IPatientAppService patientAppService, StaffService staffService)
     {
         _operationRepository = operationRepository;
         _patientAppService = patientAppService;
-        _staffService = staffAppService;
+        _staffService = staffService;
     }
 
     public async Task<OperationRequestDTO> DeleteOperationRequest(Guid id)

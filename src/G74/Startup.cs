@@ -1,9 +1,10 @@
 using G74.Adapters.Controllers;
 using G74.Adapters.Repositories;
 using G74.Domain.DomainServices;
-using G74.Domain.Factory;
 using G74.Domain.IRepositories;
+using G74.Domain.Shared;
 using G74.DTO;
+using G74.Infrastructure;
 using G74.Infrastructure.Shared;
 using G74.Mappers;
 using G74.Services;
@@ -111,7 +112,7 @@ public class Startup
 
     public void ConfigureMyServices(IServiceCollection services)
     {
-
+        services.AddTransient<IUnitOfWork,UnitOfWork>();
         services.AddTransient<UserToDtoMapper>();
         services.AddScoped<UserController>();
         services.AddScoped<IRepoUser, RepoUser>();
@@ -129,11 +130,8 @@ public class Startup
         services.AddScoped<GmailEmailService>();
         // Add Staff-related services
         services.AddScoped<IStaffRepository, StaffRepository>();
-        services.AddScoped<StaffAppService>();
-        services.AddScoped<StaffFactory>();
-        services.AddScoped<StaffMapper>();
+        services.AddScoped<StaffService>();
         services.AddScoped<StaffController>();
-        services.AddTransient<StaffToDto>();
 
     }
 }

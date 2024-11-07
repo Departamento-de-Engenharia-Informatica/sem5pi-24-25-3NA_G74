@@ -14,6 +14,10 @@ namespace G74.Domain.Shared
             Id = id ?? throw new ArgumentNullException(nameof(id));
         }
 
+        protected Entity()
+        {
+        }
+
         public override bool Equals(object? obj) => Equals(obj as Entity<TId>);
 
         public bool Equals(Entity<TId>? other)

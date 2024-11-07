@@ -3,6 +3,7 @@ using G74.Domain;
 using G74.Domain.IRepositories;
 using G74.Domain.Value_Objects.Patient;
 using G74.DTO;
+using G74.Infrastructure;
 using G74.Mappers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;

@@ -4,6 +4,7 @@ using G74.Domain.Value_Objects;
 using G74.Domain.Value_Objects.Patient;
 using G74.Domain.Value_Objects.User;
 using G74.DTO;
+using G74.Infrastructure;
 using G74.Infrastructure.Shared;
 using G74.Mappers;
 using Microsoft.EntityFrameworkCore;
