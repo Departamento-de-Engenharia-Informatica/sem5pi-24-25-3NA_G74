@@ -10,7 +10,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { FormsModule } from '@angular/forms';
 import {RegisterUserComponent} from './presentation/components/register-user/register-user.component';
 import {UpdateUserComponent} from './presentation/components/update-user/update-user.component';
-import {DeleteUserComponent} from './presentation/components/delete-user/delete-user.component';  // Import FormsModule
+import {DeleteUserComponent} from './presentation/components/delete-user/delete-user.component';
+import {MainMenuComponent} from './presentation/components/main-menu/main-menu.component';
+import {PatientMenuComponent} from './presentation/components/patient-menu/patient-menu.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,9 @@ import {DeleteUserComponent} from './presentation/components/delete-user/delete-
     PatientDeleteComponent,
     RegisterUserComponent,
     UpdateUserComponent,
-    DeleteUserComponent
+    DeleteUserComponent,
+    MainMenuComponent,
+    PatientMenuComponent
   ],
   imports: [
     BrowserModule,

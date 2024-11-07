@@ -7,14 +7,19 @@ import { AdminMenuComponent } from './presentation/components/admin-menu/admin-m
 import {RegisterUserComponent} from './presentation/components/register-user/register-user.component';
 import {UpdateUserComponent} from './presentation/components/update-user/update-user.component';
 import {DeleteUserComponent} from './presentation/components/delete-user/delete-user.component';
+import {MainMenuComponent} from './presentation/components/main-menu/main-menu.component';
+import {PatientMenuComponent} from './presentation/components/patient-menu/patient-menu.component';
 
 
 const routes: Routes = [
-  { path: '', redirectTo: '/admin', pathMatch: 'full' },  // Redirect root to the admin menu
-  { path: 'admin', component: AdminMenuComponent },       // Admin menu standalone route
+  { path: '', redirectTo: '/main', pathMatch: 'full' },  // Redirect root to the main menu
+  { path: 'main', component: MainMenuComponent },
+  { path: 'admin', component: AdminMenuComponent },
   { path: 'admin/create-patient', component: PatientCreateComponent },
   { path: 'admin/update-patient', component: PatientUpdateComponent },
   { path: 'admin/delete-patient', component: PatientDeleteComponent },
+  { path: 'admin/register-user', component: RegisterUserComponent},
+  { path: 'patient', component: PatientMenuComponent},
   { path: 'register-user', component: RegisterUserComponent},
   { path: 'update-user', component: UpdateUserComponent},
   { path: 'delete-user', component: DeleteUserComponent}
