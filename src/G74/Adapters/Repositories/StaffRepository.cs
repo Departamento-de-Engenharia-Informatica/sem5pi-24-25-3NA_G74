@@ -1,76 +1,60 @@
 ﻿using G74.Domain.Aggregates.Staff;
 using G74.Domain.IRepositories;
+using G74.Domain.Value_Objects.Staff;
 using G74.DTO;
+using G74.Infrastructure;
 using G74.Infrastructure.Shared;
 using G74.Mappers;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace G74.Adapters.Repositories;
 
-public class StaffRepository : BaseRepository<StaffDataModel, Guid>, IStaffRepository
+// TODO: maybe remove BaseRepository inheritance. switch to GenericRepository?
+public class StaffRepository : BaseRepository<Staff, Guid>, IStaffRepository
 {
-    private readonly StaffMapper _staffMapper;
-    private readonly BackofficeAppDbContext _context;
-    
-    
-    public StaffRepository(BackofficeAppDbContext context, StaffMapper mapper) : base(context.Staff)
+    private readonly BackofficeAppDbContext _dbContext;
+
+
+    public StaffRepository(BackofficeAppDbContext dbContext) : base(dbContext.Staff)
     {
-        _context = context;
-        _staffMapper = mapper;
+        _dbContext = dbContext;
     }
     
-    public async Task<Staff?> GetStaffByLicenseNumberAsync(string licenseNumber)
+    public async Task<Staff?> GetByLicenseNumber(LicenseNumber licenseNumber)
     {
         try {
-            StaffDataModel staffDataModel = await _context.Set<StaffDataModel>()
+            Staff staff = await _dbContext.Set<Staff>()
                 .FirstAsync(s => s.LicenseNumber == licenseNumber);
-
-            Staff staff = _staffMapper.ToDomain(staffDataModel);
 
             return staff;
         }
-        catch
+        catch (InvalidOperationException ex)
         {
             return null;
         }
     }
+
     
+
     public async Task<Staff> Add(Staff staff)
     {
-        try {
-            StaffDataModel staffDataModel = _staffMapper.ToDataModel(staff);
-
-            EntityEntry<StaffDataModel> staffDataModelEntityEntry = _context.Set<StaffDataModel>().Add(staffDataModel);
-            
-            await _context.SaveChangesAsync();
-
-            StaffDataModel staffDataModelSaved = staffDataModelEntityEntry.Entity;
-
-            Staff staffSaved = _staffMapper.ToDomain(staffDataModelSaved);
-
-            return staffSaved;    
-        }
-        catch (Exception ex)
-        {
-            throw ex.InnerException!;
-        }
+        var ret = _dbContext.Staff.Add(staff);
+        await _dbContext.SaveChangesAsync();
+        
+        return ret.Entity;
     }
     
-    public async Task<bool> StaffExists(string licenseNumber)
-    {
-        return await _context.Set<StaffDataModel>().AnyAsync(e => e.LicenseNumber == licenseNumber);
-    }
+    // public async Task<bool> StaffExists(LicenseNumber licenseNumber)
+    // {
+    //     return await _dbContext.Set<Staff>().AnyAsync(e => e.Id.Value == licenseNumber.Value);
+    // }
     
     public async Task<IEnumerable<Staff>> GetStaffAsync()
     {
         try
         {
-            IEnumerable<StaffDataModel> staffsDataModel = await _context.Set<StaffDataModel>()
+            IEnumerable<Staff> staffs = await _dbContext.Set<Staff>()
                 .ToListAsync();
-
-            IEnumerable<Staff> staffs = _staffMapper.ToDomain(staffsDataModel);
 
             return staffs;
         }
@@ -79,62 +63,51 @@ public class StaffRepository : BaseRepository<StaffDataModel, Guid>, IStaffRepos
             throw ex.InnerException!;
         }
     }
-    
-    public async Task<Staff> GetStaffByIdAsync(long id)
-    {
-        return null;
-    }
-    
-    public async Task<Staff> Update(string licenseNumber, Staff staff)
-    {
-        try {
-            var existingStaffModel = await _context.Set<StaffDataModel>()
-                .FirstOrDefaultAsync(s => s.LicenseNumber == licenseNumber);
-            
-            if (existingStaffModel == null)
-            {
-                throw new Exception($"Staff with license number {licenseNumber} not found");
-            }
-            
-            // Get the updated data model
-            var updatedStaffModel = _staffMapper.ToDataModel(staff);
-            
-            // license number can also be changed in post by admin
-            existingStaffModel.LicenseNumber = updatedStaffModel.LicenseNumber;
-            existingStaffModel.Name = updatedStaffModel.Name;
-            existingStaffModel.ContactEmail = updatedStaffModel.ContactEmail;
-            existingStaffModel.PhoneNumber = updatedStaffModel.PhoneNumber;
-            existingStaffModel.StaffSpecialization = updatedStaffModel.StaffSpecialization;
-            
-            await _context.SaveChangesAsync();
 
-            return _staffMapper.ToDomain(existingStaffModel);
-        }
-        
-        catch (Exception ex)
-        {
-            throw ex.InnerException!;
-        }
-    }
     
-    public async Task<Staff> UpdateStatus(string licenseNumber, Staff staff)
+
+
+    public async Task<Staff?> Update(LicenseNumber licenseNumber, Staff staff)
+    {
+        
+        var existingStaff = await _dbContext.Set<Staff>()
+            .FirstOrDefaultAsync(s => s.LicenseNumber == licenseNumber);
+        
+        if (existingStaff == null)
+        {
+            return null;
+        }
+
+        existingStaff.UpdateLicenseNumber(staff.LicenseNumber);
+        existingStaff.UpdateName(staff.Name);
+        existingStaff.UpdatePhoneNumber(staff.PhoneNumber);
+        existingStaff.UpdateContactEmail(staff.ContactEmail);
+        existingStaff.UpdateStaffSpecialization(staff.StaffSpecialization);
+        existingStaff.UpdateStatus(staff.Status);
+        
+        await _dbContext.SaveChangesAsync();
+
+        return existingStaff;
+        }
+    
+    public async Task<Staff> UpdateStatus(LicenseNumber licenseNumber, Staff staff)
     {
         try 
         {
-            var existingStaffModel = await _context.Set<StaffDataModel>()
+            var existingStaff = await _dbContext.Set<Staff>()
                 .FirstOrDefaultAsync(s => s.LicenseNumber == licenseNumber);
             
-            if (existingStaffModel == null)
+            if (existingStaff == null)
             {
                 throw new Exception($"Staff with license number {licenseNumber} not found");
             }
             
             // Update only the status
-            existingStaffModel.Status = staff.Status.Value;
+            existingStaff.UpdateStatus(staff.Status);
             
-            await _context.SaveChangesAsync();
-
-            return _staffMapper.ToDomain(existingStaffModel);
+            await _dbContext.SaveChangesAsync();
+    
+            return existingStaff;
         }
         catch (Exception ex)
         {

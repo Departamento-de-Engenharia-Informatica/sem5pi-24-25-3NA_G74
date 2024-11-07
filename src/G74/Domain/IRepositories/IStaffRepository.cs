@@ -1,4 +1,5 @@
 ﻿using G74.Domain.Aggregates.Staff;
+using G74.Domain.Value_Objects.Staff;
 
 namespace G74.Domain.IRepositories;
 
@@ -6,15 +7,17 @@ public interface IStaffRepository
 {
     Task<IEnumerable<Staff>> GetStaffAsync();
 
-    Task<Staff?> GetStaffByLicenseNumberAsync(string licenseNumber);
+    Task<Staff?> GetByLicenseNumber(LicenseNumber licenseNumber);
 
-    Task<Staff> GetStaffByIdAsync(long id);
-
+    // Task<Staff> GetByIdAsync(LicenseNumber id);
+    
     Task<Staff> Add(Staff staff);
 
-    Task<Staff> Update(string licenseNumber, Staff staff);
+    Task<Staff?> Update(LicenseNumber licenseNumber, Staff staff);
 
-    Task<bool> StaffExists(string licenseNumber);
+    // // TODO: boolean
+    // Task<bool> StaffExists(LicenseNumber licenseNumber);
     
-    Task<Staff> UpdateStatus(string licenseNumber, Staff staff);
+    // TODO: void?; receive just Staff staff?
+    Task<Staff> UpdateStatus(LicenseNumber licenseNumber, Staff staff);
 }

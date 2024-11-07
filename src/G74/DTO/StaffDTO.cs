@@ -14,29 +14,29 @@ public class StaffDto
     public string StaffSpecialization { get; set; }
     public string Status { get; set; }
 
-    // Constructor for creating from primitive types (e.g., from API request)
-    public StaffDto(string licenseNumber, string name, string phoneNumber, 
-        string contactEmail, string staffSpecialization, string status)
-    {
-        LicenseNumber = licenseNumber;
-        Name = name;
-        PhoneNumber = phoneNumber;
-        ContactEmail = contactEmail;
-        StaffSpecialization = staffSpecialization;
-        Status = status;
-    }
+    // // Constructor for creating from primitive types (e.g., from API request)
+    // public StaffDto(string licenseNumber, string name, string phoneNumber, 
+    //     string contactEmail, string staffSpecialization, string status)
+    // {
+    //     LicenseNumber = licenseNumber;
+    //     Name = name;
+    //     PhoneNumber = phoneNumber;
+    //     ContactEmail = contactEmail;
+    //     StaffSpecialization = staffSpecialization;
+    //     Status = status;
+    // }
     
     // Constructor for creating from domain model (e.g., for API response)
     public static StaffDto FromDomain(Staff staff)
     {
-        return new StaffDto(
-            staff.LicenseNumber.Value,
-            staff.Name.Value,
-            staff.PhoneNumber.Value,
-            staff.ContactEmail.email,
-            staff.StaffSpecialization.Value,
-            staff.Status.Value
-        );
+        return new StaffDto {
+            LicenseNumber = staff.LicenseNumber.Value,
+            Name = staff.Name.Value,
+            PhoneNumber = staff.PhoneNumber.Value,
+            ContactEmail = staff.ContactEmail.email,
+            StaffSpecialization = staff.StaffSpecialization.Value,
+            Status = staff.Status.Value
+        };
     }
     
     // Method to convert to domain model with validation

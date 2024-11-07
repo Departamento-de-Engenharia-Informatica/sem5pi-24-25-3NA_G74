@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using G74.Domain.Shared;
 using G74.DTO;
 using G74.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -10,97 +11,88 @@ namespace G74.Adapters.Controllers;
 [ApiController]
 public class StaffController : ControllerBase
 {
-    private readonly StaffAppService _staffAppService;
-    private readonly StaffToDto _staffToDto;
+    private readonly StaffService _service;
     
-    public StaffController(StaffAppService staffAppService, StaffToDto staffToDto)
+    public StaffController(StaffService service)
     {
-        _staffAppService = staffAppService;
-        _staffToDto = staffToDto;
+        _service = service;
     }
     
     // GET: api/Staff/
-    [Authorize(Roles = "Admin")]
+    // [Authorize(Roles = "Admin")]
     [HttpGet]
     public async Task<ActionResult<StaffDto>> GetStaff()
     {
-        IEnumerable<StaffDto> staffDto = await _staffAppService.GetAll();
+        IEnumerable<StaffDto> staffDto = await _service.GetAll();
 
         return Ok(staffDto);
     }
     
+    // TODO: delete console logs and sql logs in console
+    
     // GET: api/Staff//license/682468
-    [Authorize(Roles = "Admin")]
+    // [Authorize(Roles = "Admin")]
     [HttpGet("license/{licenseNumber}")]
     public async Task<ActionResult<StaffDto>> GetStaffByLicenseNumber(string licenseNumber)
     {
-        var staffDTO = await _staffAppService.GetByLicenseNumber(licenseNumber);
+        var staffDto = await _service.GetByLicenseNumber(licenseNumber);
 
-        if (staffDTO == null)
+        if (staffDto == null)
         {
             return NotFound();
         }
-        return Ok(staffDTO);
+        return Ok(staffDto);
     }
     
     // POST: api/Staff
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-    [Authorize(Roles = "Admin")]
+    // [Authorize(Roles = "Admin")]
     [HttpPost]
-    public async Task<ActionResult<StaffDto>> RegisterStaff([FromBody]JsonStaffDto jsonStaffDto)
+    public async Task<ActionResult<StaffDto>> RegisterStaff([FromBody] StaffDto staffDto)
     {
         try
         {
-            StaffDto staffDto = _staffToDto.JsonToDto(jsonStaffDto);
-            StaffDto resultStaffDto = await _staffAppService.Add(staffDto);
+            var retStaffDto = await _service.Add(staffDto);
             
             return CreatedAtAction(
                 nameof(GetStaffByLicenseNumber),
-                new { licenseNumber = resultStaffDto.LicenseNumber },
-                resultStaffDto);
+                new { licenseNumber = retStaffDto.LicenseNumber },
+                retStaffDto);
         }
-        catch (Exception ex)
+        catch(BusinessRuleValidationException ex)
         {
-            return BadRequest(ex.Message);
+            return BadRequest(new {Message = ex.Message});
         }
     }
     
     // PUT: api/Staff/license/{licenseNumber}
-    [Authorize(Roles = "Admin")]
+    // [Authorize(Roles = "Admin")]
     [HttpPut("license/{licenseNumber}")]
-    public async Task<ActionResult<StaffDto>> UpdateStaff(string licenseNumber, [FromBody] JsonStaffDto jsonStaffDto)
+    public async Task<ActionResult<StaffDto>> UpdateStaff(string licenseNumber, [FromBody] StaffDto staffDto)
     {
         try
         {
-            // maybe put this in service instead and just catch exception here instead
-            StaffDto? existingStaff = await _staffAppService.GetByLicenseNumber(licenseNumber);
-            if (existingStaff == null)
-            {
-                return NotFound($"Staff with license number {licenseNumber} not found.");
-            }
-            StaffDto staffDto = _staffToDto.JsonToDto(jsonStaffDto);
-            var staffDtoResult = await _staffAppService.Update(licenseNumber, staffDto);
+            var staffDtoResult = await _service.Update(licenseNumber, staffDto);
             
             return Ok(staffDtoResult);
         }
         catch (ValidationException ex)
         {
-            return BadRequest(ex.Message);
+            return BadRequest(new {Message = ex.Message});
         }
-        // catch (Exception ex)
-        // {
-        //     // return StatusCode(500, "An error occurred while updating the staff profile.");
-        //     return StatusCode(500, ex.Message);
-        // }
+        catch(BusinessRuleValidationException ex)
+        {
+            return NotFound(new {Message = ex.Message});
+        }
     }
     
-    [Authorize(Roles = "Admin")]
+    // [Authorize(Roles = "Admin")]
     [HttpPatch("license/{licenseNumber}/deactivate")]
     public async Task<ActionResult<StaffDto>> DeactivateStaff(string licenseNumber)
     {
         try
         {
-            var staffDto = await _staffAppService.Deactivate(licenseNumber);
+            var staffDto = await _service.Deactivate(licenseNumber);
             if (staffDto == null)
             {
                 return NotFound($"Staff with license number {licenseNumber} not found.");

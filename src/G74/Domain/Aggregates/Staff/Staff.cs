@@ -1,12 +1,12 @@
+using G74.Domain.Shared;
 using G74.Domain.Value_Objects.SharedValueObjects;
 using G74.Domain.Value_Objects.Staff;
 using G74.Domain.Value_Objects.User;
 
 namespace G74.Domain.Aggregates.Staff;
 
-public class Staff
+public class Staff : Entity<Guid>
 {
-    public Guid Id {get; set;}
     public LicenseNumber LicenseNumber { get; private set; }
     public Name Name { get; private set; }
     public PhoneNumber PhoneNumber { get; private set; }
@@ -16,7 +16,7 @@ public class Staff
     
 
     public Staff(LicenseNumber licenseNumber, Name name, PhoneNumber phoneNumber,
-        Email contactEmail, StaffSpecialization staffSpecialization, Status status)
+        Email contactEmail, StaffSpecialization staffSpecialization, Status status) : base(Guid.NewGuid())
     {
         LicenseNumber = licenseNumber;
         Name = name;
@@ -26,8 +26,57 @@ public class Staff
         Status = status;
     }
     
+    private Staff()
+    {
+    }
+
+    
     public void Deactivate()
     {
         Status = new Status("deactivated");
     }
+    
+    public static Staff Create(string licenseNumber, string name, string phoneNumber,
+                                string contactEmail, string staffSpecialization, string status) {
+        return new Staff(
+            new LicenseNumber(licenseNumber),
+            new Name(name),
+            new PhoneNumber(phoneNumber),
+            new Email(contactEmail),
+            new StaffSpecialization(staffSpecialization),
+            new Status(status)
+        );
+    }
+
+    public void UpdateLicenseNumber(LicenseNumber licenseNumber)
+    {
+        this.LicenseNumber = licenseNumber;
+    }
+    
+    public void UpdateName(Name name)
+    {
+        this.Name = name;
+    }
+    
+    public void UpdatePhoneNumber(PhoneNumber phoneNumber)
+    {
+        this.PhoneNumber = phoneNumber;
+    }
+    
+    public void UpdateContactEmail(Email email)
+    {
+        this.ContactEmail = email;
+    }
+    
+    public void UpdateStaffSpecialization(StaffSpecialization specialization)
+    {
+        this.StaffSpecialization = specialization;
+    }
+    
+    public void UpdateStatus(Status status)
+    {
+        this.Status = status;
+    }
+    
+    
 }
