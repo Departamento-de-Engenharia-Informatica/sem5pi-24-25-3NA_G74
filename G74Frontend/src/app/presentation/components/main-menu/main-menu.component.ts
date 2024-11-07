@@ -9,11 +9,12 @@ import {Router} from '@angular/router';
 })
 export class MainMenuComponent {
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private http: HttpClient) {}
 
   redirectToRegister() {
     this.router.navigate(['/register-user']);
   }
 
 
-}
+
+  }
