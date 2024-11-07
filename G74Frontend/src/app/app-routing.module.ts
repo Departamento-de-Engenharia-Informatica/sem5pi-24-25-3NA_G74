@@ -9,6 +9,11 @@ import {UpdateUserComponent} from './presentation/components/update-user/update-
 import {DeleteUserComponent} from './presentation/components/delete-user/delete-user.component';
 import {MainMenuComponent} from './presentation/components/main-menu/main-menu.component';
 import {PatientMenuComponent} from './presentation/components/patient-menu/patient-menu.component';
+import { DoctorMenuComponent } from './presentation/components/doctor-menu/doctor-menu.component';
+import { RegisterOperationComponent } from './presentation/components/register-operation/register-operation.component';
+import { UpdateOperationComponent } from './presentation/components/update-operation/update-operation.component';
+import { ListAllOperationComponent } from './presentation/components/list-all-operation/list-all-operation.component';
+import { DeleteOperationComponent } from './presentation/components/delete-operation/delete-operation.component';
 
 
 const routes: Routes = [
@@ -22,7 +27,14 @@ const routes: Routes = [
   { path: 'patient', component: PatientMenuComponent},
   { path: 'register-user', component: RegisterUserComponent},
   { path: 'update-user', component: UpdateUserComponent},
-  { path: 'delete-user', component: DeleteUserComponent}
+  { path: 'delete-user', component: DeleteUserComponent},
+  { path: 'doctor', component: DoctorMenuComponent},
+  { path: 'doctor/create-operation', component:RegisterOperationComponent},
+  { path: 'doctor/update-operation', component:UpdateOperationComponent},
+  { path: 'doctor/list-operation', component:ListAllOperationComponent},
+  { path: 'doctor/delete-operation', component:DeleteOperationComponent},
+
+  
 ];
 
 @NgModule({

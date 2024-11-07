@@ -1,0 +1,60 @@
+<h1>
+    Create Operation
+</h1>
+
+<form>
+    <fieldset>
+        <h3>Patient's Medical Record Number</h3>
+        <input id="medicalRecordNumber" type="number" required name="MedicalRecordNumber" placeholder="ex: YYYYMMnnnnnn...">
+    </fieldset>
+    <fieldset>
+        <h3>Licence Number</h3>
+        <input id="LicenceNumber" type="number" required name="LicenceNumber" placeholder="ex: 123"/>
+    </fieldset>
+    
+    <fieldset id="staff-specializations">
+        <h3>List of Staff's Specialization</h3>
+        
+        <div *ngFor="let specialization of specializations; let i = index; trackBy: trackByIndex" style="display: flex; gap: 10px;">
+            <label>Specialization</label>
+            <input required type="text" name="Specialization" placeholder="ex: Cardiologist" [(ngModel)]="specializations[i]">
+            <br/>
+            <label>Quantity</label>
+            <input required type="number" name="Counter" placeholder="ex: 1" [(ngModel)]="counter[i]">
+        </div>
+        <button type="button" (click)="addSpecialization()" style="margin-top: 10px;">+</button>
+        <button type="button" (click)="removeSpecialization()" style="gap: 5px;">-</button>
+    </fieldset>
+
+    <fieldset>
+        <h3>Operation Specification</h3>
+
+        <fieldset>
+            <h4>Name</h4>
+            <input id="operation-name" type="text" required name="Operation" placeholder="ex: Teeth Cleaning..">
+        </fieldset>
+
+        <fieldset>
+            <h4>Date</h4>
+            <input type="date">
+        </fieldset>
+
+        <fieldset>
+            <h4>Duration</h4>
+            <input type="time">
+        </fieldset>
+
+        <fieldset>
+            <h4>Priority</h4>
+            <select required id="Priority" [(ngModel)]="priority" name="priority" required>
+                <option value="ElectiveSurgery">Elective Surgery</option>
+                <option value="UrgentSurgery">Urgent Surgery</option>
+                <option value="EmergencySurgery">Emergency Surgery</option>
+            </select>
+        </fieldset>
+    </fieldset>
+
+    <button type="submit" style="margin-top: 10px;">Submit</button>
+</form>
+
+

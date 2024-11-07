@@ -13,6 +13,7 @@ import {UpdateUserComponent} from './presentation/components/update-user/update-
 import {DeleteUserComponent} from './presentation/components/delete-user/delete-user.component';
 import {MainMenuComponent} from './presentation/components/main-menu/main-menu.component';
 import {PatientMenuComponent} from './presentation/components/patient-menu/patient-menu.component';
+import { RegisterOperationComponent } from './presentation/components/register-operation/register-operation.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import {PatientMenuComponent} from './presentation/components/patient-menu/patie
     BrowserModule,
     HttpClientModule,
     FormsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    RegisterOperationComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

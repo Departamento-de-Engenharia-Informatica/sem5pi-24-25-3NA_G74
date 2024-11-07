@@ -1,5 +1,6 @@
 using G74.Domain.Shared;
-
+using System.Collections.Generic;
+using System;
 public class DataOperationRequest : Entity<Guid>
 {
     public string MedicalRecordNumber {get; set; }
