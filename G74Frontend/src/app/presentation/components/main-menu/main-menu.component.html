@@ -4,11 +4,19 @@
 <div class="menu">
   <button (click)="redirectToRegister()">Register New User</button>
 </div>
+<script>
+  import {MainMenuComponent} from "./main-menu.component";
+
+  function handleCredentialResponse(response) {
+    MainMenuComponent.handleCredentialResponse(response);
+  }
+</script>
+
 <div id="g_id_onload"
      data-client_id="714890624754-jkbbtsarf5nstsm1b55qpcph4b1e0aon.apps.googleusercontent.com"
+     data-callback="handleCredentialResponse"
      data-context="signin"
      data-ux_mode="popup"
-     data-login_uri="https://localhost:5001/api/auth/google-login"
      data-auto_prompt="false">
 </div>
 

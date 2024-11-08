@@ -51,7 +51,7 @@ namespace G74.Adapters.Controllers
                 await GenerateAuthToken(userDataModel);
                 
 
-                return Ok(new { success = true, message = "Login successful!" });
+                return Ok(new { success = true, message = "Login successful!", role = userDataModel.Role });
             }
             catch (InvalidJwtException)
             {
@@ -87,5 +87,16 @@ namespace G74.Adapters.Controllers
             }
             return Ok(new { success = true, message = "Logout done successfully." });
         }
+        
+        [HttpGet("check-session")]
+        public IActionResult CheckSession()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                return Ok(new { isAuthenticated = true });
+            }
+            return Ok(new { isAuthenticated = false });
+        }
+
     }
 }

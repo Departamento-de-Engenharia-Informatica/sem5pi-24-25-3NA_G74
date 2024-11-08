@@ -22,7 +22,8 @@ public class UserController : ControllerBase
         _userAppService = userAppService;
     }
   
-    [Authorize(Roles = "Admin, Patient")]
+    [AllowAnonymous]
+    //[Authorize(Roles = "Admin, Patient")]
     [HttpPost("register")]
     public async Task<ActionResult<UserDto>> RegisterNewUser([FromBody]UserDto receivedUserDto)
     {
@@ -42,7 +43,7 @@ public class UserController : ControllerBase
         
     }
     
-    [HttpGet("by-email")]
+    //[HttpGet("by-email")]
     public async Task<ActionResult<UserDto>> GetLoggedUserByEmail()
     {
         try
@@ -61,7 +62,7 @@ public class UserController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "Patient")]
+    //[Authorize(Roles = "Patient")]
     [HttpPatch("update")]
     public async Task<ActionResult<UserDto>> UpdateUser([FromBody]UserDto receivedUserDto)
     {
@@ -86,7 +87,7 @@ public class UserController : ControllerBase
         }
     }
     
-    [Authorize(Roles = "Patient")]
+    //[Authorize(Roles = "Patient")]
     [HttpDelete("delete")]
     public async Task<IActionResult> DeleteUser()
     {
