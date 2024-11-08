@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
 
@@ -7,7 +7,8 @@ import {Router} from '@angular/router';
   standalone: true,
   imports: [],
   templateUrl: './doctor-menu.component.html',
-  styleUrl: './doctor-menu.component.css'
+  styleUrl: './doctor-menu.component.css',
+  encapsulation: ViewEncapsulation.None 
 })
 export class DoctorMenuComponent {
   constructor(private router: Router, private http: HttpClient) {}
