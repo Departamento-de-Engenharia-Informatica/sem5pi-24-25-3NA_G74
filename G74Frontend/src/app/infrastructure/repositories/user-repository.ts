@@ -12,13 +12,14 @@ import {response} from 'express';
   providedIn: 'root'
 })
 export class UserRepository implements IUserRepository {
-  private apiUrl = `${environment.apiUrl}/User/`;
+  private apiUrl = `${environment.apiUrl}/User`;
 
   constructor(private http: HttpClient) {}
 
   registerUser(user: User): Observable<User> {
     console.log('Sending user data to backend:', user);
-    return this.http.post<User>(this.apiUrl, user).pipe(
+    const myURl = `${this.apiUrl}/register`;
+    return this.http.post<User>(myURl, user).pipe(
       tap(response => console.log('Received response from backend:', response)),
       catchError(error => {
         console.error('Error response from backend:', error);
@@ -28,7 +29,8 @@ export class UserRepository implements IUserRepository {
   }
 
   updateUser(user: Partial<User>): Observable<User> {
-    return this.http.patch<User>(this.apiUrl, user).pipe(
+    const myURL = `${this.apiUrl}/update`;
+    return this.http.patch<User>(myURL, user).pipe(
       tap(response => console.log('Received response from backend:', response)),
       catchError(error => {
         console.error('Error response from backend:', error);
@@ -39,7 +41,8 @@ export class UserRepository implements IUserRepository {
 
 
   markUserAsDeleted(): Observable<any> {
-    return this.http.delete<any>(this.apiUrl).pipe(
+    const myURL = `${this.apiUrl}/delete`;
+    return this.http.delete<any>(myURL).pipe(
       tap(response => console.log('Received response from backend:', response)),
       catchError(error => {
         console.error('Error response from backend:', error);

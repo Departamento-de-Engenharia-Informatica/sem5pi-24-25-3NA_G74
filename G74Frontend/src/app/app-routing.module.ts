@@ -14,10 +14,12 @@ import { RegisterOperationComponent } from './presentation/components/register-o
 import { UpdateOperationComponent } from './presentation/components/update-operation/update-operation.component';
 import { ListAllOperationComponent } from './presentation/components/list-all-operation/list-all-operation.component';
 import { DeleteOperationComponent } from './presentation/components/delete-operation/delete-operation.component';
+import {AuthGuard} from './application/services/auth-guard.service';
+import {RoleGuard} from './application/services/role-guard.service';
 
 
 const routes: Routes = [
-  { path: '', redirectTo: '/main', pathMatch: 'full' },  // Redirect root to the main menu
+  { path: '', redirectTo: '/main', pathMatch: 'full' },
   { path: 'main', component: MainMenuComponent },
   { path: 'admin', component: AdminMenuComponent },
   { path: 'admin/create-patient', component: PatientCreateComponent },
@@ -33,8 +35,11 @@ const routes: Routes = [
   { path: 'doctor/update-operation', component:UpdateOperationComponent},
   { path: 'doctor/list-operation', component:ListAllOperationComponent},
   { path: 'doctor/delete-operation', component:DeleteOperationComponent},
+  { path: 'admin', component: AdminMenuComponent, canActivate: [AuthGuard, RoleGuard], data: { expectedRole: 'admin' } },
+  { path: 'patient', component: PatientMenuComponent, canActivate: [AuthGuard, RoleGuard], data: { expectedRole: 'patient' } },
+  { path: 'doctor', component: DoctorMenuComponent, canActivate: [AuthGuard, RoleGuard], data: { expectedRole: 'doctor' } },
+  { path: '', redirectTo: '/main', pathMatch: 'full' }
 
-  
 ];
 
 @NgModule({

@@ -1,0 +1,8 @@
+<nav>
+  <div *ngIf="isAuthenticated">
+    <button (click)="onLogout()">Logout</button>
+  </div>
+  <div *ngIf="!isAuthenticated">
+    <button (click)="onLogin()">Login</button>
+  </div>
+</nav>

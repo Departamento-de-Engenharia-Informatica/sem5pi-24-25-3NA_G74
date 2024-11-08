@@ -14,6 +14,7 @@ import {DeleteUserComponent} from './presentation/components/delete-user/delete-
 import {MainMenuComponent} from './presentation/components/main-menu/main-menu.component';
 import {PatientMenuComponent} from './presentation/components/patient-menu/patient-menu.component';
 import { RegisterOperationComponent } from './presentation/components/register-operation/register-operation.component';
+import {HeaderComponent} from './presentation/components/header/header.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { RegisterOperationComponent } from './presentation/components/register-o
     UpdateUserComponent,
     DeleteUserComponent,
     MainMenuComponent,
-    PatientMenuComponent
+    PatientMenuComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
