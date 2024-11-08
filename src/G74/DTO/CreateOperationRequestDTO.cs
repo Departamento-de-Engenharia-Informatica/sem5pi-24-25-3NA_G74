@@ -4,18 +4,14 @@ public class CreateOperationRequestDTO
 {
     public string MedicalRecordNumber {get; set; }
     public string LicenceNumber {get; set; }
-    public string Name {get; set; }
-    public List<string> RequiredStaffBySpecialization {get; set; }
-    public Duration EstimatedDuration {get; set; }
+    public int OperationTypeId { get; }
     public DateTime DeadlineDate {get;set; }
     public string Priority {get;set; }
-    public CreateOperationRequestDTO(string medicalRecordNumber, string licenceNumber, string name, List<string> requiredStaffBySpecialization, Duration estimatedDuration, DateTime deadlineDate, string priority)
+    public CreateOperationRequestDTO(string medicalRecordNumber, string licenceNumber, int operationTypeId, DateTime deadlineDate, string priority)
     {
         MedicalRecordNumber = medicalRecordNumber;
         LicenceNumber = licenceNumber;
-        Name = name;
-        RequiredStaffBySpecialization = requiredStaffBySpecialization;
-        EstimatedDuration = estimatedDuration;
+        OperationTypeId = operationTypeId;
         DeadlineDate = deadlineDate;
         Priority = priority;
     }

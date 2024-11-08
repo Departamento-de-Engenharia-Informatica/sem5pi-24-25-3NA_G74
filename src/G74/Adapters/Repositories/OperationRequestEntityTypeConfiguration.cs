@@ -15,32 +15,9 @@ public class OperationRequestEntityTypeConfiguration : IEntityTypeConfiguration<
            .IsRequired()
            .HasColumnName("Medical Record Number");
 
-        builder.Property(o => o.NameOperationType)
+        builder.Property(o => o.OperationTypeId)
             .IsRequired()
             .HasColumnName("Name Operation Type");
-
-        var requiredStaffBySpecialization = builder.Property(o => o.RequiredStaffBySpecialization)
-            .IsRequired()
-            .HasConversion(new SpecializationStaffListConverter())
-            .HasColumnName("Required Staff By Specialization");
-
-        requiredStaffBySpecialization.Metadata.SetValueComparer(new SpecializationStaffListComparer());
-
-         builder.Property(o => o.Seconds)
-            .IsRequired()
-            .HasColumnName("Seconds");
-
-         builder.Property(o => o.Minutes)
-            .IsRequired()
-            .HasColumnName("Minutes");
-
-         builder.Property(o => o.Hours)
-            .IsRequired()
-            .HasColumnName("Hours");
-
-         builder.Property(o => o.Days)
-            .IsRequired()
-            .HasColumnName("Days");
 
         builder.Property(o => o.LicenceNumber)
            .IsRequired()

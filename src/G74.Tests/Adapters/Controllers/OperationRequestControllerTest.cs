@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using G74.Adapters.Controllers;
 using G74.DataModel;
 using G74.Domain;
+using G74.Domain.Aggregates.OperationType;
 using G74.Domain.DomainServices;
 using G74.Domain.IRepositories;
 using G74.Domain.Value_Objects.Patient;

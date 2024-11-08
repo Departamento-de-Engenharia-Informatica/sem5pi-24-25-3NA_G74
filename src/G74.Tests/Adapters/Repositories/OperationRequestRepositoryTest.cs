@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using G74.Adapters.Repositories;
+using G74.Domain.Aggregates.OperationType;
 using G74.Domain.Value_Objects.SharedValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;

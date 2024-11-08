@@ -1,4 +1,5 @@
 
+using G74.Domain.Aggregates.OperationType;
 using G74.Domain.IRepositories;
 using G74.Domain.Value_Objects.Patient;
 using G74.Domain.Value_Objects.SharedValueObjects;
@@ -68,7 +69,7 @@ public class AppServiceOperationRequest : IAppServiceOperationRequest
         var operation = await new OperationRequestBuilder(
             new MedicalRecordNumber(operationDto.MedicalRecordNumber),
             new LicenceNumber(operationDto.LicenceNumber),
-            new OperationType(new Name(operationDto.Name), new RequiredStaffBySpecialization(operationDto.RequiredStaffBySpecialization),operationDto.EstimatedDuration),
+            operationDto.OperationTypeId,
             new DeadlineDate(operationDto.DeadlineDate),
             new Priority(operationDto.Priority)
         ).Build();
@@ -110,11 +111,7 @@ public class AppServiceOperationRequest : IAppServiceOperationRequest
   
     existingOperation.MedicalRecordNumber = new MedicalRecordNumber(updatedOperationDto.MedicalRecordNumber.MedicalNumber);
     existingOperation.LicenceNumber = new LicenceNumber(updatedOperationDto.LicenceNumber.licenceNumber);
-    existingOperation.OperationType = new OperationType(
-        new Name(updatedOperationDto.OperationType.Name.ToString()),
-        new RequiredStaffBySpecialization(updatedOperationDto.OperationType.RequiredStaffBySpecialization.SpecializationStaffList),
-        updatedOperationDto.OperationType.EstimatedDuration
-    );
+    existingOperation.OperationTypeId = updatedOperationDto.OperationTypeId;
     existingOperation.DeadlineDate = new DeadlineDate(updatedOperationDto.DeadlineDate.date);
     existingOperation.Priority = new Priority(updatedOperationDto.Priority.PriorityDescription);
 

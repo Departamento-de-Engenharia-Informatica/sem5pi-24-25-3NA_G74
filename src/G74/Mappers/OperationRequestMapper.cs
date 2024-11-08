@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using G74.Domain.Aggregates.OperationType;
 using G74.Domain.Value_Objects.Patient;
 using G74.Domain.Value_Objects.SharedValueObjects;
 
@@ -40,7 +41,7 @@ public class OperationRequestMapper
         return new OperationRequestDTO(
             operationRequest.MedicalRecordNumber,
             operationRequest.LicenceNumber,
-            operationRequest.OperationType,
+            operationRequest.OperationTypeId,
             operationRequest.DeadlineDate,
             operationRequest.Priority);
     }
@@ -50,7 +51,7 @@ public class OperationRequestMapper
         return new OperationRequest(
             operationRequestDto.MedicalRecordNumber,
             operationRequestDto.LicenceNumber,
-            operationRequestDto.OperationType,
+            operationRequestDto.OperationTypeId,
             operationRequestDto.DeadlineDate,
             operationRequestDto.Priority
         );
@@ -63,35 +64,20 @@ public class OperationRequestMapper
     public static OperationRequest FromDataModelToDomain(DataOperationRequest operationRequestDataModel)
     {  
         return new OperationRequest(
-            new MedicalRecordNumber(operationRequestDataModel.MedicalRecordNumber),
-            new LicenceNumber(operationRequestDataModel.LicenceNumber),
-            new OperationType(
-                new Name(operationRequestDataModel.NameOperationType),
-                new RequiredStaffBySpecialization(operationRequestDataModel.RequiredStaffBySpecialization),
-                new Duration(operationRequestDataModel.Seconds, operationRequestDataModel.Minutes, operationRequestDataModel.Hours, operationRequestDataModel.Days)
-            ),
+            new MedicalRecordNumber(operationRequestDataModel.MedicalRecordNumber.ToString()),
+            new LicenceNumber(operationRequestDataModel.LicenceNumber.ToString()),
+            operationRequestDataModel.OperationTypeId,
             new DeadlineDate(operationRequestDataModel.DeadlineDate),
             new Priority(operationRequestDataModel.Priority)
         );
     }
 
     public static OperationRequestDTO FromCreateDTOtoDTO(CreateOperationRequestDTO operationRequestDTO){
-        /**
-            public MedicalRecordNumber MedicalRecordNumber {get;private set; }
-            public LicenceNumber LicenceNumber {get;private set; }
-            public OperationType OperationType {get;private set; }
-            public DeadlineDate DeadlineDate {get;private set; }
-            public Priority Priority {get;private set; }
-        */
-        
+
         return new OperationRequestDTO(
            new MedicalRecordNumber( operationRequestDTO.MedicalRecordNumber),
            new LicenceNumber(operationRequestDTO.LicenceNumber),
-           new OperationType(
-               new Name(operationRequestDTO.Name),
-               new RequiredStaffBySpecialization(operationRequestDTO.RequiredStaffBySpecialization),
-               operationRequestDTO.EstimatedDuration)
-           ,
+           operationRequestDTO.OperationTypeId,
            new DeadlineDate(operationRequestDTO.DeadlineDate),
            new Priority(operationRequestDTO.Priority)
         );

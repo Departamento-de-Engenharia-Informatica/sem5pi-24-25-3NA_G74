@@ -1,23 +1,24 @@
+using G74.Domain.Aggregates.OperationType;
 using G74.Domain.Value_Objects.Patient;
 
 public class OperationRequestBuilder
 {
     private MedicalRecordNumber _medicalRecordNumber ;
     private LicenceNumber _licenceNumber ;
-    private OperationType _operationType ;
+    private int _operationTypeId ;
     private DeadlineDate _deadlineDate ;
     private Priority _priority ;
 
     public OperationRequestBuilder(
         MedicalRecordNumber medicalRecordNumber,
         LicenceNumber licenceNumber,
-        OperationType operationType,
+        int operationTypeId,
         DeadlineDate deadlineDate,
         Priority priority
     ){
         _medicalRecordNumber = medicalRecordNumber;
         _licenceNumber = licenceNumber;
-        _operationType = operationType;
+        _operationTypeId = operationTypeId;
         _deadlineDate = deadlineDate;
         _priority = priority;
     }
@@ -37,7 +38,7 @@ public class OperationRequestBuilder
         return new OperationRequest(
             _medicalRecordNumber,
             _licenceNumber,
-            _operationType,
+            _operationTypeId,
             _deadlineDate,
             _priority
         );

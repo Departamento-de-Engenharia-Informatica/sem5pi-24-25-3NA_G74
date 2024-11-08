@@ -74,14 +74,9 @@ namespace G74.Adapters.Repositories
         }
 
         
-        dataOperation.MedicalRecordNumber = operation.MedicalRecordNumber.MedicalNumber;
-        dataOperation.LicenceNumber = operation.LicenceNumber.licenceNumber;
-        dataOperation.NameOperationType = operation.OperationType.Name.Value;
-        dataOperation.RequiredStaffBySpecialization = operation.OperationType.RequiredStaffBySpecialization.SpecializationStaffList;
-        dataOperation.Seconds = operation.OperationType.EstimatedDuration.Seconds;
-        dataOperation.Minutes = operation.OperationType.EstimatedDuration.Minutes;
-        dataOperation.Hours = operation.OperationType.EstimatedDuration.Hours;
-        dataOperation.Days = operation.OperationType.EstimatedDuration.Days;
+        dataOperation.MedicalRecordNumber = int.Parse(operation.MedicalRecordNumber.MedicalNumber);
+        dataOperation.LicenceNumber = int.Parse(operation.LicenceNumber.licenceNumber);
+        dataOperation.OperationTypeId = operation.OperationTypeId;
         dataOperation.DeadlineDate = operation.DeadlineDate.date;
         dataOperation.Priority = operation.Priority.PriorityDescription.ToString();
         Console.WriteLine("Cheguei");

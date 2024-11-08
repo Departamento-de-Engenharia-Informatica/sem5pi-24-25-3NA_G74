@@ -8,7 +8,7 @@ export class AuthService {
   constructor(private http: HttpClient, private router: Router) {}
 
   isAuthenticated(): boolean {
-    return document.cookie.includes('.AspNetCore.Cookies');  // Substitua pelo nome do seu cookie
+    return document.cookie.includes('.AspNetCore.Cookies');
   }
 
   logout() {
