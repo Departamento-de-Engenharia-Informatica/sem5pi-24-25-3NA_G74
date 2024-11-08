@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-main-menu',
   templateUrl: './main-menu.component.html',
-  styleUrl: './main-menu.component.css'
+  styleUrls: ['./main-menu.component.css'],
+  encapsulation: ViewEncapsulation.None 
 })
 export class MainMenuComponent {
 
