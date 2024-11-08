@@ -23,6 +23,9 @@ public class StaffEntityTypeConfiguration : IEntityTypeConfiguration<Staff>
             .HasMaxLength(50)
             .HasColumnName("LicenseNumber");
         
+        builder.HasIndex(u => u.LicenseNumber)
+            .IsUnique();
+        
         builder.Property(u => u.Name)
             .HasConversion(
                 name => name.Value,
@@ -62,9 +65,10 @@ public class StaffEntityTypeConfiguration : IEntityTypeConfiguration<Staff>
             .IsRequired()
             .HasMaxLength(50)
             .HasColumnName("Status");
-        
-        // // Add unique constraint on LicenseNumber
-        // builder.HasIndex(s => s.LicenseNumber)
-        //     .IsUnique();
+
+        builder.Property(u => u.Availability)
+            .IsRequired()
+            .HasMaxLength(50)
+            .HasColumnName("availability");
     }
 }

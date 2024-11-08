@@ -13,10 +13,11 @@ public class Staff : Entity<Guid>
     public Email ContactEmail { get; private set; }
     public StaffSpecialization StaffSpecialization { get; private set; }
     public Status Status { get; private set; }
+    public string Availability { get; private set; }
     
 
     public Staff(LicenseNumber licenseNumber, Name name, PhoneNumber phoneNumber,
-        Email contactEmail, StaffSpecialization staffSpecialization, Status status) : base(Guid.NewGuid())
+        Email contactEmail, StaffSpecialization staffSpecialization, Status status, string availability) : base(Guid.NewGuid())
     {
         LicenseNumber = licenseNumber;
         Name = name;
@@ -24,6 +25,7 @@ public class Staff : Entity<Guid>
         ContactEmail = contactEmail;
         StaffSpecialization = staffSpecialization;
         Status = status;
+        Availability = availability;
     }
     
     private Staff()
@@ -37,14 +39,15 @@ public class Staff : Entity<Guid>
     }
     
     public static Staff Create(string licenseNumber, string name, string phoneNumber,
-                                string contactEmail, string staffSpecialization, string status) {
+                                string contactEmail, string staffSpecialization, string status, string availability) {
         return new Staff(
             new LicenseNumber(licenseNumber),
             new Name(name),
             new PhoneNumber(phoneNumber),
             new Email(contactEmail),
             new StaffSpecialization(staffSpecialization),
-            new Status(status)
+            new Status(status),
+            availability
         );
     }
 

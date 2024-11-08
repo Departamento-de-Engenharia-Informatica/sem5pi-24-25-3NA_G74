@@ -1,10 +1,11 @@
+using G74.DTO;
 using G74.Infrastructure;
 using G74.Infrastructure.Shared;
 using Microsoft.EntityFrameworkCore;
 
 namespace G74.Adapters.Repositories
 {
-    public class OperationRequestRepository : BaseRepository<DataOperationRequest, Guid>, IOperationRequestRepository
+    public class OperationRequestRepository : BaseRepository<OperationRequestDataModel, Guid>, IOperationRequestRepository
     {
         private readonly BackofficeAppDbContext _context;
         public OperationRequestRepository(BackofficeAppDbContext context) : base(context.OperationRequests)
@@ -12,7 +13,7 @@ namespace G74.Adapters.Repositories
         _context = context;
     }
 
-        public async Task<OperationRequest> Add(DataOperationRequest operation)
+        public async Task<OperationRequest> Add(OperationRequestDataModel operation)
         {
              _context.OperationRequests.Add(operation);
             await _context.SaveChangesAsync();

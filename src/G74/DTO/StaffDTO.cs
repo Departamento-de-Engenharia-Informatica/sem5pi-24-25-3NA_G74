@@ -13,6 +13,7 @@ public class StaffDto
     public string ContactEmail { get; set; }
     public string StaffSpecialization { get; set; }
     public string Status { get; set; }
+    public string Availability { get; set; } 
 
     // // Constructor for creating from primitive types (e.g., from API request)
     // public StaffDto(string licenseNumber, string name, string phoneNumber, 
@@ -35,7 +36,8 @@ public class StaffDto
             PhoneNumber = staff.PhoneNumber.Value,
             ContactEmail = staff.ContactEmail.email,
             StaffSpecialization = staff.StaffSpecialization.Value,
-            Status = staff.Status.Value
+            Status = staff.Status.Value,
+            Availability = staff.Availability
         };
     }
     
@@ -48,7 +50,8 @@ public class StaffDto
             new PhoneNumber(staffDto.PhoneNumber),
             new Email(staffDto.ContactEmail),
             new StaffSpecialization(staffDto.StaffSpecialization),
-            new Status(staffDto.Status)
+            new Status(staffDto.Status),
+            staffDto.Availability
         );
     }
     

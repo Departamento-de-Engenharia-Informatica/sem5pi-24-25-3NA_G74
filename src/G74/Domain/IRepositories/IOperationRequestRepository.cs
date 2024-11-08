@@ -1,9 +1,10 @@
 using G74.Domain;
 using G74.Domain.Shared;
+using G74.DTO;
 
-public interface IOperationRequestRepository : IRepository<DataOperationRequest, Guid>
+public interface IOperationRequestRepository : IRepository<OperationRequestDataModel, Guid>
 {
-    Task<OperationRequest> Add(DataOperationRequest operation);
+    Task<OperationRequest> Add(OperationRequestDataModel operation);
     Task<OperationRequest> GetOperationRequestByIdAsync(Guid id);
     Task<OperationRequest> Update(Guid id,OperationRequest patient);
     Task<int> CountAsync();

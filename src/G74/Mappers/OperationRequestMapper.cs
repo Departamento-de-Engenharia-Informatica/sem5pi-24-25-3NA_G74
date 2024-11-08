@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using G74.Domain.Aggregates.OperationType;
 using G74.Domain.Value_Objects.Patient;
 using G74.Domain.Value_Objects.SharedValueObjects;
+using G74.DTO;
 
 public class OperationRequestMapper 
 {
@@ -57,18 +58,18 @@ public class OperationRequestMapper
         );
 
     }
-    public static DataOperationRequest ToDataModel(OperationRequest operationRequest)
+    public static OperationRequestDataModel ToDataModel(OperationRequest operationRequest)
     {
-        return new DataOperationRequest(operationRequest);
+        return new OperationRequestDataModel(operationRequest);
     }
-    public static OperationRequest FromDataModelToDomain(DataOperationRequest operationRequestDataModel)
+    public static OperationRequest FromDataModelToDomain(OperationRequestDataModel modelOperationRequestDataModel)
     {  
         return new OperationRequest(
-            new MedicalRecordNumber(operationRequestDataModel.MedicalRecordNumber.ToString()),
-            new LicenceNumber(operationRequestDataModel.LicenceNumber.ToString()),
-            operationRequestDataModel.OperationTypeId,
-            new DeadlineDate(operationRequestDataModel.DeadlineDate),
-            new Priority(operationRequestDataModel.Priority)
+            new MedicalRecordNumber(modelOperationRequestDataModel.MedicalRecordNumber.ToString()),
+            new LicenceNumber(modelOperationRequestDataModel.LicenceNumber.ToString()),
+            modelOperationRequestDataModel.OperationTypeId,
+            new DeadlineDate(modelOperationRequestDataModel.DeadlineDate),
+            new Priority(modelOperationRequestDataModel.Priority)
         );
     }
 

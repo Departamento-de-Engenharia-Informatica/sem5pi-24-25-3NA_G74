@@ -4,10 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Newtonsoft.Json;
 
 using G74.Adapters.Repositories;
+using G74.DTO;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-public class OperationRequestEntityTypeConfiguration : IEntityTypeConfiguration<DataOperationRequest>
+public class OperationRequestEntityTypeConfiguration : IEntityTypeConfiguration<OperationRequestDataModel>
 {
-    public void Configure(EntityTypeBuilder<DataOperationRequest> builder)
+    public void Configure(EntityTypeBuilder<OperationRequestDataModel> builder)
     {
         builder.HasKey(o => o.Id);
 
@@ -17,7 +18,7 @@ public class OperationRequestEntityTypeConfiguration : IEntityTypeConfiguration<
 
         builder.Property(o => o.OperationTypeId)
             .IsRequired()
-            .HasColumnName("Name Operation Type");
+            .HasColumnName("Operation Type Id");
 
         builder.Property(o => o.LicenceNumber)
            .IsRequired()

@@ -46,7 +46,7 @@ public class StaffService
         }
         
         var staff = Staff.Create(staffDto.LicenseNumber, staffDto.Name, staffDto.PhoneNumber,
-            staffDto.ContactEmail, staffDto.StaffSpecialization, staffDto.Status);
+            staffDto.ContactEmail, staffDto.StaffSpecialization, staffDto.Status, staffDto.Availability);
 
         
         await this._repo.Add(staff);

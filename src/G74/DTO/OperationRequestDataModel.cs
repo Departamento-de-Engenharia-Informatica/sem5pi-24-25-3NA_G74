@@ -1,7 +1,8 @@
 using G74.Domain.Shared;
-using System.Collections.Generic;
-using System;
-public class DataOperationRequest : Entity<Guid>
+
+namespace G74.DTO;
+
+public class OperationRequestDataModel : Entity<Guid>
 {
     public int MedicalRecordNumber {get; set; }
     public int LicenceNumber {get; set; }
@@ -9,10 +10,10 @@ public class DataOperationRequest : Entity<Guid>
     public DateTime DeadlineDate {get; set; }
     public string Priority {get; set; }
 
-    public DataOperationRequest(): base(Guid.NewGuid())  { }
-    public DataOperationRequest(
+    public OperationRequestDataModel(): base(Guid.NewGuid())  { }
+    public OperationRequestDataModel(
         OperationRequest request
-        )
+    )
         : base(Guid.NewGuid()) 
     {
         MedicalRecordNumber = int.Parse(request.MedicalRecordNumber.MedicalNumber);
