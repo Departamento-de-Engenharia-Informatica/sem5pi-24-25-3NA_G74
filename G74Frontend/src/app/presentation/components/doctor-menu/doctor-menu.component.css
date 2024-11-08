@@ -1,0 +1,43 @@
+body{
+    background: linear-gradient(90deg, #02012c, #06235a); 
+    height: 100vh;
+    margin: 0; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+#doctorMenu{
+    display: flex;
+    justify-content: center;
+}
+
+#butaoBox{
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+#botao{
+    background-color: #06235a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+#botao:hover{
+    background-color: #0a3990;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 5px;
+    cursor: pointer;
+}
