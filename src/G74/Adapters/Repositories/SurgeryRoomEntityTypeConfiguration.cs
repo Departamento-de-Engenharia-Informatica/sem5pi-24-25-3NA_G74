@@ -10,6 +10,12 @@ public class SurgeryRoomEntityTypeConfiguration : IEntityTypeConfiguration<Surge
     {
         builder.HasKey(u => u.Id);
 
+        builder.Property(u => u.roomNumber)
+            .IsRequired()
+            .HasColumnName("room_number");
+        builder.HasIndex(u => u.roomNumber)
+            .IsUnique();
+
         builder.Property(u => u.type)
             .HasMaxLength(50)
             .IsRequired()
@@ -22,7 +28,6 @@ public class SurgeryRoomEntityTypeConfiguration : IEntityTypeConfiguration<Surge
         
         builder.Property(u => u.assignedEquipment)
             .IsRequired()
-            .HasMaxLength(20)
             .HasColumnName("equipment");
 
         builder.Property(u => u.roomStatus)

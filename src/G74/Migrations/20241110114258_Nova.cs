@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace G74.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Nova : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "AppointmentDataModel",
+                name: "Appointments",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -24,7 +24,7 @@ namespace G74.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AppointmentDataModel", x => x.Id);
+                    table.PrimaryKey("PK_Appointments", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -44,7 +44,7 @@ namespace G74.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OperationTypeDataModel",
+                name: "OperationTypes",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -55,7 +55,7 @@ namespace G74.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OperationTypeDataModel", x => x.Id);
+                    table.PrimaryKey("PK_OperationTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -98,19 +98,20 @@ namespace G74.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SurgeryRoomDataModel",
+                name: "SurgeryRooms",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    room_number = table.Column<int>(type: "int", nullable: false),
                     type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     capacity = table.Column<int>(type: "int", maxLength: 100, nullable: false),
-                    equipment = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    equipment = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     maintenance = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SurgeryRoomDataModel", x => x.Id);
+                    table.PrimaryKey("PK_SurgeryRooms", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -130,8 +131,8 @@ namespace G74.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_OperationTypeDataModel_operation_type_id",
-                table: "OperationTypeDataModel",
+                name: "IX_OperationTypes_operation_type_id",
+                table: "OperationTypes",
                 column: "operation_type_id",
                 unique: true);
 
@@ -146,19 +147,25 @@ namespace G74.Migrations
                 table: "Staff",
                 column: "LicenseNumber",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SurgeryRooms_room_number",
+                table: "SurgeryRooms",
+                column: "room_number",
+                unique: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AppointmentDataModel");
+                name: "Appointments");
 
             migrationBuilder.DropTable(
                 name: "OperationRequests");
 
             migrationBuilder.DropTable(
-                name: "OperationTypeDataModel");
+                name: "OperationTypes");
 
             migrationBuilder.DropTable(
                 name: "Patients");
@@ -167,7 +174,7 @@ namespace G74.Migrations
                 name: "Staff");
 
             migrationBuilder.DropTable(
-                name: "SurgeryRoomDataModel");
+                name: "SurgeryRooms");
 
             migrationBuilder.DropTable(
                 name: "Users");

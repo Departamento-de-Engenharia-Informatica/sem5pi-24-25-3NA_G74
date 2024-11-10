@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace G74.Migrations
 {
     [DbContext(typeof(BackofficeAppDbContext))]
-    [Migration("20241110015041_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20241110114258_Nova")]
+    partial class Nova
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,7 +50,7 @@ namespace G74.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AppointmentDataModel");
+                    b.ToTable("Appointments");
                 });
 
             modelBuilder.Entity("G74.DTO.OperationRequestDataModel", b =>
@@ -117,7 +117,7 @@ namespace G74.Migrations
                     b.HasIndex("operationTypeID")
                         .IsUnique();
 
-                    b.ToTable("OperationTypeDataModel");
+                    b.ToTable("OperationTypes");
                 });
 
             modelBuilder.Entity("G74.DTO.SurgeryRoomDataModel", b =>
@@ -128,8 +128,7 @@ namespace G74.Migrations
 
                     b.Property<string>("assignedEquipment")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("equipment");
 
                     b.Property<int>("capacity")
@@ -141,6 +140,10 @@ namespace G74.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("maintenance");
+
+                    b.Property<int>("roomNumber")
+                        .HasColumnType("int")
+                        .HasColumnName("room_number");
 
                     b.Property<string>("roomStatus")
                         .IsRequired()
@@ -155,7 +158,10 @@ namespace G74.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SurgeryRoomDataModel");
+                    b.HasIndex("roomNumber")
+                        .IsUnique();
+
+                    b.ToTable("SurgeryRooms");
                 });
 
             modelBuilder.Entity("G74.DTO.UserDataModel", b =>
