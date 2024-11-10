@@ -91,7 +91,7 @@ namespace G74.Adapters.Repositories
     
         public async Task<Boolean> GetOperationTypeByIdAsync(long id)
         {
-            var list = await _context.OperationTypeDataModel.ToListAsync();
+            var list = await _context.OperationTypes.ToListAsync();
 
             for(var i = 0; i < list.Count; i++)
             {

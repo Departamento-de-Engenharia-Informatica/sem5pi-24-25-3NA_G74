@@ -3,7 +3,7 @@ using G74.Domain.Value_Objects.SharedValueObjects;
 using G74.Domain.Value_Objects.Staff;
 using G74.Domain.Aggregates.OperationType;
 
-public class OperationTypeMapper
+public class OperationTypeToDataModelMapper
 {
 
     public static OperationTypeDTO DataModelToDTO(OperationTypeDataModel operationTypeDataModel)
