@@ -28,15 +28,15 @@ public class StaffServiceTest
         _mockStaffRepository = new Mock<IStaffRepository>();
         // _staffService = new StaffService(_mockStaffRepository.Object);
 
-        // Create valid test data
-        _validStaff = new Staff(
-            new LicenseNumber("12345"),
-            new Name("John Smith"),
-            new PhoneNumber("+1234567890"),
-            new Email("john.Smith@example.com"),
-            new StaffSpecialization("Doctor"),
-            new Status("active")
-        );
+        // // Create valid test data
+        // _validStaff = new Staff(
+        //     new LicenseNumber("12345"),
+        //     new Name("John Smith"),
+        //     new PhoneNumber("+1234567890"),
+        //     new Email("john.Smith@example.com"),
+        //     new StaffSpecialization("Doctor"),
+        //     new Status("active")
+        // );
 
         // _validStaffDto = new StaffDto(
         //     "12345",

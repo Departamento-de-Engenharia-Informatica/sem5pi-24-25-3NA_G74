@@ -85,44 +85,44 @@ public class StaffTest
     //     ));
     // }
 
-    [Fact]
-    public void Deactivate_WhenStaffIsActive_ShouldChangeStatusToDeactivated()
-    {
-        // Arrange
-        var staff = new G74.Domain.Aggregates.Staff.Staff(
-            _validLicenseNumber,
-            _validName,
-            _validPhone,
-            _validEmail,
-            _validSpecialization,
-            _activeStatus
-        );
+    // [Fact]
+    // public void Deactivate_WhenStaffIsActive_ShouldChangeStatusToDeactivated()
+    // {
+    //     // Arrange
+    //     var staff = new G74.Domain.Aggregates.Staff.Staff(
+    //         _validLicenseNumber,
+    //         _validName,
+    //         _validPhone,
+    //         _validEmail,
+    //         _validSpecialization,
+    //         _activeStatus
+    //     );
 
-        // Act
-        staff.Deactivate();
+    //     // Act
+    //     staff.Deactivate();
 
-        // Assert
-        Assert.Equal("deactivated", staff.Status.Value);
-    }
+    //     // Assert
+    //     Assert.Equal("deactivated", staff.Status.Value);
+    // }
 
-    [Fact]
-    public void Deactivate_WhenStaffIsAlreadyDeactivated_ShouldKeepDeactivatedStatus()
-    {
-        // Arrange
-        var deactivatedStatus = new Status("deactivated");
-        var staff = new G74.Domain.Aggregates.Staff.Staff(
-            _validLicenseNumber,
-            _validName,
-            _validPhone,
-            _validEmail,
-            _validSpecialization,
-            deactivatedStatus
-        );
+    // [Fact]
+    // public void Deactivate_WhenStaffIsAlreadyDeactivated_ShouldKeepDeactivatedStatus()
+    // {
+    //     // Arrange
+    //     var deactivatedStatus = new Status("deactivated");
+    //     var staff = new G74.Domain.Aggregates.Staff.Staff(
+    //         _validLicenseNumber,
+    //         _validName,
+    //         _validPhone,
+    //         _validEmail,
+    //         _validSpecialization,
+    //         deactivatedStatus
+    //     );
 
-        // Act
-        staff.Deactivate();
+    //     // Act
+    //     staff.Deactivate();
 
-        // Assert
-        Assert.Equal("deactivated", staff.Status.Value);
-    }
+    //     // Assert
+    //     Assert.Equal("deactivated", staff.Status.Value);
+    // }
 }

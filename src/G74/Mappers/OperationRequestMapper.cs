@@ -6,36 +6,7 @@ using G74.DTO;
 
 public class OperationRequestMapper 
 {
-    /**
-    public static PatientDTO ToDTO(Patient patient)
-    {
-        ArgumentNullException.ThrowIfNull(patient);
-
-        return new PatientDTO(patient.Name, patient.Gender.GenderDescription,
-            patient.DateOfBirth, patient.ContactInformation, patient.EmergencyContact);
-    }
-
-    public static Patient toDomain(PatientDTO patientDto)
-    {
-        throw new NotImplementedException();
-    }
-
-    public static PatientDataModel ToDataModel(Patient patient)
-    {
-        ArgumentNullException.ThrowIfNull(patient, nameof(Patient));
-
-        return new PatientDataModel(patient);
-
-    }
-
-    public static Patient FromDataModelToDomain(PatientDataModel patientDataModel)
-    {
-        ArgumentNullException.ThrowIfNull(patientDataModel, nameof(patientDataModel));
-
-        return new Patient(patientDataModel);
-    }
-    */
-
+    
     public static OperationRequestDTO ToDTO(OperationRequest operationRequest)
     {
         

@@ -1,4 +1,5 @@
 using G74.Domain;
+using G74.Domain.Aggregates.OperationType;
 using G74.Domain.Shared;
 using G74.DTO;
 
@@ -11,4 +12,5 @@ public interface IOperationRequestRepository : IRepository<OperationRequestDataM
     Task<OperationRequest> Delete(Guid id);
 
     Task<List<OperationRequest>> ReadAll();
+    Task<Boolean> GetOperationTypeByIdAsync(long id);
 }

@@ -5,12 +5,12 @@ namespace G74.Domain.Aggregates.OperationType;
 
 public class OperationType
 {
-	public int operationTypeID { get; }
+	public long operationTypeID { get; }
 	public Name name { get; }
 	public RequiredStaffBySpecialization requiredStaffBySpecialization { get; }
 	public int duration { get; }
 
-	public OperationType(int operationTypeID, Name name, RequiredStaffBySpecialization requiredStaffBySpecialization, int duration)
+	public OperationType(long operationTypeID, Name name, RequiredStaffBySpecialization requiredStaffBySpecialization, int duration)
 	{
 		this.operationTypeID = operationTypeID;
 		this.name = name;

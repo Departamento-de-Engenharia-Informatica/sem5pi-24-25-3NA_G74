@@ -2,28 +2,31 @@
     Create Operation
 </h1>
 
-<form>
+<form (ngSubmit)="submitOperation()" #operationForm="ngForm">
     <fieldset>
         <h3>Patient's Medical Record Number</h3>
-        <input id="medicalRecordNumber" type="number" required name="MedicalRecordNumber" placeholder="ex: YYYYMMnnnnnn...">
+        <input id="medicalRecordNumber" type="number" required name="MedicalRecordNumber" placeholder="ex: YYYYMMnnnnnn..." [(ngModel)]="medicalRecordNumber">
     </fieldset>
     <fieldset>
         <h3>Licence Number</h3>
-        <input id="LicenceNumber" type="number" required name="LicenceNumber" placeholder="ex: 123"/>
+        <input id="LicenceNumber" type="number" required name="LicenceNumber" placeholder="ex: 123" [(ngModel)]="licenceNumber"/>
     </fieldset>
     
     <fieldset id="staff-specializations">
         <h3>List of Staff's Specialization</h3>
         
-        <div *ngFor="let specialization of specializations; let i = index; trackBy: trackByIndex" style="display: flex; gap: 10px;">
-            <label>Specialization</label>
-            <input required type="text" name="Specialization" placeholder="ex: Cardiologist" [(ngModel)]="specializations[i]">
-            <br/>
-            <label>Quantity</label>
-            <input required type="number" name="Counter" placeholder="ex: 1" [(ngModel)]="counter[i]">
-        </div>
-        <button type="button" (click)="addSpecialization()" style="margin-top: 10px;">+</button>
-        <button type="button" (click)="removeSpecialization()" style="gap: 5px;">-</button>
+        <fieldset *ngFor="let specialization of specializations; let i = index; trackBy: trackByIndex">
+
+            <h3>Specialization {{i + 1}}</h3>
+            <input id="specialization{{i}}" type="text" name="specialization{{i}}" placeholder="ex: Cardiology" [(ngModel)]="specializations[i]">
+
+            <h3>Quantity {{ i + 1 }}</h3>
+            <input id="Quantity{{i}}" type="number" name="quantity{{i}}" placeholder="ex: 1" [(ngModel)]="quantities[i]"/>
+
+          </fieldset>
+          <button type="button" (click)="addSpecialization()">Add Specialization</button>
+          <button type="button" (click)="removeSpecialization()">Remove Specialization</button>
+          
     </fieldset>
 
     <fieldset>
@@ -31,17 +34,17 @@
 
         <fieldset>
             <h4>Name</h4>
-            <input id="operation-name" type="text" required name="Operation" placeholder="ex: Teeth Cleaning..">
+            <input id="operation-name" type="text" required name="Operation" placeholder="ex: Teeth Cleaning.." [(ngModel)]="operationName">
         </fieldset>
 
         <fieldset>
             <h4>Date</h4>
-            <input type="date">
+            <input type="datetime-local" name="operationDate" [(ngModel)]="operationDate">
         </fieldset>
 
         <fieldset>
             <h4>Duration</h4>
-            <input type="time">
+            <input type="time" name="operationDuration" [(ngModel)]="operationDuration">
         </fieldset>
 
         <fieldset>

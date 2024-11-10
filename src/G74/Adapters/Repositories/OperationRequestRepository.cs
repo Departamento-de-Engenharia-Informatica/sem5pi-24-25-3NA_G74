@@ -1,3 +1,4 @@
+using G74.Domain.Aggregates.OperationType;
 using G74.DTO;
 using G74.Infrastructure;
 using G74.Infrastructure.Shared;
@@ -75,17 +76,35 @@ namespace G74.Adapters.Repositories
         }
 
         
-        dataOperation.MedicalRecordNumber = int.Parse(operation.MedicalRecordNumber.MedicalNumber);
-        dataOperation.LicenceNumber = int.Parse(operation.LicenceNumber.licenceNumber);
-        dataOperation.OperationTypeId = operation.OperationTypeId;
-        dataOperation.DeadlineDate = operation.DeadlineDate.date;
-        dataOperation.Priority = operation.Priority.PriorityDescription.ToString();
-        Console.WriteLine("Cheguei");
-       
-        _context.OperationRequests.Update(dataOperation);
-        await _context.SaveChangesAsync();
+            dataOperation.MedicalRecordNumber = long.Parse(operation.MedicalRecordNumber.MedicalNumber);
+            dataOperation.LicenceNumber = long.Parse(operation.LicenceNumber.licenceNumber);
+            dataOperation.OperationTypeId = operation.OperationTypeId;
+            dataOperation.DeadlineDate = operation.DeadlineDate.date;
+            dataOperation.Priority = operation.Priority.PriorityDescription.ToString();
 
-        return OperationRequestMapper.FromDataModelToDomain(dataOperation);
+        
+            _context.OperationRequests.Update(dataOperation);
+            await _context.SaveChangesAsync();
+
+            return OperationRequestMapper.FromDataModelToDomain(dataOperation);
+        }
+    
+        public async Task<Boolean> GetOperationTypeByIdAsync(long id)
+        {
+            var list = await _context.OperationTypeDataModel.ToListAsync();
+
+            for(var i = 0; i < list.Count; i++)
+            {
+                Console.WriteLine(list[i].operationTypeID);
+                if(list[i].operationTypeID == id)
+                {
+                    
+                    return true;
+                }
+            }
+
+            return false;
+            
         }
     }
 }

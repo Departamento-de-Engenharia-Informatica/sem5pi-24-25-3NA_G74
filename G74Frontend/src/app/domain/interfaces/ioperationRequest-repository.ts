@@ -2,12 +2,13 @@ import { Observable } from 'rxjs';
 import { OperationRequest } from '../models/operationRequest.model';
 
 export interface IOperationRepository {
+
   createOperationRequest(operation: OperationRequest): Observable<OperationRequest>;
 
-  updateOperationRequest(operation: Partial<OperationRequest>, medicalRecordNumber : string): Observable<OperationRequest>;
+  updateOperationRequest(operation: Partial<OperationRequest>, id : BigInt): Observable<OperationRequest>;
   
-  deleteOperationRequest(medicalRecordNumber: string): Observable<any>;
+  deleteOperationRequest(id: BigInt): Observable<any>;
 
-
+  listAllOperationRequests(): Observable<OperationRequest[]>;
   
 }

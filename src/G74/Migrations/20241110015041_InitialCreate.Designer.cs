@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace G74.Migrations
 {
     [DbContext(typeof(BackofficeAppDbContext))]
-    [Migration("20241107050351_ChangeLicenseNumberToString")]
-    partial class ChangeLicenseNumberToString
+    [Migration("20241110015041_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,60 +25,137 @@ namespace G74.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("DataOperationRequest", b =>
+            modelBuilder.Entity("G74.DTO.AppointmentDataModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Days")
-                        .HasColumnType("int")
-                        .HasColumnName("Days");
+                    b.Property<string>("date")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("operationRequestId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("surgeryRoomId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("time")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AppointmentDataModel");
+                });
+
+            modelBuilder.Entity("G74.DTO.OperationRequestDataModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
 
                     b.Property<DateTime>("DeadlineDate")
                         .HasColumnType("datetime2")
                         .HasColumnName("DeadLine Date");
 
-                    b.Property<int>("Hours")
-                        .HasColumnType("int")
-                        .HasColumnName("Hours");
-
-                    b.Property<string>("LicenceNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                    b.Property<long>("LicenceNumber")
+                        .HasColumnType("bigint")
                         .HasColumnName("Licence Number");
 
-                    b.Property<string>("MedicalRecordNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                    b.Property<long>("MedicalRecordNumber")
+                        .HasColumnType("bigint")
                         .HasColumnName("Medical Record Number");
 
-                    b.Property<int>("Minutes")
-                        .HasColumnType("int")
-                        .HasColumnName("Minutes");
-
-                    b.Property<string>("NameOperationType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("Name Operation Type");
+                    b.Property<long>("OperationTypeId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("Operation Type Id");
 
                     b.Property<string>("Priority")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("Priority");
 
-                    b.Property<string>("RequiredStaffBySpecialization")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("Required Staff By Specialization");
-
-                    b.Property<int>("Seconds")
-                        .HasColumnType("int")
-                        .HasColumnName("Seconds");
-
                     b.HasKey("Id");
 
                     b.ToTable("OperationRequests");
+                });
+
+            modelBuilder.Entity("G74.DTO.OperationTypeDataModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("estimatedDuration")
+                        .HasColumnType("int")
+                        .HasColumnName("duration");
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("name");
+
+                    b.Property<long>("operationTypeID")
+                        .HasMaxLength(50)
+                        .HasColumnType("bigint")
+                        .HasColumnName("operation_type_id");
+
+                    b.Property<string>("requiredStaffBySpecialization")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("required_staff");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("operationTypeID")
+                        .IsUnique();
+
+                    b.ToTable("OperationTypeDataModel");
+                });
+
+            modelBuilder.Entity("G74.DTO.SurgeryRoomDataModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("assignedEquipment")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("equipment");
+
+                    b.Property<int>("capacity")
+                        .HasMaxLength(100)
+                        .HasColumnType("int")
+                        .HasColumnName("capacity");
+
+                    b.Property<string>("maintenanceSlot")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("maintenance");
+
+                    b.Property<string>("roomStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("status");
+
+                    b.Property<string>("type")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("type");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SurgeryRoomDataModel");
                 });
 
             modelBuilder.Entity("G74.DTO.UserDataModel", b =>
@@ -135,7 +212,7 @@ namespace G74.Migrations
 
                     b.Property<string>("MedicalRecordNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("PatientGender")
                         .IsRequired()
@@ -155,19 +232,35 @@ namespace G74.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("MedicalRecordNumber")
+                        .IsUnique();
+
                     b.ToTable("Patients");
                 });
 
             modelBuilder.Entity("G74.Domain.Aggregates.Staff.Staff", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Availability")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("availability");
 
                     b.Property<string>("ContactEmail")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)")
                         .HasColumnName("ContactEmail");
+
+                    b.Property<string>("LicenseNumber")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("LicenseNumber");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -194,6 +287,9 @@ namespace G74.Migrations
                         .HasColumnName("Status");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("LicenseNumber")
+                        .IsUnique();
 
                     b.ToTable("Staff");
                 });

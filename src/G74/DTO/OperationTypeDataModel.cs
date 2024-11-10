@@ -7,7 +7,7 @@ namespace G74.DTO;
 
 public class OperationTypeDataModel : Entity<Guid>
 {
-    public int operationTypeID { get; private set; }
+    public long operationTypeID { get; private set; }
     public string name { get; private set; }
     public string requiredStaffBySpecialization { get; private set; }
     public int estimatedDuration { get; private set; }

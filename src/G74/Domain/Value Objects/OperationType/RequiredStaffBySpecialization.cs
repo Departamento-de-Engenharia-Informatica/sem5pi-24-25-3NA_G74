@@ -1,21 +1,23 @@
 using System.Linq.Expressions;
 using G74.Domain.Shared;
+using G74.Domain.Value_Objects.Staff;
 
 public  class RequiredStaffBySpecialization : IValueObject
 {
-    public List<SpecializationStaff> SpecializationStaffList {get; private set; }
+    public Dictionary<StaffSpecialization, int> SpecializationStaffList {get; private set; }
 
-    public RequiredStaffBySpecialization(List<SpecializationStaff> specializationStaffList)
+    public RequiredStaffBySpecialization(Dictionary<StaffSpecialization, int> specializationStaffList)
     {
         this.SpecializationStaffList = specializationStaffList;
     }
 
-    public RequiredStaffBySpecialization(List<string> specializationStaffList)
+    public RequiredStaffBySpecialization(List<string> specializationStaffList, List<int> quantities)
     {
-        this.SpecializationStaffList = new List<SpecializationStaff>();
-        foreach (string element in specializationStaffList)
+        this.SpecializationStaffList = new Dictionary<StaffSpecialization, int>();
+        for (int i = 0; i < specializationStaffList.Count; i++)
         {
-            this.SpecializationStaffList.Add(new SpecializationStaff(element));
+            this.SpecializationStaffList.Add(new StaffSpecialization(specializationStaffList[i]), quantities[i]);
         }
+        
     }
 }

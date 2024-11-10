@@ -63,8 +63,10 @@ public class AppServiceOperationRequest : IAppServiceOperationRequest
         if(staffDto.Status == "deactivated"){
             throw new ArgumentException("Staff member with deactivated account");
         }
-        
-        
+        if(! await _operationRepository.GetOperationTypeByIdAsync(operationDto.OperationTypeId))
+        {
+            throw new ArgumentException("Operation Type with this ID doesn't exists");
+        }
 
         var operation = await new OperationRequestBuilder(
             new MedicalRecordNumber(operationDto.MedicalRecordNumber),
@@ -114,7 +116,7 @@ public class AppServiceOperationRequest : IAppServiceOperationRequest
     existingOperation.OperationTypeId = updatedOperationDto.OperationTypeId;
     existingOperation.DeadlineDate = new DeadlineDate(updatedOperationDto.DeadlineDate.date);
     existingOperation.Priority = new Priority(updatedOperationDto.Priority.PriorityDescription);
-
+    
     
     await _operationRepository.Update(id,existingOperation);
 

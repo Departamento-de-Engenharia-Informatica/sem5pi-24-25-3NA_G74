@@ -1,4 +1,4 @@
-
+    
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +21,6 @@ public class OperationRequestController : ControllerBase
         
         if (receivedOperationRequest == null)
         { 
-            Console.WriteLine("Cheguei");
             return BadRequest("Invalid data, please input patient data");
         }
         try 

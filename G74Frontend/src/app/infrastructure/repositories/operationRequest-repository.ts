@@ -9,22 +9,31 @@ import { catchError, tap } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
+
 export class OperationRequestRepository implements IOperationRepository {
+
   private apiUrl = `${environment.apiUrl}/patient/`;
 
   constructor(private http: HttpClient) {}
+
+    listAllOperationRequests(): Observable<OperationRequest[]> {
+      console.log("Listando todas as Operation Requests")
+      throw new Error('Method not implemented.');
+    }
+    
     createOperationRequest(operation: OperationRequest): Observable<OperationRequest> {
-        console.log("Operation Request Criada com Sucesso!")
-        throw new Error('Method not implemented.');
-        
+      console.log("Operation Request Criada com Sucesso!")
+      throw new Error('Method not implemented.');
     }
-    updateOperationRequest(operation: Partial<OperationRequest>, medicalRecordNumber: string): Observable<OperationRequest> {
-        console.log("Operation Request Atualizada com Sucesso!")
-        throw new Error('Method not implemented.');
+    
+    updateOperationRequest(operation: Partial<OperationRequest>, id: BigInt): Observable<OperationRequest> {
+      console.log("Operation Request Atualizada com Sucesso!")
+      throw new Error('Method not implemented.');
     }
-    deleteOperationRequest(medicalRecordNumber: string): Observable<any> {
-        console.log("Operation Request Apagada com sucesso!")
-        throw new Error('Method not implemented.');
+
+    deleteOperationRequest(id: BigInt): Observable<any> {
+      console.log("Operation Request Apagada com sucesso!")
+      throw new Error('Method not implemented.');
     }
 
 }

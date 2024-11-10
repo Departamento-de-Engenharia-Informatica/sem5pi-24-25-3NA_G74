@@ -35,7 +35,13 @@ public class PatientMapper
         ArgumentNullException.ThrowIfNull(patientDto);
         ArgumentNullException.ThrowIfNull(medicalRecordNumber);
 
+        
+        if (string.IsNullOrEmpty(patientDto.Name))
+        {
+            throw new ArgumentNullException(nameof(patientDto.Name));
+        }
         Name name = new Name(patientDto.Name);
+        
 
         MedicalRecordNumber medicalnumber = new MedicalRecordNumber(medicalRecordNumber);
 
@@ -51,7 +57,7 @@ public class PatientMapper
 
         EmergencyContact emergencyContact = new EmergencyContact(patientDto.EmergencyContact.PhoneNumber,
             new Name(patientDto.EmergencyContact.Name));
-
+            
         return new Patient(name, medicalnumber, dateOfBirth, gender, contactInformation, emergencyContact);
     }
 }

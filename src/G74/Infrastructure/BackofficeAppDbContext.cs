@@ -16,6 +16,7 @@ public class BackofficeAppDbContext : DbContext
     public DbSet<UserDataModel> Users { get; set; }
     public DbSet<Staff> Staff { get; set; }
     public DbSet<OperationRequestDataModel> OperationRequests { get; set; }
+    public DbSet<OperationTypeDataModel> OperationTypeDataModel { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -28,4 +29,6 @@ public class BackofficeAppDbContext : DbContext
         modelBuilder.ApplyConfiguration(new PatientEntityTypeConfiguration());
         base.OnModelCreating(modelBuilder);
     }
+
+
 }
