@@ -106,5 +106,9 @@ public class RepoUser : GenericRepository<User>, IRepoUser
             throw;
         }
     }
+    public async Task ExportUserDataToProlog()
+    {
+        //TODO:Terminar Rui Beloto.
+    }
 
 }

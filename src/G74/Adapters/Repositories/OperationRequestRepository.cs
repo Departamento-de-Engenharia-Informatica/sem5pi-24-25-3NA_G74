@@ -3,6 +3,7 @@ using G74.DTO;
 using G74.Infrastructure;
 using G74.Infrastructure.Shared;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace G74.Adapters.Repositories
 {
@@ -105,6 +106,11 @@ namespace G74.Adapters.Repositories
 
             return false;
             
+        }
+
+        public async Task ExportOperationRequestDataToProlog()
+        {
+            //TODO:Terminar Rui Beloto.
         }
     }
 }

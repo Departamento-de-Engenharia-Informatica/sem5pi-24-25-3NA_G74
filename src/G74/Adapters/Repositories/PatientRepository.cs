@@ -232,4 +232,9 @@ public class PatientRepository : GenericRepository<Patient>, IPatientRepository
 
         return maxSequentialNumber;
     }
+    
+    public async Task ExportPatientDataToProlog()
+    {
+        //TODO:Terminar Rui Beloto.
+    }
 }

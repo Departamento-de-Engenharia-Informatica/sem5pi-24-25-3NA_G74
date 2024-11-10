@@ -23,4 +23,9 @@ public class AppointmentRepository : GenericRepository<Appointment>, IAppointmen
         return await _context.Appointments
             .AnyAsync(u => u.Id.Equals(id));
     }
+    
+    public async Task ExportAppointmentDataToProlog()
+    {
+        //TODO:Terminar Rui Beloto.
+    }
 }

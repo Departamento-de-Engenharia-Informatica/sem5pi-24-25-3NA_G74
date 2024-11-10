@@ -21,4 +21,9 @@ public class SurgeryRoomRepository : GenericRepository<SurgeryRoom>, ISurgeryRoo
         return await _context.SurgeryRooms
             .AnyAsync(u => u.Id.Equals(id));
     }
+    
+    public async Task ExportSurgeryRoomDataToProlog()
+    {
+        //TODO:Terminar Rui Beloto.
+    }
 }

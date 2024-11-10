@@ -21,4 +21,8 @@ public class OperationTypeRepository : GenericRepository<OperationType>, IOperat
         return await _context.OperationTypes
             .AnyAsync(u => u.Id.Equals(id));
     }
+    public async Task ExportOperationTypeDataToProlog()
+    {
+        //TODO:Terminar Rui Beloto.
+    }
 }
