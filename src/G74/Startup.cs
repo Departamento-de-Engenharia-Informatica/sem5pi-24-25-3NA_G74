@@ -138,6 +138,8 @@ public class Startup
         services.AddTransient<OperationTypeToDataModelMapper>();
         services.AddTransient<AppointmentToDataModelMapper>();
         services.AddTransient<SurgeryRoomToDataModelMapper>();
+        services.AddScoped<OptimizationModuleService>();
+        services.AddScoped<OptimizationModuleController>();
 
     }
 }

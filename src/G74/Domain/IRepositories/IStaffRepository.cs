@@ -20,4 +20,6 @@ public interface IStaffRepository
     
     // TODO: void?; receive just Staff staff?
     Task<Staff> UpdateStatus(LicenseNumber licenseNumber, Staff staff);
+
+    Task ExportStaffDataToProlog();
 }

@@ -1,4 +1,5 @@
-﻿using G74.Domain.Aggregates.Staff;
+﻿using System.Text;
+using G74.Domain.Aggregates.Staff;
 using G74.Domain.IRepositories;
 using G74.Domain.Value_Objects.Staff;
 using G74.DTO;
@@ -113,5 +114,18 @@ public class StaffRepository : BaseRepository<Staff, Guid>, IStaffRepository
         {
             throw ex.InnerException!;
         }
+    }
+    
+    public async Task ExportStaffDataToProlog()
+    {
+        var staffList = await _dbContext.Staff.ToListAsync();
+        var prologData = new StringBuilder();
+
+        foreach (var staff in staffList)
+        {
+            prologData.AppendLine($"staff('{staff.Id}', '{staff.LicenseNumber}', '{staff.Name}', '{staff.PhoneNumber}', '{staff.ContactEmail}', '{staff.StaffSpecialization}', '{staff.Status}', '{staff.Availability}').");
+        }
+        
+        File.WriteAllText("exported_staff.pl", prologData.ToString());
     }
 }

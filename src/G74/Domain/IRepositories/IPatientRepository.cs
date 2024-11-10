@@ -20,4 +20,5 @@ public interface IPatientRepository : IGenericRepository<Patient>
         string? gender, string? phoneNumber, string? email, DateOfBirthDTO? dateOfBirth);
 
     Task<int> GetMaxMedicalRecordNumberSequentialPartAsync();
+    Task ExportPatientDataToProlog();
 }
