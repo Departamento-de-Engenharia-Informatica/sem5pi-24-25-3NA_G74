@@ -43,7 +43,7 @@ public class UserController : ControllerBase
         
     }
     
-    //[HttpGet("by-email")]
+    [HttpGet("by-email")]
     public async Task<ActionResult<UserDto>> GetLoggedUserByEmail()
     {
         try
@@ -62,7 +62,7 @@ public class UserController : ControllerBase
         }
     }
 
-    //[Authorize(Roles = "Patient")]
+    //[Authorize(Roles = "patient")]
     [HttpPatch("update")]
     public async Task<ActionResult<UserDto>> UpdateUser([FromBody]UserDto receivedUserDto)
     {
@@ -87,7 +87,7 @@ public class UserController : ControllerBase
         }
     }
     
-    //[Authorize(Roles = "Patient")]
+    //[Authorize(Roles = "patient")]
     [HttpDelete("delete")]
     public async Task<IActionResult> DeleteUser()
     {

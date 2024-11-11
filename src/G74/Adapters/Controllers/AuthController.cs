@@ -41,7 +41,7 @@ namespace G74.Adapters.Controllers
                 Console.WriteLine($"Nome: {payload.Name}");
                 Console.WriteLine($"ID: {payload.Subject}");
                 Email loginEmail = new Email(payload.Email);
-                var userDataModel = await _context.Users.SingleOrDefaultAsync(u => u.Email.Equals(loginEmail));
+                var userDataModel = await _context.Users.SingleOrDefaultAsync(u => u.Email.Equals(loginEmail.ToString()));
                 
                 if (userDataModel == null)
                 {
