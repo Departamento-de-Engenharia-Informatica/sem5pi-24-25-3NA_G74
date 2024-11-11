@@ -128,11 +128,44 @@ public class OperationRequestControllerTest: IClassFixture<WebApplicationFactory
         Assert.Equal(200,okResult.StatusCode);
     }
 
-// testes integração
+    // testes integração
+    [Fact]
+    public async Task GetAllOperationRequestControllerTest(){
+        var _mockRepositoryPatient = new Mock<IPatientAppService>();
+        var _mockOperationRequestRepository = new Mock<IOperationRequestRepository>();
+        var _mockStaffRepo = new Mock<IStaffRepository>();
+        var _mockIUnitOfWork = new Mock<IUnitOfWork>();
+        var _mockStaffService = new Mock<StaffService>(_mockIUnitOfWork.Object, _mockStaffRepo.Object);
 
+        var operationService = new AppServiceOperationRequest(_mockOperationRequestRepository.Object, _mockRepositoryPatient.Object, _mockStaffService.Object);
+        var operationRequestController = new OperationRequestController(operationService);
+
+        var response = await operationRequestController.GetAllOperationRequest();
+
+        var okResult = Assert.IsType<OkObjectResult>(response.Result);
+        Assert.NotNull(okResult);
+        Assert.Equal(200,okResult.StatusCode);
+    }
+
+    [Fact]
+    public async Task CreateOperationRequestControllerTest(){
+        var _mockRepositoryPatient = new Mock<IPatientAppService>();
+        var _mockOperationRequestRepository = new Mock<IOperationRequestRepository>();
+        var _mockStaffRepo = new Mock<IStaffRepository>();
+        var _mockIUnitOfWork = new Mock<IUnitOfWork>();
+        var _mockStaffService = new Mock<StaffService>(_mockIUnitOfWork.Object, _mockStaffRepo.Object);
+
+        var operationService = new AppServiceOperationRequest(_mockOperationRequestRepository.Object, _mockRepositoryPatient.Object, _mockStaffService.Object);
+        var operationRequestController = new OperationRequestController(operationService);
+    
+        var response = await operationRequestController.RegisterOperationRequest(new CreateOperationRequestDTO("202411000002", "102042", 1, new DateTime(), "UrgentSurgery"));
+        var createdResult = Assert.IsType<CreatedAtActionResult>(response.Result);
+        Assert.NotNull(createdResult);
+        Assert.Equal(201, createdResult.StatusCode);
+
+    }
 
 // testes E2E
-
     [Fact]
     public async Task RegisterOperationRequestController(){
         
