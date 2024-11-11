@@ -32,7 +32,11 @@ public class AppServiceOperationRequest : IAppServiceOperationRequest
 
     public async Task<List<OperationRequestDTO>> Read()
     {
-       var operationRequests = await _operationRepository.ReadAll();
+            var operationRequests = await _operationRepository.ReadAll();
+            if(operationRequests == null)
+            {
+                return null;
+            }
             var operationRequestsDTO = new List<OperationRequestDTO>();
 
             foreach (var operationRequest in operationRequests)
