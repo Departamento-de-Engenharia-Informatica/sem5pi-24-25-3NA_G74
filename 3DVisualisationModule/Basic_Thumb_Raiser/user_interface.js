@@ -1,8 +1,22 @@
 import * as THREE from "three";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
+import {mazeParameters,buildingA1Data,buildingA2Data,buildingB1Data,buildingB2Data,buildingB3Data, buildingC1Data, buildingC2Data, buildingC3Data, buildingC4Data, buildingD1Data, buildingD2Data, buildingD3Data} from "./default_data.js";
+import Maze from "./maze.js";
+import { merge } from "./merge.js";
 
 export default class UserInteraction {
-    constructor(scene, renderer, lights, fog, object, animations) {
+    constructor(scene, renderer, lights, finalMaze, thumbRaser, animations) {
+
+        this.buildingA1Parameters = merge({},buildingA1Data,mazeParameters);
+        
+        this.floorParametersA = new Array();
+        this.floorParametersA.push(this.buildingA1Parameters);
+        
+        this.thumbRaser = thumbRaser;
+        this.scene = scene;
+        this.finalMaze = finalMaze;
+
+        //thumbRaser.gameRunning=false;
 
         function colorCallback(object, color) {
             object.color.set(color);
@@ -25,6 +39,91 @@ export default class UserInteraction {
 
         // Create the graphical user interface
         this.gui = new GUI({ hideable: false });
+        const buildingFolder = this.gui.addFolder('Buildings');
+
+        
+        //Create the building A folder
+        const buildingA=buildingFolder.addFolder("Building A");
+        
+        // Add a button to change building parameters
+        buildingA.add({ 'Floor 1': () => changeBuildingParameters(this.buildingA1Parameters) }, 'Floor 1');
+        
+
+        // Create the character folder
+        const characterFolder = this.gui.addFolder("Character");
+
+        // Create the emotes folder and add emotes
+        const emotesFolder = characterFolder.addFolder("Emotes");
+        const callbacks = [];
+        for (let i = 0; i < animations.emotes.length; i++) {
+            createEmoteCallback(animations, animations.emotes[i]);
+        }
+
+        function changeBuildingParameters(parameters){
+            if (parameters) {
+                console.log("New Floor:")
+                console.log(parameters);
+                // Cria um novo edifício com base nos parâmetros fornecidos
+                createMaze(parameters);
+            }
+        }
+
+        
+
+        function createMaze(parameters) {
+            // Remove o labirinto atual da cena se houver um
+            if (finalMaze) {
+                console.log("tr.doors");
+                console.log(thumbRaser.maze.doors);
+                for(let i=0; i< thumbRaser.maze.doors.length; i++){
+                    scene.remove(thumbRaser.maze.doors[i].object);
+                }
+
+                scene.remove(thumbRaser.maze.object);
+
+                thumbRaser.gameRunning=false;
+                scene.remove(thumbRaser.gui);
+
+            }
+
+            // Cria um novo edifício
+            finalMaze = new Maze(parameters,thumbRaser.doorParameters,0);
+            finalMaze.scale= thumbRaser.maze.scale
+            thumbRaser.maze= finalMaze;
+        }
+
+
+       /* function load(parameters){
+            for (const [key, value] of Object.entries(parameters)) {
+                this[key] = value;
+            }
+
+
+            // The cache must be enabled; additional information available at https://threejs.org/docs/api/en/loaders/FileLoader.html
+            THREE.Cache.enabled = true;
+
+            // Create a resource file loader
+            const loader = new THREE.FileLoader();
+
+            // Set the response type: the resource file will be parsed with JSON.parse()
+            loader.setResponseType("json");
+
+            // Load a maze description resource file
+            loader.load(
+                //Resource URL
+                this.url,
+
+                // onLoad callback
+                description => this.onLoad(description),
+
+                // onProgress callback
+                xhr => this.onProgress(this.url, xhr),
+
+                // onError callback
+                error => this.onError(this.url, error)
+            );
+        }*/
+
 
         // Create the lights folder
         const lightsFolder = this.gui.addFolder("Lights");
@@ -61,32 +160,26 @@ export default class UserInteraction {
         // Create the shadows folder
         const shadowsFolder = this.gui.addFolder("Shadows");
         shadowsFolder.add(renderer.shadowMap, "enabled").onChange(enabled => shadowsCallback(enabled));
+    }
 
-        // Create the fog folder
-        const fogFolder = this.gui.addFolder("Fog");
-        const fogColor = { color: "#" + new THREE.Color(fog.color).getHexString() };
-        fogFolder.add(fog, "enabled").listen();
-        fogFolder.addColor(fogColor, "color").onChange(color => colorCallback(fog.object, color));
-        fogFolder.add(fog.object, "near", 0.01, 1.0, 0.01);
-        fogFolder.add(fog.object, "far", 1.01, 20.0, 0.01);
+    createMaze(parameters, playerPosition) {
+        // Remove o labirinto atual da cena se houver um
+        if (this.finalMaze) {
+            for(let i=0; i< this.thumbRaser.maze.doors.length; i++){
+                this.scene.remove(this.thumbRaser.maze.doors[i].object);
+            }
 
-        // Create the character folder
-        const characterFolder = this.gui.addFolder("Character");
+            this.scene.remove(this.thumbRaser.maze.object);
 
-        // Create the emotes folder and add emotes
-        const emotesFolder = characterFolder.addFolder("Emotes");
-        const callbacks = [];
-        for (let i = 0; i < animations.emotes.length; i++) {
-            createEmoteCallback(animations, animations.emotes[i]);
+            this.thumbRaser.gameRunning=false;
+            this.scene.remove(this.thumbRaser.gui);
         }
 
-        // Create the expressions folder and add expressions
-        const expressionsFolder = characterFolder.addFolder("Expressions");
-        const face = object.getObjectByName("Head_4");
-        const expressions = Object.keys(face.morphTargetDictionary);
-        for (let i = 0; i < expressions.length; i++) {
-            expressionsFolder.add(face.morphTargetInfluences, i, 0.0, 1.0, 0.01).name(expressions[i]);
-        }
+        // Cria um novo edifício
+        this.finalMaze = new Maze(parameters, this.thumbRaser.doorParameters, playerPosition);
+        this.finalMaze.scale = this.thumbRaser.maze.scale;
+        this.thumbRaser.maze = this.finalMaze;
+
     }
 
     setVisibility(visible) {
@@ -97,4 +190,6 @@ export default class UserInteraction {
             this.gui.hide();
         }
     }
+
 }
+

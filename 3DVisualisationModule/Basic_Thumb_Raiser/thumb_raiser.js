@@ -13,146 +13,26 @@
 import * as THREE from "three";
 import Stats from "three/addons/libs/stats.module.js";
 import Orientation from "./orientation.js";
-import { generalData, mazeData, playerData, lightsData, fogData, cameraData } from "./default_data.js";
+import { generalData, buildingA1Data, playerData, lightsData, fogData, cameraData, doorData} from "./default_data.js";
 import { merge } from "./merge.js";
 import Maze from "./maze.js";
 import Player from "./player.js";
+import Door from "./door.js";
 import Lights from "./lights.js";
 import Fog from "./fog.js";
 import Camera from "./camera.js";
-import Animations from "./animations.js";
 import UserInterface from "./user_interface.js";
+import Animations from "./animations.js";
+import Animations_door from "./animations_door.js";
 
-/*
- * generalParameters = {
- *  setDevicePixelRatio: Boolean
- * }
- *
- * mazeParameters = {
- *  url: String,
- *  credits: String,
- *  scale: Vector3
- * }
- *
- * playerParameters = {
- *  url: String,
- *  credits: String,
- *  scale: Vector3,
- *  walkingSpeed: Float,
- *  initialDirection: Float,
- *  turningSpeed: Float,
- *  runningFactor: Float,
- *  keyCodes: { fixedView: String, firstPersonView: String, thirdPersonView: String, topView: String, viewMode: String, userInterface: String, miniMap: String, help: String, statistics: String, run: String, left: String, right: String, backward: String, forward: String, jump: String, yes: String, no: String, wave: String, punch: String, thumbsUp: String }
- * }
- *
- * lightsParameters = {
- *  ambientLight: { color: Integer, intensity: Float },
- *  pointLight1: { color: Integer, intensity: Float, range: Float, position: Vector3 },
- *  pointLight2: { color: Integer, intensity: Float, range: Float, position: Vector3 },
- *  spotLight: { color: Integer, intensity: Float, range: Float, angle: Float, penumbra: Float, position: Vector3, direction: Float }
- * }
- *
- * fogParameters = {
- *  enabled: Boolean,
- *  color: Integer,
- *  near: Float,
- *  far: Float
- * }
- *
- * fixedViewCameraParameters = {
- *  view: String,
- *  multipleViewsViewport: Vector4,
- *  target: Vector3,
- *  initialOrientation: Orientation,
- *  orientationMin: Orientation,
- *  orientationMax: Orientation,
- *  initialDistance: Float,
- *  distanceMin: Float,
- *  distanceMax: Float,
- *  initialZoom: Float,
- *  zoomMin: Float,
- *  zoomMax: Float,
- *  initialFov: Float,
- *  near: Float,
- *  far: Float
- * }
- *
- * firstPersonViewCameraParameters = {
- *  view: String,
- *  multipleViewsViewport: Vector4,
- *  target: Vector3,
- *  initialOrientation: Orientation,
- *  orientationMin: Orientation,
- *  orientationMax: Orientation,
- *  initialDistance: Float,
- *  distanceMin: Float,
- *  distanceMax: Float,
- *  initialZoom: Float,
- *  zoomMin: Float,
- *  zoomMax: Float,
- *  initialFov: Float,
- *  near: Float,
- *  far: Float
- * }
- *
- * thirdPersonViewCameraParameters = {
- *  view: String,
- *  multipleViewsViewport: Vector4,
- *  target: Vector3,
- *  initialOrientation: Orientation,
- *  orientationMin: Orientation,
- *  orientationMax: Orientation,
- *  initialDistance: Float,
- *  distanceMin: Float,
- *  distanceMax: Float,
- *  initialZoom: Float,
- *  zoomMin: Float,
- *  zoomMax: Float,
- *  initialFov: Float,
- *  near: Float,
- *  far: Float
- * }
- *
- * topViewCameraParameters = {
- *  view: String,
- *  multipleViewsViewport: Vector4,
- *  target: Vector3,
- *  initialOrientation: Orientation,
- *  orientationMin: Orientation,
- *  orientationMax: Orientation,
- *  initialDistance: Float,
- *  distanceMin: Float,
- *  distanceMax: Float,
- *  initialZoom: Float,
- *  zoomMin: Float,
- *  zoomMax: Float,
- *  initialFov: Float,
- *  near: Float,
- *  far: Float
- * }
- *
- * miniMapCameraParameters = {
- *  view: String,
- *  multipleViewsViewport: Vector4,
- *  initialOrientation: Orientation,
- *  orientationMin: Orientation,
- *  orientationMax: Orientation,
- *  initialDistance: Float,
- *  distanceMin: Float,
- *  distanceMax: Float,
- *  initialZoom: Float,
- *  zoomMin: Float,
- *  zoomMax: Float,
- *  initialFov: Float,
- *  near: Float,
- *  far: Float
- * }
- */
 
 export default class ThumbRaiser {
-    constructor(generalParameters, mazeParameters, playerParameters, lightsParameters, fogParameters, fixedViewCameraParameters, firstPersonViewCameraParameters, thirdPersonViewCameraParameters, topViewCameraParameters, miniMapCameraParameters) {
+    constructor(generalParameters,mazeParameters, buildingParameters, playerParameters, lightsParameters, fogParameters, fixedViewCameraParameters, firstPersonViewCameraParameters, thirdPersonViewCameraParameters, topViewCameraParameters, miniMapCameraParameters, doorParameters) {
+       
         this.generalParameters = merge({}, generalData, generalParameters);
-        this.mazeParameters = merge({}, mazeData, mazeParameters);
+
+        this.buildingA1Parameters = merge({},buildingA1Data,mazeParameters);
+       
         this.playerParameters = merge({}, playerData, playerParameters);
         this.lightsParameters = merge({}, lightsData, lightsParameters);
         this.fogParameters = merge({}, fogData, fogParameters);
@@ -161,6 +41,7 @@ export default class ThumbRaiser {
         this.thirdPersonViewCameraParameters = merge({}, cameraData, thirdPersonViewCameraParameters);
         this.topViewCameraParameters = merge({}, cameraData, topViewCameraParameters);
         this.miniMapCameraParameters = merge({}, cameraData, miniMapCameraParameters);
+        this.doorParameters = merge({}, doorData, doorParameters);
 
         // Create a 2D scene (the viewports frames)
         this.scene2D = new THREE.Scene();
@@ -179,7 +60,7 @@ export default class ThumbRaiser {
         this.scene3D = new THREE.Scene();
 
         // Create the maze
-        this.maze = new Maze(this.mazeParameters);
+        this.maze = new Maze(buildingParameters,this.doorParameters,0);
 
         // Create the player
         this.player = new Player(this.playerParameters);
@@ -204,6 +85,25 @@ export default class ThumbRaiser {
         this.statistics.dom.style.visibility = "hidden";
         document.body.appendChild(this.statistics.dom);
 
+        //Create the Automatic Movement Table and make its node invisible
+
+        
+        this.container= document.createElement('container');
+
+        this.buttonContainer = document.createElement('matrix');
+
+
+       
+        //document.body.appendChild(this.buttonContainer);
+
+
+
+       // this.buttonMatrixList = this.container.querySelectorAll('buttonMatrix');
+
+
+
+
+
         // Create a renderer and turn on shadows in the renderer
         this.renderer = new THREE.WebGLRenderer({ antialias: true });
         if (this.generalParameters.setDevicePixelRatio) {
@@ -213,12 +113,16 @@ export default class ThumbRaiser {
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         this.renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(this.renderer.domElement);
+        //document.body.appendChild(this.renderer.domElement);
 
+        this.container.appendChild(this.renderer.domElement);
+        document.body.appendChild(this.container);
         // Set the mouse move action (none)
         this.dragMiniMap = false;
         this.changeCameraDistance = false;
         this.changeCameraOrientation = false;
+
+        this.container.appendChild(this.buttonContainer);
 
         // Set the game state
         this.gameRunning = false;
@@ -241,7 +145,7 @@ export default class ThumbRaiser {
         this.helpPanel.style.visibility = "hidden";
         this.subwindowsPanel = document.getElementById("subwindows-panel");
         this.multipleViewsCheckBox = document.getElementById("multiple-views");
-        this.multipleViewsCheckBox.checked = false;
+        this.multipleViewsCheckBox.checked = true;
         this.userInterfaceCheckBox = document.getElementById("user-interface");
         this.userInterfaceCheckBox.checked = true;
         this.miniMapCheckBox = document.getElementById("mini-map");
@@ -250,6 +154,7 @@ export default class ThumbRaiser {
         this.helpCheckBox.checked = false;
         this.statisticsCheckBox = document.getElementById("statistics");
         this.statisticsCheckBox.checked = false;
+
 
         // Build the help panel
         this.buildHelpPanel();
@@ -301,7 +206,54 @@ export default class ThumbRaiser {
         this.resetAll.addEventListener("click", event => this.buttonClick(event));
 
         this.activeElement = document.activeElement;
+
+
     }
+
+
+
+    movePlayerToPosition(i, j) {
+        i = i - 5;
+        j = j - 11;
+
+        const deltaT = this.clock.getDelta();
+
+        const destination = new THREE.Vector3(j, 0, i);
+
+        // Calculate the direction and distance to the destination
+        const direction = destination.clone().sub(this.player.position);
+        const distance = direction.length();
+
+
+        // while(distance >= 0.1){
+        // Set the player's direction
+        this.player.direction = Math.atan2(direction.x, direction.z) * (180 / Math.PI);
+
+        // Move the player towards the destination
+        const speed = 5.0; // Adjust the speed as needed
+        const coveredDistance = Math.min(speed * deltaT, distance);
+        const movement = direction.clone().normalize().multiplyScalar(coveredDistance);
+        this.player.position.add(movement);
+
+        // Update the player's object position
+        this.player.object.position.copy(this.player.position);
+
+        // Check if the player has reached the destination
+        if (distance < 0.1) {
+            // Player has reached the destination
+            console.log('Player reached destination');
+        }
+        //}
+
+    }
+
+    /*  while(this.player.position != newPosition){
+                if (this.player.position.x > newPosition.x ) this.player.position.x=this.player.position.x+0.1;
+                else if (this.player.position.x < newPosition.x) this.player.position.x=this.player.position.x-0.1;
+
+                if(this.player.position.z > newPosition.z )this.player.position.z=this.player.position.z+0.1
+                else if (this.player.position.z < newPosition.z) this.player.position.z=this.player.position.z-0.1;
+            } */
 
     buildHelpPanel() {
         const table = document.getElementById("help-table");
@@ -313,6 +265,8 @@ export default class ThumbRaiser {
             table.rows[i++].cells[0].innerHTML = this.player.keyCodes[key];
         }
         table.rows[i].cells[0].innerHTML = this.maze.credits + "<br>" + this.player.credits;
+        table
+
     }
 
     displayPanel() {
@@ -322,6 +276,7 @@ export default class ThumbRaiser {
         this.vertical.value = this.activeViewCamera.orientation.v.toFixed(0);
         this.distance.value = this.activeViewCamera.distance.toFixed(1);
         this.zoom.value = this.activeViewCamera.zoom.toFixed(1);
+
     }
 
     // Set active view camera
@@ -336,6 +291,7 @@ export default class ThumbRaiser {
         this.zoom.min = this.activeViewCamera.zoomMin.toFixed(1);
         this.zoom.max = this.activeViewCamera.zoomMax.toFixed(1);
         this.displayPanel();
+
     }
 
     arrangeViewports(multipleViews) {
@@ -467,24 +423,10 @@ export default class ThumbRaiser {
             else if (event.code == this.player.keyCodes.forward) {
                 this.player.keyStates.forward = state;
             }
-            if (event.code == this.player.keyCodes.jump) {
-                this.player.keyStates.jump = state;
+            if (event.code == this.player.keyCodes.dance) {
+                this.player.keyStates.dance = state;
             }
-            else if (event.code == this.player.keyCodes.yes) {
-                this.player.keyStates.yes = state;
-            }
-            else if (event.code == this.player.keyCodes.no) {
-                this.player.keyStates.no = state;
-            }
-            else if (event.code == this.player.keyCodes.wave) {
-                this.player.keyStates.wave = state;
-            }
-            else if (event.code == this.player.keyCodes.punch) {
-                this.player.keyStates.punch = state;
-            }
-            else if (event.code == this.player.keyCodes.thumbsUp) {
-                this.player.keyStates.thumbsUp = state;
-            }
+            
         }
     }
 
@@ -632,8 +574,6 @@ export default class ThumbRaiser {
     }
 
     finalSequence() {
-        // Disable the fog
-        this.fog.enabled = false;
         // Reconfigure the third-person view camera
         this.thirdPersonViewCamera.setOrientation(new Orientation(180.0, this.thirdPersonViewCamera.initialOrientation.v));
         this.thirdPersonViewCamera.setDistance(this.thirdPersonViewCamera.initialDistance);
@@ -642,156 +582,254 @@ export default class ThumbRaiser {
         this.setActiveViewCamera(this.thirdPersonViewCamera);
         // Set single-view mode
         this.setViewMode(false);
-        // Set the final action
-        this.animations.fadeToAction("Dance", 0.2);
     }
 
     collision(position) {
-        return this.maze.distanceToWestWall(position) < this.player.radius || this.maze.distanceToEastWall(position) < this.player.radius || this.maze.distanceToNorthWall(position) < this.player.radius || this.maze.distanceToSouthWall(position) < this.player.radius;
+        return this.maze.distanceToEastWall(position) < this.player.radius || this.maze.distanceToWestWall(position) < this.player.radius ||
+        this.maze.distanceToSouthWall(position) < this.player.radius || this.maze.distanceToNorthWall(position) < this.player.radius
     }
 
+    collision_door(position) {
+        return this.maze.distanceToWestDoor(position) < (this.player.radius*2) || this.maze.distanceToEastDoor(position) < (this.player.radius*2)
+        || this.maze.distanceToNorthDoor(position) < (this.player.radius*2) || this.maze.distanceToSouthDoor(position) < (this.player.radius*2);
+    }
+
+    
     update() {
         if (!this.gameRunning) {
+
             if (this.maze.loaded && this.player.loaded) { // If all resources have been loaded
                 // Add the maze, the player and the lights to the scene
+
+                this.doorsTR = new Array();
+
+                console.log("tr.doors");
+                console.log(this.maze.doors);
+
+                console.log("Currentmaze");
+                console.log(this.maze);
+
+                console.log("Map")
+                console.log(this.maze.map);
+
+                this.matriz= this.maze.map;
+
                 this.scene3D.add(this.maze.object);
+
+                let y=0;
+
+                this.doorsTR = this.maze.doors;
+
+                if(this.maze.doorObjectVertical.length>0){
+                    //5
+                    for(let i=0; i<this.maze.doorObjectVertical.length; i++){
+                        this.scene3D.add(this.doorsTR[y].object);
+                        this.doorsTR[y].object.position.set(this.maze.doorObjectVertical[i].x,this.maze.doorObjectVertical[i].y,this.maze.doorObjectVertical[i].z);
+                        this.doorsTR[y].object.rotation.y = Math.PI / 2.0;
+                        y++;
+                    }
+                }
+
+                if(this.maze.doorObjectHorizontal.length>0){
+                    //4
+                    for(let i=0; i< this.maze.doorObjectHorizontal.length; i++){
+                        // Create the door
+                        this.scene3D.add(this.doorsTR[y].object);
+                        this.doorsTR[y].object.position.set(this.maze.doorObjectHorizontal[i].x,this.maze.doorObjectHorizontal[i].y,this.maze.doorObjectHorizontal[i].z);
+                        y++;
+                    }
+                }
+
+
+
+                
+
                 this.scene3D.add(this.player.object);
                 this.scene3D.add(this.lights.object);
 
                 // Create the clock
                 this.clock = new THREE.Clock();
 
-                // Create model animations (states, emotes and expressions)
+                // Create model animations (states)
                 this.animations = new Animations(this.player.object, this.player.animations);
+                
+
+                this.animationsDoors = new Array();
+                for(let i=0; i<this.doorsTR.length; i++){
+                    this.animationsDoors.push(new Animations_door(this.doorsTR[i].object, this.doorsTR[i].animations_door, this.doorsTR[i].location));
+                }
+
 
                 // Set the player's position and direction
-                this.player.position = this.maze.initialPosition.clone();
+                this.player.position = this.maze.initialPosition;
                 this.player.direction = this.maze.initialDirection;
 
-                // Create the user interface
-                this.userInterface = new UserInterface(this.scene3D, this.renderer, this.lights, this.fog, this.player.object, this.animations);
+
+                if (this.userInterface == null) {
+                    // Create the user interface
+                    this.userInterface = new UserInterface(this.scene3D, this.renderer, this.lights, this.maze,this,this.animations);
+                }
 
                 // Start the game
                 this.gameRunning = true;
+
             }
+
         }
         else {
-            // Update the model animations
-            const deltaT = this.clock.getDelta();
-            this.animations.update(deltaT);
+            this.buildMaze();
+        }
+    }
 
-            // Update the player
-            if (!this.animations.actionInProgress) {
-                // Check if the player found the exit
-                if (this.maze.foundExit(this.player.position)) {
-                    this.finalSequence();
+    buildMaze(){
+        // Update the model animations
+        const deltaT = this.clock.getDelta();
+        this.animations.update(deltaT);
+        
+
+
+        for(let i=0; i<this.animationsDoors.length; i++){
+            this.animationsDoors[i].update(deltaT);
+        }
+
+        // Update the player
+        if (!this.animations.actionInProgress) {
+            // Check if the player found the exit
+            if (this.maze.foundExit(this.player.position)) {
+                this.finalSequence();
+            }
+            
+            let coveredDistance = this.player.walkingSpeed * deltaT;
+            let directionIncrement = this.player.turningSpeed * deltaT;
+            if (this.player.keyStates.run) {
+                coveredDistance *= this.player.runningFactor;
+                directionIncrement *= this.player.runningFactor;
+            }
+            if (this.player.keyStates.left) {
+                this.player.direction += directionIncrement;
+            }
+            else if (this.player.keyStates.right) {
+                this.player.direction -= directionIncrement;
+            }
+            const direction = THREE.MathUtils.degToRad(this.player.direction);
+            if (this.player.keyStates.backward) {
+                const newPosition = new THREE.Vector3(-coveredDistance * Math.sin(direction), 0.0, -coveredDistance * Math.cos(direction)).add(this.player.position);
+                if (this.collision(newPosition)) {
+
+                }
+                else if (this.collision_door(newPosition)) {
+                    let posPlayer = this.maze.cartesianToCell(newPosition);
+                    for(let i=0;i<this.doorsTR.length;i++){
+                        let posPorta = this.doorsTR[i].location;
+                        if(posPorta[0] == posPlayer[0] && posPorta[1] == posPlayer[1]){
+                            for(let j=0;j<this.animationsDoors.length;j++){
+                                if(posPorta == this.animationsDoors[j].location){
+                                    this.animationsDoors[j].fadeToAction("door|Open", 0.1);
+                                    // Aguarda 5 segundos (5000 milissegundos) antes de executar a próxima linha
+                                    setTimeout(() => {
+                                        this.animationsDoors[j].fadeToAction("door|Close", 0.1);
+                                    }, 5000);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    this.player.position = newPosition;
                 }
                 else {
-                    let coveredDistance = this.player.walkingSpeed * deltaT;
-                    let directionIncrement = this.player.turningSpeed * deltaT;
-                    if (this.player.keyStates.run) {
-                        coveredDistance *= this.player.runningFactor;
-                        directionIncrement *= this.player.runningFactor;
-                    }
-                    if (this.player.keyStates.left) {
-                        this.player.direction += directionIncrement;
-                    }
-                    else if (this.player.keyStates.right) {
-                        this.player.direction -= directionIncrement;
-                    }
-                    const direction = THREE.MathUtils.degToRad(this.player.direction);
-                    if (this.player.keyStates.backward) {
-                        const newPosition = new THREE.Vector3(-coveredDistance * Math.sin(direction), 0.0, -coveredDistance * Math.cos(direction)).add(this.player.position);
-                        if (this.collision(newPosition)) {
-                            this.animations.fadeToAction("Death", 0.2);
-                        }
-                        else {
-                            this.animations.fadeToAction(this.player.keyStates.run ? "Running" : "Walking", 0.2);
-                            this.player.position = newPosition;
-                        }
-                    }
-                    else if (this.player.keyStates.forward) {
-                        const newPosition = new THREE.Vector3(coveredDistance * Math.sin(direction), 0.0, coveredDistance * Math.cos(direction)).add(this.player.position);
-                        if (this.collision(newPosition)) {
-                            this.animations.fadeToAction("Death", 0.2);
-                        }
-                        else {
-                            this.animations.fadeToAction(this.player.keyStates.run ? "Running" : "Walking", 0.2);
-                            this.player.position = newPosition;
-                        }
-                    }
-                    else if (this.player.keyStates.jump) {
-                        this.animations.fadeToAction("Jump", 0.2);
-                    }
-                    else if (this.player.keyStates.yes) {
-                        this.animations.fadeToAction("Yes", 0.2);
-                    }
-                    else if (this.player.keyStates.no) {
-                        this.animations.fadeToAction("No", 0.2);
-                    }
-                    else if (this.player.keyStates.wave) {
-                        this.animations.fadeToAction("Wave", 0.2);
-                    }
-                    else if (this.player.keyStates.punch) {
-                        this.animations.fadeToAction("Punch", 0.2);
-                    }
-                    else if (this.player.keyStates.thumbsUp) {
-                        this.animations.fadeToAction("ThumbsUp", 0.2);
-                    }
-                    else {
-                        this.animations.fadeToAction("Idle", this.animations.activeName != "Death" ? 0.2 : 0.6);
-                    }
-                    this.player.object.position.set(this.player.position.x, this.player.position.y, this.player.position.z);
-                    this.player.object.rotation.y = direction - this.player.initialDirection;
+                    this.animations.fadeToAction("metarig|Walk", 0.2);
+                    this.player.position = newPosition;
                 }
             }
+            else if (this.player.keyStates.forward) {
+                const newPosition = new THREE.Vector3(coveredDistance * Math.sin(direction), 0.0, coveredDistance * Math.cos(direction)).add(this.player.position);
 
-            // Update first-person, third-person and top view cameras parameters (player direction and target)
-            this.firstPersonViewCamera.playerDirection = this.player.direction;
-            this.thirdPersonViewCamera.playerDirection = this.player.direction;
-            this.topViewCamera.playerDirection = this.player.direction;
-            const target = new THREE.Vector3(this.player.position.x, this.player.position.y + this.player.eyeHeight, this.player.position.z);
-            this.firstPersonViewCamera.setTarget(target);
-            this.thirdPersonViewCamera.setTarget(target);
-            this.topViewCamera.setTarget(target);
+                if (this.collision(newPosition)) {
 
-            // Update statistics
-            this.statistics.update();
+                }
+                else if (this.collision_door(newPosition)) {
+                    let posPlayer = this.maze.cartesianToCell(newPosition);
+                    for(let i=0;i<this.doorsTR.length;i++){
+                        let posPorta = this.doorsTR[i].location;
+                        if(posPorta[0] == posPlayer[0] && posPorta[1] == posPlayer[1]){
+                            for(let j=0;j<this.animationsDoors.length;j++){
+                                if(posPorta == this.animationsDoors[j].location){
+                                    this.animationsDoors[j].fadeToAction("door|Open", 0.1);
+                                    // Aguarda 5 segundos (5000 milissegundos) antes de executar a próxima linha
+                                    setTimeout(() => {
+                                        this.animationsDoors[j].fadeToAction("door|Close", 0.1);
+                                    }, 5000);
+                                    break;
+                                }
+                            }
+                            break;
+                        }
+                    }
+                    this.player.position = newPosition;
 
-            // Render primary viewport(s)
-            this.renderer.clear();
-
-            if (this.fog.enabled) {
-                this.scene3D.fog = this.fog.object;
+                }
+                
+                else {
+                    this.animations.fadeToAction("metarig|Walk", 0.2);
+                    this.player.position = newPosition;
+                }
+            }
+            else if (this.player.keyStates.dance) {
+                this.animations.fadeToAction("metarig|Dance1", 0.9);
             }
             else {
-                this.scene3D.fog = null;
+                this.animations.fadeToAction("metarig|Idle(HeavyBreathing)", 0.2);
             }
-            let cameras;
-            if (this.multipleViewsCheckBox.checked) {
-                cameras = [this.fixedViewCamera, this.firstPersonViewCamera, this.thirdPersonViewCamera, this.topViewCamera];
-            }
-            else {
-                cameras = [this.activeViewCamera];
-            }
-            for (const camera of cameras) {
-                this.player.object.visible = (camera != this.firstPersonViewCamera);
-                const viewport = camera.getViewport();
-                this.renderer.setViewport(viewport.x, viewport.y, viewport.width, viewport.height);
-                this.renderer.render(this.scene3D, camera.object);
-                this.renderer.render(this.scene2D, this.camera2D);
-                this.renderer.clearDepth();
-            }
+            this.player.object.position.set(this.player.position.x, this.player.position.y, this.player.position.z);
+            this.player.object.rotation.y = direction - this.player.initialDirection;
+            
+        }
 
-            // Render secondary viewport (mini-map)
-            if (this.miniMapCheckBox.checked) {
-                this.scene3D.fog = null;
-                this.player.object.visible = true;
-                const viewport = this.miniMapCamera.getViewport();
-                this.renderer.setViewport(viewport.x, viewport.y, viewport.width, viewport.height);
-                this.renderer.render(this.scene3D, this.miniMapCamera.object);
-                this.renderer.render(this.scene2D, this.camera2D);
-            }
+        // Update first-person, third-person and top view cameras parameters (player direction and target)
+        this.firstPersonViewCamera.playerDirection = this.player.direction;
+        this.thirdPersonViewCamera.playerDirection = this.player.direction;
+        this.topViewCamera.playerDirection = this.player.direction;
+        const target = new THREE.Vector3(this.player.position.x, this.player.position.y + this.player.eyeHeight, this.player.position.z);
+        this.firstPersonViewCamera.setTarget(target);
+        this.thirdPersonViewCamera.setTarget(target);
+        this.topViewCamera.setTarget(target);
+
+        // Update statistics
+        this.statistics.update();
+
+        // Render primary viewport(s)
+        this.renderer.clear();
+
+        if (this.fog.enabled) {
+            this.scene3D.fog = this.fog.object;
+        }
+        else {
+            this.scene3D.fog = null;
+        }
+        let cameras;
+        if (this.multipleViewsCheckBox.checked) {
+            cameras = [this.fixedViewCamera, this.firstPersonViewCamera, this.thirdPersonViewCamera, this.topViewCamera];
+        }
+        else {
+            cameras = [this.activeViewCamera];
+        }
+        for (const camera of cameras) {
+            this.player.object.visible = (camera != this.firstPersonViewCamera);
+            const viewport = camera.getViewport();
+            this.renderer.setViewport(viewport.x, viewport.y, viewport.width, viewport.height);
+            this.renderer.render(this.scene3D, camera.object);
+            this.renderer.render(this.scene2D, this.camera2D);
+            this.renderer.clearDepth();
+        }
+
+        // Render secondary viewport (mini-map)
+        if (this.miniMapCheckBox.checked) {
+            this.scene3D.fog = null;
+            this.player.object.visible = true;
+            const viewport = this.miniMapCamera.getViewport();
+            this.renderer.setViewport(viewport.x, viewport.y, viewport.width, viewport.height);
+            this.renderer.render(this.scene3D, this.miniMapCamera.object);
+            this.renderer.render(this.scene2D, this.camera2D);
         }
     }
 }

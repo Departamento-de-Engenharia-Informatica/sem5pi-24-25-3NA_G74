@@ -2,23 +2,28 @@ import * as THREE from "three";
 
 export default class Animations {
     constructor(object, animations) {
-        this.states = ["Idle", "Walking", "Running", "Dance", "Death", "Sitting", "Standing"];
-        this.emotes = ["Jump", "Yes", "No", "Wave", "Punch", "ThumbsUp"];
+        
+        this.states = ["metarig|Walk", "metarig|Idle(HeavyBreathing)","metarig|Dance1"];
+        this.emotes = ["metarig|Dance1"];  
 
         this.mixer = new THREE.AnimationMixer(object);
         this.actionInProgress = false;
+
+        console.log("anime");
+        console.log(animations);
 
         this.actions = {};
         for (let i = 0; i < animations.length; i++) {
             const clip = animations[i];
             const action = this.mixer.clipAction(clip);
             this.actions[clip.name] = action;
-            if (this.states.indexOf(clip.name) >= 4 || this.emotes.indexOf(clip.name) >= 0) {
+            if (this.emotes.indexOf(clip.name) == 0) {
                 action.clampWhenFinished = true;
                 action.loop = THREE.LoopOnce;
             }
         }
-        this.activeName = "Idle";
+        //this.activeName = "IDLE";
+        this.activeName = "metarig|Idle(HeavyBreathing)";
         this.actions[this.activeName].play();
     }
 
@@ -34,7 +39,12 @@ export default class Animations {
                 .fadeIn(duration)
                 .play();
             // Some actions must not be interrupted
-            if (this.activeName != "Idle" && this.activeName != "Walking" && this.activeName != "Running") {
+            if (this.activeName != "metarig|Idle(HeavyBreathing)" && this.activeName != "metarig|Walk" ) {
+                this.mixer.addEventListener("finished", event => this.actionFinished(event));
+                this.actionInProgress = true;
+            }
+
+            if (this.activeName != "metarig|Idle(HeavyBreathing)" && this.activeName != "metarig|Walk") {
                 this.mixer.addEventListener("finished", event => this.actionFinished(event));
                 this.actionInProgress = true;
             }
