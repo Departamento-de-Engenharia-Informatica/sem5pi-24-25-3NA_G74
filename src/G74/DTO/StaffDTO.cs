@@ -7,7 +7,7 @@ namespace G74.DTO;
 
 public class StaffDto
 {
-    public string LicenseNumber { get; set; }
+    public long LicenceNumber { get; set; }
     public string Name { get; set; }
     public string PhoneNumber { get; set; }
     public string ContactEmail { get; set; }
@@ -31,7 +31,7 @@ public class StaffDto
     public static StaffDto FromDomain(Staff staff)
     {
         return new StaffDto {
-            LicenseNumber = staff.LicenseNumber.Value,
+            LicenceNumber = staff.LicenceNumber.licenceNumber,
             Name = staff.Name.Value,
             PhoneNumber = staff.PhoneNumber.Value,
             ContactEmail = staff.ContactEmail.email,
@@ -45,7 +45,7 @@ public class StaffDto
     public static Staff ToDomain(StaffDto staffDto)
     {
         return new Staff(
-            new LicenseNumber(staffDto.LicenseNumber),  // Validation happens in value objects
+            new LicenceNumber(staffDto.LicenceNumber),  // Validation happens in value objects
             new Name(staffDto.Name),
             new PhoneNumber(staffDto.PhoneNumber),
             new Email(staffDto.ContactEmail),

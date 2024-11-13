@@ -37,7 +37,7 @@ public class OperationRequestMapper
     {  
         return new OperationRequest(
             new MedicalRecordNumber(modelOperationRequestDataModel.MedicalRecordNumber.ToString()),
-            new LicenceNumber(modelOperationRequestDataModel.LicenceNumber.ToString()),
+            new LicenceNumber(modelOperationRequestDataModel.LicenceNumber),
             modelOperationRequestDataModel.OperationTypeId,
             new DeadlineDate(modelOperationRequestDataModel.DeadlineDate),
             new Priority(modelOperationRequestDataModel.Priority)

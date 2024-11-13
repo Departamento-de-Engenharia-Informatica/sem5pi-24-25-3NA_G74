@@ -7,7 +7,7 @@ namespace G74.Domain.Aggregates.Staff;
 
 public class Staff : Entity<Guid>
 {
-    public LicenseNumber LicenseNumber { get; private set; }
+    public LicenceNumber LicenceNumber { get; private set; }
     public Name Name { get; private set; }
     public PhoneNumber PhoneNumber { get; private set; }
     public Email ContactEmail { get; private set; }
@@ -16,10 +16,10 @@ public class Staff : Entity<Guid>
     public string Availability { get; private set; }
     
 
-    public Staff(LicenseNumber licenseNumber, Name name, PhoneNumber phoneNumber,
+    public Staff(LicenceNumber licenseNumber, Name name, PhoneNumber phoneNumber,
         Email contactEmail, StaffSpecialization staffSpecialization, Status status, string availability) : base(Guid.NewGuid())
     {
-        LicenseNumber = licenseNumber;
+        LicenceNumber = licenseNumber;
         Name = name;
         PhoneNumber = phoneNumber;
         ContactEmail = contactEmail;
@@ -38,10 +38,10 @@ public class Staff : Entity<Guid>
         Status = new Status("deactivated");
     }
     
-    public static Staff Create(string licenseNumber, string name, string phoneNumber,
+    public static Staff Create(long licenseNumber, string name, string phoneNumber,
                                 string contactEmail, string staffSpecialization, string status, string availability) {
         return new Staff(
-            new LicenseNumber(licenseNumber),
+            new LicenceNumber(licenseNumber),
             new Name(name),
             new PhoneNumber(phoneNumber),
             new Email(contactEmail),
@@ -51,9 +51,9 @@ public class Staff : Entity<Guid>
         );
     }
 
-    public void UpdateLicenseNumber(LicenseNumber licenseNumber)
+    public void UpdateLicenseNumber(LicenceNumber licenseNumber)
     {
-        this.LicenseNumber = licenseNumber;
+        this.LicenceNumber = licenseNumber;
     }
     
     public void UpdateName(Name name)
