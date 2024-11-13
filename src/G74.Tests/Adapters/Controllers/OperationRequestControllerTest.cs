@@ -48,7 +48,7 @@ public class OperationRequestControllerTest: IClassFixture<WebApplicationFactory
         _operationRequest = new OperationRequest
         (
             new MedicalRecordNumber("202411000002"),
-            new LicenceNumber("122005"),
+            new LicenceNumber(122005),
             1,
             new DeadlineDate(new DateTime()),
             new Priority("ElectiveSurgery")
@@ -72,7 +72,7 @@ public class OperationRequestControllerTest: IClassFixture<WebApplicationFactory
     public async Task RegisterOperationRequestTestSuccessfull(){
         var validOperationRequestDTO = new CreateOperationRequestDTO(
             "20241000002",
-            "12",
+            12,
             2,
             DateTime.Now, 
             "ElectiveSurgery"
@@ -92,7 +92,7 @@ public class OperationRequestControllerTest: IClassFixture<WebApplicationFactory
     public async Task UpdateOperationRequestTestSuccessfull(){
         var validOperationRequestDTO = new CreateOperationRequestDTO(
             "202411000002",
-            "122005",
+            122005,
             1,
             DateTime.Now, 
             "ElectiveSurgery"
@@ -158,7 +158,7 @@ public class OperationRequestControllerTest: IClassFixture<WebApplicationFactory
         var operationService = new AppServiceOperationRequest(_mockOperationRequestRepository.Object, _mockRepositoryPatient.Object, _mockStaffService.Object);
         var operationRequestController = new OperationRequestController(operationService);
     
-        var response = await operationRequestController.RegisterOperationRequest(new CreateOperationRequestDTO("202411000002", "102042", 1, new DateTime(), "UrgentSurgery"));
+        var response = await operationRequestController.RegisterOperationRequest(new CreateOperationRequestDTO("202411000002", 102042, 1, new DateTime(), "UrgentSurgery"));
         var createdResult = Assert.IsType<CreatedAtActionResult>(response.Result);
         Assert.NotNull(createdResult);
         Assert.Equal(201, createdResult.StatusCode);
@@ -172,7 +172,7 @@ public class OperationRequestControllerTest: IClassFixture<WebApplicationFactory
         //Arrange
         var createDataOperation = new CreateOperationRequestDTO(
             "202411000002",
-            "122005",
+            122005,
             1,
             new DateTime(),
             "ElectiveSurgery"
@@ -194,7 +194,7 @@ public class OperationRequestControllerTest: IClassFixture<WebApplicationFactory
         //Arrange
         var createDataOperation = new CreateOperationRequestDTO(
             "202411000002",
-            "122005",
+            122005,
             1,
             new DateTime(),
             "ElectiveSurgery"
@@ -216,7 +216,7 @@ public class OperationRequestControllerTest: IClassFixture<WebApplicationFactory
         //Arrange
         var createDataOperation = new CreateOperationRequestDTO(
             "202411000002",
-            "122005",
+            122005,
             1,
             new DateTime(),
             "ElectiveSurgery"
@@ -238,7 +238,7 @@ public class OperationRequestControllerTest: IClassFixture<WebApplicationFactory
         //Arrange
         var createDataOperation = new CreateOperationRequestDTO(
             "202411000002",
-            "122005",
+            122005,
             1,
             new DateTime(),
             "ElectiveSurgery"

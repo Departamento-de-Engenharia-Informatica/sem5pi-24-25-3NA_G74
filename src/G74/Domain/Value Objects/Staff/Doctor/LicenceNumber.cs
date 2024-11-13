@@ -2,13 +2,13 @@ using G74.Domain.Shared;
 
 public class LicenceNumber : IValueObject
 {
-    public string licenceNumber;
+    public long licenceNumber;
 
-    public LicenceNumber(string licenceNumber)
+    public LicenceNumber(long licenceNumber)
     {
         this.licenceNumber = licenceNumber;
     }
 
-    public string number { get; private set; }
+    public long number { get; private set; }
 
 }

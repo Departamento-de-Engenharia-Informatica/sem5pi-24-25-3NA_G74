@@ -15,15 +15,12 @@ public class StaffEntityTypeConfiguration : IEntityTypeConfiguration<Staff>
     {
         builder.HasKey(s => s.Id);
 
-        builder.Property(s => s.LicenseNumber)
-            .HasConversion(
-                licenseNumber => licenseNumber.Value,
-                value => new LicenseNumber(value))
+        builder.Property(s => s.LicenceNumber)
             .IsRequired()
             .HasMaxLength(50)
-            .HasColumnName("LicenseNumber");
+            .HasColumnName("Licence Number");
         
-        builder.HasIndex(u => u.LicenseNumber)
+        builder.HasIndex(u => u.LicenceNumber)
             .IsUnique();
         
         builder.Property(u => u.Name)

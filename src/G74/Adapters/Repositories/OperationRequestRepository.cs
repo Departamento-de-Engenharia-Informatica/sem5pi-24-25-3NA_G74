@@ -78,7 +78,7 @@ namespace G74.Adapters.Repositories
 
         
             dataOperation.MedicalRecordNumber = long.Parse(operation.MedicalRecordNumber.MedicalNumber);
-            dataOperation.LicenceNumber = long.Parse(operation.LicenceNumber.licenceNumber);
+            dataOperation.LicenceNumber = operation.LicenceNumber.licenceNumber;
             dataOperation.OperationTypeId = operation.OperationTypeId;
             dataOperation.DeadlineDate = operation.DeadlineDate.date;
             dataOperation.Priority = operation.Priority.PriorityDescription.ToString();

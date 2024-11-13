@@ -21,11 +21,11 @@ public class StaffRepository : BaseRepository<Staff, Guid>, IStaffRepository
         _dbContext = dbContext;
     }
     
-    public async Task<Staff?> GetByLicenseNumber(LicenseNumber licenseNumber)
+    public async Task<Staff?> GetByLicenseNumber(LicenceNumber licenseNumber)
     {
         try {
             Staff staff = await _dbContext.Set<Staff>()
-                .FirstAsync(s => s.LicenseNumber == licenseNumber);
+                .FirstAsync(s => s.LicenceNumber == licenseNumber);
 
             return staff;
         }
@@ -68,18 +68,18 @@ public class StaffRepository : BaseRepository<Staff, Guid>, IStaffRepository
     
 
 
-    public async Task<Staff?> Update(LicenseNumber licenseNumber, Staff staff)
+    public async Task<Staff?> Update(LicenceNumber licenceNumber, Staff staff)
     {
         
         var existingStaff = await _dbContext.Set<Staff>()
-            .FirstOrDefaultAsync(s => s.LicenseNumber == licenseNumber);
+            .FirstOrDefaultAsync(s => s.LicenceNumber == licenceNumber);
         
         if (existingStaff == null)
         {
             return null;
         }
 
-        existingStaff.UpdateLicenseNumber(staff.LicenseNumber);
+        existingStaff.UpdateLicenseNumber(staff.LicenceNumber);
         existingStaff.UpdateName(staff.Name);
         existingStaff.UpdatePhoneNumber(staff.PhoneNumber);
         existingStaff.UpdateContactEmail(staff.ContactEmail);
@@ -91,12 +91,12 @@ public class StaffRepository : BaseRepository<Staff, Guid>, IStaffRepository
         return existingStaff;
         }
     
-    public async Task<Staff> UpdateStatus(LicenseNumber licenseNumber, Staff staff)
+    public async Task<Staff> UpdateStatus(LicenceNumber licenseNumber, Staff staff)
     {
         try 
         {
             var existingStaff = await _dbContext.Set<Staff>()
-                .FirstOrDefaultAsync(s => s.LicenseNumber == licenseNumber);
+                .FirstOrDefaultAsync(s => s.LicenceNumber == licenseNumber);
             
             if (existingStaff == null)
             {
@@ -123,7 +123,7 @@ public class StaffRepository : BaseRepository<Staff, Guid>, IStaffRepository
 
         foreach (var staff in staffList)
         {
-            prologData.AppendLine($"staff('{staff.Id}', '{staff.LicenseNumber}', '{staff.Name}', '{staff.PhoneNumber}', '{staff.ContactEmail}', '{staff.StaffSpecialization}', '{staff.Status}', '{staff.Availability}').");
+            prologData.AppendLine($"staff('{staff.Id}', '{staff.LicenceNumber}', '{staff.Name}', '{staff.PhoneNumber}', '{staff.ContactEmail}', '{staff.StaffSpecialization}', '{staff.Status}', '{staff.Availability}').");
         }
         
         File.WriteAllText("exported_staff.pl", prologData.ToString());
