@@ -15,6 +15,7 @@ import {MainMenuComponent} from './presentation/components/main-menu/main-menu.c
 import {PatientMenuComponent} from './presentation/components/patient-menu/patient-menu.component';
 import { RegisterOperationComponent } from './presentation/components/register-operation/register-operation.component';
 import {HeaderComponent} from './presentation/components/header/header.component';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,9 @@ import {HeaderComponent} from './presentation/components/header/header.component
     AppRoutingModule,
     RegisterOperationComponent
   ],
-  providers: [],
+  providers: [
+    provideAnimationsAsync()
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

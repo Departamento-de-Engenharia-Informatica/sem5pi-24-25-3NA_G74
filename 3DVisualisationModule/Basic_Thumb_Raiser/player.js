@@ -17,6 +17,8 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 export default class Player {
     constructor(parameters) {
         this.onLoad = function (description) {
+            //console.log("Model description:", description);
+
             this.object = description.scene;
             this.animations = description.animations;
 
@@ -32,7 +34,7 @@ export default class Player {
             box.getSize(size);
 
             // Adjust the object's oversized dimensions (hard-coded; see previous comments)
-            size.x = 3.0;
+            size.x = 1.5;
             size.y = 4.4;
             size.z = 2.6;
 
@@ -41,6 +43,7 @@ export default class Player {
             this.eyeHeight *= size.y * this.scale.y;
 
             this.object.scale.set(this.scale.x, this.scale.y, this.scale.z);
+            this.keyStates = { dance: false };
             this.loaded = true;
         }
 
@@ -54,8 +57,8 @@ export default class Player {
         for (const [key, value] of Object.entries(parameters)) {
             this[key] = value;
         }
-        this.initialDirection = THREE.MathUtils.degToRad(this.initialDirection);
-        this.keyStates = { fixedView: false, firstPersonView: false, thirdPersonView: false, topView: false, viewMode: false, miniMap: false, statistics: false, userInterface: false, help: false, run: false, left: false, right: false, backward: false, forward: false, jump: false, yes: false, no: false, wave: false, punch: false, thumbsUp: false };
+        this.openingSpeed = THREE.MathUtils.degToRad(this.openingSpeed);
+        this.keyStates = { fixedView: false, firstPersonView: false, thirdPersonView: false, topView: false, viewMode: false, miniMap: false, statistics: false, userInterface: false, help: false, run: false, left: false, right: false, backward: false, forward: false };
         this.loaded = false;
 
         // Create a resource .gltf or .glb file loader

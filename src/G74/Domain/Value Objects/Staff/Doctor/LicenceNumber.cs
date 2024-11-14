@@ -2,13 +2,28 @@ using G74.Domain.Shared;
 
 public class LicenceNumber : IValueObject
 {
-    public string licenceNumber;
+    public long licenceNumber;
 
-    public LicenceNumber(string licenceNumber)
+    public LicenceNumber(long licenceNumber)
     {
         this.licenceNumber = licenceNumber;
     }
+    public LicenceNumber(string licenceNumber)
+    {
+        try
+        {
+            this.licenceNumber = long.Parse(licenceNumber);
+        }
+        catch (System.Exception)
+        {
+            throw new System.ArgumentException("Invalid Licence Number");
+        }
+    
+    }
 
-    public string number { get; private set; }
+    public override string ToString()
+    {
+        return licenceNumber.ToString();
+    }
 
 }

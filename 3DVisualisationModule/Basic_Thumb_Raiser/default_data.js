@@ -5,22 +5,36 @@ export const generalData = {
     setDevicePixelRatio: false
 }
 
-export const mazeData = {
-    url: "./mazes/Loquitas.json",
+export const mazeParameters={ scale: new THREE.Vector3(1.0, 0.5, 1.0) };
+
+export const buildingA1Data = {
+    url: "./mazes/EdA-P1.json",
     credits: "Maze designed by Cecília Fernandes and Nikita.",
-    scale: new THREE.Vector3(1.0, 1.0, 1.0)
+    scale: new THREE.Vector3(1.0, 1.0, 1.0),
 }
 
 export const playerData = {
-    url: "./models/gltf/RobotExpressive/RobotExpressive.glb",
-    credits: "Model and related code snippets created by <a href='https://www.patreon.com/quaternius' target='_blank' rel='noopener'>Tomás Laulhé</a>. CC0 1.0. Modified by <a href='https://donmccurdy.com/' target='_blank' rel='noopener'>Don McCurdy</a>.",
-    eyeHeight: 0.8, // fraction of character height
-    scale: new THREE.Vector3(0.1, 0.1, 0.1),
-    walkingSpeed: 0.75,
-    initialDirection: 0.0, // Expressed in degrees
-    turningSpeed: 75.0, // Expressed in degrees / second
+    //url: "./models/gltf/NewRobot/animated_humanoid_robot.glb",
+    //credits: "Model and related code snippets created by <a href='https://www.patreon.com/quaternius' target='_blank' rel='noopener'>Tomás Laulhé</a>. CC0 1.0. Modified by <a href='https://donmccurdy.com/' target='_blank' rel='noopener'>Don McCurdy</a>.",
+
+    url: "./models/gltf/NewRobot/grandpa.glb",
+    credits: "Model and related code snippets created by <a href='https://sketchfab.com/3d-models/grandpa-83d8d29ae74e4eb89775c9c0c7bc5e45",
+    eyeHeight: 0.3, // fraction of character height
+    scale: new THREE.Vector3(0.5, 0.4, 0.5),
+    walkingSpeed:2,
+    initialDirection: 25.3, // Expressed in degrees
+    turningSpeed: 180.0, // Expressed in degrees / second
     runningFactor: 2.0, // Affects walking speed and turning speed
-    keyCodes: { fixedView: "Digit1", firstPersonView: "Digit2", thirdPersonView: "Digit3", topView: "Digit4", viewMode: "KeyV", userInterface: "KeyU", miniMap: "KeyM", help: "KeyH", statistics: "KeyS", run: "KeyR", left: "ArrowLeft", right: "ArrowRight", backward: "ArrowDown", forward: "ArrowUp", jump: "KeyJ", yes: "KeyY", no: "KeyN", wave: "KeyW", punch: "KeyP", thumbsUp: "KeyT" }
+    keyCodes: { fixedView: "Digit1", firstPersonView: "Digit2", thirdPersonView: "Digit3", topView: "Digit4", viewMode: "KeyV", userInterface: "KeyU", miniMap: "KeyM", help: "KeyH", statistics: "KeyS", run: "KeyR", left: "ArrowLeft", right: "ArrowRight", backward: "ArrowDown", forward: "ArrowUp" }
+}
+
+
+export const doorData = {
+    url: "./models/gltf/Door/animated_door.glb",
+    credits: "https://sketchfab.com/3d-models/animated-low-poly-door-b31949b739874c119d31d89a3ec942a3",
+    scale: new THREE.Vector3(0.40, 0.20, 0.40)
+    //open:2,
+    //close:2
 }
 
 export const lightsData = {

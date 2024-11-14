@@ -1,17 +1,25 @@
 
 
 export interface OperationRequest {
-  
     medicalRecordNumber: string;
-    licenceNumber: string;
-    nameOperationType: string;
-    requiredStaffSpecialization: string[];
-    seconds: number;
-    minutes: number;
-    hours: number;
-    days: number;
-    deadlineDate: Date;
+    licenceNumber: number;
+    operationTypeId: number;
+    deadlineDate: string;
     priority: string;
-  
+  }
+
+  export interface OperationRequestDTO{
+    operationRequestId: number;
+    medicalRecordNumber: {
+      medicalNumber: string;
+    };
+    licenceNumber: number;
+    operationTypeId: number;
+    priority: {
+      priorityDescription: number;
+    };
+    deadlineDate: {
+      date: Date;
+    };
   }
 

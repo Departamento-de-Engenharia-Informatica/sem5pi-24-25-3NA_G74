@@ -128,7 +128,6 @@ public class Startup
         services.AddScoped<AuthController>();
         services.AddTransient<IOperationRequestRepository, OperationRequestRepository>();
         services.AddScoped<GmailEmailService>();
-        // Add Staff-related services
         services.AddScoped<IStaffRepository, StaffRepository>();
         services.AddScoped<StaffService>();
         services.AddScoped<StaffController>();

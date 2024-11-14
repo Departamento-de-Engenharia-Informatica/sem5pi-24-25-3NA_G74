@@ -13,9 +13,10 @@ public class OperationRequestEntityTypeConfiguration : IEntityTypeConfiguration<
         builder.HasKey(o => o.Id);
 
         builder.Property(o => o.Id)
-            .IsRequired()
             .ValueGeneratedOnAdd()
+            .IsRequired()
             .HasColumnName("Id");
+            
 
         builder.Property(o => o.MedicalRecordNumber)
            .IsRequired()

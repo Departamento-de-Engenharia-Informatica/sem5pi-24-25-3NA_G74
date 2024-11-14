@@ -4,7 +4,7 @@ namespace G74.DTO;
 
 public class OperationRequestDataModel : Entity<Guid>
 {
-
+    public long Id {get; set; } 
     public long MedicalRecordNumber {get; set; }
     public long LicenceNumber {get; set; }
     public long OperationTypeId {get; set; }
@@ -18,11 +18,13 @@ public class OperationRequestDataModel : Entity<Guid>
         : base(Guid.NewGuid()) 
     {
         MedicalRecordNumber = long.Parse(request.MedicalRecordNumber.MedicalNumber);
-        LicenceNumber = long.Parse(request.LicenceNumber.licenceNumber);
+        LicenceNumber = request.LicenceNumber.licenceNumber;
         OperationTypeId = request.OperationTypeId;
         DeadlineDate = request.DeadlineDate.date;
         Priority = request.Priority.PriorityDescription.ToString();
     }
+    
+   
 
     
 

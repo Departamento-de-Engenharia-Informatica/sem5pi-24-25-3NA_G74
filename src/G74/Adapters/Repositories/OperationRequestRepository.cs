@@ -22,7 +22,7 @@ namespace G74.Adapters.Repositories
             return  OperationRequestMapper.FromDataModelToDomain(operation);
         }
 
-        public async Task<OperationRequest> Delete(Guid id)
+        public async Task<OperationRequest> Delete(long id)
         {
             var operation = await _context.OperationRequests.FindAsync(id);
 
@@ -37,7 +37,7 @@ namespace G74.Adapters.Repositories
             return OperationRequestMapper.FromDataModelToDomain(operation);
         }
 
-        public async Task<OperationRequest> GetOperationRequestByIdAsync(Guid id)
+        public async Task<OperationRequest> GetOperationRequestByIdAsync(long id)
         {
             var dataOperation = await _context.OperationRequests.FindAsync(id);
     
@@ -68,7 +68,7 @@ namespace G74.Adapters.Repositories
             return operationRequests;
         }
 
-        public async Task<OperationRequest> Update(Guid id,OperationRequest operation)
+        public async Task<OperationRequest> Update(long id,OperationRequest operation)
         {
             var dataOperation = await _context.OperationRequests.FindAsync(id);
         if (dataOperation == null)
@@ -78,7 +78,7 @@ namespace G74.Adapters.Repositories
 
         
             dataOperation.MedicalRecordNumber = long.Parse(operation.MedicalRecordNumber.MedicalNumber);
-            dataOperation.LicenceNumber = long.Parse(operation.LicenceNumber.licenceNumber);
+            dataOperation.LicenceNumber = operation.LicenceNumber.licenceNumber;
             dataOperation.OperationTypeId = operation.OperationTypeId;
             dataOperation.DeadlineDate = operation.DeadlineDate.date;
             dataOperation.Priority = operation.Priority.PriorityDescription.ToString();
@@ -107,6 +107,8 @@ namespace G74.Adapters.Repositories
             return false;
             
         }
+
+        
 
         public async Task ExportOperationRequestDataToProlog()
         {

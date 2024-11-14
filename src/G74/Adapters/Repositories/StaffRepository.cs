@@ -20,12 +20,13 @@ public class StaffRepository : BaseRepository<Staff, Guid>, IStaffRepository
     {
         _dbContext = dbContext;
     }
-    
-    public async Task<Staff?> GetByLicenseNumber(LicenseNumber licenseNumber)
+
+    public async Task<Staff?> GetByLicenceNumber(LicenceNumber licenceNumber)
     {
-        try {
+        try
+        {
             Staff staff = await _dbContext.Set<Staff>()
-                .FirstAsync(s => s.LicenseNumber == licenseNumber);
+                .FirstAsync(s => s.LicenceNumber == licenceNumber);
 
             return staff;
         }
@@ -35,21 +36,21 @@ public class StaffRepository : BaseRepository<Staff, Guid>, IStaffRepository
         }
     }
 
-    
+
 
     public async Task<Staff> Add(Staff staff)
     {
         var ret = _dbContext.Staff.Add(staff);
         await _dbContext.SaveChangesAsync();
-        
+
         return ret.Entity;
     }
-    
-    // public async Task<bool> StaffExists(LicenseNumber licenseNumber)
+
+    // public async Task<bool> StaffExists(LicenceNumber licenceNumber)
     // {
-    //     return await _dbContext.Set<Staff>().AnyAsync(e => e.Id.Value == licenseNumber.Value);
+    //     return await _dbContext.Set<Staff>().AnyAsync(e => e.Id.Value == licenceNumber.Value);
     // }
-    
+
     public async Task<IEnumerable<Staff>> GetStaffAsync()
     {
         try
@@ -65,49 +66,49 @@ public class StaffRepository : BaseRepository<Staff, Guid>, IStaffRepository
         }
     }
 
-    
 
 
-    public async Task<Staff?> Update(LicenseNumber licenseNumber, Staff staff)
+
+    public async Task<Staff?> Update(LicenceNumber licenceNumber, Staff staff)
     {
-        
+
         var existingStaff = await _dbContext.Set<Staff>()
-            .FirstOrDefaultAsync(s => s.LicenseNumber == licenseNumber);
-        
+            .FirstOrDefaultAsync(s => s.LicenceNumber == licenceNumber);
+
         if (existingStaff == null)
         {
             return null;
         }
 
-        existingStaff.UpdateLicenseNumber(staff.LicenseNumber);
+        existingStaff.UpdateLicenceNumber(staff.LicenceNumber);
         existingStaff.UpdateName(staff.Name);
         existingStaff.UpdatePhoneNumber(staff.PhoneNumber);
         existingStaff.UpdateContactEmail(staff.ContactEmail);
         existingStaff.UpdateStaffSpecialization(staff.StaffSpecialization);
         existingStaff.UpdateStatus(staff.Status);
-        
+
         await _dbContext.SaveChangesAsync();
 
         return existingStaff;
-        }
-    
-    public async Task<Staff> UpdateStatus(LicenseNumber licenseNumber, Staff staff)
+    }
+
+    public async Task<Staff> UpdateStatus(LicenceNumber licenceNumber, Staff staff)
     {
-        try 
+        try
         {
             var existingStaff = await _dbContext.Set<Staff>()
-                .FirstOrDefaultAsync(s => s.LicenseNumber == licenseNumber);
-            
+                .FirstOrDefaultAsync(s => s.LicenceNumber == licenceNumber);
+
             if (existingStaff == null)
             {
-                throw new Exception($"Staff with license number {licenseNumber} not found");
+                throw new Exception($"Staff with licence number {licenceNumber} not found");
             }
-            
+
             // Update only the status
             existingStaff.UpdateStatus(staff.Status);
-            
+
             await _dbContext.SaveChangesAsync();
-    
+
             return existingStaff;
         }
         catch (Exception ex)
@@ -115,7 +116,7 @@ public class StaffRepository : BaseRepository<Staff, Guid>, IStaffRepository
             throw ex.InnerException!;
         }
     }
-    
+
     public async Task ExportStaffDataToProlog()
     {
         var staffList = await _dbContext.Staff.ToListAsync();
@@ -123,9 +124,9 @@ public class StaffRepository : BaseRepository<Staff, Guid>, IStaffRepository
 
         foreach (var staff in staffList)
         {
-            prologData.AppendLine($"staff('{staff.Id}', '{staff.LicenseNumber}', '{staff.Name}', '{staff.PhoneNumber}', '{staff.ContactEmail}', '{staff.StaffSpecialization}', '{staff.Status}', '{staff.Availability}').");
+            prologData.AppendLine($"staff('{staff.Id}', '{staff.LicenceNumber}', '{staff.Name}', '{staff.PhoneNumber}', '{staff.ContactEmail}', '{staff.StaffSpecialization}', '{staff.Status}', '{staff.Availability}').");
         }
-        
+
         File.WriteAllText("exported_staff.pl", prologData.ToString());
     }
 }

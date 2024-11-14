@@ -6,10 +6,10 @@ using G74.DTO;
 public interface IOperationRequestRepository : IRepository<OperationRequestDataModel, Guid>
 {
     Task<OperationRequest> Add(OperationRequestDataModel operation);
-    Task<OperationRequest> GetOperationRequestByIdAsync(Guid id);
-    Task<OperationRequest> Update(Guid id,OperationRequest patient);
+    Task<OperationRequest> GetOperationRequestByIdAsync(long id);
+    Task<OperationRequest> Update(long id,OperationRequest patient);
     Task<int> CountAsync();
-    Task<OperationRequest> Delete(Guid id);
+    Task<OperationRequest> Delete(long id);
 
     Task<List<OperationRequest>> ReadAll();
     Task<Boolean> GetOperationTypeByIdAsync(long id);
