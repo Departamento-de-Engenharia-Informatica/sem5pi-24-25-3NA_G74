@@ -21,7 +21,7 @@ public class StaffEntityTypeConfiguration : IEntityTypeConfiguration<Staff>
                 value => new LicenseNumber(value))
             .IsRequired()
             .HasMaxLength(50)
-            .HasColumnName("LicenseNumber");
+            .HasColumnName("LicenceNumber");
         
         builder.HasIndex(u => u.LicenseNumber)
             .IsUnique();

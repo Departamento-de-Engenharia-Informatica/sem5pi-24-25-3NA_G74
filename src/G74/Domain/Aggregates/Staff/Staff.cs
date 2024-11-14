@@ -5,7 +5,7 @@ using G74.Domain.Value_Objects.User;
 
 namespace G74.Domain.Aggregates.Staff;
 
-public class Staff : Entity<Guid>
+public class Staff : Entity<Guid>, IAggregateRoot
 {
     public LicenseNumber LicenseNumber { get; private set; }
     public Name Name { get; private set; }
@@ -16,8 +16,8 @@ public class Staff : Entity<Guid>
     public string Availability { get; private set; }
     
 
-    public Staff(LicenseNumber licenseNumber, Name name, PhoneNumber phoneNumber,
-        Email contactEmail, StaffSpecialization staffSpecialization, Status status, string availability) : base(Guid.NewGuid())
+    public Staff(LicenseNumber licenseNumber, Name name, PhoneNumber phoneNumber, Email contactEmail,
+        StaffSpecialization staffSpecialization, Status status, string availability) : base(Guid.NewGuid())
     {
         LicenseNumber = licenseNumber;
         Name = name;
