@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace G74.Migrations
 {
     [DbContext(typeof(BackofficeAppDbContext))]
-    [Migration("20241110114258_Nova")]
-    partial class Nova
+    [Migration("20241113222217_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -262,11 +262,10 @@ namespace G74.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasColumnName("ContactEmail");
 
-                    b.Property<string>("LicenseNumber")
-                        .IsRequired()
+                    b.Property<long>("LicenceNumber")
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("LicenseNumber");
+                        .HasColumnType("bigint")
+                        .HasColumnName("Licence Number");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -293,9 +292,6 @@ namespace G74.Migrations
                         .HasColumnName("Status");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("LicenseNumber")
-                        .IsUnique();
 
                     b.ToTable("Staff");
                 });

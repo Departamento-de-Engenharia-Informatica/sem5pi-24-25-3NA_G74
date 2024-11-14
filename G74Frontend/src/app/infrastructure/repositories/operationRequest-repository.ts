@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { OperationRequestDTO } from '../../domain/models/operationRequest.model';
 import { OperationRequest } from '../../domain/models/operationRequest.model';
 import { IOperationRepository } from '../../domain/interfaces/ioperationRequest-repository';
 import { environment } from '../../../environments/environment';
@@ -12,28 +13,47 @@ import { catchError, tap } from 'rxjs/operators';
 
 export class OperationRequestRepository implements IOperationRepository {
 
-  private apiUrl = `${environment.apiUrl}/patient/`;
+  private apiUrl = `${environment.apiUrl}/OperationRequest/`;
 
   constructor(private http: HttpClient) {}
 
-    listAllOperationRequests(): Observable<OperationRequest[]> {
+    listAllOperationRequests(): Observable<OperationRequestDTO[]> {
       console.log("Listando todas as Operation Requests")
-      throw new Error('Method not implemented.');
+      return this.http.get<OperationRequestDTO[]>(this.apiUrl).pipe(
+        tap(response => console.log('Received response from backend:', response)), 
+        catchError(error => {
+          console.error('Error response from backend:', error); 
+          throw error; 
+        })
+      );
     }
     
-    createOperationRequest(operation: OperationRequest): Observable<OperationRequest> {
-      console.log("Operation Request Criada com Sucesso!")
-      throw new Error('Method not implemented.');
+    async createOperationRequest(operation: OperationRequest): Promise<OperationRequest> {
+      
+    const operationJson = JSON.stringify(operation);
+    console.log('Operation Request JSON:', operationJson);
+      try {
+        const response = await this.http.post<OperationRequest>(this.apiUrl, operation).toPromise();
+        console.log('Received response from backend:', response);
+        if (!response) {
+          throw new Error('Response is undefined');
+        }
+        return response;
+      } catch (error) {
+        console.error('Error response from backend:', error);
+        throw error;
+      }
+      
     }
     
     updateOperationRequest(operation: Partial<OperationRequest>, id: BigInt): Observable<OperationRequest> {
-      console.log("Operation Request Atualizada com Sucesso!")
-      throw new Error('Method not implemented.');
+      const url = `${this.apiUrl}${id}`;
+      return this.http.patch<OperationRequest>(url, operation);
     }
 
     deleteOperationRequest(id: BigInt): Observable<any> {
-      console.log("Operation Request Apagada com sucesso!")
-      throw new Error('Method not implemented.');
+      const url = `${this.apiUrl}${id}`;
+      return this.http.delete<any>(url);
     }
 
 }

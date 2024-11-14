@@ -4,7 +4,7 @@ namespace G74.DTO;
 
 public class OperationRequestDataModel : Entity<Guid>
 {
-
+    public long OperationRequestId {get; set; } 
     public long MedicalRecordNumber {get; set; }
     public long LicenceNumber {get; set; }
     public long OperationTypeId {get; set; }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { OperationRequestRepository  } from '../../infrastructure/repositories/operationRequest-repository';
-import { OperationRequest } from '../../domain/models/operationRequest.model';
+import { OperationRequest, OperationRequestDTO } from '../../domain/models/operationRequest.model';
 
 
 @Injectable({
@@ -10,22 +10,22 @@ import { OperationRequest } from '../../domain/models/operationRequest.model';
 
 export class OperationRequestService {
 
-    constructor(private patientRepository: OperationRequestRepository ) { }
+    constructor(private operationRepository: OperationRequestRepository ) { }
 
-    createOperation(operation: OperationRequest): Observable<OperationRequest> {
-        return this.patientRepository.createOperationRequest(operation);
+    async createOperation(operation: OperationRequest): Promise<OperationRequest> {
+        return this.operationRepository.createOperationRequest(operation);
     }
 
     updateOperation(operation: Partial<OperationRequest>, id: BigInt): Observable<OperationRequest> {
-        return this.updateOperation(operation, id);
+        return this.operationRepository.updateOperationRequest(operation, id);
     }
 
     deleteOperation(id: BigInt): Observable<any> {
-        return this.deleteOperation(id);
+        return this.operationRepository.deleteOperationRequest(id);
     }
 
-    listAllOperations(): Observable<OperationRequest[]> {
-        return this.listAllOperations();
+    listAllOperations(): Observable<OperationRequestDTO[]> {
+        return this.operationRepository.listAllOperationRequests();
     }
 
 }

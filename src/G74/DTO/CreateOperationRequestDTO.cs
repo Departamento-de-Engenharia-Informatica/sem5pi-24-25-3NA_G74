@@ -2,6 +2,7 @@ using G74.Domain.Value_Objects.Patient;
 
 public class CreateOperationRequestDTO
 {   
+    public long OperationRequestId {get; set; } 
     public string MedicalRecordNumber {get; set; }
     public long LicenceNumber {get; set; }
     public long OperationTypeId { get; }

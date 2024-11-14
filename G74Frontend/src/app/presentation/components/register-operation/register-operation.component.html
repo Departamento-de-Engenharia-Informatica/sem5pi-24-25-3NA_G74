@@ -1,63 +1,46 @@
-<h1>
-    Create Operation
-</h1>
 
-<form (ngSubmit)="submitOperation()" #operationForm="ngForm">
-    <fieldset>
-        <h3>Patient's Medical Record Number</h3>
-        <input id="medicalRecordNumber" type="number" required name="MedicalRecordNumber" placeholder="ex: YYYYMMnnnnnn..." [(ngModel)]="medicalRecordNumber">
-    </fieldset>
-    <fieldset>
-        <h3>Licence Number</h3>
-        <input id="LicenceNumber" type="number" required name="LicenceNumber" placeholder="ex: 123" [(ngModel)]="licenceNumber"/>
-    </fieldset>
-    
-    <fieldset id="staff-specializations">
-        <h3>List of Staff's Specialization</h3>
-        
-        <fieldset *ngFor="let specialization of specializations; let i = index; trackBy: trackByIndex">
+        <h1 id="title">
+            Create Operation
+        </h1>
+        <div id="backTemp" style="width: 600px;">
+        <form (ngSubmit)="submitOperation()" #operationForm="ngForm">
+            <fieldset id="fieldSetMedicalRecordNumber">
+                <h3>Patient's Medical Record Number</h3>
+                <input id="medicalRecordNumber" type="number" required name="MedicalRecordNumber" placeholder="ex: YYYYMMnnnnnn..." [(ngModel)]="medicalRecordNumber">
+            </fieldset>
+            <fieldset id="fieldSetLicenceNumber">
+                <h3>Licence Number</h3>
+                <input id="LicenceNumber" type="number" required name="LicenceNumber" placeholder="ex: 123" [(ngModel)]="licenceNumber"/>
+            </fieldset>
+            
+            
 
-            <h3>Specialization {{i + 1}}</h3>
-            <input id="specialization{{i}}" type="text" name="specialization{{i}}" placeholder="ex: Cardiology" [(ngModel)]="specializations[i]">
+            <fieldset id="operationSpecification">
+                <h3>Operation Specification</h3>
+                
+                <fieldset style="width: 100%; display: flex; justify-content: center;flex-direction:column ; align-items: center;">
+                    <h4>Operation Type ID: </h4>
+                    <input id="operationTypeId" type="number" required name="operationTypeId" placeholder="ex: 123" [(ngModel)]="operationTypeId"/>
+                </fieldset>
 
-            <h3>Quantity {{ i + 1 }}</h3>
-            <input id="Quantity{{i}}" type="number" name="quantity{{i}}" placeholder="ex: 1" [(ngModel)]="quantities[i]"/>
+                <fieldset style="width: 100%; display: flex; justify-content: center;flex-direction:column ; align-items: center;">
+                    <h4>Date</h4>
+                    <input type="datetime-local" name="operationDate" [(ngModel)]="operationDate">
+                </fieldset>
 
-          </fieldset>
-          <button type="button" (click)="addSpecialization()">Add Specialization</button>
-          <button type="button" (click)="removeSpecialization()">Remove Specialization</button>
-          
-    </fieldset>
-
-    <fieldset>
-        <h3>Operation Specification</h3>
-
-        <fieldset>
-            <h4>Name</h4>
-            <input id="operation-name" type="text" required name="Operation" placeholder="ex: Teeth Cleaning.." [(ngModel)]="operationName">
-        </fieldset>
-
-        <fieldset>
-            <h4>Date</h4>
-            <input type="datetime-local" name="operationDate" [(ngModel)]="operationDate">
-        </fieldset>
-
-        <fieldset>
-            <h4>Duration</h4>
-            <input type="time" name="operationDuration" [(ngModel)]="operationDuration">
-        </fieldset>
-
-        <fieldset>
-            <h4>Priority</h4>
-            <select required id="Priority" [(ngModel)]="priority" name="priority" required>
-                <option value="ElectiveSurgery">Elective Surgery</option>
-                <option value="UrgentSurgery">Urgent Surgery</option>
-                <option value="EmergencySurgery">Emergency Surgery</option>
-            </select>
-        </fieldset>
-    </fieldset>
-
-    <button type="submit" style="margin-top: 10px;">Submit</button>
-</form>
+                <fieldset style="width: 100%; display: flex; justify-content: center;flex-direction:column ; align-items: center;">
+                    <h4>Priority</h4>
+                    <select required id="Priority" [(ngModel)]="priority" name="priority" required>
+                        <option value="ElectiveSurgery">Elective Surgery</option>
+                        <option value="UrgentSurgery">Urgent Surgery</option>
+                        <option value="EmergencySurgery">Emergency Surgery</option>
+                    </select>
+                </fieldset>
+            </fieldset>
+            <div id="submitDiv">
+                <button type="submit" style=" width: 100px;" id="submit">Submit</button>
+            </div>
+        </form>
+    </div>
 
 

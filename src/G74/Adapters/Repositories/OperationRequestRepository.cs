@@ -108,6 +108,8 @@ namespace G74.Adapters.Repositories
             
         }
 
+        
+
         public async Task ExportOperationRequestDataToProlog()
         {
             //TODO:Terminar Rui Beloto.

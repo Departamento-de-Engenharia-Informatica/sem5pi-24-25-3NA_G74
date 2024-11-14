@@ -22,7 +22,7 @@ public class OperationRequestMapper
     {
         return new OperationRequest(
             operationRequestDto.MedicalRecordNumber,
-            operationRequestDto.LicenceNumber,
+            new LicenceNumber(operationRequestDto.LicenceNumber),
             operationRequestDto.OperationTypeId,
             operationRequestDto.DeadlineDate,
             operationRequestDto.Priority
@@ -37,7 +37,7 @@ public class OperationRequestMapper
     {  
         return new OperationRequest(
             new MedicalRecordNumber(modelOperationRequestDataModel.MedicalRecordNumber.ToString()),
-            new LicenceNumber(modelOperationRequestDataModel.LicenceNumber),
+            new LicenceNumber(modelOperationRequestDataModel.LicenceNumber.ToString()),
             modelOperationRequestDataModel.OperationTypeId,
             new DeadlineDate(modelOperationRequestDataModel.DeadlineDate),
             new Priority(modelOperationRequestDataModel.Priority)

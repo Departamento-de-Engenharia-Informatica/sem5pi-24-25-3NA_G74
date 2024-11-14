@@ -25,6 +25,7 @@ public class OperationRequestController : ControllerBase
         }
         try 
         {
+            Console.WriteLine("Received Operation Request: " + receivedOperationRequest);
             OperationRequestDTO operationReturnDto = await _appServiceOperationRequest.RegisterOperationRequest(receivedOperationRequest);
 
             return CreatedAtAction(nameof(RegisterOperationRequest), operationReturnDto);
