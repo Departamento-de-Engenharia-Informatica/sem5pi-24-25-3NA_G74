@@ -13,7 +13,7 @@ import { catchError, tap } from 'rxjs/operators';
 
 export class OperationRequestRepository implements IOperationRepository {
 
-  private apiUrl = `${environment.apiUrl}/OperationRequest/`;
+  private apiUrl = `https://localhost:7036/api/OperationRequest/`;
 
   constructor(private http: HttpClient) {}
 
@@ -46,12 +46,15 @@ export class OperationRequestRepository implements IOperationRepository {
       
     }
     
-    updateOperationRequest(operation: Partial<OperationRequest>, id: BigInt): Observable<OperationRequest> {
+    updateOperationRequest(operation: Partial<OperationRequest>, id: number): Observable<OperationRequest> {
       const url = `${this.apiUrl}${id}`;
-      return this.http.patch<OperationRequest>(url, operation);
+      const operationJson = JSON.stringify(operation);
+      console.log(url)
+      console.log('Operation Request JSON:', operationJson);
+      return this.http.put<OperationRequest>(url, operation);
     }
 
-    deleteOperationRequest(id: BigInt): Observable<any> {
+    deleteOperationRequest(id: number): Observable<any> {
       const url = `${this.apiUrl}${id}`;
       return this.http.delete<any>(url);
     }

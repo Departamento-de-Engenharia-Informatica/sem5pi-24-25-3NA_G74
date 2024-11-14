@@ -16,11 +16,11 @@ export class OperationRequestService {
         return this.operationRepository.createOperationRequest(operation);
     }
 
-    updateOperation(operation: Partial<OperationRequest>, id: BigInt): Observable<OperationRequest> {
+    updateOperation(operation: Partial<OperationRequest>, id: number): Observable<OperationRequest> {
         return this.operationRepository.updateOperationRequest(operation, id);
     }
 
-    deleteOperation(id: BigInt): Observable<any> {
+    deleteOperation(id: number): Observable<any> {
         return this.operationRepository.deleteOperationRequest(id);
     }
 

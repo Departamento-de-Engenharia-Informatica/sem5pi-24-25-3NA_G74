@@ -1,27 +1,43 @@
 
 <h1 style="display: flex; justify-content: center; color: white;">Table of All Operations</h1>
 
+<div style=" margin-top: 5px; " >
+    <button (click)="redirectToRegister()" type="button" id="AddOperation">+ Add Operation</button>
+</div>
+
 <div id="firstDiv">
     
 
     <table border="1">
     <thead>
         <tr>
-        <th>Medical Record Number</th>
-        <th>Licence Number</th>
-        <th>Priority</th>
-        <th>Deadline Date (yyyyMMdd)</th>
-        <th>Operation Type ID</th>
+        <th id="tableColumns">ID</th>
+        <th id="tableColumns">Medical Record Number</th>
+        <th id="tableColumns">Licence Number</th>
+        <th id="tableColumns">Priority</th>
+        <th id="tableColumns">Deadline Date (yyyy/MM/dd-hh:mm)</th>
+        <th id="tableColumns">Operation Type ID</th>
         </tr>
     </thead>
     <tbody>
         <tr *ngFor="let operation of operations; let i = index; trackBy: trackByIndex">
-            <td>{{operation.medicalRecordNumber.medicalNumber}}</td>
-            <td>{{operation.licenceNumber}}</td>
-            <td>{{getPriorityDescription(operation.priority.priorityDescription)}}</td>
-            <td>{{operation.deadlineDate.date}}</td>
-            <td>{{operation.operationTypeId}}</td>
+            <td id="tableData">{{operation.operationRequestId}}</td>
+            <td id="tableData">{{operation.medicalRecordNumber.medicalNumber}}</td>
+            <td id="tableData">{{operation.licenceNumber}}</td>
+            <td id="tableData">{{getPriorityDescription(operation.priority.priorityDescription)}}</td>
+            <td id="tableData">{{operation.deadlineDate.date | date: 'yyyy/MM/dd-HH:mm'}}</td>
+            <td id="tableData">{{operation.operationTypeId}}</td>
+            <td>
+                <button (click)="redirectToEdit(operation)" id="AddOperation2">Edit</button>
+            </td>
+            <td>
+                <button (click)="deleteOperation(operation)"  id="AddOperation2">Delete</button>
+            </td>
+            
+            
         </tr>
     </tbody>
     </table>
+
+    
 </div>

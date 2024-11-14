@@ -5,9 +5,9 @@ export interface IOperationRepository {
 
   createOperationRequest(operation: OperationRequest): Promise<OperationRequest>;
 
-  updateOperationRequest(operation: Partial<OperationRequest>, id : BigInt): Observable<OperationRequest>;
+  updateOperationRequest(operation: Partial<OperationRequest>, id : number): Observable<OperationRequest>;
   
-  deleteOperationRequest(id: BigInt): Observable<any>;
+  deleteOperationRequest(id: number): Observable<any>;
 
   listAllOperationRequests(): Observable<OperationRequestDTO[]>;
   

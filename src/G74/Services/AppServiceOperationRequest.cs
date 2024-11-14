@@ -19,7 +19,7 @@ public class AppServiceOperationRequest : IAppServiceOperationRequest
         _staffService = staffService;
     }
 
-    public async Task<OperationRequestDTO> DeleteOperationRequest(Guid id)
+    public async Task<OperationRequestDTO> DeleteOperationRequest(long id)
     {
         var operation = await _operationRepository.Delete(id);
         if (operation != null) { return OperationRequestMapper.ToDTO(operation); } else { throw new Exception("Operation Executed Not as Expected."); };
@@ -90,7 +90,7 @@ public class AppServiceOperationRequest : IAppServiceOperationRequest
         return OperationRequestMapper.ToDTO(operation);
     }
 
-    public async Task<OperationRequestDTO> UpdateOperationRequest(Guid id, OperationRequestDTO updatedOperationDto)
+    public async Task<OperationRequestDTO> UpdateOperationRequest(long id, OperationRequestDTO updatedOperationDto)
     {
 
         if (updatedOperationDto == null)

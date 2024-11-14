@@ -15,7 +15,9 @@ public class OperationRequestMapper
             operationRequest.LicenceNumber,
             operationRequest.OperationTypeId,
             operationRequest.DeadlineDate,
-            operationRequest.Priority);
+            operationRequest.Priority,
+            operationRequest.OperationRequestId
+        );
     }
 
     public static OperationRequest ToDomain(OperationRequestDTO operationRequestDto)
@@ -25,7 +27,8 @@ public class OperationRequestMapper
             new LicenceNumber(operationRequestDto.LicenceNumber),
             operationRequestDto.OperationTypeId,
             operationRequestDto.DeadlineDate,
-            operationRequestDto.Priority
+            operationRequestDto.Priority,
+            operationRequestDto.OperationRequestId
         );
 
     }
@@ -35,12 +38,14 @@ public class OperationRequestMapper
     }
     public static OperationRequest FromDataModelToDomain(OperationRequestDataModel modelOperationRequestDataModel)
     {  
+        
         return new OperationRequest(
             new MedicalRecordNumber(modelOperationRequestDataModel.MedicalRecordNumber.ToString()),
             new LicenceNumber(modelOperationRequestDataModel.LicenceNumber.ToString()),
             modelOperationRequestDataModel.OperationTypeId,
             new DeadlineDate(modelOperationRequestDataModel.DeadlineDate),
-            new Priority(modelOperationRequestDataModel.Priority)
+            new Priority(modelOperationRequestDataModel.Priority),
+            modelOperationRequestDataModel.Id
         );
     }
 

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace G74.Migrations
 {
     [DbContext(typeof(BackofficeAppDbContext))]
-    [Migration("20241113222217_InitialCreate")]
+    [Migration("20241114133405_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -55,10 +55,12 @@ namespace G74.Migrations
 
             modelBuilder.Entity("G74.DTO.OperationRequestDataModel", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("bigint")
                         .HasColumnName("Id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("DeadlineDate")
                         .HasColumnType("datetime2")
@@ -265,7 +267,7 @@ namespace G74.Migrations
                     b.Property<long>("LicenceNumber")
                         .HasMaxLength(50)
                         .HasColumnType("bigint")
-                        .HasColumnName("Licence Number");
+                        .HasColumnName("LicenceNumber");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -292,6 +294,9 @@ namespace G74.Migrations
                         .HasColumnName("Status");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("LicenceNumber")
+                        .IsUnique();
 
                     b.ToTable("Staff");
                 });

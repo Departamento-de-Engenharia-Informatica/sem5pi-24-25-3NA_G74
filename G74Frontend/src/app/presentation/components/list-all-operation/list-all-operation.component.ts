@@ -2,6 +2,10 @@ import { Component, ViewEncapsulation } from '@angular/core';
 import { OperationRequest, OperationRequestDTO } from '../../../domain/models/operationRequest.model';
 import {OperationRequestService} from '../../../application/services/operationRequest.service';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+
 @Component({
   selector: 'app-list-all-operation',
   standalone: true,
@@ -13,7 +17,15 @@ import { CommonModule } from '@angular/common';
 export class ListAllOperationComponent {
   operations: OperationRequestDTO[] = [];
 
-  constructor(private operationService: OperationRequestService) {}
+  constructor(private router: Router,private operationService: OperationRequestService, private dialog:MatDialog) {}
+
+  redirectToRegister() {
+    this.router.navigate(['/doctor/create-operation']);
+  }
+
+  redirectToEdit(operation: OperationRequestDTO) {
+    this.router.navigate(['/doctor/update-operation'], { state: { operation } });
+  }
 
   ngOnInit(): void {
     this.getOperations();
@@ -41,6 +53,19 @@ export class ListAllOperationComponent {
       default:
         return 'Unknown';
     }
+  }
+
+  deleteOperation(operation: OperationRequestDTO): void {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: { message: 'Are you sure you want to delete this operation?' }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.operationService.deleteOperation(operation.operationRequestId).subscribe(() => {
+          this.getOperations();
+        });
+      }
+    });
   }
 
 }

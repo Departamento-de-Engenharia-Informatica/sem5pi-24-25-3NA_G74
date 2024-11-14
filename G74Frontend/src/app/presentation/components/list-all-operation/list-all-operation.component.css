@@ -23,3 +23,40 @@ body{
     border-radius: 10px;
     background-color: #f5f5f5;
 }
+
+#AddOperation{
+    
+    cursor: pointer;
+    margin-left: 15px;
+    color: blue;
+    align-items: center;
+    padding: 4px;
+}
+#AddOperation2{
+    
+    cursor: pointer;
+    color: blue;
+    align-items: center;
+    padding: 4px;
+}
+
+
+#AddOperation:hover{
+    text-decoration: underline;
+    
+}
+#AddOperation2:hover{
+    text-decoration: underline;
+    
+}
+
+#tableData{
+    padding: 4px;
+    align-items: center;
+}
+
+#tableColumns{
+    color: black;
+    font-weight: bold;
+    padding: 4px;
+}

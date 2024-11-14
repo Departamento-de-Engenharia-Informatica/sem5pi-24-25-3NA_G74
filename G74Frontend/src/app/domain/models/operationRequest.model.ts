@@ -9,7 +9,7 @@ export interface OperationRequest {
   }
 
   export interface OperationRequestDTO{
-
+    operationRequestId: number;
     medicalRecordNumber: {
       medicalNumber: string;
     };

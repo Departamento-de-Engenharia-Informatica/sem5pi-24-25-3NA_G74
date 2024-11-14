@@ -9,6 +9,15 @@ public class OperationRequestDTO {
     public DeadlineDate DeadlineDate {get;private set; }
     public Priority Priority {get;private set; }
 
+    public OperationRequestDTO(MedicalRecordNumber medicalRecordNumber, LicenceNumber licenceNumber, long operationTypeId, DeadlineDate deadlineDate, Priority priority, long operationRequestId)
+    {
+        OperationRequestId = operationRequestId;
+        MedicalRecordNumber = medicalRecordNumber;
+        LicenceNumber = licenceNumber.licenceNumber;
+        OperationTypeId = operationTypeId;
+        DeadlineDate = deadlineDate;
+        Priority = priority;
+    }
     public OperationRequestDTO(MedicalRecordNumber medicalRecordNumber, LicenceNumber licenceNumber, long operationTypeId, DeadlineDate deadlineDate, Priority priority)
     {
         MedicalRecordNumber = medicalRecordNumber;
@@ -17,5 +26,6 @@ public class OperationRequestDTO {
         DeadlineDate = deadlineDate;
         Priority = priority;
     }
+    
 
 }

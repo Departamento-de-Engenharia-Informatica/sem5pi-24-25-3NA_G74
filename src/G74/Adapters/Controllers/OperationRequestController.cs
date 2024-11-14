@@ -50,10 +50,11 @@ public class OperationRequestController : ControllerBase
         {
             return BadRequest("Invalid operation data.");
         }
-        if (!Guid.TryParse(id, out Guid operationRequestId))
+        if (!long.TryParse(id, out long operationRequestId))
         {
             return BadRequest("Invalid ID format.");
         }
+        
 
         try
         {
@@ -78,7 +79,7 @@ public class OperationRequestController : ControllerBase
         string id
     )
     {
-        if (!Guid.TryParse(id, out Guid operationRequestId))
+        if (!long.TryParse(id, out long operationRequestId))
         {
             return BadRequest("Invalid ID format.");
         }
