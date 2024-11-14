@@ -18,7 +18,7 @@ export default class Ground {
         texture.colorSpace = THREE.SRGBColorSpace;
         texture.wrapS = THREE.RepeatWrapping;
         texture.wrapT = THREE.RepeatWrapping;
-        texture.repeat.set(this.size.width, this.size.height);
+        texture.repeat.set(this.size.width, this.size.height-2);
         texture.magFilter = THREE.LinearFilter;
         texture.minFilter = THREE.LinearMipmapLinearFilter;
 

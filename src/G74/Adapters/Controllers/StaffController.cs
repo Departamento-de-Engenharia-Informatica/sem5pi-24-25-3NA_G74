@@ -33,9 +33,9 @@ public class StaffController : ControllerBase
     // GET: api/Staff//license/682468
     // [Authorize(Roles = "Admin")]
     [HttpGet("license/{licenseNumber}")]
-    public async Task<ActionResult<StaffDto>> GetStaffByLicenseNumber(string licenseNumber)
+    public async Task<ActionResult<StaffDto>> GetStaffByLicenseNumber(long licenceNumber)
     {
-        var staffDto = await _service.GetByLicenseNumber(licenseNumber);
+        var staffDto = await _service.GetByLicenseNumber(licenceNumber);
 
         if (staffDto == null)
         {
@@ -56,7 +56,7 @@ public class StaffController : ControllerBase
             
             return CreatedAtAction(
                 nameof(GetStaffByLicenseNumber),
-                new { licenseNumber = retStaffDto.LicenseNumber },
+                new { licenseNumber = retStaffDto.LicenceNumber },
                 retStaffDto);
         }
         catch(BusinessRuleValidationException ex)
@@ -68,11 +68,11 @@ public class StaffController : ControllerBase
     // PUT: api/Staff/license/{licenseNumber}
     // [Authorize(Roles = "Admin")]
     [HttpPut("license/{licenseNumber}")]
-    public async Task<ActionResult<StaffDto>> UpdateStaff(string licenseNumber, [FromBody] StaffDto staffDto)
+    public async Task<ActionResult<StaffDto>> UpdateStaff(long licenceNumber, [FromBody] StaffDto staffDto)
     {
         try
         {
-            var staffDtoResult = await _service.Update(licenseNumber, staffDto);
+            var staffDtoResult = await _service.Update(licenceNumber, staffDto);
             
             return Ok(staffDtoResult);
         }
@@ -88,14 +88,14 @@ public class StaffController : ControllerBase
     
     // [Authorize(Roles = "Admin")]
     [HttpPatch("license/{licenseNumber}/deactivate")]
-    public async Task<ActionResult<StaffDto>> DeactivateStaff(string licenseNumber)
+    public async Task<ActionResult<StaffDto>> DeactivateStaff(long licenceNumber)
     {
         try
         {
-            var staffDto = await _service.Deactivate(licenseNumber);
+            var staffDto = await _service.Deactivate(licenceNumber);
             if (staffDto == null)
             {
-                return NotFound($"Staff with license number {licenseNumber} not found.");
+                return NotFound($"Staff with license number {licenceNumber} not found.");
             }
             return Ok(staffDto);
         }

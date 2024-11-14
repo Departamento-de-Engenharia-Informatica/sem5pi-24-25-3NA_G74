@@ -259,11 +259,10 @@ namespace G74.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasColumnName("ContactEmail");
 
-                    b.Property<string>("LicenseNumber")
-                        .IsRequired()
+                    b.Property<long>("LicenceNumber")
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("LicenseNumber");
+                        .HasColumnType("bigint")
+                        .HasColumnName("Licence Number");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -290,9 +289,6 @@ namespace G74.Migrations
                         .HasColumnName("Status");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("LicenseNumber")
-                        .IsUnique();
 
                     b.ToTable("Staff");
                 });

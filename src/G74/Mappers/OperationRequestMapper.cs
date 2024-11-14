@@ -22,7 +22,7 @@ public class OperationRequestMapper
     {
         return new OperationRequest(
             operationRequestDto.MedicalRecordNumber,
-            operationRequestDto.LicenceNumber,
+            new LicenceNumber(operationRequestDto.LicenceNumber),
             operationRequestDto.OperationTypeId,
             operationRequestDto.DeadlineDate,
             operationRequestDto.Priority

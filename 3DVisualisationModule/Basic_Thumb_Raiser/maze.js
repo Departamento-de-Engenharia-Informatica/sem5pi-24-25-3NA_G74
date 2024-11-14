@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import Ground from "./ground.js";
 import Wall from "./wall.js";
+import Door from "./door.js";
 
 /*
  * parameters = {
@@ -11,46 +12,76 @@ import Wall from "./wall.js";
  */
 
 export default class Maze {
-    constructor(parameters) {
+    constructor(parameters, doorParameters, initial_position) {
+
         this.onLoad = function (description) {
+
             // Store the maze's map and size
             this.map = description.map;
             this.size = description.size;
 
-            // Store the player's initial position and direction
-            this.initialPosition = this.cellToCartesian(description.initialPosition);
-            this.initialDirection = description.initialDirection;
+            console.log(description.map);
+            // Store the building
+            this.building = description.building;
 
+            // Store the player's initial position and direction
+            console.log('Pos__Initial = ', initial_position);
+            if(initial_position==0){
+                this.initialPosition = this.cellToCartesian(description.initialPosition);
+            }else{
+                this.initialPosition = this.cellToCartesian(initial_position);
+            }
+
+            console.log('PosInitial = ', this.initialPosition);
+
+            this.initialDirection = description.initialDirection;
+            
             // Store the maze's exit location
             this.exitLocation = this.cellToCartesian(description.exitLocation);
 
+            if(typeof description.accessToBuilding != "undefined"){
+                this.accessToBuilding = description.accessToBuilding;
+            }else{
+                this.accessToBuilding = [];
+            }
+
+            
             // Create a group of objects
             this.object = new THREE.Group();
 
             // Create the ground
             this.ground = new Ground({ textureUrl: description.groundTextureUrl, size: description.size });
+            
             this.object.add(this.ground.object);
 
             // Create a wall
-            this.wall = new Wall({ textureUrl: description.wallTextureUrl });
+            this.wall = new Wall( {textureUrl: description.wallTextureUrl} );
 
             // Build the maze
             let wallObject;
+
+            this.doorObjectHorizontal = new Array();
+            this.doorObjectVertical = new Array();
+            this.doors = new Array();
+
             for (let i = 0; i <= description.size.width; i++) { // In order to represent the eastmost walls, the map width is one column greater than the actual maze width
                 for (let j = 0; j <= description.size.height; j++) { // In order to represent the southmost walls, the map height is one row greater than the actual maze height
-                    /*
-                     * description.map[][] | North wall | West wall
-                     * --------------------+------------+-----------
-                     *          0          |     No     |     No
-                     *          1          |     No     |    Yes
-                     *          2          |    Yes     |     No
-                     *          3          |    Yes     |    Yes
+                              /*
+                     *  this.map[][] | North wall | West wall
+                     * --------------+------------+-----------
+                     *       0       |     No     |     No
+                     *       1       |     No     |    Yes
+                     *       2       |    Yes     |     No
+                     *       3       |    Yes     |    Yes
+                     *       4       |    door    |
+                     *       5       |            |    door
                      */
                     if (description.map[j][i] == 2 || description.map[j][i] == 3) {
                         wallObject = this.wall.object.clone();
                         wallObject.position.set(i - description.size.width / 2.0 + 0.5, 0.5, j - description.size.height / 2.0);
                         this.object.add(wallObject);
                     }
+
                     if (description.map[j][i] == 1 || description.map[j][i] == 3) {
                         wallObject = this.wall.object.clone();
                         wallObject.rotateY(Math.PI / 2.0);
@@ -59,6 +90,32 @@ export default class Maze {
                     }
                 }
             }
+
+            for (let i = 0; i <= description.size.width; i++) { // In order to represent the eastmost walls, the map width is one column greater than the actual maze width
+                for (let j = 0; j <= description.size.height; j++) { // In order to represent the southmost walls, the map height is one row greater than the actual maze height
+                    if (description.map[j][i] == 4) {
+                        const position = [j - 0.5, i];
+                        this.doorObjectHorizontal.push(this.cellToCartesian(position));
+                        // Create the door
+                        this.doorObject = new Door(doorParameters,[j,i]);
+                        this.doors.push(this.doorObject);
+
+                    }
+                }
+            }
+
+            for (let i = 0; i <= description.size.width; i++) { // In order to represent the eastmost walls, the map width is one column greater than the actual maze width
+                for (let j = 0; j <= description.size.height; j++) { // In order to represent the southmost walls, the map height is one row greater than the actual maze height
+                    if (description.map[j][i] == 5) {
+                        const position = [j, i - 0.5 ];
+                        this.doorObjectVertical.push(this.cellToCartesian(position));
+                        // Create the door
+                        this.doorObject = new Door(doorParameters,[j,i]);
+                        this.doors.push(this.doorObject);
+                    }
+                }
+            }
+
 
             this.object.scale.set(this.scale.x, this.scale.y, this.scale.z);
             this.loaded = true;
@@ -146,7 +203,45 @@ export default class Maze {
         return Infinity;
     }
 
+    distanceToEastDoor(position) {
+        const indices = this.cartesianToCell(position);
+        indices[1]++;
+        if (this.map[indices[0]][indices[1]] == 5) {
+            return this.cellToCartesian(indices).x - this.scale.x / 2.0 - position.x;
+        }
+        return Infinity;
+    }
+
+    distanceToWestDoor(position) {
+        const indices = this.cartesianToCell(position);
+        if (this.map[indices[0]][indices[1]] == 5) {
+            return position.x - this.cellToCartesian(indices).x + this.scale.x / 2.0;
+        }
+        return Infinity;
+    }
+
+    distanceToNorthDoor(position) {
+        const indices = this.cartesianToCell(position);
+        if (this.map[indices[0]][indices[1]] == 4) {
+            return position.z - this.cellToCartesian(indices).z + this.scale.z / 2.0;
+        }
+        return Infinity;
+    }
+
+    distanceToSouthDoor(position) {
+        const indices = this.cartesianToCell(position);
+        indices[0]++;
+        if (this.map[indices[0]][indices[1]] == 4) {
+            return this.cellToCartesian(indices).z - this.scale.z / 2.0 - position.z;
+        }
+        return Infinity;
+    }
+
+    
     foundExit(position) {
         return Math.abs(position.x - this.exitLocation.x) < 0.5 * this.scale.x && Math.abs(position.z - this.exitLocation.z) < 0.5 * this.scale.z
     };
+
+
+
 }

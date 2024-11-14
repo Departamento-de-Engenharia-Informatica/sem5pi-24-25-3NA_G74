@@ -18,21 +18,13 @@ export default class Lights {
         // Create a group of objects
         this.object = new THREE.Group();
 
-        // Create the directional light
-        this.object.directionalLight = new THREE.DirectionalLight(this.directionalLight.color, this.directionalLight.intensity);
-        this.object.directionalLight.position.set(0,10,0);
-        this.object.directionalLight.target.position.set(-5,0,0);
-
-        this.object.add(this.object.directionalLight);
-
-
         // Create the ambient light
         this.object.ambientLight = new THREE.AmbientLight(this.ambientLight.color, this.ambientLight.intensity);
 
         this.object.add(this.object.ambientLight);
 
         // Create the first point light and turn on shadows for this light
-        /*this.object.pointLight1 = new THREE.PointLight(this.pointLight1.color, this.pointLight1.intensity, this.pointLight1.distance);
+        this.object.pointLight1 = new THREE.PointLight(this.pointLight1.color, this.pointLight1.intensity, this.pointLight1.distance);
         this.object.pointLight1.position.set(this.pointLight1.position.x, this.pointLight1.position.y, this.pointLight1.position.z);
         this.object.pointLight1.castShadow = true;
 
@@ -53,6 +45,6 @@ export default class Lights {
         this.object.pointLight2.shadow.mapSize.height = 512;
         this.object.pointLight2.shadow.camera.near = 5.0;
         this.object.pointLight2.shadow.camera.far = 15.0;
-        this.object.add(this.object.pointLight2);*/
+        this.object.add(this.object.pointLight2);
     }
 }

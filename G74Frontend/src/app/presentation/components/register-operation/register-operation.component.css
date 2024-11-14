@@ -1,0 +1,102 @@
+body{
+    background: linear-gradient(90deg, #02012c, #06235a); 
+    margin: 0; 
+    display: flex;
+    justify-content: center;
+    color: white;
+}
+
+#title{
+    margin-top: 10%;
+    margin-bottom: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+#fieldSetMedicalRecordNumber{
+    margin-top: 5%;
+    margin-bottom: 5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #06235a;
+}
+
+#fieldSetLicenceNumber{
+    margin-top: 2%;
+    margin-bottom: 5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #06235a;
+}
+
+
+
+
+
+#butoesListSpecializations{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: #06235a;
+    
+}
+
+#backTemp{
+    background-color: white;
+    color: white;
+    border-radius: 10px;
+    padding: 20px;
+   
+}
+
+#operationSpecification{
+    margin-top: 5%;
+    margin-bottom: 5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 30px;
+    background-color: #06235a;
+}
+
+#submitDiv{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+}
+
+#submit{
+    background-color: #06235a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+#submit:hover{
+    background-color: #0a3990;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+}

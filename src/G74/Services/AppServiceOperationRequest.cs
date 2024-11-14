@@ -41,7 +41,9 @@ public class AppServiceOperationRequest : IAppServiceOperationRequest
 
             foreach (var operationRequest in operationRequests)
             {
+                
                 var operationRequestDTO = OperationRequestMapper.ToDTO(operationRequest);
+                Console.WriteLine("Licence Number: "+operationRequestDTO.LicenceNumber);
                 operationRequestsDTO.Add(operationRequestDTO);
             }
 
@@ -98,7 +100,7 @@ public class AppServiceOperationRequest : IAppServiceOperationRequest
             throw new ArgumentException("No patient found with this medical record number");
     }
 
-    var staffDto = await _staffService.GetByLicenseNumber(updatedOperationDto.LicenceNumber.licenceNumber);
+    var staffDto = await _staffService.GetByLicenseNumber(updatedOperationDto.LicenceNumber);
     if( staffDto==null)
     {
             throw new ArgumentException("No staff member with this Licence Number.");
@@ -116,7 +118,7 @@ public class AppServiceOperationRequest : IAppServiceOperationRequest
     Console.WriteLine("Operation");
   
     existingOperation.MedicalRecordNumber = new MedicalRecordNumber(updatedOperationDto.MedicalRecordNumber.MedicalNumber);
-    existingOperation.LicenceNumber = new LicenceNumber(updatedOperationDto.LicenceNumber.licenceNumber);
+    existingOperation.LicenceNumber = new LicenceNumber(updatedOperationDto.LicenceNumber);
     existingOperation.OperationTypeId = updatedOperationDto.OperationTypeId;
     existingOperation.DeadlineDate = new DeadlineDate(updatedOperationDto.DeadlineDate.date);
     existingOperation.Priority = new Priority(updatedOperationDto.Priority.PriorityDescription);
