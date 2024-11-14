@@ -16,10 +16,10 @@ public class Staff : Entity<Guid>, IAggregateRoot
     public string Availability { get; private set; }
 
 
-    public Staff(LicenseNumber licenseNumber, Name name, PhoneNumber phoneNumber,
+    public Staff(LicenceNumber licenceNumber, Name name, PhoneNumber phoneNumber,
         Email contactEmail, StaffSpecialization staffSpecialization, Status status, string availability) : base(Guid.NewGuid())
     {
-        LicenceNumber = licenseNumber;
+        LicenceNumber = licenceNumber;
         Name = name;
         PhoneNumber = phoneNumber;
         ContactEmail = contactEmail;
@@ -38,11 +38,11 @@ public class Staff : Entity<Guid>, IAggregateRoot
         Status = new Status("deactivated");
     }
 
-    public static Staff Create(long licenseNumber, string name, string phoneNumber,
+    public static Staff Create(long licenceNumber, string name, string phoneNumber,
                                 string contactEmail, string staffSpecialization, string status, string availability)
     {
         return new Staff(
-            new LicenceNumber(licenseNumber),
+            new LicenceNumber(licenceNumber),
             new Name(name),
             new PhoneNumber(phoneNumber),
             new Email(contactEmail),
@@ -52,9 +52,9 @@ public class Staff : Entity<Guid>, IAggregateRoot
         );
     }
 
-    public void UpdateLicenseNumber(LicenceNumber licenseNumber)
+    public void UpdateLicenceNumber(LicenceNumber licenceNumber)
     {
-        this.LicenceNumber = licenseNumber;
+        this.LicenceNumber = licenceNumber;
     }
 
     public void UpdateName(Name name)

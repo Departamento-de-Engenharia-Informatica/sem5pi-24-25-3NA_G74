@@ -1,6 +1,6 @@
 export interface Staff {
 
-    licenseNumber: string;
+    licenceNumber: string;
     name: string;
     phoneNumber: string;
     contactEmail: string;

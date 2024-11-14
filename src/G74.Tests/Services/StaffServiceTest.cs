@@ -30,7 +30,7 @@ public class StaffServiceTest
 
         // // Create valid test data
         // _validStaff = new Staff(
-        //     new LicenseNumber("12345"),
+        //     new LicenceNumber("12345"),
         //     new Name("John Smith"),
         //     new PhoneNumber("+1234567890"),
         //     new Email("john.Smith@example.com"),
@@ -65,7 +65,7 @@ public class StaffServiceTest
     //     Assert.Equal(2, staffDtos.Count); // Verify we got both staff members
     //     Assert.All(staffDtos, dto => 
     //     {
-    //         Assert.Equal(_validStaff.LicenseNumber.Value, dto.LicenseNumber);
+    //         Assert.Equal(_validStaff.LicenceNumber.Value, dto.LicenceNumber);
     //         Assert.Equal(_validStaff.Name.Value, dto.Name);
     //         Assert.Equal(_validStaff.PhoneNumber.Value, dto.PhoneNumber);
     //         Assert.Equal(_validStaff.ContactEmail.email, dto.ContactEmail);
@@ -75,29 +75,29 @@ public class StaffServiceTest
     // }
     //
     // [Fact]
-    // public async Task GetByLicenseNumber_WithExistingLicense_ReturnsStaffDto()
+    // public async Task GetByLicenceNumber_WithExistingLicence_ReturnsStaffDto()
     // {
     //     // Arrange
-    //     _mockStaffRepository.Setup(repo => repo.GetByLicenseNumberAsync(_validStaff.LicenseNumber.Value))
+    //     _mockStaffRepository.Setup(repo => repo.GetByLicenceNumberAsync(_validStaff.LicenceNumber.Value))
     //         .ReturnsAsync(_validStaff);
     //
     //     // Act
-    //     var result = await _staffService.GetByLicenseNumber(_validStaff.LicenseNumber.Value);
+    //     var result = await _staffService.GetByLicenceNumber(_validStaff.LicenceNumber.Value);
     //
     //     // Assert
     //     Assert.NotNull(result);
-    //     Assert.Equal(_validStaff.LicenseNumber.Value, result.LicenseNumber);
+    //     Assert.Equal(_validStaff.LicenceNumber.Value, result.LicenceNumber);
     // }
     //
     // [Fact]
-    // public async Task GetByLicenseNumber_WithNonExistingLicense_ReturnsNull()
+    // public async Task GetByLicenceNumber_WithNonExistingLicence_ReturnsNull()
     // {
     //     // Arrange
-    //     _mockStaffRepository.Setup(repo => repo.GetByLicenseNumberAsync("nonexistent"))
+    //     _mockStaffRepository.Setup(repo => repo.GetByLicenceNumberAsync("nonexistent"))
     //         .ReturnsAsync((Staff)null);
     //
     //     // Act
-    //     var result = await _staffService.GetByLicenseNumber("nonexistent");
+    //     var result = await _staffService.GetByLicenceNumber("nonexistent");
     //
     //     // Assert
     //     Assert.Null(result);
@@ -107,7 +107,7 @@ public class StaffServiceTest
     // public async Task Add_WithNewStaff_ReturnsCreatedStaffDto()
     // {
     //     // Arrange
-    //     _mockStaffRepository.Setup(repo => repo.StaffExists(_validStaffDto.LicenseNumber))
+    //     _mockStaffRepository.Setup(repo => repo.StaffExists(_validStaffDto.LicenceNumber))
     //         .ReturnsAsync(false);
     //     _mockStaffRepository.Setup(repo => repo.Add(It.IsAny<Staff>()))
     //         .ReturnsAsync(_validStaff);
@@ -117,15 +117,15 @@ public class StaffServiceTest
     //
     //     // Assert
     //     Assert.NotNull(result);
-    //     Assert.Equal(_validStaffDto.LicenseNumber, result.LicenseNumber);
+    //     Assert.Equal(_validStaffDto.LicenceNumber, result.LicenceNumber);
     //     _mockStaffRepository.Verify(repo => repo.Add(It.IsAny<Staff>()), Times.Once);
     // }
     //
     // [Fact]
-    // public async Task Add_WithExistingLicenseNumber_ThrowsException()
+    // public async Task Add_WithExistingLicenceNumber_ThrowsException()
     // {
     //     // Arrange
-    //     _mockStaffRepository.Setup(repo => repo.StaffExists(_validStaffDto.LicenseNumber))
+    //     _mockStaffRepository.Setup(repo => repo.StaffExists(_validStaffDto.LicenceNumber))
     //         .ReturnsAsync(true);
     //
     //     // Act & Assert
@@ -138,7 +138,7 @@ public class StaffServiceTest
     // {
     //     // Arrange
     //     var updatedStaff = new Staff(
-    //         new LicenseNumber(_validStaff.LicenseNumber.Value),
+    //         new LicenceNumber(_validStaff.LicenceNumber.Value),
     //         new Name("Jane Smith"),
     //         _validStaff.PhoneNumber,
     //         _validStaff.ContactEmail,
@@ -146,11 +146,11 @@ public class StaffServiceTest
     //         _validStaff.Status
     //     );
     //
-    //     _mockStaffRepository.Setup(repo => repo.Update(_validStaff.LicenseNumber.Value, It.IsAny<Staff>()))
+    //     _mockStaffRepository.Setup(repo => repo.Update(_validStaff.LicenceNumber.Value, It.IsAny<Staff>()))
     //         .ReturnsAsync(updatedStaff);
     //
     //     var updateDto = new StaffDto(
-    //         _validStaffDto.LicenseNumber,
+    //         _validStaffDto.LicenceNumber,
     //         "Jane Smith",
     //         _validStaffDto.PhoneNumber,
     //         _validStaffDto.ContactEmail,
@@ -159,12 +159,12 @@ public class StaffServiceTest
     //     );
     //
     //     // Act
-    //     var result = await _staffService.Update(_validStaff.LicenseNumber.Value, updateDto);
+    //     var result = await _staffService.Update(_validStaff.LicenceNumber.Value, updateDto);
     //
     //     // Assert
     //     Assert.NotNull(result);
     //     Assert.Equal("Jane Smith", result.Name);
-    //     _mockStaffRepository.Verify(repo => repo.Update(_validStaff.LicenseNumber.Value, It.IsAny<Staff>()), Times.Once);
+    //     _mockStaffRepository.Verify(repo => repo.Update(_validStaff.LicenceNumber.Value, It.IsAny<Staff>()), Times.Once);
     // }
     //
     // [Fact]
@@ -172,7 +172,7 @@ public class StaffServiceTest
     // {
     //     // Arrange
     //     var deactivatedStaff = new Staff(
-    //         _validStaff.LicenseNumber,
+    //         _validStaff.LicenceNumber,
     //         _validStaff.Name,
     //         _validStaff.PhoneNumber,
     //         _validStaff.ContactEmail,
@@ -180,25 +180,25 @@ public class StaffServiceTest
     //         new Status("deactivated")
     //     );
     //
-    //     _mockStaffRepository.Setup(repo => repo.GetByLicenseNumberAsync(_validStaff.LicenseNumber.Value))
+    //     _mockStaffRepository.Setup(repo => repo.GetByLicenceNumberAsync(_validStaff.LicenceNumber.Value))
     //         .ReturnsAsync(_validStaff);
-    //     _mockStaffRepository.Setup(repo => repo.UpdateStatus(_validStaff.LicenseNumber.Value, It.IsAny<Staff>()))
+    //     _mockStaffRepository.Setup(repo => repo.UpdateStatus(_validStaff.LicenceNumber.Value, It.IsAny<Staff>()))
     //         .ReturnsAsync(deactivatedStaff);
     //
     //     // Act
-    //     var result = await _staffService.Deactivate(_validStaff.LicenseNumber.Value);
+    //     var result = await _staffService.Deactivate(_validStaff.LicenceNumber.Value);
     //
     //     // Assert
     //     Assert.NotNull(result);
     //     Assert.Equal("deactivated", result.Status);
-    //     _mockStaffRepository.Verify(repo => repo.UpdateStatus(_validStaff.LicenseNumber.Value, It.IsAny<Staff>()), Times.Once);
+    //     _mockStaffRepository.Verify(repo => repo.UpdateStatus(_validStaff.LicenceNumber.Value, It.IsAny<Staff>()), Times.Once);
     // }
     //
     // [Fact]
     // public async Task Deactivate_WithNonExistingStaff_ReturnsNull()
     // {
     //     // Arrange
-    //     _mockStaffRepository.Setup(repo => repo.GetByLicenseNumberAsync("nonexistent"))
+    //     _mockStaffRepository.Setup(repo => repo.GetByLicenceNumberAsync("nonexistent"))
     //         .ReturnsAsync((Staff)null);
     //
     //     // Act

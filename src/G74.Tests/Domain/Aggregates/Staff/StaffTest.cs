@@ -9,7 +9,7 @@ namespace G74.Tests.Domain.Aggregates.Staff;
 [TestSubject(typeof(G74.Domain.Aggregates.Staff.Staff))]
 public class StaffTest
 {
-        private readonly LicenceNumber _validLicenseNumber;
+        private readonly LicenceNumber _validLicenceNumber;
         private readonly Name _validName;
         private readonly PhoneNumber _validPhone;
         private readonly Email _validEmail;
@@ -19,7 +19,7 @@ public class StaffTest
         public StaffTest()
         {
                 // Initialize valid test data for reuse across tests
-                _validLicenseNumber = new LicenceNumber(12345);
+                _validLicenceNumber = new LicenceNumber(12345);
                 _validName = new Name("John Doe");
                 _validPhone = new PhoneNumber("+1234567890");
                 _validEmail = new Email("john.doe@example.com");
@@ -32,7 +32,7 @@ public class StaffTest
         // {
         //     // Act
         //     var staff = new G74.Domain.Aggregates.Staff.Staff(
-        //         _validLicenseNumber,
+        //         _validLicenceNumber,
         //         _validName,
         //         _validPhone,
         //         _validEmail,
@@ -42,7 +42,7 @@ public class StaffTest
         //
         //     // Assert
         //     Assert.NotNull(staff);
-        //     Assert.Equal(_validLicenseNumber, staff.LicenseNumber);
+        //     Assert.Equal(_validLicenceNumber, staff.LicenceNumber);
         //     Assert.Equal(_validName, staff.Name);
         //     Assert.Equal(_validPhone, staff.PhoneNumber);
         //     Assert.Equal(_validEmail, staff.ContactEmail);
@@ -51,7 +51,7 @@ public class StaffTest
         // }
 
         // [Fact]
-        // public void CreateStaff_WithNullLicenseNumber_ShouldThrowArgumentNullException()
+        // public void CreateStaff_WithNullLicenceNumber_ShouldThrowArgumentNullException()
         // {
         //     // Act & Assert
         //     Assert.Throws<ArgumentNullException>(() => new G74.Domain.Aggregates.Staff.Staff(
@@ -75,7 +75,7 @@ public class StaffTest
         //
         //     // Act & Assert
         //     Assert.Throws<ArgumentNullException>(() => new G74.Domain.Aggregates.Staff.Staff(
-        //         _validLicenseNumber,
+        //         _validLicenceNumber,
         //         null,
         //         _validPhone,
         //         _validEmail,
@@ -89,7 +89,7 @@ public class StaffTest
         // {
         //     // Arrange
         //     var staff = new G74.Domain.Aggregates.Staff.Staff(
-        //         _validLicenseNumber,
+        //         _validLicenceNumber,
         //         _validName,
         //         _validPhone,
         //         _validEmail,
@@ -110,7 +110,7 @@ public class StaffTest
         //     // Arrange
         //     var deactivatedStatus = new Status("deactivated");
         //     var staff = new G74.Domain.Aggregates.Staff.Staff(
-        //         _validLicenseNumber,
+        //         _validLicenceNumber,
         //         _validName,
         //         _validPhone,
         //         _validEmail,

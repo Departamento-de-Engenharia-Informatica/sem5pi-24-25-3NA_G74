@@ -13,11 +13,11 @@ import { of } from 'rxjs';
   template: `
     <form [formGroup]="staffForm" (ngSubmit)="handleSubmit()" class="p-4">
       <div class="mb-3">
-        <label for="licenseNumber" class="form-label">License Number:</label>
+        <label for="licenceNumber" class="form-label">Licence Number:</label>
         <input 
-          id="licenseNumber"
+          id="licenceNumber"
           type="text"
-          formControlName="licenseNumber"
+          formControlName="licenceNumber"
           class="form-control">
       </div>
 
@@ -93,7 +93,7 @@ export class StaffCreateComponent {
   message = '';
 
   staffForm = new FormGroup({
-    licenseNumber: new FormControl('', Validators.required),
+    licenceNumber: new FormControl('', Validators.required),
     name: new FormControl('', Validators.required),
     phoneNumber: new FormControl('', Validators.required),
     contactEmail: new FormControl('', [Validators.required, Validators.email]),
@@ -107,7 +107,7 @@ export class StaffCreateComponent {
   handleSubmit() {
 
     const staff: Staff = {
-      licenseNumber: this.staffForm.value.licenseNumber || '',
+      licenceNumber: this.staffForm.value.licenceNumber || '',
       name: this.staffForm.value.name || '',
       phoneNumber: this.staffForm.value.phoneNumber || '',
       contactEmail: this.staffForm.value.contactEmail || '',

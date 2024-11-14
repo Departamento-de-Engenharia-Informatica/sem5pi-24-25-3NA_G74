@@ -10,47 +10,48 @@ public class StaffService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IStaffRepository _repo;
-    
+
     public StaffService(IUnitOfWork unitOfWork, IStaffRepository repo)
     {
         _unitOfWork = unitOfWork;
         _repo = repo;
     }
 
-    
-    
+
+
     public async Task<IEnumerable<StaffDto>> GetAll()
-    {    
+    {
         IEnumerable<Staff> staff = await _repo.GetStaffAsync();
 
         IEnumerable<StaffDto> staffDto = StaffDto.FromDomain(staff);
 
         return staffDto;
     }
-    
-    public async Task<StaffDto?> GetByLicenseNumber(long licenseNumber)
-    {    
-        Staff? staff =  await _repo.GetByLicenseNumber(new LicenceNumber(licenseNumber));
 
-        if(staff != null)
+    public async Task<StaffDto?> GetByLicenceNumber(long licenceNumber)
+    {
+        Staff? staff = await _repo.GetByLicenceNumber(new LicenceNumber(licenceNumber));
+
+        if (staff != null)
         {
             StaffDto staffDto = StaffDto.FromDomain(staff);
             return staffDto;
         }
         return null;
     }
-    
+
     public async Task<StaffDto> Add(StaffDto staffDto)
     {
-        var existing = await _repo.GetByLicenseNumber(new LicenceNumber(staffDto.LicenceNumber));
-        if(existing != null) {
-            throw new BusinessRuleValidationException("Staff member with the same license number already exists");
+        var existing = await _repo.GetByLicenceNumber(new LicenceNumber(staffDto.LicenceNumber));
+        if (existing != null)
+        {
+            throw new BusinessRuleValidationException("Staff member with the same licence number already exists");
         }
-        
+
         var staff = Staff.Create(staffDto.LicenceNumber, staffDto.Name, staffDto.PhoneNumber,
             staffDto.ContactEmail, staffDto.StaffSpecialization, staffDto.Status, staffDto.Availability);
 
-        
+
         await this._repo.Add(staff);
         await this._unitOfWork.CommitAsync();
 
@@ -69,19 +70,19 @@ public class StaffService
     {
         // TODO: choose between this and the create inside Staff
         Staff staff = StaffDto.ToDomain(staffDto);
-    
+
         Staff? staffUpdated = await _repo.Update(new LicenceNumber(licenceNumber), staff);
         if (staffUpdated == null)
         {
-            throw new BusinessRuleValidationException($"Staff with license number {licenceNumber} not found.");
+            throw new BusinessRuleValidationException($"Staff with licence number {licenceNumber} not found.");
         }
 
         return StaffDto.FromDomain(staffUpdated);
     }
-    
+
     public async Task<StaffDto?> Deactivate(long licenceNumber)
     {
-        Staff? staff = await _repo.GetByLicenseNumber(new LicenceNumber(licenceNumber));
+        Staff? staff = await _repo.GetByLicenceNumber(new LicenceNumber(licenceNumber));
         if (staff == null)
         {
             return null;
@@ -91,5 +92,5 @@ public class StaffService
         Staff updatedStaff = await _repo.UpdateStatus(new LicenceNumber(licenceNumber), staff);
         return StaffDto.FromDomain(updatedStaff);
     }
-    
+
 }

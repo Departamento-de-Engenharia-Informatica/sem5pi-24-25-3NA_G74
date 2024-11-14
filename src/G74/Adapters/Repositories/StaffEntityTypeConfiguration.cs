@@ -23,7 +23,7 @@ public class StaffEntityTypeConfiguration : IEntityTypeConfiguration<Staff>
             .HasMaxLength(50)
             .HasColumnName("LicenceNumber");
 
-        builder.HasIndex(u => u.LicenseNumber)
+        builder.HasIndex(u => u.LicenceNumber)
             .IsUnique();
 
         builder.Property(u => u.Name)
