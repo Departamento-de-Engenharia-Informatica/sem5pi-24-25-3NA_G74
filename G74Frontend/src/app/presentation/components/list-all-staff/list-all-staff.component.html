@@ -1,0 +1,45 @@
+<table>
+    <thead>
+        <tr>
+            <th>Licence Number</th>
+            <th>Name</th>
+            <th>Phone Number</th>
+            <th>Contact Email</th>
+            <th>Specialization</th>
+            <th>Status</th>
+            <th>Availability</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let staff of staffMembers">
+            <td>{{staff.licenceNumber}}</td>
+            <td>{{staff.name}}</td>
+            <td>{{staff.phoneNumber}}</td>
+            <td>{{staff.contactEmail}}</td>
+            <td>{{staff.staffSpecialization}}</td>
+            <td>{{staff.status}}</td>
+            <td>{{staff.availability}}</td>
+            <td>
+                <button (click)="editStaff(staff.licenceNumber)" id="edit-staff">Edit</button>
+            </td>
+            <td>
+                <button (click)="showDeactivateConfirmation(staff.licenceNumber)"
+                    id="deactivate-staff">Deactivate</button>
+            </td>
+        </tr>
+        <tr>
+        </tr>
+    </tbody>
+
+    @if (message) {
+    <div class="alert">{{ message }}</div>
+    }
+
+    @if (showConfirmDialog) {
+    <confirmation-dialog [licenceNumber]="selectedLicenceNumberToDeactivate" (confirm)="handleConfirmDeactivate()"
+        (cancel)="handleCancelDeactivate()">
+    </confirmation-dialog>
+    }
+</table>
