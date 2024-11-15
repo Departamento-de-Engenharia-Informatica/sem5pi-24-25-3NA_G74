@@ -30,7 +30,7 @@ public class StaffController : ControllerBase
 
     // TODO: delete console logs and sql logs in console
 
-    // GET: api/Staff//licence/682468
+    // GET: api/Staff/licence/682468
     // [Authorize(Roles = "Admin")]
     [HttpGet("licence/{licenceNumber}")]
     public async Task<ActionResult<StaffDto>> GetStaffByLicenceNumber(long licenceNumber)

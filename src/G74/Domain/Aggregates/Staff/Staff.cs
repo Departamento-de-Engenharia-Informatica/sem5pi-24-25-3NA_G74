@@ -35,7 +35,7 @@ public class Staff : Entity<Guid>, IAggregateRoot
 
     public void Deactivate()
     {
-        Status = new Status("deactivated");
+        Status = new Status("Inactive");
     }
 
     public static Staff Create(long licenceNumber, string name, string phoneNumber,

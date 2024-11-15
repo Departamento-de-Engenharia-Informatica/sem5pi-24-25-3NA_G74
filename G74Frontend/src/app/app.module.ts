@@ -8,13 +8,13 @@ import { PatientUpdateComponent } from './presentation/components/patient-update
 import { PatientDeleteComponent } from './presentation/components/patient-delete/patient-delete.component';
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule } from '@angular/forms';
-import {RegisterUserComponent} from './presentation/components/register-user/register-user.component';
-import {UpdateUserComponent} from './presentation/components/update-user/update-user.component';
-import {DeleteUserComponent} from './presentation/components/delete-user/delete-user.component';
-import {MainMenuComponent} from './presentation/components/main-menu/main-menu.component';
-import {PatientMenuComponent} from './presentation/components/patient-menu/patient-menu.component';
+import { RegisterUserComponent } from './presentation/components/register-user/register-user.component';
+import { UpdateUserComponent } from './presentation/components/update-user/update-user.component';
+import { DeleteUserComponent } from './presentation/components/delete-user/delete-user.component';
+import { MainMenuComponent } from './presentation/components/main-menu/main-menu.component';
+import { PatientMenuComponent } from './presentation/components/patient-menu/patient-menu.component';
 import { RegisterOperationComponent } from './presentation/components/register-operation/register-operation.component';
-import {HeaderComponent} from './presentation/components/header/header.component';
+import { HeaderComponent } from './presentation/components/header/header.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 @NgModule({
@@ -29,7 +29,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     DeleteUserComponent,
     MainMenuComponent,
     PatientMenuComponent,
-    HeaderComponent
+    HeaderComponent,
   ],
   imports: [
     BrowserModule,
@@ -43,4 +43,4 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }
