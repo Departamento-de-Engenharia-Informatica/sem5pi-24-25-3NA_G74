@@ -1,0 +1,10 @@
+<div class="modal-backdrop" (click)="onCancel()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <h2>Confirm Deactivation</h2>
+        <p>Are you sure you want to deactivate staff member with licence number {{licenceNumber}}?</p>
+        <div class="button-group">
+            <button class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+            <button class="btn btn-danger" (click)="onConfirm()">Confirm</button>
+        </div>
+    </div>
+</div>
