@@ -73,16 +73,17 @@ public class UserAppService
         return _userToDtoMapper.UserToDto(updatedUser);
     }
 
-    public async Task MarkUserToBeDeleted(UserDto currentUserDto)
+    public async Task MarkUserToBeDeleted(string userEmail)
     {
-        TimeSpan retainInfoPeriod = GetRetainInfoPeriod();
-        User user = _userToDtoMapper.DtoToUser(currentUserDto);
-        _repoUser.MarkUserToBeDeleted(user, retainInfoPeriod);
-    }
+        var existingUser = _repoUser.GetUserByEmail(userEmail).Result;
 
-    public TimeSpan GetRetainInfoPeriod()
-    {
+        if (existingUser == null)
+        {
+            throw new InvalidOperationException("User not found");
+        }
+
         string time = _configuration["GPRD:RetainInfoPeriod"] ?? "2m";
+
         TimeSpan retainInfoPeriod;
         if (time.EndsWith("m"))
         {
@@ -100,6 +101,8 @@ public class UserAppService
         {
             throw new ArgumentException("Invalid time format. Use 'm' for minutes, 'h' for hours, or 'd' for days.");
         }
-        return retainInfoPeriod;
+
+        await _repoUser.MarkUserToBeDeleted(existingUser, retainInfoPeriod);
     }
+    
 }

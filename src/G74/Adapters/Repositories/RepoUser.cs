@@ -77,22 +77,13 @@ public class RepoUser : GenericRepository<User>, IRepoUser
 
     public async Task MarkUserToBeDeleted(User user, TimeSpan retainInfoPeriod)
     {
-        try
-        {
-            var userDataModel = await _context.Users.SingleOrDefaultAsync(u => u.Email == user.GetEmail());
-            if (userDataModel == null)
-            {
-                throw new KeyNotFoundException("User not found.");
-            }
-            var deletionInfo = new DeletionInformation(true, retainInfoPeriod);
-            _context.Entry(userDataModel).Property(u => u.DeletionInformation).CurrentValue = deletionInfo;
-            await _context.SaveChangesAsync();
-        }
-        catch
-        {
-            throw;
-        }
+        UserDataModel userDataModel = await _context.Set<UserDataModel>()
+            .FirstAsync(p => p.Email == user.email.email);
+        userDataModel.MarkForDeletion(retainInfoPeriod);
+        _context.Entry(userDataModel).State = EntityState.Modified;
+        await _context.SaveChangesAsync();
     }
+    
     public async Task ExportUserDataToProlog()
     {
         //TODO:Terminar Rui Beloto.

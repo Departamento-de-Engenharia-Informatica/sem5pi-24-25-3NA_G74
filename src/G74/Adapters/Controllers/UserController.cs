@@ -87,20 +87,20 @@ public class UserController : ControllerBase
         }
     }
     
-    //[Authorize(Roles = "patient")]
+    //[Authorize(Roles = "Admin,Patient")]
     [HttpDelete("delete/{userEmail}")]
     public async Task<IActionResult> DeleteUser(string userEmail)
     {
-        var currentUserDto = await _userAppService.GetUserByEmail(userEmail);
-        if (currentUserDto == null)
+        if (string.IsNullOrWhiteSpace(userEmail))
         {
-            return NotFound(new { message = "User not found." });
+            return BadRequest(new { message = "Email cannot be empty or white space" });
         }
+
         try
         {
-            await _userAppService.MarkUserToBeDeleted(currentUserDto);
+            await _userAppService.MarkUserToBeDeleted(userEmail);
 
-            return Ok(new { message = "User delete with success" });
+            return Ok(new { message = "User deletion with success" });
         }
         catch (Exception ex)
         {

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace G74.Migrations
 {
     [DbContext(typeof(BackofficeAppDbContext))]
-    [Migration("20241114133405_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20241116205229_Nova")]
+    partial class Nova
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -172,11 +172,17 @@ namespace G74.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime?>("DateToBeDeleted")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)")
                         .HasColumnName("Email");
+
+                    b.Property<bool>("MarkedForDeletion")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Role")
                         .IsRequired()
@@ -299,33 +305,6 @@ namespace G74.Migrations
                         .IsUnique();
 
                     b.ToTable("Staff");
-                });
-
-            modelBuilder.Entity("G74.DTO.UserDataModel", b =>
-                {
-                    b.OwnsOne("G74.Domain.Value_Objects.Patient.DeletionInformation", "DeletionInformation", b1 =>
-                        {
-                            b1.Property<Guid>("UserDataModelId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<DateTime?>("DateToBeDeleted")
-                                .HasColumnType("datetime2")
-                                .HasColumnName("DateToBeDeleted");
-
-                            b1.Property<bool>("IsMarkedForDeletion")
-                                .HasColumnType("bit")
-                                .HasColumnName("IsMarkedForDeletion");
-
-                            b1.HasKey("UserDataModelId");
-
-                            b1.ToTable("Users");
-
-                            b1.WithOwner()
-                                .HasForeignKey("UserDataModelId");
-                        });
-
-                    b.Navigation("DeletionInformation")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

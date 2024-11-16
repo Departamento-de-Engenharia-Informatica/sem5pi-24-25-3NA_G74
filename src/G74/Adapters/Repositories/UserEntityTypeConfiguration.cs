@@ -26,16 +26,6 @@ public class UserEntityTypeConfiguration : IEntityTypeConfiguration<UserDataMode
             .HasMaxLength(20)
             .HasColumnName("Role");
         
-        // Configure DeletionInformation as an owned entity
-        builder.OwnsOne(u => u.DeletionInformation, deletionInfo =>
-        {
-            deletionInfo.Property(d => d.IsMarkedForDeletion)
-                .HasColumnName("IsMarkedForDeletion")
-                .IsRequired();
-
-            deletionInfo.Property(d => d.DateToBeDeleted)
-                .HasColumnName("DateToBeDeleted");
-        });
         
         
         

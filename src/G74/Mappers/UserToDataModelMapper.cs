@@ -17,7 +17,7 @@ public class UserToDataModelMapper
 
         UserDataModel userDataModel = new UserDataModel
         (
-            user    
+            user   
         );
 
         return userDataModel;
