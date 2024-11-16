@@ -13,6 +13,14 @@ export const buildingA1Data = {
     scale: new THREE.Vector3(1.0, 1.0, 1.0),
 }
 
+export const hospitalBedPositions = {
+    url : "./mazes/hospital_beds_positions.json",
+}
+
+export const patientPresence = {
+    url : "./mazes/patient_presence.json",
+}
+
 export const playerData = {
     //url: "./models/gltf/NewRobot/animated_humanoid_robot.glb",
     //credits: "Model and related code snippets created by <a href='https://www.patreon.com/quaternius' target='_blank' rel='noopener'>Tomás Laulhé</a>. CC0 1.0. Modified by <a href='https://donmccurdy.com/' target='_blank' rel='noopener'>Don McCurdy</a>.",
@@ -50,6 +58,20 @@ export const fogData = {
     near: 0.1,
     far: 14.0
 }
+
+export const hospitalBedData = {
+    url : "./models/gltf/HospitalBed/hospital_bed_purple.glb",
+    credits : "https://sketchfab.com/3d-models/simple-hospital-bed-60651eac7e96454c8cf5c43a91412336",
+    scale : new THREE.Vector3(0.025, 0.04, 0.03)
+}
+
+export const patientData = {
+    url : "./models/gltf/Patient/patient.glb",
+    credits : "https://sketchfab.com/3d-models/patient-00b483f284a542899b94e99831f1ad1c",
+    scale : new THREE.Vector3(0.005, 0.005, 0.005)
+}
+
+
 
 export const cameraData = {
     view: "fixed", // Fixed view: "fixed"; first-person view: "first-person"; third-person view: "third-person"; top view: "top"; mini-map: "mini-map"

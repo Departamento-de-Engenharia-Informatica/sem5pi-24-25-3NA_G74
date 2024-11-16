@@ -1,0 +1,77 @@
+{
+    "Surgery_Rooms" : [
+
+        {
+            "Room Number" : 1,
+            "hospitalBedPosition" : [9, 4.5],
+            "rotation": 3.14159,
+            "patientPosition" : [9, 4.5, 6],
+            "patientRotation": 4.71239
+        },
+        {
+            "Room Number" : 2,
+            "hospitalBedPosition" : [9, 7.5],
+            "rotation" : 3.14159,
+            "patientPosition" : [9, 7.5, 6],
+            "patientRotation": 4.71239
+        },
+        {
+            "Room Number" : 3,
+            "hospitalBedPosition" : [9, 10.5],
+            "rotation" : 3.14159,
+            "patientPosition" : [9, 10.5, 6],
+            "patientRotation": 4.71239
+        },
+        {
+            "Room Number" : 4,
+            "hospitalBedPosition" : [0.5, 10.5],
+            "rotation" : 3.14159,
+            "patientPosition" : [0.5, 10.5, 6],
+            "patientRotation": 4.71239
+        },
+        {
+            "Room Number" : 5,
+            "hospitalBedPosition" : [0.5, 7.5],
+            "rotation" : 3.14159,
+            "patientPosition" : [0.5, 7.5, 6],
+            "patientRotation": 4.71239
+        },
+        {
+            "Room Number" : 6,
+            "hospitalBedPosition" : [0.5, 4.5],
+            "rotation" : 3.14159,
+            "patientPosition" : [0.5, 4.5, 6],
+            "patientRotation": 4.71239
+        },
+        {
+            "Room Number" : 7,
+            "hospitalBedPosition" : [0.5, 1.5],
+            "rotation" : 3.14159,
+            "patientPosition" : [0.5, 1.5, 6],
+            "patientRotation": 4.71239
+        },
+        {
+            "Room Number" : 8,
+            "hospitalBedPosition" : [3.5, 3.5],
+            "rotation" : 4.71239,
+            "patientPosition" : [3.5, 3.5, 6],
+            "patientRotation": 0
+        },
+        {
+            "Room Number" : 9,
+            "hospitalBedPosition" : [3.5, 5.5],
+            "rotation" : 0,
+            "patientPosition" : [3.5, 5.5, 6],
+            "patientRotation": 1.5708
+        },
+        {
+            "Room Number" : 10,
+            "hospitalBedPosition" : [5.5, 5.5],
+            "rotation" : 0,
+            "patientPosition" : [5.5, 5.5, 6],
+            "patientRotation": 1.5708
+        }
+
+        
+    ]
+}

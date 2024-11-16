@@ -13,17 +13,19 @@
 import * as THREE from "three";
 import Stats from "three/addons/libs/stats.module.js";
 import Orientation from "./orientation.js";
-import { generalData, buildingA1Data, playerData, lightsData, fogData, cameraData, doorData} from "./default_data.js";
+import { generalData, buildingA1Data, playerData, lightsData, fogData, cameraData, doorData, hospitalBedData, patientData, hospitalBedPositions, patientPresence} from "./default_data.js";
 import { merge } from "./merge.js";
 import Maze from "./maze.js";
 import Player from "./player.js";
 import Door from "./door.js";
+import HospitalBed from "./hospital_bed.js";
 import Lights from "./lights.js";
 import Fog from "./fog.js";
 import Camera from "./camera.js";
 import UserInterface from "./user_interface.js";
 import Animations from "./animations.js";
 import Animations_door from "./animations_door.js";
+import Patient from "./patient.js";
 
 
 export default class ThumbRaiser {
@@ -32,6 +34,10 @@ export default class ThumbRaiser {
         this.generalParameters = merge({}, generalData, generalParameters);
 
         this.buildingA1Parameters = merge({},buildingA1Data,mazeParameters);
+        this.hospitalBedParameters = hospitalBedData;
+        this.patientParameters = patientData;
+    
+
        
         this.playerParameters = merge({}, playerData, playerParameters);
         this.lightsParameters = merge({}, lightsData, lightsParameters);
@@ -61,6 +67,12 @@ export default class ThumbRaiser {
 
         // Create the maze
         this.maze = new Maze(buildingParameters,this.doorParameters,0);
+
+        // Create the hospital bed
+        this.hospitalBed = new HospitalBed(this.hospitalBedParameters);
+
+        // Create the patient
+        this.patient = new Patient(this.patientParameters);
 
         // Create the player
         this.player = new Player(this.playerParameters);
@@ -145,7 +157,7 @@ export default class ThumbRaiser {
         this.helpPanel.style.visibility = "hidden";
         this.subwindowsPanel = document.getElementById("subwindows-panel");
         this.multipleViewsCheckBox = document.getElementById("multiple-views");
-        this.multipleViewsCheckBox.checked = true;
+        this.multipleViewsCheckBox.checked = false;
         this.userInterfaceCheckBox = document.getElementById("user-interface");
         this.userInterfaceCheckBox.checked = true;
         this.miniMapCheckBox = document.getElementById("mini-map");
@@ -594,6 +606,63 @@ export default class ThumbRaiser {
         || this.maze.distanceToNorthDoor(position) < (this.player.radius*2) || this.maze.distanceToSouthDoor(position) < (this.player.radius*2);
     }
 
+    setHospitalBedsAndPatients(hospitalBedsUrl, patientsUrl) {
+
+        let hospitalBedObject;
+        let patientObject;
+        let patientPositionArray = new Array();
+        let patientRotationArray = new Array();
+
+
+        fetch(hospitalBedsUrl)
+        .then(response => response.json())
+        .then(data => {
+        data.Surgery_Rooms.forEach(room => {
+                //console.log(`Room Number: ${room["Room Number"]}`);
+                //console.log(`Hospital Bed Position: x=${room.hospitalBedPosition[0]}, y=${room.hospitalBedPosition[1]}`);
+                //console.log(`Rotation: ${room.rotation}`);
+                //console.log('---------------------');
+                hospitalBedObject = this.hospitalBed.object.clone();
+                let hospitalBedPosition = this.maze.cellToCartesian(room.hospitalBedPosition);
+                this.scene3D.add(hospitalBedObject);
+                hospitalBedObject.position.set(hospitalBedPosition.x,hospitalBedPosition.y,hospitalBedPosition.z);
+                hospitalBedObject.rotation.y = room.rotation;
+                
+                patientPositionArray.push(room.patientPosition);
+                patientRotationArray.push(room.patientRotation);
+                
+            });
+        })
+        .catch(error => console.error('Error loading JSON:', error));
+        
+        let index = 0;
+        
+        fetch(patientsUrl)
+        .then(response => response.json())
+        .then(data => {
+        data.Surgery_Rooms.forEach(room => {
+
+            if(room.IsBeingUsed == true){
+                patientObject = this.patient.object.clone();
+                let patientPosition = this.maze.cellToCartesianWithHeight(patientPositionArray[index]);
+                this.scene3D.add(patientObject);
+                patientObject.position.set(patientPosition.x, patientPosition.y, patientPosition.z);
+                patientObject.rotation.y = (patientRotationArray[index]);
+            }
+            index++;
+
+        });
+        })
+        .catch(error => console.error('Error loading JSON:', error));
+
+
+
+
+    }
+
+    
+
+
     
     update() {
         if (!this.gameRunning) {
@@ -639,32 +708,34 @@ export default class ThumbRaiser {
                         y++;
                     }
                 }
-
-
-
-                
+  
 
                 this.scene3D.add(this.player.object);
                 this.scene3D.add(this.lights.object);
-
+                
+                
                 // Create the clock
                 this.clock = new THREE.Clock();
-
+                
                 // Create model animations (states)
                 this.animations = new Animations(this.player.object, this.player.animations);
                 
-
+                
                 this.animationsDoors = new Array();
                 for(let i=0; i<this.doorsTR.length; i++){
                     this.animationsDoors.push(new Animations_door(this.doorsTR[i].object, this.doorsTR[i].animations_door, this.doorsTR[i].location));
                 }
-
-
+                
+                
                 // Set the player's position and direction
                 this.player.position = this.maze.initialPosition;
                 this.player.direction = this.maze.initialDirection;
+                
 
+                // Setting the hospital beds
+                this.setHospitalBedsAndPatients(hospitalBedPositions.url, patientPresence.url);
 
+                
                 if (this.userInterface == null) {
                     // Create the user interface
                     this.userInterface = new UserInterface(this.scene3D, this.renderer, this.lights, this.maze,this,this.animations);

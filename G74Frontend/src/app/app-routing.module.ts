@@ -4,6 +4,8 @@ import { PatientCreateComponent } from './presentation/components/patient-create
 import { PatientUpdateComponent } from './presentation/components/patient-update/patient-update.component';
 import { PatientDeleteComponent } from './presentation/components/patient-delete/patient-delete.component';
 import { StaffCreateComponent } from './presentation/components/staff-create/staff-create.component';
+import { StaffUpdateComponent } from './presentation/components/staff-update/staff-update.component';
+import { ListAllStaffComponent } from './presentation/components/list-all-staff/list-all-staff.component';
 import { AdminMenuComponent } from './presentation/components/admin-menu/admin-menu.component';
 import { RegisterUserComponent } from './presentation/components/register-user/register-user.component';
 import { UpdateUserComponent } from './presentation/components/update-user/update-user.component';
@@ -29,6 +31,8 @@ const routes: Routes = [
   { path: 'admin/delete-patient', component: PatientDeleteComponent },
   { path: 'admin/register-user', component: RegisterUserComponent },
   { path: 'admin/create-staff', component: StaffCreateComponent },
+  { path: 'admin/list-all-staff', component: ListAllStaffComponent },
+  { path: 'admin/update-staff/:licenceNumber', component: StaffUpdateComponent },
   { path: 'patient', component: PatientMenuComponent },
   { path: 'register-user', component: RegisterUserComponent },
   { path: 'update-user', component: UpdateUserComponent },

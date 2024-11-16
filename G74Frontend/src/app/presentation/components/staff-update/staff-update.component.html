@@ -1,0 +1,45 @@
+<form [formGroup]="staffForm" (ngSubmit)="handleSubmit()" class="p-4">
+    <div class="mb-3">
+        <label for="licenceNumber" class="form-label">Licence Number:</label>
+        <input id="licenceNumber" type="text" formControlName="licenceNumber" class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <label for="name" class="form-label">Name:</label>
+        <input id="name" type="text" formControlName="name" class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <label for="phoneNumber" class="form-label">Phone Number:</label>
+        <input id="phoneNumber" type="tel" formControlName="phoneNumber" class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <label for="contactEmail" class="form-label">Email:</label>
+        <input id="contactEmail" type="email" formControlName="contactEmail" class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <label for="staffSpecialization" class="form-label">Specialization:</label>
+        <input id="staffSpecialization" type="text" formControlName="staffSpecialization" class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <label for="status" class="form-label">Status:</label>
+        <select id="status" formControlName="status" class="form-control">
+            <option value="">Select Status</option>
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="availability" class="form-label">Availability:</label>
+        <input id="availability" type="text" formControlName="availability" class="form-control">
+    </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="!staffForm.valid">Submit</button>
+</form>
+@if (message) {
+<p>{{ message }}</p>
+}

@@ -12,4 +12,20 @@ export class StaffService {
   createStaffProfile(staff: Staff): Observable<Staff> {
     return this.staffRepository.createStaffProfile(staff);
   }
+
+  updateStaffProfile(licenceNumber: string, staff: Staff): Observable<Staff> {
+    return this.staffRepository.updateStaffProfile(licenceNumber, staff);
+  }
+
+  getAllStaff(): Observable<Staff[]> {
+    return this.staffRepository.getAll();
+  }
+
+  getStaffByLicenceNumber(licenceNumber: string): Observable<Staff> {
+    return this.staffRepository.getByLicenceNumber(licenceNumber);
+  }
+
+  deactivateStaff(licenceNumber: string): Observable<any> {
+    return this.staffRepository.deactivateStaff(licenceNumber);
+  }
 }
