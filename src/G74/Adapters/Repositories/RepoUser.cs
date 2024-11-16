@@ -63,29 +63,16 @@ public class RepoUser : GenericRepository<User>, IRepoUser
             .AnyAsync(u => u.Email.Equals(email));
     }
 
-    public async Task<User> UpdateUser(User updatedUser, string oldEmail)
+    public async Task<User> UpdateUser(User updatedUser)
     {
-        try
-        {
-            var existingUserDataModel = await _context.Users.SingleOrDefaultAsync(u => u.Email == oldEmail);
-            if (existingUserDataModel == null)
-            {
-                throw new KeyNotFoundException("User not found.");
-            }
-            _context.Entry(existingUserDataModel).Property(u => u.Username).CurrentValue = updatedUser.GetUsername();
-            _context.Entry(existingUserDataModel).Property(u => u.Role).CurrentValue = updatedUser.GetRole();
-            _context.Entry(existingUserDataModel).Property(u => u.Role).CurrentValue = updatedUser.GetEmail();
-            
-            _context.Users.Update(existingUserDataModel);
-            await _context.SaveChangesAsync();
-            User savedUser = _userToDataModelMapper.MapToUser(existingUserDataModel);
-            return savedUser;
-        }
-        catch
-        {
-            return null;
-            throw;
-        }
+        UserDataModel userDataModel = await _context.Set<UserDataModel>()
+            .FirstAsync(p => p.Email == updatedUser.email.email);
+
+        _userToDataModelMapper.UpdateDataModel(userDataModel, updatedUser);
+        _context.Entry(userDataModel).State = EntityState.Modified;
+        await _context.SaveChangesAsync();
+        User savedUser = _userToDataModelMapper.MapToUser(userDataModel);
+        return savedUser;
     }
 
     public async Task MarkUserToBeDeleted(User user, TimeSpan retainInfoPeriod)

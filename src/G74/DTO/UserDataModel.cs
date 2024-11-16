@@ -23,4 +23,19 @@ public class UserDataModel : Entity<Guid>
         Role = user.role.ToString();
         DeletionInformation = new DeletionInformation(false, new TimeSpan());
     }
+    
+    public void UpdateUsername(string newName)
+    {
+        Username = newName;
+    }
+
+    public void UpdateEmail(string newEmail)
+    {
+        Email = newEmail;
+    }
+
+    public void UpdateRole(string newRole)
+    {
+        Role = newRole;
+    }
 }

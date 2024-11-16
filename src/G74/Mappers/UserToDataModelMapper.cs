@@ -41,4 +41,12 @@ public class UserToDataModelMapper
             new Email(savedUser.Email)
         );
     }
+    
+    public bool UpdateDataModel(UserDataModel userDataModel, User user)
+    {
+        userDataModel.UpdateUsername(user.username.name);
+        userDataModel.UpdateEmail(user.email.email);
+        userDataModel.UpdateRole(user.role.ToString());
+        return true;
+    }
 }

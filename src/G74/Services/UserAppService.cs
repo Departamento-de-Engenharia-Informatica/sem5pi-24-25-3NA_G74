@@ -1,6 +1,9 @@
 using G74.Domain.Aggregates.User;
 using G74.Domain.IRepositories;
 using G74.Domain.Value_Objects;
+using G74.Domain.Value_Objects.Patient;
+using G74.Domain.Value_Objects.SharedValueObjects;
+using G74.Domain.Value_Objects.User;
 using G74.DTO;
 using G74.Mappers;
 using Microsoft.AspNetCore.Mvc;
@@ -39,25 +42,35 @@ public class UserAppService
         return _userToDtoMapper.UserToDto(existingUser);
     }
     
-    public async Task<UserDto> UpdateUser(UserDto receivedUserDto, UserDto currentUserDto)
+    public async Task<UserDto> UpdateUserLimited(string email, UserDto updatedInfoUserDto)
     {
-        if (currentUserDto == null)
+        var user = _repoUser.GetUserByEmail(email).Result;
+
+        ArgumentNullException.ThrowIfNull(user);
+
+        if (updatedInfoUserDto.Username != null)
         {
-            throw new ArgumentNullException(nameof(currentUserDto), "Current user data cannot be null.");
+            user.UpdateUsername(new Username(updatedInfoUserDto.Username));
         }
 
-        string oldEmail = currentUserDto.Email;
-        
-        UserDto updatedUserDto = _userToDtoMapper.Create(
-            username: receivedUserDto.Username ?? currentUserDto.Username,
-            email: receivedUserDto.Email ?? currentUserDto.Email,
-            role: receivedUserDto.Role ?? currentUserDto.Role
-        );
-        User updatedUser = _userToDtoMapper.DtoToUser(updatedUserDto);
-        User savedUser = await _repoUser.UpdateUser(updatedUser, oldEmail);
-        UserDto userDto = _userToDtoMapper.UserToDto(savedUser);
+        if (updatedInfoUserDto.Email != null)
+        {
+            user.UpdateEmail(new Email(updatedInfoUserDto.Email));
+        }
 
-        return userDto;
+        if (updatedInfoUserDto.Role != null)
+        {
+            user.UpdateRole(updatedInfoUserDto.Role);
+        }
+
+        var updatedUser = _repoUser.UpdateUser(user).Result;
+
+        if (updatedUser == null)
+        {
+            throw new InvalidOperationException("Could not update user info");
+        }
+
+        return _userToDtoMapper.UserToDto(updatedUser);
     }
 
     public async Task MarkUserToBeDeleted(UserDto currentUserDto)

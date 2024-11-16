@@ -62,18 +62,14 @@ public class UserController : ControllerBase
         }
     }
 
+    [AllowAnonymous]
     //[Authorize(Roles = "patient")]
-    [HttpPatch("update")]
-    public async Task<ActionResult<UserDto>> UpdateUser([FromBody]UserDto receivedUserDto)
+    [HttpPatch("update/{userEmail}")]
+    public async Task<ActionResult<UserDto>> UpdateUser(string userEmail,[FromBody]UserDto receivedUserDto)
     {
         try
         {
-            var currentUserDto = GetLoggedUserByEmail().Result.Value;
-            if (currentUserDto == null)
-            {
-                return NotFound(new { message = "User not found." });
-            }
-            var userDto = await _userAppService.UpdateUser(receivedUserDto, currentUserDto);
+            var userDto = await _userAppService.UpdateUserLimited(userEmail, receivedUserDto);
 
             return Ok(new
             {
@@ -81,17 +77,21 @@ public class UserController : ControllerBase
                 userDto
             });
         }
-        catch (Exception e)
+        catch (Exception e) when (e is InvalidOperationException or ArgumentNullException)
         {
-            return BadRequest((e.Message));
+            return NotFound(e.Message);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
         }
     }
     
     //[Authorize(Roles = "patient")]
-    [HttpDelete("delete")]
-    public async Task<IActionResult> DeleteUser()
+    [HttpDelete("delete/{userEmail}")]
+    public async Task<IActionResult> DeleteUser(string userEmail)
     {
-        var currentUserDto = GetLoggedUserByEmail().Result.Value;
+        var currentUserDto = await _userAppService.GetUserByEmail(userEmail);
         if (currentUserDto == null)
         {
             return NotFound(new { message = "User not found." });
