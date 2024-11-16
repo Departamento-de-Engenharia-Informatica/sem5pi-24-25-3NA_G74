@@ -14,10 +14,31 @@
 agenda_staff(d001,20241028,[(720,790,m01),(1080,1140,c01)]).
 agenda_staff(d002,20241028,[(850,900,m02),(901,960,m02),(1380,1440,c02)]).
 agenda_staff(d003,20241028,[(720,790,m01),(910,980,m02)]).
+agenda_staff(da001,20241028,[]).
+agenda_staff(da002,20241028,[]).
+agenda_staff(in001,20241028,[]).
+agenda_staff(cn001,20241028,[]).
+agenda_staff(an001,20241028,[]).
+agenda_staff(maa001,20241028,[]).
+agenda_staff(in002,20241028,[]).
+agenda_staff(cn002,20241028,[]).
+agenda_staff(an002,20241028,[]).
+agenda_staff(maa002,20241028,[]).
+
 
 timetable(d001,20241028,(480,1200)).
 timetable(d002,20241028,(500,1440)).
 timetable(d003,20241028,(520,1320)).
+timetable(da001,20241028,(480,1200)).
+timetable(da002,20241028,(500,1440)).
+timetable(in001,20241028,(520,1320)).
+timetable(cn001,20241028,(480,1200)).
+timetable(an001,20241028,(500,1440)).
+timetable(maa001,20241028,(520,1320)).
+timetable(in002,20241028,(480,1200)).
+timetable(cn002,20241028,(500,1440)).
+timetable(an002,20241028,(520,1320)).
+timetable(maa002,20241028,(520,1320)).
 
 % first example
 %agenda_staff(d001,20241028,[(720,840,m01),(1080,1200,c01)]).
@@ -32,6 +53,16 @@ timetable(d003,20241028,(520,1320)).
 staff(d001,doctor,orthopaedist,[so2,so3,so4]).
 staff(d002,doctor,orthopaedist,[so2,so3,so4]).
 staff(d003,doctor,orthopaedist,[so2,so3,so4]).
+staff(da001,doctor,anaesthetist,[so2,so3,so4]).
+staff(da002,doctor,anaesthetist,[so2,so3,so4]).
+staff(in001,staff,instrumentingnurse,[so2,so3,so4]).
+staff(cn001,staff,circulatingnurse,[so2,so3,so4]).
+staff(an001,staff,anaesthetistnurse,[so2,so3,so4]).
+staff(maa001,staff,medicalactionassistant,[so2,so3,so4]).
+staff(in002,staff,instrumentingnurse,[so2,so3,so4]).
+staff(cn002,staff,circulatingnurse,[so2,so3,so4]).
+staff(an002,staff,anaesthetistnurse,[so2,so3,so4]).
+staff(maa002,staff,medicalactionassistant,[so2,so3,so4]).
 
 %surgery(SurgeryType,TAnesthesia,TSurgery,TCleaning).
 
@@ -53,6 +84,8 @@ assignment_surgery(so100004,d001).
 assignment_surgery(so100004,d002).
 assignment_surgery(so100005,d002).
 assignment_surgery(so100005,d003).
+
+
 
 
 agenda_operation_room(or1,20241028,[]).
@@ -120,6 +153,7 @@ min_max(I,I1,I,I1):- I<I1,!.
 min_max(I,I1,I1,I).
 
 schedule_all_surgeries(Room,Day):-
+	get_time(Ti),
     retractall(agenda_staff1(_,_,_)),
     retractall(agenda_operation_room1(_,_,_)),
     retractall(availability(_,_,_)),
@@ -144,21 +178,77 @@ schedule_all_surgeries(Room,Day):-
     forall(member(Doctor, Doctors),
            (agenda_staff1(Doctor, Day, AgendaDoc),
             format("  Médico ~w: ~w~n", [Doctor, AgendaDoc]))
-    ).
+    ),
+	get_time(Tf),
+	T is Tf-Ti,
+	write('Tempo de geracao da solucao:'),write(T),nl.
 
 availability_all_surgeries([],_,_).
 availability_all_surgeries([OpCode|LOpCode],Room,Day):-
-    surgery_id(OpCode,OpType),surgery(OpType,_,TSurgery,_),
-    availability_operation(OpCode,Room,Day,LPossibilities,LDoctors),
-    schedule_first_interval(TSurgery,LPossibilities,(TinS,TfinS)),
-    retract(agenda_operation_room1(Room,Day,Agenda)),
-    insert_agenda((TinS,TfinS,OpCode),Agenda,Agenda1),
-    assertz(agenda_operation_room1(Room,Day,Agenda1)),
-    insert_agenda_doctors((TinS,TfinS,OpCode),Day,LDoctors),
-    %Adicionei a heuristica aqui, cada vez que é marcada uma cirurgia.
-    %Faz sentido voltar a analisar as disponibilidades e o médico disponivel.
-    %Mais cedo, assim volto a organizar a cirurgia proxima pelo médico.
-    %Mais disponivel.
+    surgery_id(OpCode,OpType),
+    surgery(OpType,TAnaes,TSurgery,TClean),
+    total_time(TAnaes,TSurgery,TATotal),
+    total_time(TATotal,TClean,TTotal),
+    get_all_anaesthologist_doctors(LADoctors),
+    all_staff_occupation(Day,LADoctors,Result1),
+    sort_staff_by_occupation(Result1,SortedStaff1),
+    get_all_anaesthologist_nurses(LANurses),
+    all_staff_occupation(Day,LANurses,Result2),
+    sort_staff_by_occupation(Result2,SortedStaff2),
+    get_all_medicalactionassistant_staff(LMAAs),
+    all_staff_occupation(Day,LMAAs,Result3),
+    sort_staff_by_occupation(Result3,SortedStaff3),
+    get_all_instrumenting_nurses(LINurses),
+    all_staff_occupation(Day,LINurses,Result4),
+    sort_staff_by_occupation(Result4,SortedStaff4),
+    get_all_circulating_nurses(LCNurses),
+    all_staff_occupation(Day,LCNurses,Result5),
+    sort_staff_by_occupation(Result5,SortedStaff5),
+    select_element(SortedStaff1,AD),
+    %write(AD),
+    select_element(SortedStaff2,AN),
+    %write(AN),
+    select_element(SortedStaff3,MAA),
+    %write(MAA),
+    select_element(SortedStaff4,IN),
+    %write(IN),
+    select_element(SortedStaff5,CN),
+    %write(CN),
+    %write(OpCode),
+	findall(Doctor, assignment_surgery(OpCode, Doctor), LDoctors),
+    %write('aqui'),
+	append([[AD],[AN], [IN], [CN], LDoctors, [MAA]], TotalStaff),
+	intersect_all_agendas(TotalStaff, Day, ATotalStaff),
+	%write(TotalStaff),
+    %write(ATotalStaff),
+    agenda_operation_room1(Room,Day,LAgenda),
+    %write(LAgenda),
+    free_agenda0(LAgenda,LFAgRoom),
+    intersect_2_agendas(LFAgRoom,ATotalStaff,GlobalAgenda),
+    remove_unf_intervals(TTotal,GlobalAgenda,LPossibilities),
+    ( 
+        LPossibilities \= [] -> 
+        (
+            schedule_first_interval(TTotal, LPossibilities, (TinS, TfinS)),
+            TfinAnae is TinS + TATotal,
+            TinDoc is TinS + TAnaes,
+            TfinDoc is TinDoc + TSurgery,
+            TinMAA is TinS + TATotal,
+
+            retract(agenda_operation_room1(Room, Day, Agenda)),
+            insert_agenda((TinS, TfinS, OpCode), Agenda, Agenda1),
+            assertz(agenda_operation_room1(Room, Day, Agenda1)),
+            insert_agenda_doctors((TinDoc, TfinDoc, OpCode), Day, LDoctors),
+            insert_agenda_staff((TinS, TfinAnae, OpCode), Day, AD),
+            insert_agenda_staff((TinS, TfinAnae, OpCode), Day, AN),
+            insert_agenda_staff((TinMAA, TfinS, OpCode), Day, MAA),
+            insert_agenda_staff((TinDoc, TfinDoc, OpCode), Day, IN),
+            insert_agenda_staff((TinDoc, TfinDoc, OpCode), Day, CN)
+            %write('Cirurgia marcada.')
+        )
+        ;
+        nl
+    ),
     heuristic_by_time(LOpCode,Room,Day,SortedLOpCode),
     extract_ids(SortedLOpCode,IdList),
     availability_all_surgeries(IdList,Room,Day).
@@ -233,3 +323,67 @@ insert_agenda_doctors((TinS,TfinS,OpCode),Day,[Doctor|LDoctors]):-
     insert_agenda((TinS,TfinS,OpCode),Agenda,Agenda1),
     assert(agenda_staff1(Doctor,Day,Agenda1)),
     insert_agenda_doctors((TinS,TfinS,OpCode),Day,LDoctors).
+
+
+
+calculate_free_time([], 0).  % Caso base: se a lista estiver vazia, o tempo livre é 0
+calculate_free_time([(In, Fin)|LT], TotalFreeTime) :-
+    % Para cada intervalo (In, Fin), calcula a diferença (Fin - In) e soma recursivamente
+    FreeTime is Fin - In,
+    calculate_free_time(LT, RemainingTime),
+    TotalFreeTime is RemainingTime + FreeTime.
+
+get_total_time_free(D,Date,TotalFreeTime):-
+    agenda_staff(D,Date,L),
+free_agenda0(L,LFA),
+    adapt_timetable(D,Date,LFA,LFA2),
+    calculate_free_time(LFA2,TotalFreeTime).
+
+calculate_working_hours(D, Date, R) :-
+    timetable(D, Date, (InTime, FinTime)),
+    R is FinTime - InTime.
+
+staff_occupation_percentage(D,Date,R):-
+    get_total_time_free(D,Date,TFT),
+    calculate_working_hours(D,Date,WH),
+    R is (TFT/WH) * 100.
+
+% Caso base: lista vazia retorna resultado vazio.
+all_staff_occupation(_, [], []).
+% Caso recursivo: calcula a ocupação para o primeiro membro e continua com o restante.
+all_staff_occupation(Date, [Staff | RestStaff], [(Staff, OccupationPercent) | RestResult]) :-
+    staff_occupation_percentage(Staff, Date, OccupationPercent),
+    all_staff_occupation(Date, RestStaff, RestResult).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Ordena os médicos pela ocupação em ordem decrescente
+sort_staff_by_occupation(RestResult, SortedStaff) :-
+    % Ordena a lista de médicos pela ocupação (em ordem decrescente)
+    sort(2, @=<, RestResult, SortedStaffWithOccupation),
+    % Extrai apenas os médicos da lista ordenada
+    findall(Staff, member((Staff, _), SortedStaffWithOccupation), SortedStaff).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+get_all_anaesthologist_doctors(LADoctors):-
+    findall(ADoctor,staff(ADoctor,doctor,anaesthetist,_),LADoctors).
+get_all_anaesthologist_nurses(LANurses):-
+    findall(ANurse,staff(ANurse,staff,anaesthetistnurse,_),LANurses).
+get_all_instrumenting_nurses(LINurses):-
+    findall(INurse,staff(INurse,staff,instrumentingnurse,_),LINurses).
+get_all_circulating_nurses(LCNurses):-
+    findall(CNurse,staff(CNurse,staff,circulatingnurse,_),LCNurses).
+get_all_medicalactionassistant_staff(LMAAs):-
+    findall(MAA,staff(MAA,staff,medicalactionassistant,_),LMAAs).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+total_time(TAnaes,TSurgery,TTotal):-
+    TTotal is TAnaes+TSurgery.
+
+select_element([Element | _], Element).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+insert_agenda_staff((TinS,TfinS,OpCode),Day,Staff):-
+    retract(agenda_staff1(Staff,Day,Agenda)),
+    insert_agenda((TinS,TfinS,OpCode),Agenda,Agenda1),
+    assert(agenda_staff1(Staff,Day,Agenda1)).
+
