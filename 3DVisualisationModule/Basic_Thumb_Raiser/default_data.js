@@ -46,6 +46,7 @@ export const doorData = {
 }
 
 export const lightsData = {
+    directionalLight: { color: 0xffffff, intensity: 0.5 },
     ambientLight: { color: 0xffffff, intensity: 1.0 },
     pointLight1: { color: 0xffffff, intensity: 1.0, distance: 0.0, position: new THREE.Vector3(0.0, 0.0, 0.0) },
     pointLight2: { color: 0xffffff, intensity: 1.0, distance: 0.0, position: new THREE.Vector3(0.0, 0.0, 0.0) },

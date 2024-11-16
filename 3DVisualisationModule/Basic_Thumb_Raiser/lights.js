@@ -18,6 +18,13 @@ export default class Lights {
         // Create a group of objects
         this.object = new THREE.Group();
 
+        // Create the directional light
+        this.object.directionalLight = new THREE.DirectionalLight(this.directionalLight.color, this.directionalLight.intensity);
+        this.object.directionalLight.position.set(0,10,0);
+        this.object.directionalLight.target.position.set(-5,0,0);
+
+        this.object.add(this.object.directionalLight);
+
         // Create the ambient light
         this.object.ambientLight = new THREE.AmbientLight(this.ambientLight.color, this.ambientLight.intensity);
 

@@ -128,6 +128,12 @@ export default class UserInteraction {
         // Create the lights folder
         const lightsFolder = this.gui.addFolder("Lights");
 
+        const directionalLightFolder = lightsFolder.addFolder("Directional light");
+        const directionalLight = lights.object.directionalLight;
+        const directionalColor = { color: "#" + new THREE.Color(directionalLight.color).getHexString() };
+        directionalLightFolder.addColor(directionalColor, "color").onChange(color => colorCallback(directionalLight, color));
+        directionalLightFolder.add(lights.object.directionalLight, "intensity", 0.0, 1.0, 0.01);
+
         // Create the ambient light folder
         const ambientLightFolder = lightsFolder.addFolder("Ambient light");
         const ambientLight = lights.object.ambientLight;
