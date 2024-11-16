@@ -1,0 +1,48 @@
+{
+    "Surgery_Rooms" : [
+            
+            {
+                "Room Number" : 1,
+                "IsBeingUsed" : true
+            },
+            {
+                "Room Number" : 2,
+                "IsBeingUsed" : false
+            },
+            {
+                "Room Number" : 3,
+                "IsBeingUsed" : true
+            },
+            {
+                "Room Number" : 4,
+                "IsBeingUsed" : true
+            },
+            {
+                "Room Number" : 5,
+                "IsBeingUsed" : false
+            },
+            {
+                "Room Number" : 6,
+                "IsBeingUsed" : true
+            },
+            {
+                "Room Number" : 7,
+                "IsBeingUsed" : true
+            },
+            {
+                "Room Number" : 8,
+                "IsBeingUsed" : true
+                
+            },
+            {
+                "Room Number" : 9,
+                "IsBeingUsed" : false
+                
+            },
+            {
+                "Room Number" : 10,
+                "IsBeingUsed" : true
+                
+            }
+    ]
+}

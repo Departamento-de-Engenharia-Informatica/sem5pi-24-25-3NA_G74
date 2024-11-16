@@ -3,6 +3,7 @@ import Ground from "./ground.js";
 import Wall from "./wall.js";
 import Door from "./door.js";
 
+
 /*
  * parameters = {
  *  url: String,
@@ -45,7 +46,6 @@ export default class Maze {
                 this.accessToBuilding = [];
             }
 
-            
             // Create a group of objects
             this.object = new THREE.Group();
 
@@ -160,6 +160,10 @@ export default class Maze {
     }
 
     // Convert cell [row, column] coordinates to cartesian (x, y, z) coordinates
+    cellToCartesianWithHeight(position) {
+        return new THREE.Vector3((position[1] - this.size.width / 2.0 + 0.5) * this.scale.x, (position[2] - this.size.width / 2.0 + 0.5) * this.scale.y, (position[0] - this.size.height / 2.0 + 0.5) * this.scale.z)
+    }
+
     cellToCartesian(position) {
         return new THREE.Vector3((position[1] - this.size.width / 2.0 + 0.5) * this.scale.x, 0.0, (position[0] - this.size.height / 2.0 + 0.5) * this.scale.z)
     }
