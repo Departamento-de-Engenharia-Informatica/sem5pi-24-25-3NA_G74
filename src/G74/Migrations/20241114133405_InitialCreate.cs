@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace G74.Migrations
 {
     /// <inheritdoc />
-    public partial class Nova : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -31,7 +31,8 @@ namespace G74.Migrations
                 name: "OperationRequests",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     MedicalRecordNumber = table.Column<long>(name: "Medical Record Number", type: "bigint", nullable: false),
                     LicenceNumber = table.Column<long>(name: "Licence Number", type: "bigint", nullable: false),
                     OperationTypeId = table.Column<long>(name: "Operation Type Id", type: "bigint", nullable: false),
@@ -84,7 +85,7 @@ namespace G74.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LicenseNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    LicenceNumber = table.Column<long>(type: "bigint", maxLength: 50, nullable: false),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     ContactEmail = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
@@ -143,9 +144,9 @@ namespace G74.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Staff_LicenseNumber",
+                name: "IX_Staff_LicenceNumber",
                 table: "Staff",
-                column: "LicenseNumber",
+                column: "LicenceNumber",
                 unique: true);
 
             migrationBuilder.CreateIndex(

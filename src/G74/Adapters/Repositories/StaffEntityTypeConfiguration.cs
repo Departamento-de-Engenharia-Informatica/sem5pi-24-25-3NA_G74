@@ -16,13 +16,16 @@ public class StaffEntityTypeConfiguration : IEntityTypeConfiguration<Staff>
         builder.HasKey(s => s.Id);
 
         builder.Property(s => s.LicenceNumber)
+            .HasConversion(
+                licence => licence.licenceNumber,
+                licenceNumber => new LicenceNumber(licenceNumber))
             .IsRequired()
             .HasMaxLength(50)
-            .HasColumnName("Licence Number");
-        
+            .HasColumnName("LicenceNumber");
+
         builder.HasIndex(u => u.LicenceNumber)
             .IsUnique();
-        
+
         builder.Property(u => u.Name)
             .HasConversion(
                 name => name.Value,
@@ -30,7 +33,7 @@ public class StaffEntityTypeConfiguration : IEntityTypeConfiguration<Staff>
             .IsRequired()
             .HasMaxLength(100)
             .HasColumnName("Name");
-        
+
         builder.Property(u => u.PhoneNumber)
             .HasConversion(
                 phoneNumber => phoneNumber.Value,
@@ -38,7 +41,7 @@ public class StaffEntityTypeConfiguration : IEntityTypeConfiguration<Staff>
             .IsRequired()
             .HasMaxLength(20)
             .HasColumnName("PhoneNumber");
-        
+
         builder.Property(u => u.ContactEmail)
             .HasConversion(
                 email => email.email,
@@ -46,7 +49,7 @@ public class StaffEntityTypeConfiguration : IEntityTypeConfiguration<Staff>
             .IsRequired()
             .HasMaxLength(100)
             .HasColumnName("ContactEmail");
-        
+
         builder.Property(u => u.StaffSpecialization)
             .HasConversion(
                 specialization => specialization.Value,
@@ -54,7 +57,7 @@ public class StaffEntityTypeConfiguration : IEntityTypeConfiguration<Staff>
             .IsRequired()
             .HasMaxLength(50)
             .HasColumnName("StaffSpecialization");
-            
+
         builder.Property(u => u.Status)
             .HasConversion(
                 status => status.Value,

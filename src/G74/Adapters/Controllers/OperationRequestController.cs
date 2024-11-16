@@ -25,6 +25,7 @@ public class OperationRequestController : ControllerBase
         }
         try 
         {
+            Console.WriteLine("Received Operation Request: " + receivedOperationRequest);
             OperationRequestDTO operationReturnDto = await _appServiceOperationRequest.RegisterOperationRequest(receivedOperationRequest);
 
             return CreatedAtAction(nameof(RegisterOperationRequest), operationReturnDto);
@@ -49,10 +50,11 @@ public class OperationRequestController : ControllerBase
         {
             return BadRequest("Invalid operation data.");
         }
-        if (!Guid.TryParse(id, out Guid operationRequestId))
+        if (!long.TryParse(id, out long operationRequestId))
         {
             return BadRequest("Invalid ID format.");
         }
+        
 
         try
         {
@@ -77,7 +79,7 @@ public class OperationRequestController : ControllerBase
         string id
     )
     {
-        if (!Guid.TryParse(id, out Guid operationRequestId))
+        if (!long.TryParse(id, out long operationRequestId))
         {
             return BadRequest("Invalid ID format.");
         }

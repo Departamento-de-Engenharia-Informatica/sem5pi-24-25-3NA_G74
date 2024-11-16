@@ -7,17 +7,17 @@ public interface IStaffRepository
 {
     Task<IEnumerable<Staff>> GetStaffAsync();
 
-    Task<Staff?> GetByLicenseNumber(LicenceNumber licenceNumber);
+    Task<Staff?> GetByLicenceNumber(LicenceNumber licenceNumber);
 
-    // Task<Staff> GetByIdAsync(LicenseNumber id);
-    
+    // Task<Staff> GetByIdAsync(LicenceNumber id);
+
     Task<Staff> Add(Staff staff);
 
     Task<Staff?> Update(LicenceNumber licenceNumber, Staff staff);
 
     // // TODO: boolean
-    // Task<bool> StaffExists(LicenseNumber licenseNumber);
-    
+    // Task<bool> StaffExists(LicenceNumber licenceNumber);
+
     // TODO: void?; receive just Staff staff?
     Task<Staff> UpdateStatus(LicenceNumber licenceNumber, Staff staff);
 

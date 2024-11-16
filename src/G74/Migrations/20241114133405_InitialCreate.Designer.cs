@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace G74.Migrations
 {
     [DbContext(typeof(BackofficeAppDbContext))]
-    [Migration("20241110114258_Nova")]
-    partial class Nova
+    [Migration("20241114133405_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -55,10 +55,12 @@ namespace G74.Migrations
 
             modelBuilder.Entity("G74.DTO.OperationRequestDataModel", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
+                        .HasColumnType("bigint")
                         .HasColumnName("Id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("DeadlineDate")
                         .HasColumnType("datetime2")
@@ -262,11 +264,10 @@ namespace G74.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasColumnName("ContactEmail");
 
-                    b.Property<string>("LicenseNumber")
-                        .IsRequired()
+                    b.Property<long>("LicenceNumber")
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("LicenseNumber");
+                        .HasColumnType("bigint")
+                        .HasColumnName("LicenceNumber");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -294,7 +295,7 @@ namespace G74.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LicenseNumber")
+                    b.HasIndex("LicenceNumber")
                         .IsUnique();
 
                     b.ToTable("Staff");

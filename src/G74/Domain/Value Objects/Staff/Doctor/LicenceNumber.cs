@@ -8,7 +8,22 @@ public class LicenceNumber : IValueObject
     {
         this.licenceNumber = licenceNumber;
     }
+    public LicenceNumber(string licenceNumber)
+    {
+        try
+        {
+            this.licenceNumber = long.Parse(licenceNumber);
+        }
+        catch (System.Exception)
+        {
+            throw new System.ArgumentException("Invalid Licence Number");
+        }
+    
+    }
 
-    public long number { get; private set; }
+    public override string ToString()
+    {
+        return licenceNumber.ToString();
+    }
 
 }

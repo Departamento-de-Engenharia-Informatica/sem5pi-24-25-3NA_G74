@@ -1,1 +1,45 @@
-<p>update-operation works!</p>
+
+<h1 id="title">
+    Update Operation 
+</h1>
+<div id="backTemp" style="width: 600px;">
+<form (ngSubmit)="submitOperation()" #operationForm="ngForm">
+    <fieldset id="fieldSetMedicalRecordNumber">
+        <h3>Patient's Medical Record Number</h3>
+        <input id="medicalRecordNumber" type="text" [(ngModel)]="medicalRecordNumber" name="medicalRecordNumber" required>
+    </fieldset>
+    <fieldset id="fieldSetLicenceNumber">
+        <h3>Licence Number</h3>
+        <input id="LicenceNumber" type="number" required name="LicenceNumber" placeholder="ex: 123" [(ngModel)]="licenceNumber"/>
+    </fieldset>
+    
+    
+
+    <fieldset id="operationSpecification">
+        <h3>Operation Specification</h3>
+        
+        <fieldset style="width: 100%; display: flex; justify-content: center;flex-direction:column ; align-items: center;">
+            <h4>Operation Type ID: </h4>
+            <input id="operationTypeId" type="number" required name="operationTypeId" placeholder="ex: 123" [(ngModel)]="operationTypeId"/>
+        </fieldset>
+
+        <fieldset style="width: 100%; display: flex; justify-content: center;flex-direction:column ; align-items: center;">
+            <h4>Date</h4>
+            <input type="datetime-local" name="operationDate" [(ngModel)]="operationDate">
+        </fieldset>
+
+        <fieldset style="width: 100%; display: flex; justify-content: center;flex-direction:column ; align-items: center;">
+            <h4>Priority</h4>
+            <select required id="Priority" [(ngModel)]="priority" name="priority" required>
+                <option value="ElectiveSurgery">Elective Surgery</option>
+                <option value="UrgentSurgery">Urgent Surgery</option>
+                <option value="EmergencySurgery">Emergency Surgery</option>
+            </select>
+        </fieldset>
+    </fieldset>
+    <div id="submitDiv">
+        <button type="submit" style=" width: 100px;" id="submit">Submit</button>
+    </div>
+</form>
+</div>
+

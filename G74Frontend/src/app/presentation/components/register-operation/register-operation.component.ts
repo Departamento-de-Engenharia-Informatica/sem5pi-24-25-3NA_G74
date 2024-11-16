@@ -1,90 +1,76 @@
 import { CommonModule, Time } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { OperationRequest } from '../../../domain/models/operationRequest.model';
 import { OperationRequestService } from '../../../application/services/operationRequest.service';
-
+import { OperationType } from '../../../domain/models/operationType.model';
+import { OperationRequestRepository } from '../../../infrastructure/repositories/operationRequest-repository';
+import { HttpClient } from '@angular/common/http';
+import { error } from 'console';
 
 @Component({
   selector: 'app-register-operation',
   standalone: true,
   imports: [CommonModule,FormsModule],
   templateUrl: './register-operation.component.html',
-  styleUrl: './register-operation.component.css'
+  styleUrl: './register-operation.component.css',
+  encapsulation: ViewEncapsulation.None 
 })
 
 export class RegisterOperationComponent {
 
-  specializations: string[] = [''];
-  quantities: number[] = [];
-  counter: number[] = [];
+  constructor(private operationRequestService: OperationRequestService) { }
+  
   priority: string = "";
   medicalRecordNumber: string = "";
-  patientName: string = "";
-  map: Map<string, number> = new Map<string, number>();
-  licenceNumber: string = "";
-  operationName: string = "";
+  operationType: number = -1;
+  licenceNumber: number = 0;
   operationDate: string = "";
-  operationDuration: string = "";
+  operationTypeId: number = 0;
   
   operationRequest: OperationRequest = {
     medicalRecordNumber: "",
-    licenceNumber: "",
-    nameOperationType: "",
-    requiredStaffSpecialization: [],
-    seconds: 0,
-    minutes: 0,
-    hours: 0,
-    days: 0,
-    deadlineDate: new Date(),
-    priority: ""
+    licenceNumber: 0,
+    operationTypeId: -1,
+    priority: "",
+    deadlineDate: ""
   }
 
-  addSpecialization(){
-    this.specializations.push('');
-    this.quantities.push();
-    
-  }
-
-  removeSpecialization(){
-    this.specializations.pop();
-    this.quantities.pop();
-  }
+  
 
   trackByIndex(index: number, obj: any): any {
     return index;
   }
 
-  submitOperation() {
-    console.log('Medical Record Number:', this.medicalRecordNumber);
-    console.log('Priority:', this.priority);
-    console.log('Licence Number:', this.licenceNumber);
-    console.log('Operation Name:', this.operationName);
-    console.log('Operation Date:', this.operationDate);
-    console.log('Operation Duration:', this.operationDuration);
-
-
-
-
-    for (let i = 0; i < this.specializations.length; i++) {
-      this.map.set(this.specializations[i], this.quantities[i]);
-    }
-
-    this.operationRequest.medicalRecordNumber = this.medicalRecordNumber;
+  submitOperation(): void {
+    this.operationRequest.medicalRecordNumber = this.medicalRecordNumber.toString();
     this.operationRequest.licenceNumber = this.licenceNumber;
-    this.operationRequest.nameOperationType = this.operationName;
-    this.operationRequest.requiredStaffSpecialization = Array.from(this.map.keys());
-    this.operationRequest.seconds = Number(this.operationDuration.split(':')[2]);
-    this.operationRequest.minutes = Number(this.operationDuration.split(':')[1]);
-    this.operationRequest.hours = Number(this.operationDuration.split(':')[0]);
-    this.operationRequest.days = 0;
-    this.operationRequest.deadlineDate = new Date(this.operationDate);
+    this.operationRequest.operationTypeId = this.operationTypeId;
     this.operationRequest.priority = this.priority;
     
+    if (typeof this.operationDate === 'string') {
+      this.operationRequest.deadlineDate = this.operationDate;
+      
+    } ;
+    console.log(this.operationRequest);
 
-
-    console.log('Map:', this.map);
-    this.map.clear(); 
+    const observer = {
+      next: (response: OperationRequest) => {
+        console.log('Operation Request created successfully:', response);
+        alert('Operation Request created successfully');
+      },
+      error: (error: any) => {
+        console.error('Error creating Operation Request:', error);
+        alert('Error creating Operation Request');
+      },
+      complete: () => {
+        console.log('Operation Request creation completed');
+      }
+    };
+     this.operationRequestService.createOperation(this.operationRequest)
+       .then(observer.next)
+       .catch(observer.error)
+       .finally(observer.complete);
   }
 
 }
