@@ -6,22 +6,22 @@ using G74.Domain.Aggregates.OperationType;
 public class OperationTypeToDataModelMapper
 {
 
-    public static OperationTypeDTO DataModelToDTO(OperationTypeDataModel operationTypeDataModel)
+    public OperationTypeDataModel OperationTypeDomainToDataModel(OperationType operationType)
     {
-        return new OperationTypeDTO(
-            operationTypeDataModel.operationTypeID, 
-            new Name(operationTypeDataModel.name),
-            new RequiredStaffBySpecialization(makeStringIntoDictionary(operationTypeDataModel.requiredStaffBySpecialization)), 
-            new Duration(operationTypeDataModel.estimatedDuration)
+        return new OperationTypeDataModel(
+            operationType.operationTypeID,
+            operationType.name.ToString(),
+            operationType.requiredStaffBySpecialization.ToString(),
+            operationType.duration
         );
     }
 
-    public static OperationType DTOtoDomain(OperationTypeDTO operationTypeDTO){
+    public OperationType OperationTypeDataModelToDomain(OperationTypeDataModel operationTypeDataModel){
         return new OperationType(
-            operationTypeDTO.operationTypeID,
-            operationTypeDTO.name,
-            operationTypeDTO.requiredStaffBySpecialization,
-            operationTypeDTO.duration.DurationTime
+            operationTypeDataModel.OperationTypeID,
+            new Name(operationTypeDataModel.Name),
+            new RequiredStaffBySpecialization(makeStringIntoDictionary(operationTypeDataModel.RequiredStaffBySpecialization)),
+            operationTypeDataModel.EstimatedDuration
         );
     }
 
@@ -48,6 +48,19 @@ public class OperationTypeToDataModelMapper
         }
         return turnListIntoDictionary(specializations, quantities); 
     }
+    
+    public bool UpdateDataModel(OperationTypeDataModel operationTypeDataModel, OperationType operationType)
+    {
+        operationTypeDataModel.UpdateName(operationType.name.ToString());
+        operationTypeDataModel.UpdateRequiredStaffBySpecialization(operationType.requiredStaffBySpecialization.ToString());
+        operationTypeDataModel.UpdateEstimatedDuration(operationType.duration.ToString());
+        return true;
+    }
 
-   
+    public IEnumerable<OperationType> ToDomain(IEnumerable<OperationTypeDataModel> operationTypeDataModels)
+    {
+        var operationTypeList = operationTypeDataModels.Select(OperationTypeDataModelToDomain).ToList();
+
+        return operationTypeList.AsEnumerable();
+    }
 }

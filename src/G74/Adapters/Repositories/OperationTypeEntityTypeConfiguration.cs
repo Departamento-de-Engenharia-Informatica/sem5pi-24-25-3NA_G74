@@ -10,24 +10,24 @@ public class OperationTypeEntityTypeConfiguration : IEntityTypeConfiguration<Ope
     {
         builder.HasKey(u => u.Id);
         
-        builder.Property(u => u.operationTypeID)
+        builder.Property(u => u.OperationTypeID)
             .HasMaxLength(50)
             .IsRequired()
             .HasColumnName("operation_type_id");
 
-        builder.HasIndex(u => u.operationTypeID)
+        builder.HasIndex(u => u.OperationTypeID)
             .IsUnique();
         
-        builder.Property(u => u.name)
+        builder.Property(u => u.Name)
             .IsRequired()
             .HasMaxLength(100)
             .HasColumnName("name");
         
-        builder.Property(u => u.requiredStaffBySpecialization)
+        builder.Property(u => u.RequiredStaffBySpecialization)
             .IsRequired()
             .HasColumnName("required_staff");
 
-        builder.Property(u => u.estimatedDuration)
+        builder.Property(u => u.EstimatedDuration)
             .IsRequired()
             .HasColumnName("duration");
         
