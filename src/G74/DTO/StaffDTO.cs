@@ -1,6 +1,7 @@
 ﻿using G74.Domain.Aggregates.Staff;
 using G74.Domain.Value_Objects.SharedValueObjects;
 using G74.Domain.Value_Objects.Staff;
+using G74.Domain.Value_Objects.Staff.Doctor;
 using G74.Domain.Value_Objects.User;
 
 namespace G74.DTO;
@@ -32,7 +33,7 @@ public class StaffDto
     {
         return new StaffDto
         {
-            LicenceNumber = staff.LicenceNumber.licenceNumber,
+            LicenceNumber = staff.LicenceNumber.Value,
             Name = staff.Name.Value,
             PhoneNumber = staff.PhoneNumber.Value,
             ContactEmail = staff.ContactEmail.email,

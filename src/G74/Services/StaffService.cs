@@ -2,11 +2,12 @@
 using G74.Domain.IRepositories;
 using G74.Domain.Shared;
 using G74.Domain.Value_Objects.Staff;
+using G74.Domain.Value_Objects.Staff.Doctor;
 using G74.DTO;
 
 namespace G74.Services;
 
-public class StaffService
+public class StaffService : IStaffService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IStaffRepository _repo;
@@ -57,7 +58,7 @@ public class StaffService
 
         return new StaffDto
         {
-            LicenceNumber = staff.LicenceNumber.licenceNumber,
+            LicenceNumber = staff.LicenceNumber.Value,
             ContactEmail = staff.ContactEmail.email,
             Name = staff.Name.Value,
             PhoneNumber = staff.PhoneNumber.Value,
