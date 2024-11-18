@@ -99,29 +99,22 @@ public class StaffRepository : BaseRepository<StaffDataModel, Guid>, IStaffRepos
 
     public async Task<Staff> UpdateStatus(LicenceNumber licenceNumber, Staff staff)
     {
-        try
+        var existingStaffDataModel = await _dbContext.Set<StaffDataModel>()
+            .FirstOrDefaultAsync(s => s.LicenceNumber == licenceNumber.Value);
+
+        if (existingStaffDataModel == null)
         {
-            var existingStaffDataModel = await _dbContext.Set<StaffDataModel>()
-                .FirstOrDefaultAsync(s => s.LicenceNumber == licenceNumber.Value);
-
-            if (existingStaffDataModel == null)
-            {
-                throw new Exception($"Staff with licence number {licenceNumber} not found");
-            }
-
-            Staff existingStaff = StaffDataModel.ToDomain(existingStaffDataModel);
-
-            // Update only the status
-            existingStaff.UpdateStatus(staff.Status);
-
-            await _dbContext.SaveChangesAsync();
-
-            return existingStaff;
+            throw new Exception($"Staff with licence number {licenceNumber} not found");
         }
-        catch (Exception ex)
-        {
-            throw ex.InnerException!;
-        }
+
+        Staff existingStaff = StaffDataModel.ToDomain(existingStaffDataModel);
+
+        // Update only the status
+        existingStaff.UpdateStatus(staff.Status);
+
+        await _dbContext.SaveChangesAsync();
+
+        return existingStaff;
     }
 
     public async Task ExportStaffDataToProlog()
