@@ -1,0 +1,89 @@
+/* Fundo geral */
+body {
+  background: linear-gradient(90deg, #02012c, #06235a);
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+/* Container principal */
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 30px;
+  background-color: #06235a;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 400px;
+  box-sizing: border-box;
+}
+
+/* Título */
+h2 {
+  margin-bottom: 20px;
+  color: #143ea1;
+  text-align: center;
+}
+
+/* Campos de formulário */
+form div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+label {
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: white;
+}
+
+input, select {
+  width: 90%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  box-sizing: border-box;
+  outline: none;
+}
+
+input:focus, select:focus {
+  border-color: #0a3990;
+  box-shadow: 0 0 5px rgba(10, 57, 144, 0.5);
+}
+
+/* Botão de envio */
+button[type="submit"] {
+  background-color: #06235a;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+  background-color: #0a3990;
+}
+
+/* Mensagem de feedback */
+div[ngIf] {
+  margin-top: 20px;
+  text-align: center;
+  font-weight: bold;
+  color: white;
+}

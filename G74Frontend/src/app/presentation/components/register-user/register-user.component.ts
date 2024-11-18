@@ -32,7 +32,7 @@ export class RegisterUserComponent {
       })
     ).subscribe(response => {
       if (response) {
-        this.message = 'Patient profile created successfully!';
+        this.message = 'User profile created successfully!';
         this.resetForm();
       }
     });
