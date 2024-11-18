@@ -26,6 +26,7 @@ import UserInterface from "./user_interface.js";
 import Animations from "./animations.js";
 import Animations_door from "./animations_door.js";
 import Patient from "./patient.js";
+import ChandelierLight from "./chandelier_light.js";
 
 
 export default class ThumbRaiser {
@@ -609,6 +610,7 @@ export default class ThumbRaiser {
     setHospitalBedsAndPatients(hospitalBedsUrl, patientsUrl) {
 
         let hospitalBedObject;
+        let chandelierLightObject;
         let patientObject;
         let patientPositionArray = new Array();
         let patientRotationArray = new Array();
@@ -627,10 +629,10 @@ export default class ThumbRaiser {
                 this.scene3D.add(hospitalBedObject);
                 hospitalBedObject.position.set(hospitalBedPosition.x,hospitalBedPosition.y,hospitalBedPosition.z);
                 hospitalBedObject.rotation.y = room.rotation;
-                
+
                 patientPositionArray.push(room.patientPosition);
                 patientRotationArray.push(room.patientRotation);
-                
+
             });
         })
         .catch(error => console.error('Error loading JSON:', error));
@@ -648,6 +650,11 @@ export default class ThumbRaiser {
                 this.scene3D.add(patientObject);
                 patientObject.position.set(patientPosition.x, patientPosition.y, patientPosition.z);
                 patientObject.rotation.y = (patientRotationArray[index]);
+
+                // Create the chandelierLight
+                let chandelierLightObject = new ChandelierLight(this.lightsParameters,patientPosition.x,patientPosition.y+0.5,patientPosition.z);
+                this.scene3D.add(chandelierLightObject.object)
+
             }
             index++;
 
