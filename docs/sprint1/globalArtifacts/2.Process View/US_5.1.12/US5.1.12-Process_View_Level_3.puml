@@ -1,0 +1,86 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor "Admin" as admin
+
+participant StaffRoute as route
+participant StaffController as controller
+participant "StaffAppService : IStaffAppService" as pservice
+participant StaffBuilder as builder
+participant "staff : Staff" as staff
+participant StaffMapper as mapper
+participant StaffDataModel as datamodel
+participant "StaffRepository : IStaffRepository" as irepo
+participant BackofficeAppDbContext as context
+participant "staffDto : StaffDTO" as staffdto
+
+
+admin -> route : POST register new staff profile
+
+activate route
+route -> controller : createsStaffDTO(json)
+activate controller
+controller -> pservice : RegisterStaff(receivedStaff : StaffDto)
+
+activate pservice 
+
+pservice ->  builder : build()
+
+activate builder
+
+builder -> staff : Staff(...)
+
+activate staff
+staff --> builder : staff
+deactivate staff
+
+builder --> pservice : staff
+
+deactivate builder
+
+pservice -> mapper : ToDataModel(staff)
+
+activate mapper
+mapper -> datamodel : StaffDataModel(staff)
+activate datamodel
+datamodel --> mapper : staffDataModel
+deactivate datamodel
+mapper --> pservice : staffDataModel
+deactivate mapper
+
+pservice -> irepo : AddStaff(staffDataModel)
+
+activate irepo
+
+irepo -> context : AddAsync(staff)
+activate context
+irepo -> context : SaveChangesAsync()
+deactivate context
+
+deactivate irepo
+
+pservice -> mapper : ToDTO(staff)
+activate mapper
+mapper -> staffdto : StaffDTO(...)
+activate staffdto
+staffdto --> mapper : staffDto
+deactivate staffdto
+mapper --> pservice : staffDto
+deactivate mapper
+
+pservice --> controller : staffdto
+
+deactivate pservice
+
+controller --> route : Status Code 200 and staffDto
+
+deactivate controller
+
+route --> admin : Confirms POST success \n and shows registered staff profile
+
+deactivate route
+
+
+@enduml

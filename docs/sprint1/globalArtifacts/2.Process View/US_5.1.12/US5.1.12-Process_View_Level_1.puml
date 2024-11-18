@@ -1,0 +1,31 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor "Administrator" as admin
+
+participant ":SARM" as sys
+
+
+activate admin
+
+admin -> sys : Asks to register staff profile
+
+activate sys
+
+alt success
+
+    sys --> admin : Confirms registration success
+
+else failure
+
+    sys --> admin : Informs registration was unsuccessful
+
+deactivate sys
+    
+deactivate admin
+
+end
+
+@enduml

@@ -1,0 +1,73 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor "Admin" as admin
+
+participant StaffRoute as route
+participant StaffController as controller
+participant "StaffAppService : IStaffAppService" as sservice
+participant StaffBuilder as builder
+participant "staff : Staff" as staff
+participant StaffMapper as mapper
+participant StaffDataModel as datamodel
+participant "StaffRepository : IStaffRepository" as irepo
+participant BackofficeAppDbContext as context
+participant "staffDto : StaffDTO" as staffdto
+participant IConfiguration as configfile
+
+
+admin -> route :  PATCH deactivate staff profile
+
+activate route
+route -> controller : licenceNumber
+activate controller
+controller -> sservice : DeactivateStaff(licenceNumber)
+
+activate sservice 
+
+sservice -> irepo : GetStaffByLicenceNumber(licenceNumber)
+
+activate irepo
+
+irepo -> context : FirstOrDefaultAsync(...)
+activate context
+context --> irepo : staffDataModel
+deactivate context
+irepo --> sservice : staffDataModel
+deactivate irepo
+
+sservice -> configfile : ["GPRD:RetainInfoPeriod"]
+
+activate configfile
+configfile --> sservice : retainInfoPeriod
+deactivate configfile
+
+sservice -> datamodel : staffDataModel.MarkForDeletion(retainInfoPeriod)
+
+activate datamodel
+datamodel -> datamodel : MarkForDeletion()
+deactivate datamodel
+
+sservice -> irepo : UpdateStaff(staffDataModel)
+
+activate irepo
+irepo -> context : Update(staff);
+activate context
+irepo -> context : SaveChangesAsync();
+deactivate context
+deactivate irepo
+
+deactivate sservice
+
+controller --> route : Status Code 200
+
+deactivate controller
+
+route --> admin : Confirms DELETE success
+
+deactivate route
+
+
+@enduml
