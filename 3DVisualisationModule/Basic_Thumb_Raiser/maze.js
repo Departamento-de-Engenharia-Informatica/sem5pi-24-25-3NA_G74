@@ -94,7 +94,7 @@ export default class Maze {
             for (let i = 0; i <= description.size.width; i++) { // In order to represent the eastmost walls, the map width is one column greater than the actual maze width
                 for (let j = 0; j <= description.size.height; j++) { // In order to represent the southmost walls, the map height is one row greater than the actual maze height
                     if (description.map[j][i] == 4) {
-                        const position = [j - 0.5, i];
+                        const position = [j - 0.56, i];
                         this.doorObjectHorizontal.push(this.cellToCartesian(position));
                         // Create the door
                         this.doorObject = new Door(doorParameters,[j,i]);
@@ -107,7 +107,7 @@ export default class Maze {
             for (let i = 0; i <= description.size.width; i++) { // In order to represent the eastmost walls, the map width is one column greater than the actual maze width
                 for (let j = 0; j <= description.size.height; j++) { // In order to represent the southmost walls, the map height is one row greater than the actual maze height
                     if (description.map[j][i] == 5) {
-                        const position = [j, i - 0.5 ];
+                        const position = [j, i - 0.56 ];
                         this.doorObjectVertical.push(this.cellToCartesian(position));
                         // Create the door
                         this.doorObject = new Door(doorParameters,[j,i]);

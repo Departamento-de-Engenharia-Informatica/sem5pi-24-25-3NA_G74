@@ -14,7 +14,7 @@ public class BackofficeAppDbContext : DbContext
 
     public DbSet<PatientDataModel> Patients { get; set; }
     public DbSet<UserDataModel> Users { get; set; }
-    public DbSet<Staff> Staff { get; set; }
+    public DbSet<StaffDataModel> Staff { get; set; }
     public DbSet<OperationRequestDataModel> OperationRequests { get; set; }
     public DbSet<OperationTypeDataModel> OperationTypes { get; set; }
     public DbSet<SurgeryRoomDataModel> SurgeryRooms { get; set; }

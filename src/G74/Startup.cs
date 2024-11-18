@@ -1,17 +1,20 @@
+using System.Text;
 using G74.Adapters.Controllers;
 using G74.Adapters.Repositories;
 using G74.Domain.Aggregates.OperationType;
 using G74.Domain.DomainServices;
 using G74.Domain.IRepositories;
 using G74.Domain.Shared;
+using G74.Domain.Value_Objects.User;
 using G74.DTO;
 using G74.Infrastructure;
 using G74.Infrastructure.Shared;
 using G74.Mappers;
 using G74.Services;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Microsoft.IdentityModel.Tokens;
 
 namespace G74;
 
@@ -44,7 +47,11 @@ public class Startup
                 .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole())));
     
         ConfigureMyServices(serviceCollection);
+        
+        ConfigureAuthentication(serviceCollection);
 
+        ConfigureAuthorization(serviceCollection);
+        /*
         serviceCollection.AddDistributedMemoryCache();
 
         serviceCollection.AddSession(options =>
@@ -79,6 +86,7 @@ public class Startup
             options.AddPolicy("RequireTechnicianRole", policy => policy.RequireRole("Technician"));
             options.AddPolicy("RequirePatientRole", policy => policy.RequireRole("Patient"));
         });
+        */
 
         serviceCollection.AddControllers();
     }
@@ -102,7 +110,7 @@ public class Startup
         
         app.UseHttpsRedirection();
         app.UseRouting();
-        app.UseSession();
+        //app.UseSession();
         app.UseAuthentication();
         app.UseAuthorization();
 
@@ -130,7 +138,7 @@ public class Startup
         services.AddTransient<IOperationRequestRepository, OperationRequestRepository>();
         services.AddScoped<GmailEmailService>();
         services.AddScoped<IStaffRepository, StaffRepository>();
-        services.AddScoped<StaffService>();
+        services.AddScoped<IStaffService, StaffService>();
         services.AddScoped<StaffController>();
         services.AddScoped<IOperationTypeRepository,OperationTypeRepository>();
         services.AddScoped<IAppointmentRepository,AppointmentRepository>();
@@ -144,5 +152,44 @@ public class Startup
         services.AddScoped<OperationTypeController>();
         services.AddTransient<OperationTypeDtoMapper>();
 
+
+        // For authentication and authorization purposes
+        services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<IAuthService, AuthService>();
+        services.AddHttpContextAccessor();
+
+
+    }
+
+    private void ConfigureAuthentication(IServiceCollection serviceCollection)
+    {
+        serviceCollection.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey =
+                        new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtSettings:SecretKey"])),
+                    ValidateIssuer = true,
+                    ValidIssuer = Configuration["JwtSettings:Issuer"],
+                    ValidateAudience = true,
+                    ValidAudience = Configuration["JwtSettings:Audience"],
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero // Remover atraso no tempo do token
+                };
+            });
+    }
+
+    private void ConfigureAuthorization(IServiceCollection serviceCollection)
+    {
+        serviceCollection.AddAuthorization(options =>
+        {
+            options.AddPolicy("Admin", policy => policy.RequireRole(Role.Admin.ToString()));
+            options.AddPolicy("Patient", policy => policy.RequireRole(Role.Patient.ToString()));
+            options.AddPolicy("Nurse", policy => policy.RequireRole(Role.Nurse.ToString()));
+            options.AddPolicy("Technician", policy => policy.RequireRole(Role.Technician.ToString()));
+            options.AddPolicy("Doctor", policy => policy.RequireRole(Role.Doctor.ToString()));
+        });
     }
 }

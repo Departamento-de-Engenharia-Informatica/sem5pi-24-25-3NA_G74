@@ -18,7 +18,7 @@ public class PatientController : ControllerBase
         _patientAppService = patientAppService;
     }
 
-    //[Authorize(Roles = "Admin,Patient")]
+    [Authorize(Roles = "Admin,Patient")]
     [HttpPost]
     public async Task<ActionResult<PatientDTO>> RegisterPatient([FromBody] PatientDTO receivedPatient)
     {

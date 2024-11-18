@@ -1,0 +1,85 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor "Admin" as admin
+
+participant StaffRoute as route
+participant StaffController as controller
+participant "StaffAppService : IStaffAppService" as pservice
+participant StaffBuilder as builder
+participant "staff : Staff" as staff
+participant StaffMapper as mapper
+participant StaffDataModel as datamodel
+participant "StaffRepository : IStaffRepository" as irepo
+participant BackofficeAppDbContext as context
+participant "staffDto : StaffDTO" as staffdto
+
+
+admin -> route : PUT edit staff profile
+
+activate route
+route -> controller : createsStaffDTO(json), \nlicenceNumber
+activate controller
+controller -> pservice : GetStaffByLicenceNumber(licenceNumber)
+
+activate pservice 
+
+pservice -> irepo : GetStaffByLicenceNumber(licenceNumber)
+
+activate irepo
+
+irepo -> context : FirstOrDefaultAsync(...)
+activate context
+context --> irepo : staffDataModel
+deactivate context
+irepo --> pservice : staffDataModel
+deactivate irepo
+
+pservice -> mapper : ToDomain(receivedStaffDto)
+activate mapper
+mapper -> staff : Staff(...)
+activate staff
+staff --> mapper : staff
+deactivate staff
+mapper --> pservice : staff
+deactivate mapper
+
+pservice -> pservice : UpdateStaffHelper(staff, staffDataModel)
+
+
+pservice -> irepo : UpdateStaff(staffDataModel)
+
+activate irepo
+irepo -> context : Update(staff);
+activate context
+irepo -> context : await _context.SaveChangesAsync();
+deactivate context
+deactivate irepo
+
+
+
+pservice -> mapper : ToDTO(staff)
+activate mapper
+mapper -> staffdto : StaffDTO(...)
+activate staffdto
+staffdto --> mapper : staffDto
+deactivate staffdto
+mapper --> pservice : staffDto
+deactivate mapper
+
+pservice --> controller : staffdto
+
+deactivate pservice
+
+controller --> route : Status Code 200 and staffDto
+
+deactivate controller
+
+route --> admin : Confirms PUT success \n and shows edited staff profile
+
+deactivate route
+
+
+@enduml

@@ -1,33 +1,47 @@
-using System.IdentityModel.Tokens.Jwt;
-using G74.Domain.Aggregates.User;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Mvc;
-using Google.Apis.Auth;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
-using System.Text;
-using G74.Domain.Value_Objects;
-using G74.Domain.Value_Objects.User;
 using G74.DTO;
-using G74.Infrastructure;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.IdentityModel.Tokens;
+using G74.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace G74.Adapters.Controllers
 {
     [ApiController]
-    [Route("api/auth")]
+    [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
         //private readonly AuthAppService _authAppService;
-        private readonly BackofficeAppDbContext _context;
+        //private readonly BackofficeAppDbContext _context;
 
-        public AuthController(BackofficeAppDbContext context)
+        private readonly IAuthService _authService;
+        private readonly ITokenService _tokenService;
+        
+
+        public AuthController(IAuthService authService, ITokenService tokenService)
         {
-            _context = context;
+            //_context = context;
+            _authService = authService;
+            _tokenService = tokenService;
             //_authAppService = authAppService;
         }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginDto? loginDto)
+        {
+            if (loginDto == null) return BadRequest("Login data not valid");
+
+            var (token, message, userDto) = await _authService.Login(loginDto);
+
+            return token == null
+                ? StatusCode(500, message)
+                : Ok(new { Token = token, Message = message, User = userDto });
+        }
+
+        public async Task<IActionResult> GoogleLogin()
+        {
+            throw new NotImplementedException();
+        }
+        
+        
+        /*
         
         [AllowAnonymous]
         [HttpPost("google-login")]
@@ -97,6 +111,7 @@ namespace G74.Adapters.Controllers
             }
             return Ok(new { isAuthenticated = false });
         }
+        */
 
     }
 }

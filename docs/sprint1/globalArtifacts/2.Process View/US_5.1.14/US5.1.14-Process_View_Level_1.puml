@@ -1,0 +1,31 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor "Administrator" as admin
+
+participant ":SARM" as sys
+
+
+activate admin
+
+admin -> sys : Asks to edit staff profile
+
+activate sys
+
+alt success
+
+    sys --> admin : Confirms editing success
+
+else failure
+
+    sys --> admin : Informs editing was unsuccessful
+
+deactivate sys
+    
+deactivate admin
+
+end
+
+@enduml

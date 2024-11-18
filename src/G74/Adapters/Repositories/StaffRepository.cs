@@ -2,6 +2,7 @@
 using G74.Domain.Aggregates.Staff;
 using G74.Domain.IRepositories;
 using G74.Domain.Value_Objects.Staff;
+using G74.Domain.Value_Objects.Staff.Doctor;
 using G74.DTO;
 using G74.Infrastructure;
 using G74.Infrastructure.Shared;
@@ -11,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 namespace G74.Adapters.Repositories;
 
 // TODO: maybe remove BaseRepository inheritance. switch to GenericRepository?
-public class StaffRepository : BaseRepository<Staff, Guid>, IStaffRepository
+public class StaffRepository : BaseRepository<StaffDataModel, Guid>, IStaffRepository
 {
     private readonly BackofficeAppDbContext _dbContext;
 
@@ -25,10 +26,10 @@ public class StaffRepository : BaseRepository<Staff, Guid>, IStaffRepository
     {
         try
         {
-            Staff staff = await _dbContext.Set<Staff>()
-                .FirstAsync(s => s.LicenceNumber == licenceNumber);
+            StaffDataModel staffDataModel = await _dbContext.Set<StaffDataModel>()
+                .FirstAsync(s => s.LicenceNumber == licenceNumber.Value);
 
-            return staff;
+            return StaffDataModel.ToDomain(staffDataModel);
         }
         catch (InvalidOperationException ex)
         {
@@ -40,10 +41,12 @@ public class StaffRepository : BaseRepository<Staff, Guid>, IStaffRepository
 
     public async Task<Staff> Add(Staff staff)
     {
-        var ret = _dbContext.Staff.Add(staff);
+        StaffDataModel staffDataModel = StaffDataModel.FromDomain(staff);
+        
+        var ret = _dbContext.Set<StaffDataModel>().Add(staffDataModel);
         await _dbContext.SaveChangesAsync();
 
-        return ret.Entity;
+        return StaffDataModel.ToDomain(ret.Entity);
     }
 
     // public async Task<bool> StaffExists(LicenceNumber licenceNumber)
@@ -55,10 +58,10 @@ public class StaffRepository : BaseRepository<Staff, Guid>, IStaffRepository
     {
         try
         {
-            IEnumerable<Staff> staffs = await _dbContext.Set<Staff>()
+            IEnumerable<StaffDataModel> staffDataModel = await _dbContext.Set<StaffDataModel>()
                 .ToListAsync();
 
-            return staffs;
+            return StaffDataModel.ToDomain(staffDataModel);
         }
         catch (Exception ex)
         {
@@ -72,14 +75,23 @@ public class StaffRepository : BaseRepository<Staff, Guid>, IStaffRepository
     public async Task<Staff?> Update(LicenceNumber licenceNumber, Staff staff)
     {
 
-        var existingStaff = await _dbContext.Set<Staff>()
-            .FirstOrDefaultAsync(s => s.LicenceNumber == licenceNumber);
+        var staffDataModel = await _dbContext.Set<StaffDataModel>()
+            .FirstOrDefaultAsync(s => s.LicenceNumber == licenceNumber.Value);
 
-        if (existingStaff == null)
+        if (staffDataModel == null)
         {
             return null;
         }
 
+        Staff existingStaff = StaffDataModel.ToDomain(staffDataModel);
+
+        staffDataModel.LicenceNumber = staff.LicenceNumber.Value;
+        staffDataModel.Name = staff.Name.Value;
+        staffDataModel.PhoneNumber = staff.PhoneNumber.Value;
+        staffDataModel.ContactEmail = staff.ContactEmail.email;
+        staffDataModel.StaffSpecialization = staff.StaffSpecialization.Value;
+        staffDataModel.Status = staff.Status.Value;
+        
         existingStaff.UpdateLicenceNumber(staff.LicenceNumber);
         existingStaff.UpdateName(staff.Name);
         existingStaff.UpdatePhoneNumber(staff.PhoneNumber);
@@ -94,27 +106,22 @@ public class StaffRepository : BaseRepository<Staff, Guid>, IStaffRepository
 
     public async Task<Staff> UpdateStatus(LicenceNumber licenceNumber, Staff staff)
     {
-        try
+        var existingStaffDataModel = await _dbContext.Set<StaffDataModel>()
+            .FirstOrDefaultAsync(s => s.LicenceNumber == licenceNumber.Value);
+
+        if (existingStaffDataModel == null)
         {
-            var existingStaff = await _dbContext.Set<Staff>()
-                .FirstOrDefaultAsync(s => s.LicenceNumber == licenceNumber);
-
-            if (existingStaff == null)
-            {
-                throw new Exception($"Staff with licence number {licenceNumber} not found");
-            }
-
-            // Update only the status
-            existingStaff.UpdateStatus(staff.Status);
-
-            await _dbContext.SaveChangesAsync();
-
-            return existingStaff;
+            throw new Exception($"Staff with licence number {licenceNumber} not found");
         }
-        catch (Exception ex)
-        {
-            throw ex.InnerException!;
-        }
+
+        Staff existingStaff = StaffDataModel.ToDomain(existingStaffDataModel);
+
+        // Update only the status
+        existingStaff.Deactivate();
+
+        await _dbContext.SaveChangesAsync();
+
+        return existingStaff;
     }
 
     public async Task ExportStaffDataToProlog()
@@ -124,7 +131,9 @@ public class StaffRepository : BaseRepository<Staff, Guid>, IStaffRepository
 
         foreach (var staff in staffList)
         {
-            prologData.AppendLine($"staff('{staff.Id}', '{staff.LicenceNumber}', '{staff.Name}', '{staff.PhoneNumber}', '{staff.ContactEmail}', '{staff.StaffSpecialization}', '{staff.Status}', '{staff.Availability}').");
+            prologData.AppendLine($"staff('{staff.Id}', '{staff.LicenceNumber}', '{staff.Name}'," +
+                                  $"'{staff.PhoneNumber}', '{staff.ContactEmail}', '{staff.StaffSpecialization}'," +
+                                  $"'{staff.Status}', '{staff.Availability}').");
         }
 
         File.WriteAllText("exported_staff.pl", prologData.ToString());

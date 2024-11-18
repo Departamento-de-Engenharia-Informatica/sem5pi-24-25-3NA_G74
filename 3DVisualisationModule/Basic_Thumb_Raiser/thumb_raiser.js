@@ -26,6 +26,7 @@ import UserInterface from "./user_interface.js";
 import Animations from "./animations.js";
 import Animations_door from "./animations_door.js";
 import Patient from "./patient.js";
+import ChandelierLight from "./chandelier_light.js";
 
 
 export default class ThumbRaiser {
@@ -597,18 +598,19 @@ export default class ThumbRaiser {
     }
 
     collision(position) {
-        return this.maze.distanceToEastWall(position) < this.player.radius || this.maze.distanceToWestWall(position) < this.player.radius ||
-        this.maze.distanceToSouthWall(position) < this.player.radius || this.maze.distanceToNorthWall(position) < this.player.radius
+        return this.maze.distanceToEastWall(position) < (this.player.radius/2) || this.maze.distanceToWestWall(position) < (this.player.radius/2) ||
+        this.maze.distanceToSouthWall(position) < (this.player.radius/2) || this.maze.distanceToNorthWall(position) < (this.player.radius/2)
     }
 
     collision_door(position) {
-        return this.maze.distanceToWestDoor(position) < (this.player.radius*2) || this.maze.distanceToEastDoor(position) < (this.player.radius*2)
-        || this.maze.distanceToNorthDoor(position) < (this.player.radius*2) || this.maze.distanceToSouthDoor(position) < (this.player.radius*2);
+        return this.maze.distanceToWestDoor(position) < (this.player.radius/2) || this.maze.distanceToEastDoor(position) < (this.player.radius/2)
+        || this.maze.distanceToNorthDoor(position) < (this.player.radius/2) || this.maze.distanceToSouthDoor(position) < (this.player.radius/2);
     }
 
     setHospitalBedsAndPatients(hospitalBedsUrl, patientsUrl) {
 
         let hospitalBedObject;
+        let chandelierLightObject;
         let patientObject;
         let patientPositionArray = new Array();
         let patientRotationArray = new Array();
@@ -627,10 +629,10 @@ export default class ThumbRaiser {
                 this.scene3D.add(hospitalBedObject);
                 hospitalBedObject.position.set(hospitalBedPosition.x,hospitalBedPosition.y,hospitalBedPosition.z);
                 hospitalBedObject.rotation.y = room.rotation;
-                
+
                 patientPositionArray.push(room.patientPosition);
                 patientRotationArray.push(room.patientRotation);
-                
+
             });
         })
         .catch(error => console.error('Error loading JSON:', error));
@@ -648,6 +650,11 @@ export default class ThumbRaiser {
                 this.scene3D.add(patientObject);
                 patientObject.position.set(patientPosition.x, patientPosition.y, patientPosition.z);
                 patientObject.rotation.y = (patientRotationArray[index]);
+
+                // Create the chandelierLight
+                let chandelierLightObject = new ChandelierLight(this.lightsParameters,patientPosition.x,patientPosition.y+0.5,patientPosition.z);
+                this.scene3D.add(chandelierLightObject.object)
+
             }
             index++;
 
@@ -659,10 +666,6 @@ export default class ThumbRaiser {
 
 
     }
-
-    
-
-
     
     update() {
         if (!this.gameRunning) {
@@ -785,29 +788,7 @@ export default class ThumbRaiser {
             const direction = THREE.MathUtils.degToRad(this.player.direction);
             if (this.player.keyStates.backward) {
                 const newPosition = new THREE.Vector3(-coveredDistance * Math.sin(direction), 0.0, -coveredDistance * Math.cos(direction)).add(this.player.position);
-                if (this.collision(newPosition)) {
-
-                }
-                else if (this.collision_door(newPosition)) {
-                    let posPlayer = this.maze.cartesianToCell(newPosition);
-                    for(let i=0;i<this.doorsTR.length;i++){
-                        let posPorta = this.doorsTR[i].location;
-                        if(posPorta[0] == posPlayer[0] && posPorta[1] == posPlayer[1]){
-                            for(let j=0;j<this.animationsDoors.length;j++){
-                                if(posPorta == this.animationsDoors[j].location){
-                                    this.animationsDoors[j].fadeToAction("door|Open", 0.1);
-                                    // Aguarda 5 segundos (5000 milissegundos) antes de executar a próxima linha
-                                    setTimeout(() => {
-                                        this.animationsDoors[j].fadeToAction("door|Close", 0.1);
-                                    }, 5000);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    this.player.position = newPosition;
-                }
-                else {
+                if (!this.collision(newPosition) && !this.collision_door(newPosition)) {
                     this.animations.fadeToAction("metarig|Walk", 0.2);
                     this.player.position = newPosition;
                 }
@@ -815,32 +796,7 @@ export default class ThumbRaiser {
             else if (this.player.keyStates.forward) {
                 const newPosition = new THREE.Vector3(coveredDistance * Math.sin(direction), 0.0, coveredDistance * Math.cos(direction)).add(this.player.position);
 
-                if (this.collision(newPosition)) {
-
-                }
-                else if (this.collision_door(newPosition)) {
-                    let posPlayer = this.maze.cartesianToCell(newPosition);
-                    for(let i=0;i<this.doorsTR.length;i++){
-                        let posPorta = this.doorsTR[i].location;
-                        if(posPorta[0] == posPlayer[0] && posPorta[1] == posPlayer[1]){
-                            for(let j=0;j<this.animationsDoors.length;j++){
-                                if(posPorta == this.animationsDoors[j].location){
-                                    this.animationsDoors[j].fadeToAction("door|Open", 0.1);
-                                    // Aguarda 5 segundos (5000 milissegundos) antes de executar a próxima linha
-                                    setTimeout(() => {
-                                        this.animationsDoors[j].fadeToAction("door|Close", 0.1);
-                                    }, 5000);
-                                    break;
-                                }
-                            }
-                            break;
-                        }
-                    }
-                    this.player.position = newPosition;
-
-                }
-                
-                else {
+                if (!this.collision(newPosition) && !this.collision_door(newPosition)) {
                     this.animations.fadeToAction("metarig|Walk", 0.2);
                     this.player.position = newPosition;
                 }

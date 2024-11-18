@@ -1,6 +1,7 @@
 using G74.Domain.Shared;
 using G74.Domain.Value_Objects.SharedValueObjects;
 using G74.Domain.Value_Objects.Staff;
+using G74.Domain.Value_Objects.Staff.Doctor;
 using G74.Domain.Value_Objects.User;
 
 namespace G74.Domain.Aggregates.Staff;
@@ -81,6 +82,10 @@ public class Staff : Entity<Guid>, IAggregateRoot
     {
         this.Status = status;
     }
-
+    
+    public void UpdateAvailability(string availability)
+    {
+        this.Availability = availability;
+    }
 
 }

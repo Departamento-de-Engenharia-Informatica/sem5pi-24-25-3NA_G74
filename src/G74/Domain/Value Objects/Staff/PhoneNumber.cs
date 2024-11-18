@@ -2,7 +2,7 @@ using G74.Domain.Shared;
 
 namespace G74.Domain.Value_Objects.Staff;
 
-public class PhoneNumber
+public class PhoneNumber : IValueObject
 {
     public string Value { get; }
 
