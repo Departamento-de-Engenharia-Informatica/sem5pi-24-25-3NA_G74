@@ -63,7 +63,8 @@ public class StaffService : IStaffService
             Name = staff.Name.Value,
             PhoneNumber = staff.PhoneNumber.Value,
             StaffSpecialization = staff.StaffSpecialization.Value,
-            Status = staff.Status.Value
+            Status = staff.Status.Value,
+            Availability = staff.Availability
         };
     }
 
@@ -88,9 +89,10 @@ public class StaffService : IStaffService
         {
             return null;
         }
-
+        
         staff.Deactivate();
-        Staff updatedStaff = await _repo.UpdateStatus(new LicenceNumber(licenceNumber), staff);
+
+        Staff? updatedStaff = await _repo.Update(new LicenceNumber(licenceNumber), staff);
         return StaffDto.FromDomain(updatedStaff);
     }
 

@@ -85,6 +85,13 @@ public class StaffRepository : BaseRepository<StaffDataModel, Guid>, IStaffRepos
 
         Staff existingStaff = StaffDataModel.ToDomain(staffDataModel);
 
+        staffDataModel.LicenceNumber = staff.LicenceNumber.Value;
+        staffDataModel.Name = staff.Name.Value;
+        staffDataModel.PhoneNumber = staff.PhoneNumber.Value;
+        staffDataModel.ContactEmail = staff.ContactEmail.email;
+        staffDataModel.StaffSpecialization = staff.StaffSpecialization.Value;
+        staffDataModel.Status = staff.Status.Value;
+        
         existingStaff.UpdateLicenceNumber(staff.LicenceNumber);
         existingStaff.UpdateName(staff.Name);
         existingStaff.UpdatePhoneNumber(staff.PhoneNumber);
@@ -110,7 +117,7 @@ public class StaffRepository : BaseRepository<StaffDataModel, Guid>, IStaffRepos
         Staff existingStaff = StaffDataModel.ToDomain(existingStaffDataModel);
 
         // Update only the status
-        existingStaff.UpdateStatus(staff.Status);
+        existingStaff.Deactivate();
 
         await _dbContext.SaveChangesAsync();
 

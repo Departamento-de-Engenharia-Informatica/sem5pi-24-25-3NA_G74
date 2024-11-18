@@ -137,7 +137,7 @@ public class Startup
         services.AddTransient<IOperationRequestRepository, OperationRequestRepository>();
         services.AddScoped<GmailEmailService>();
         services.AddScoped<IStaffRepository, StaffRepository>();
-        services.AddScoped<StaffService>();
+        services.AddScoped<IStaffService, StaffService>();
         services.AddScoped<StaffController>();
         services.AddScoped<IOperationTypeRepository,OperationTypeRepository>();
         services.AddScoped<IAppointmentRepository,AppointmentRepository>();

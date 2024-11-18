@@ -82,6 +82,10 @@ public class Staff : Entity<Guid>, IAggregateRoot
     {
         this.Status = status;
     }
-
+    
+    public void UpdateAvailability(string availability)
+    {
+        this.Availability = availability;
+    }
 
 }

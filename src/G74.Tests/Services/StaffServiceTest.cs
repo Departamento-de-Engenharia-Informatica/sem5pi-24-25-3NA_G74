@@ -218,7 +218,7 @@ public class StaffServiceTest
 
         _mockStaffRepository.Setup(repo => repo.GetByLicenceNumber(It.IsAny<LicenceNumber>()))
             .ReturnsAsync(_sampleStaff);
-        _mockStaffRepository.Setup(repo => repo.UpdateStatus(It.IsAny<LicenceNumber>(), It.IsAny<Staff>()))
+        _mockStaffRepository.Setup(repo => repo.Update(It.IsAny<LicenceNumber>(), It.IsAny<Staff>()))
             .ReturnsAsync(deactivatedStaff);
 
         // Act
