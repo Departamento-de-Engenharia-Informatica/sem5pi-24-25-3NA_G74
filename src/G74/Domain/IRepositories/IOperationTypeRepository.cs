@@ -1,10 +1,11 @@
-using Azure;
-using Microsoft.OpenApi.Models;
+using G74.Domain.Aggregates.OperationType;
+using G74.DTO;
 
 namespace G74.Domain.IRepositories;
 
 public interface IOperationTypeRepository
 {
+
     Task<OperationType> CreateOperationType(OperationType operationType);
     Task<OperationType> UpdateOperationType(OperationType operationType);
 
@@ -12,5 +13,8 @@ public interface IOperationTypeRepository
 
     Task<IEnumerable<OperationType>> SearchOperationTypeByFiltersAsync(string? OperationTypeID,
         string? Name, string? RequiredStaffBySpecialization, string? Duration);
-    
+
+    Task<OperationType?> GetOperationTypeByID(
+        int operationTypeID);
+
 }

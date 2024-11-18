@@ -90,14 +90,14 @@ namespace G74.Adapters.Repositories
             return OperationRequestMapper.FromDataModelToDomain(dataOperation);
         }
     
-        public async Task<Boolean> GetOperationTypeByIdAsync(long id)
+        public async Task<Boolean> GetOperationTypeByIdAsync(int id)
         {
             var list = await _context.OperationTypes.ToListAsync();
 
             for(var i = 0; i < list.Count; i++)
             {
-                Console.WriteLine(list[i].operationTypeID);
-                if(list[i].operationTypeID == id)
+                Console.WriteLine(list[i].OperationTypeID);
+                if(list[i].OperationTypeID == id)
                 {
                     
                     return true;

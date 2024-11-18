@@ -1,5 +1,6 @@
 using G74.Adapters.Controllers;
 using G74.Adapters.Repositories;
+using G74.Domain.Aggregates.OperationType;
 using G74.Domain.DomainServices;
 using G74.Domain.IRepositories;
 using G74.Domain.Shared;
@@ -139,6 +140,9 @@ public class Startup
         services.AddTransient<SurgeryRoomToDataModelMapper>();
         services.AddScoped<OptimizationModuleService>();
         services.AddScoped<OptimizationModuleController>();
+        services.AddScoped<OperationTypeService>();
+        services.AddScoped<OperationTypeController>();
+        services.AddTransient<OperationTypeDtoMapper>();
 
     }
 }

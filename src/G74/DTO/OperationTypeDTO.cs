@@ -4,13 +4,13 @@ using G74.Domain.Value_Objects.SharedValueObjects;
 public class OperationTypeDTO
 {
 
-    public long operationTypeID { get; }
-	public Name name { get; }
-	public RequiredStaffBySpecialization requiredStaffBySpecialization { get; }
-	public Duration duration { get; }
+    public string operationTypeID { get; }
+	public string name { get; }
+	public string requiredStaffBySpecialization { get; }
+	public string duration { get; }
 
     
-    public OperationTypeDTO(long operationTypeID, Name name, RequiredStaffBySpecialization requiredStaffBySpecialization, Duration duration)
+    public OperationTypeDTO(string operationTypeID, string name, string requiredStaffBySpecialization, string duration)
     {
         this.operationTypeID = operationTypeID;
 		this.name = name;

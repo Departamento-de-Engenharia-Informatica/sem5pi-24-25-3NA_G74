@@ -129,4 +129,11 @@ public class OperationTypeRepository : GenericRepository<OperationType>, IOperat
 
         return query;
     }
+
+    public async Task<OperationType?> GetOperationTypeByID(
+        int operationTypeID)
+    {
+        var operationTypeDataModel = GetOperationTypeDataModelByID(operationTypeID).Result;
+        return _operationTypeToDataModelMapper.OperationTypeDataModelToDomain(operationTypeDataModel);
+    }
 }
