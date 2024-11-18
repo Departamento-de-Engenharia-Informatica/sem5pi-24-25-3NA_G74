@@ -28,8 +28,8 @@ export class UserRepository implements IUserRepository {
     );
   }
 
-  updateUser(user: Partial<User>): Observable<User> {
-    const myURL = `${this.apiUrl}/update`;
+  updateUser(email: string, user: Partial<User>): Observable<User> {
+    const myURL = `${this.apiUrl}/update/${email}`;
     return this.http.patch<User>(myURL, user).pipe(
       tap(response => console.log('Received response from backend:', response)),
       catchError(error => {

@@ -12,41 +12,56 @@ import {User} from '../../../domain/models/user.model';
   styleUrl: './update-user.component.css'
 })
 export class UpdateUserComponent {
-  username: string = '';
+  isEditing: boolean = false;
   email: string = '';
-  user: Partial<User> = {};
   message: string = '';
+  username: string = '';
+  newEmail: string = '';
+  user: Partial<User> = {};
 
   constructor(private userService: UserService) {
   }
 
-  onSubmit():void{
-
-    let username;
-    if (this.username) {
-      username = this.username;
-    }
-    let email;
+  submitEmail() {
     if (this.email) {
-      email = this.email;
+      this.isEditing = true;
+      this.message = '';
+      this.user.email = this.email;
+    } else {
+      this.message = 'Please enter a valid email.';
     }
-
-    this.userService.updateUser(this.user).pipe(
-      catchError(error => {
-        console.error('Error updating user profile:', error);
-        this.message = `Failed to update user profile. ${error?.error?.message || 'Please try again.'}`;
-        return of(null);
-      })
-    ).subscribe(response => {
-      if (response) {
-        this.message = 'User profile updated successfully!';
-        this.resetForm();
-      }
-    });
   }
 
-  resetForm(): void{
-    this.username = '';
+  updateUser() {
+    if (this.user.username && this.user.email && this.user.role) {
+      this.userService.updateUser(this.email,this.user).pipe(
+        catchError(error => {
+          console.error('Error updating user profile:', error);
+          this.message = `Failed to update user profile. ${error?.error?.message || 'Please try again.'}`;
+          return of(null);
+        })
+      ).subscribe(response => {
+        if (response) {
+          this.message = 'User profile updated successfully!';
+          this.resetForm();
+        }
+      });
+    } else {
+      this.message = 'Please fill in all fields.';
+    }
+  }
+
+  goBack() {
+    this.isEditing = false;
+    this.message = '';
+  }
+
+  resetForm() {
+    this.user = {
+      username: '',
+      email: '',
+      role: 'Admin'
+    };
     this.email = '';
   }
 
