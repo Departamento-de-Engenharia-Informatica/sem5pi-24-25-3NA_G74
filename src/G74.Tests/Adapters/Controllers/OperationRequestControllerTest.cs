@@ -14,6 +14,7 @@ using G74.Domain.IRepositories;
 using G74.Domain.Shared;
 using G74.Domain.Value_Objects.Patient;
 using G74.Domain.Value_Objects.SharedValueObjects;
+using G74.Domain.Value_Objects.Staff.Doctor;
 using G74.Domain.Value_Objects.User;
 using G74.DTO;
 using G74.Infrastructure;

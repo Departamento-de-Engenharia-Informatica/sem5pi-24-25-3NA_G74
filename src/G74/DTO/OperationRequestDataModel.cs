@@ -18,7 +18,7 @@ public class OperationRequestDataModel : Entity<Guid>
         : base(Guid.NewGuid()) 
     {
         MedicalRecordNumber = long.Parse(request.MedicalRecordNumber.MedicalNumber);
-        LicenceNumber = request.LicenceNumber.licenceNumber;
+        LicenceNumber = request.LicenceNumber.Value;
         OperationTypeId = request.OperationTypeId;
         DeadlineDate = request.DeadlineDate.date;
         Priority = request.Priority.PriorityDescription.ToString();

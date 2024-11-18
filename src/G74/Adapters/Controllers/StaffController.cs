@@ -11,9 +11,9 @@ namespace G74.Adapters.Controllers;
 [ApiController]
 public class StaffController : ControllerBase
 {
-    private readonly StaffService _service;
+    private readonly IStaffService _service;
 
-    public StaffController(StaffService service)
+    public StaffController(IStaffService service)
     {
         _service = service;
     }

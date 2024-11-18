@@ -1,16 +1,16 @@
-// using G74.Adapters.Repositories;
-// using JetBrains.Annotations;
-// using Xunit;
+using G74.Adapters.Repositories;
+using JetBrains.Annotations;
+using Xunit;
 
-// namespace G74.Tests.Adapters.Repositories;
+namespace G74.Tests.Adapters.Repositories;
 
-// [TestSubject(typeof(StaffRepository))]
-// public class StaffRepositoryTest
-// {
+[TestSubject(typeof(StaffRepository))]
+public class StaffRepositoryTest
+{
 
-//     [Fact]
-//     public void METHOD()
-//     {
+    [Fact]
+    public void METHOD()
+    {
         
-//     }
-// }
+    }
+}

@@ -1,5 +1,6 @@
 using G74.Domain.Aggregates.OperationType;
 using G74.Domain.Value_Objects.Patient;
+using G74.Domain.Value_Objects.Staff.Doctor;
 
 public class OperationRequestDTO {
     public long OperationRequestId {get; set; } 
@@ -13,7 +14,7 @@ public class OperationRequestDTO {
     {
         OperationRequestId = operationRequestId;
         MedicalRecordNumber = medicalRecordNumber;
-        LicenceNumber = licenceNumber.licenceNumber;
+        LicenceNumber = licenceNumber.Value;
         OperationTypeId = operationTypeId;
         DeadlineDate = deadlineDate;
         Priority = priority;
@@ -21,7 +22,7 @@ public class OperationRequestDTO {
     public OperationRequestDTO(MedicalRecordNumber medicalRecordNumber, LicenceNumber licenceNumber, long operationTypeId, DeadlineDate deadlineDate, Priority priority)
     {
         MedicalRecordNumber = medicalRecordNumber;
-        LicenceNumber = licenceNumber.licenceNumber;
+        LicenceNumber = licenceNumber.Value;
         OperationTypeId = operationTypeId;
         DeadlineDate = deadlineDate;
         Priority = priority;

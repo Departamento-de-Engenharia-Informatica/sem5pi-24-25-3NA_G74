@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using G74.Domain.Aggregates.OperationType;
 using G74.Domain.Value_Objects.Patient;
 using G74.Domain.Value_Objects.SharedValueObjects;
+using G74.Domain.Value_Objects.Staff.Doctor;
 using G74.DTO;
 
 public class OperationRequestMapper 
