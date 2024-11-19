@@ -20,4 +20,10 @@ public  class RequiredStaffBySpecialization : IValueObject
         }
         
     }
+    
+    public override string ToString()
+    {
+        return string.Join(",", SpecializationStaffList.Select(kvp => $"{kvp.Key}:{kvp.Value}"));
+    }
+    
 }

@@ -9,11 +9,11 @@ public class OperationRequest : IAggregateRoot
     public long OperationRequestId {get; set; }
     public MedicalRecordNumber MedicalRecordNumber {get; set; }
     public LicenceNumber LicenceNumber {get; set; }
-    public long OperationTypeId {get; set; }
+    public int OperationTypeId {get; set; }
     public DeadlineDate DeadlineDate {get; set; }
     public Priority Priority {get; set; }
 
-    public OperationRequest(MedicalRecordNumber medicalRecordNumber, LicenceNumber licenceNumber, long operationTypeId, DeadlineDate deadlineDate, Priority priority)
+    public OperationRequest(MedicalRecordNumber medicalRecordNumber, LicenceNumber licenceNumber, int operationTypeId, DeadlineDate deadlineDate, Priority priority)
     {
         MedicalRecordNumber = medicalRecordNumber;
         LicenceNumber = licenceNumber;
@@ -21,7 +21,7 @@ public class OperationRequest : IAggregateRoot
         DeadlineDate = deadlineDate;
         Priority = priority;
     }
-    public OperationRequest(MedicalRecordNumber medicalRecordNumber, LicenceNumber licenceNumber, long operationTypeId, DeadlineDate deadlineDate, Priority priority, long operationRequestId)
+    public OperationRequest(MedicalRecordNumber medicalRecordNumber, LicenceNumber licenceNumber, int operationTypeId, DeadlineDate deadlineDate, Priority priority, long operationRequestId)
     {
         MedicalRecordNumber = medicalRecordNumber;
         LicenceNumber = licenceNumber;

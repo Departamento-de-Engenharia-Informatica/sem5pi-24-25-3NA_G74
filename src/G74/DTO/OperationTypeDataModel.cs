@@ -7,20 +7,36 @@ namespace G74.DTO;
 
 public class OperationTypeDataModel : Entity<Guid>
 {
-    public long operationTypeID { get; private set; }
-    public string name { get; private set; }
-    public string requiredStaffBySpecialization { get; private set; }
-    public int estimatedDuration { get; private set; }
+    public int OperationTypeID { get; private set; }
+    public string Name { get; private set; }
+    public string RequiredStaffBySpecialization { get; private set; }
+    public int EstimatedDuration { get; private set; }
 
     protected OperationTypeDataModel() : base(Guid.NewGuid())
     {
         
     }
 	
-    public OperationTypeDataModel(OperationType operationType) : base(Guid.NewGuid()){
-        operationTypeID = operationType.operationTypeID;
-        name = operationType.name.ToString();
-        requiredStaffBySpecialization = operationType.requiredStaffBySpecialization.ToString();
-        estimatedDuration = operationType.duration;
+    public OperationTypeDataModel(int operationTypeId, string name, string requiredStaffBySpecialization, int estimatedDuration) : base(Guid.NewGuid())
+    {
+        OperationTypeID = operationTypeId;
+        Name = name;
+        RequiredStaffBySpecialization = requiredStaffBySpecialization;
+        EstimatedDuration = estimatedDuration;
+    }
+    
+    public void UpdateName(string newName)
+    {
+        Name = newName;
+    }
+
+    public void UpdateRequiredStaffBySpecialization(string newRequiredStaffBySpecialization)
+    {
+        RequiredStaffBySpecialization = newRequiredStaffBySpecialization;
+    }
+
+    public void UpdateEstimatedDuration(string newEstimatedDuration)
+    {
+        EstimatedDuration = int.Parse(newEstimatedDuration);
     }
 }

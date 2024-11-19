@@ -6,14 +6,14 @@ public class OperationRequestBuilder
 {
     private MedicalRecordNumber _medicalRecordNumber ;
     private LicenceNumber _licenceNumber ;
-    private long _operationTypeId ;
+    private int _operationTypeId ;
     private DeadlineDate _deadlineDate ;
     private Priority _priority ;
 
     public OperationRequestBuilder(
         MedicalRecordNumber medicalRecordNumber,
         LicenceNumber licenceNumber,
-        long operationTypeId,
+        int operationTypeId,
         DeadlineDate deadlineDate,
         Priority priority
     ){

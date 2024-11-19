@@ -7,7 +7,7 @@ public class OperationRequestDataModel : Entity<Guid>
     public long Id {get; set; } 
     public long MedicalRecordNumber {get; set; }
     public long LicenceNumber {get; set; }
-    public long OperationTypeId {get; set; }
+    public int OperationTypeId {get; set; }
     public DateTime DeadlineDate {get; set; }
     public string Priority {get; set; }
 
@@ -24,7 +24,7 @@ public class OperationRequestDataModel : Entity<Guid>
         Priority = request.Priority.PriorityDescription.ToString();
     }
     
-   
+    
 
     
 

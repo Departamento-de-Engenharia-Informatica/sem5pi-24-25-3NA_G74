@@ -12,6 +12,6 @@ public interface IOperationRequestRepository : IRepository<OperationRequestDataM
     Task<OperationRequest> Delete(long id);
 
     Task<List<OperationRequest>> ReadAll();
-    Task<Boolean> GetOperationTypeByIdAsync(long id);
+    Task<Boolean> GetOperationTypeByIdAsync(int id);
     Task ExportOperationRequestDataToProlog();
 }

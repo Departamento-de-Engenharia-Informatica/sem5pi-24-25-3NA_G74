@@ -4,10 +4,10 @@ public class CreateOperationRequestDTO
 {   
     public string MedicalRecordNumber {get; set; }
     public long LicenceNumber {get; set; }
-    public long OperationTypeId { get; }
+    public int OperationTypeId { get; }
     public DateTime DeadlineDate {get;set; }
     public string Priority {get;set; }
-    public CreateOperationRequestDTO(string medicalRecordNumber, long licenceNumber, long operationTypeId, DateTime deadlineDate, string priority)
+    public CreateOperationRequestDTO(string medicalRecordNumber, long licenceNumber, int operationTypeId, DateTime deadlineDate, string priority)
     {
         MedicalRecordNumber = medicalRecordNumber;
         LicenceNumber = licenceNumber;
