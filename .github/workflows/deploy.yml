@@ -57,7 +57,7 @@ jobs:
           host: vsgate-ssh.dei.isep.ipp.pt
           username: deployer
           key: ${{ secrets.DEPLOY_KEY }}
-          port: 11056
+          port: 10953
           source: "sarm"
           target: "/var/www/"
           strip_components: 0
@@ -68,7 +68,7 @@ jobs:
           host: vsgate-ssh.dei.isep.ipp.pt
           username: deployer
           key: ${{ secrets.DEPLOY_KEY }}
-          port: 11056
+          port: 10953
           script: |
             sudo systemctl restart g74backend
             sudo systemctl restart nginx
