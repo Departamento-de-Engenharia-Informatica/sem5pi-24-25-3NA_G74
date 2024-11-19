@@ -50,7 +50,7 @@ jobs:
         host: vs1056.dei.isep.ipp.pt
         username: deployer
         key: ${{ secrets.DEPLOY_KEY }}
-        port: 2222  # Using the SSH port mapping
+        port: 11056
         source: "backend-publish/*,G74Frontend/dist/*"
         target: "/var/www/sarm"
         strip_components: 1
@@ -61,7 +61,7 @@ jobs:
         host: vs1056.dei.isep.ipp.pt
         username: deployer
         key: ${{ secrets.DEPLOY_KEY }}
-        port: 2222
+        port: 11056
         script: |
           sudo systemctl restart g74backend
           sudo systemctl restart nginx
