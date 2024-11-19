@@ -58,7 +58,6 @@ jobs:
         source: "backend-publish/*,G74Frontend/dist/*"
         target: "/var/www/sarm"
         strip_components: 1
-        debug: true  # troubleshooting
 
     - name: Restart services
       uses: appleboy/ssh-action@master
