@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { AdminMenuComponent } from './presentation/components/admin-menu/admin-menu.component';
 import { PatientCreateComponent } from './presentation/components/patient-create/patient-create.component';
@@ -17,6 +18,9 @@ import { RegisterOperationComponent } from './presentation/components/register-o
 import { HeaderComponent } from './presentation/components/header/header.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import {ListOperationtypeComponent} from './presentation/components/list-operationtype/list-operationtype.component';
+import { JwtInterceptor } from './domain/services/jwt-interceptor.service';
+import { LoginComponent } from './presentation/components/login/login.component';
+
 
 @NgModule({
   declarations: [
@@ -32,6 +36,7 @@ import {ListOperationtypeComponent} from './presentation/components/list-operati
     PatientMenuComponent,
     HeaderComponent,
     ListOperationtypeComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -41,7 +46,8 @@ import {ListOperationtypeComponent} from './presentation/components/list-operati
     RegisterOperationComponent
   ],
   providers: [
-    provideAnimationsAsync()
+    provideAnimationsAsync(),
+    {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true}
   ],
   bootstrap: [AppComponent]
 })

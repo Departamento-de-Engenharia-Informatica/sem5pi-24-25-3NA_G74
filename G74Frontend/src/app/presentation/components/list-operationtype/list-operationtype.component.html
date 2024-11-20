@@ -5,7 +5,7 @@
   <form (ngSubmit)="search()">
     <div>
       <label for="operationTypeID">Operation Type ID:</label>
-      <input id="operationTypeID" type="text" [(ngModel)]="filters.operationTypeID" name="operationTypeID" />
+      <input id="operationTypeID" type="text" [(ngModel)]="filters.operationTypeId" name="operationTypeID" />
     </div>
 
     <div>
@@ -37,7 +37,7 @@
   <!-- Lista de resultados -->
   <ul *ngIf="operationTypes.length > 0; else noData">
     <li *ngFor="let type of operationTypes">
-      <strong>{{ type.name }}</strong> (ID: {{ type.operationTypeID }})<br />
+      <strong>{{ type.name }}</strong> (ID: {{ type.operationTypeId }})<br />
       Duration: {{ type.duration }}<br />
       Required Staff: {{ type.requiredStaffBySpecialization }}
     </li>

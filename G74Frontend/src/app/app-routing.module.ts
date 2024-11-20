@@ -17,15 +17,16 @@ import { RegisterOperationComponent } from './presentation/components/register-o
 import { UpdateOperationComponent } from './presentation/components/update-operation/update-operation.component';
 import { ListAllOperationComponent } from './presentation/components/list-all-operation/list-all-operation.component';
 import { DeleteOperationComponent } from './presentation/components/delete-operation/delete-operation.component';
-import { AuthGuard } from './application/services/auth-guard.service';
+//import { AuthGuard } from './application/services/auth-guard.service';
 import { RoleGuard } from './application/services/role-guard.service';
 import {ListOperationtypeComponent} from './presentation/components/list-operationtype/list-operationtype.component';
-
+import { LoginComponent } from './presentation/components/login/login.component';
 
 
 const routes: Routes = [
   { path: '', redirectTo: '/main', pathMatch: 'full' },
   { path: 'main', component: MainMenuComponent },
+  { path: 'login', component: LoginComponent},
   { path: 'admin', component: AdminMenuComponent },
   { path: 'admin/create-patient', component: PatientCreateComponent },
   { path: 'admin/update-patient', component: PatientUpdateComponent },
@@ -44,9 +45,10 @@ const routes: Routes = [
   { path: 'doctor/list-operation', component: ListAllOperationComponent },
   { path: 'doctor/delete-operation', component: DeleteOperationComponent },
   { path: 'admin/list-operationtype', component: ListOperationtypeComponent},
-  { path: 'admin', component: AdminMenuComponent, canActivate: [AuthGuard, RoleGuard], data: { expectedRole: 'admin' } },
-  { path: 'patient', component: PatientMenuComponent, canActivate: [AuthGuard, RoleGuard], data: { expectedRole: 'patient' } },
-  { path: 'doctor', component: DoctorMenuComponent, canActivate: [AuthGuard, RoleGuard], data: { expectedRole: 'doctor' } },
+  //Commented for now
+  //{ path: 'admin', component: AdminMenuComponent, canActivate: [AuthGuard, RoleGuard], data: { expectedRole: 'admin' } },
+  //{ path: 'patient', component: PatientMenuComponent, canActivate: [AuthGuard, RoleGuard], data: { expectedRole: 'patient' } },
+  //{ path: 'doctor', component: DoctorMenuComponent, canActivate: [AuthGuard, RoleGuard], data: { expectedRole: 'doctor' } },
   { path: '', redirectTo: '/main', pathMatch: 'full' }
 
 ];
