@@ -8,19 +8,14 @@ namespace G74.Adapters.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        //private readonly AuthAppService _authAppService;
-        //private readonly BackofficeAppDbContext _context;
-
+        
         private readonly IAuthService _authService;
-        private readonly ITokenService _tokenService;
         
 
-        public AuthController(IAuthService authService, ITokenService tokenService)
+        public AuthController(IAuthService authService)
         {
-            //_context = context;
             _authService = authService;
-            _tokenService = tokenService;
-            //_authAppService = authAppService;
+            
         }
 
         [HttpPost("login")]
@@ -35,14 +30,21 @@ namespace G74.Adapters.Controllers
                 : Ok(new { Token = token, Message = message, User = userDto });
         }
 
-        public async Task<IActionResult> GoogleLogin()
+        [HttpPost("iam-login")]
+        public async Task<IActionResult> IAMLogin([FromBody] IAMLoginRequest request)
         {
-            throw new NotImplementedException();
+            if (request.Token == null) return BadRequest("Google token not received");
+
+            var (token, message, userDto) = await _authService.IAMLogin(request.Token);
+
+            return token == null
+                ? StatusCode(500, message)
+                : Ok(new { Token = token, Message = message, User = userDto });
         }
-        
-        
+
+
         /*
-        
+
         [AllowAnonymous]
         [HttpPost("google-login")]
         public async Task<IActionResult> GoogleLogin([FromBody] GoogleLoginRequest request)
@@ -56,14 +58,14 @@ namespace G74.Adapters.Controllers
                 Console.WriteLine($"ID: {payload.Subject}");
                 Email loginEmail = new Email(payload.Email);
                 var userDataModel = await _context.Users.SingleOrDefaultAsync(u => u.Email.Equals(loginEmail.ToString()));
-                
+
                 if (userDataModel == null)
                 {
                     return NotFound(new { success = false, message = "User does not exist." });
                 }
-                
+
                 await GenerateAuthToken(userDataModel);
-                
+
 
                 return Ok(new { success = true, message = "Login successful!", role = userDataModel.Role });
             }
@@ -81,13 +83,13 @@ namespace G74.Adapters.Controllers
                 new Claim(ClaimTypes.Email, userDataModel.Email),
                 new Claim(ClaimTypes.Role, userDataModel.Role)
             };
-            
+
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var authProperties = new AuthenticationProperties
             {
                 IsPersistent = true
             };
-            
+
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
         }
 
@@ -101,7 +103,7 @@ namespace G74.Adapters.Controllers
             }
             return Ok(new { success = true, message = "Logout done successfully." });
         }
-        
+
         [HttpGet("check-session")]
         public IActionResult CheckSession()
         {
@@ -112,6 +114,5 @@ namespace G74.Adapters.Controllers
             return Ok(new { isAuthenticated = false });
         }
         */
-
     }
 }

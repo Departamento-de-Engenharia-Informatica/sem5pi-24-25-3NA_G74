@@ -157,8 +157,10 @@ public class Startup
 
         // For authentication and authorization purposes
         services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<IProviderIAMService, GoogleIAMService>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddHttpContextAccessor();
+        
 
 
     }
