@@ -9,13 +9,14 @@ import {catchError, of} from 'rxjs';
 })
 export class DeleteUserComponent {
   message: string = '';
+  email: string = '';
 
   constructor(private userService: UserService) {
   }
 
   onSubmit(): void {
 
-    this.userService.markUserAsDeleted().pipe(
+    this.userService.markUserAsDeleted(this.email).pipe(
       catchError(error => {
         console.error('Error deleting user profile: ', error);
         this.message = `Failed to delete user profile. ${error?.error?.message || 'Please try again.'}`

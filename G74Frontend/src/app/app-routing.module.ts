@@ -19,6 +19,7 @@ import { ListAllOperationComponent } from './presentation/components/list-all-op
 import { DeleteOperationComponent } from './presentation/components/delete-operation/delete-operation.component';
 import { AuthGuard } from './application/services/auth-guard.service';
 import { RoleGuard } from './application/services/role-guard.service';
+import {ListOperationtypeComponent} from './presentation/components/list-operationtype/list-operationtype.component';
 
 
 
@@ -35,13 +36,14 @@ const routes: Routes = [
   { path: 'admin/update-staff/:licenceNumber', component: StaffUpdateComponent },
   { path: 'patient', component: PatientMenuComponent },
   { path: 'register-user', component: RegisterUserComponent },
-  { path: 'update-user', component: UpdateUserComponent },
-  { path: 'delete-user', component: DeleteUserComponent },
+  { path: 'patient/update-user', component: UpdateUserComponent },
+  { path: 'patient/delete-user', component: DeleteUserComponent },
   { path: 'doctor', component: DoctorMenuComponent },
   { path: 'doctor/create-operation', component: RegisterOperationComponent },
   { path: 'doctor/update-operation', component: UpdateOperationComponent },
   { path: 'doctor/list-operation', component: ListAllOperationComponent },
   { path: 'doctor/delete-operation', component: DeleteOperationComponent },
+  { path: 'admin/list-operationtype', component: ListOperationtypeComponent},
   { path: 'admin', component: AdminMenuComponent, canActivate: [AuthGuard, RoleGuard], data: { expectedRole: 'admin' } },
   { path: 'patient', component: PatientMenuComponent, canActivate: [AuthGuard, RoleGuard], data: { expectedRole: 'patient' } },
   { path: 'doctor', component: DoctorMenuComponent, canActivate: [AuthGuard, RoleGuard], data: { expectedRole: 'doctor' } },

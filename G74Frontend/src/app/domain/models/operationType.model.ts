@@ -1,4 +1,6 @@
 export interface OperationType{
-    id: number;
+    operationTypeId: string;
     name: string;
+    requiredStaffBySpecialization: string;
+    duration: string;
 }

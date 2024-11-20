@@ -81,7 +81,7 @@ public class OperationTypeController : ControllerBase
     }
 
     //[Authorize(Roles = "Admin")]
-    [HttpGet("find")]
+    [HttpGet("type/find")]
     public async Task<IActionResult> ListOperationTypesByFilter([FromQuery] OperationTypeDTO criteria)
     {
         try

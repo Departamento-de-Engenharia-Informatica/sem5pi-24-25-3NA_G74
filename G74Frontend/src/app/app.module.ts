@@ -16,6 +16,7 @@ import { PatientMenuComponent } from './presentation/components/patient-menu/pat
 import { RegisterOperationComponent } from './presentation/components/register-operation/register-operation.component';
 import { HeaderComponent } from './presentation/components/header/header.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import {ListOperationtypeComponent} from './presentation/components/list-operationtype/list-operationtype.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     MainMenuComponent,
     PatientMenuComponent,
     HeaderComponent,
+    ListOperationtypeComponent,
   ],
   imports: [
     BrowserModule,

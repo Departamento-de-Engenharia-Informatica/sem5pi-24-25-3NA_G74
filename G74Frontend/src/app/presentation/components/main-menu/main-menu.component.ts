@@ -16,6 +16,15 @@ export class MainMenuComponent {
     this.router.navigate(['/register-user']);
   }
 
+  //TODO:Just to test, delete after.
+  redirectToPatientMenu(){
+    this.router.navigate(['patient']);
+  }
+  //TODO:Just to test, delete after.
+  redirectToAdminMenu(){
+    this.router.navigate(['admin']);
+  }
+
   handleCredentialResponse(response: any) {
     const token = response.credential;
 
