@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-patient-menu',
@@ -6,5 +7,14 @@ import { Component } from '@angular/core';
   styleUrl: './patient-menu.component.css'
 })
 export class PatientMenuComponent {
+  constructor(private router: Router) {}
 
+
+  navigateToUpdate() {
+    this.router.navigate(['/patient/update-user']);
+  }
+
+  navigateToDeleteUser() {
+    this.router.navigate(['/patient/delete-user'])
+  }
 }

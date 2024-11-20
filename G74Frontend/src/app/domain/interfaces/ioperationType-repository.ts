@@ -3,6 +3,6 @@ import { OperationType } from '../models/operationType.model';
 
 export interface IOperationTypeRepository {
 
-  listAllOperationType(): Observable<OperationType[]>;
-  
+  listOperationTypesByFilter(criteria: Partial<OperationType>): Observable<OperationType[]>;
+
 }

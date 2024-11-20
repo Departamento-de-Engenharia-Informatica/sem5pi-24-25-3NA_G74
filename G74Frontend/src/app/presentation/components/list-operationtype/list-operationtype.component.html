@@ -1,0 +1,50 @@
+<div class="container">
+  <h2>Search Operation Types</h2>
+
+  <!-- Formulário para filtros -->
+  <form (ngSubmit)="search()">
+    <div>
+      <label for="operationTypeID">Operation Type ID:</label>
+      <input id="operationTypeID" type="text" [(ngModel)]="filters.operationTypeID" name="operationTypeID" />
+    </div>
+
+    <div>
+      <label for="name">Name:</label>
+      <input id="name" type="text" [(ngModel)]="filters.name" name="name" />
+    </div>
+
+    <div>
+      <label for="requiredStaffBySpecialization">Required Staff by Specialization:</label>
+      <input
+        id="requiredStaffBySpecialization"
+        type="text"
+        [(ngModel)]="filters.requiredStaffBySpecialization"
+        name="requiredStaffBySpecialization"
+      />
+    </div>
+
+    <div>
+      <label for="duration">Duration:</label>
+      <input id="duration" type="text" [(ngModel)]="filters.duration" name="duration" />
+    </div>
+
+    <button type="submit">Search</button>
+  </form>
+
+  <!-- Mensagem de erro -->
+  <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+
+  <!-- Lista de resultados -->
+  <ul *ngIf="operationTypes.length > 0; else noData">
+    <li *ngFor="let type of operationTypes">
+      <strong>{{ type.name }}</strong> (ID: {{ type.operationTypeID }})<br />
+      Duration: {{ type.duration }}<br />
+      Required Staff: {{ type.requiredStaffBySpecialization }}
+    </li>
+  </ul>
+
+  <!-- Mensagem caso não haja resultados -->
+  <ng-template #noData>
+    <p>No operation types found.</p>
+  </ng-template>
+</div>

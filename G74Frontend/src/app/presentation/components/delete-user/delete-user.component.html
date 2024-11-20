@@ -1,9 +1,21 @@
 <h2>Delete User Profile</h2>
 
-<form (ngSubmit)="onSubmit()">
+<form (ngSubmit)="onSubmit()" #deleteForm="ngForm">
+  <label for="email">Confirm your email:</label>
+  <input
+    type="text"
+    id="email"
+    [(ngModel)]="email"
+    name="email"
+    required
+    #email="ngModel"
+  />
 
-  <button type="submit">Delete User</button>
+  <div *ngIf="deleteForm.submitted && email.invalid">
+    <small style="color: red;">Valid email is required</small>
+  </div>
 
+  <button type="submit">Delete Patient</button>
 </form>
 
 <p *ngIf="message">{{ message }}</p>

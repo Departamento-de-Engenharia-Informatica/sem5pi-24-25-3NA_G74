@@ -40,9 +40,9 @@ export class UserRepository implements IUserRepository {
   }
 
 
-  markUserAsDeleted(): Observable<any> {
-    const myURL = `${this.apiUrl}/delete`;
-    return this.http.delete<any>(myURL).pipe(
+  markUserAsDeleted(email: string): Observable<any> {
+    const myURL = `${this.apiUrl}/delete/${email}`;
+    return this.http.delete<User>(myURL).pipe(
       tap(response => console.log('Received response from backend:', response)),
       catchError(error => {
         console.error('Error response from backend:', error);

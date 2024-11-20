@@ -8,14 +8,13 @@ import { OperationType } from '../../domain/models/operationType.model';
     providedIn: 'root'
 })
 
-export class OperationRequestService {
+export class OperationTypeService {
 
-    constructor(private operationRepository: OperationTypeRepository ) { }
+    constructor(private operationTypeRepository: OperationTypeRepository ) { }
 
-    
-
-    listAllOperations(): Observable<OperationType[]> {
-        return this.operationRepository.listAllOperationType();
+    listOperationTypesByFilter(criteria: Partial<OperationType>): Observable<OperationType[]> {
+      return this.operationTypeRepository.listOperationTypesByFilter(criteria);
     }
+
 
 }
