@@ -13,7 +13,7 @@ export class LoginComponent {
   errorMessage: string | null = null;
   isLoading = false;
 
-  constructor(private vm: LoginViewModel, private router: Router) {}
+  constructor(private vm: LoginViewModel, private router: Router) { }
 
   login() {
     this.errorMessage = null;
@@ -27,7 +27,9 @@ export class LoginComponent {
         if (response.user.role === 'Admin') {
           this.router.navigate(['/admin']);
         } else if (response.user.role === 'Patient') {
-          this.router.navigate(['/main']); // ATTENTION :  TEMPORARY
+          this.router.navigate(['/patient']);
+        } else if (response.user.role === 'Doctor') {
+          this.router.navigate(['/doctor']);
         } else {
           this.router.navigate(['/']); // Fallback
         }

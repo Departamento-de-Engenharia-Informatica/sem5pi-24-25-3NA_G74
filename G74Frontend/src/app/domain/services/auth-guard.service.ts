@@ -14,16 +14,24 @@ export class AuthGuard implements CanActivate {
     const user = this.authService.currentUserSubject.value;
     const requiredRole = route.data['role'];
 
-    if (user && (user.role === requiredRole || !requiredRole)) {
-      return true;
+    //console.log('AuthGuard - User:', user); // Debug log
+    //console.log('AuthGuard - Required Role:', requiredRole); // Debug log
+
+    if (user) {
+      // Allow access if the user's role matches the required role or no role is specified
+      //console.log('user.role:', user.role);
+
+      if (!requiredRole || user.role === requiredRole) {
+        return true;
+      } else {
+        console.warn(`Unauthorized access - User role '${user.role}' is not allowed.`);
+        this.router.navigate(['/unauthorized']); // Redirect to an unauthorized page
+        return false;
+      }
     }
 
-    if (!user) {
-      console.warn('Unauthorized access attempt - no user logged in.');
-      this.router.navigate(['/login']);
-      return false;
-    }
-
+    // If no user is logged in, redirect to login
+    console.warn('Unauthorized access attempt - no user logged in.');
     this.router.navigate(['/login']);
     return false;
   }

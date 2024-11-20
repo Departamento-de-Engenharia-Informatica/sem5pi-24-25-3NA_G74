@@ -44,7 +44,14 @@ export class AuthService {
 
     private decodeToken(token: string) {
         const payload = atob(token.split('.')[1]);
-        return JSON.parse(payload);
+        const decoded = JSON.parse(payload);
+        //console.log('Decoded Token:', decoded); // Debug log
+        const user = {
+            username: decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'],
+            email: decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress'],
+            role: decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'],
+        };
+        return user;
     }
 
     get isAdmin(): boolean {
