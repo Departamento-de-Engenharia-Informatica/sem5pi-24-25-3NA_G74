@@ -1,18 +1,24 @@
-<h2>Admin Menu</h2>
-<div>
-  <div>
-    <button (click)="navigateTo('register-user')">Register Users</button>
+<div id="admin-menu">
+  <h1 id="admin-title">Admin Menu</h1>
+
+  <div class="buttons-container">
+    <!-- User Management -->
+    <button class="menu-button" (click)="navigateTo('register-user')">Register Users</button>
+
+    <!-- Patient Management -->
+    <button class="menu-button" (click)="navigateTo('create-patient')">Create Patient Profile</button>
+    <button class="menu-button" (click)="navigateTo('update-patient')">Update Patient Profile</button>
+    <button class="menu-button" (click)="navigateTo('delete-patient')">Delete Patient Profile</button>
+    <button class="menu-button" (click)="navigateTo('list-patient')">List Patient Profiles</button>
+
+    <!-- Staff Management -->
+    <button class="menu-button" (click)="navigateTo('create-staff')">Create Staff Profile</button>
+    <button class="menu-button" (click)="navigateTo('list-all-staff')">List Staff Profiles</button>
+
+    <!-- Operations -->
+    <button class="menu-button" (click)="navigateTo('list-operationtype')">List Operation Types</button>
   </div>
-  <div>
-    <button (click)="navigateTo('create-patient')">Create Patient Profile</button>
-    <button (click)="navigateTo('update-patient')">Update Patient Profile</button>
-    <button (click)="navigateTo('delete-patient')">Delete Patient Profile</button>
-  </div>
-  <div>
-    <button (click)="navigateTo('create-staff')">Create Staff Profile</button>
-    <button (click)="navigateTo('list-all-staff')">List Staff Profiles</button>
-  </div>
-  <div>
-    <button (click)="navigateTo('list-operationtype')">List Operation Types</button>
-  </div>
+
+  <!-- Logout Button -->
+  <button class="logout-button" (click)="logout()">Logout</button>
 </div>

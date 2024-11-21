@@ -13,7 +13,7 @@ export class LoginComponent {
   errorMessage: string | null = null;
   isLoading = false;
 
-  constructor(private vm: LoginViewModel, private router: Router) { }
+  constructor(private vm: LoginViewModel, private router: Router) {}
 
   login() {
     this.errorMessage = null;
@@ -39,5 +39,9 @@ export class LoginComponent {
         this.errorMessage = error.error?.message || 'Login failed. Try again.';
       }
     );
+  }
+
+  goBack() {
+    this.router.navigate(['/main']); // Navigate back to the main page
   }
 }

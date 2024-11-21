@@ -19,6 +19,10 @@ export class LoginViewModel {
     googleLogin(token: string): Observable<LoginResponse> {
         return this.authService.googleLogin(token);
     }
+
+    logout(): void {
+        this.authService.logout(); // This removes the token and resets the user session
+    }
     
 
 }

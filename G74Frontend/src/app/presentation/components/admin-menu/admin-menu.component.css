@@ -1,19 +1,67 @@
-nav ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  nav ul li {
-    margin: 10px 0;
-  }
-  
-  nav ul li a {
-    text-decoration: none;
-    font-weight: bold;
-    color: #007bff;
-  }
-  
-  nav ul li a:hover {
-    color: #0056b3;
-  }
-  
+/* Admin Menu Container */
+#admin-menu {
+  background: linear-gradient(135deg, #02012c, #06235a);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  padding: 20px;
+}
+
+/* Title Styling */
+#admin-title {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+/* Buttons Container */
+.buttons-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+/* Menu Button */
+.menu-button {
+  background-color: #14105b;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  font-weight: bold;
+  width: 220px;
+  text-align: center;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.menu-button:hover {
+  background-color: #06235a;
+  transform: scale(1.05);
+}
+
+/* Logout Button */
+.logout-button {
+  background-color: #ff6f3c;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  font-weight: bold;
+  width: 220px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.logout-button:hover {
+  background-color: #e65c30;
+  transform: scale(1.05);
+}
