@@ -5,7 +5,7 @@ export default class Door {
     constructor(parameters, location) {
         this.onLoad = function (description) {
             this.object = description.scene;
-            this.animations_door = description.animations; 
+            this.animations_door = description.animations;
 
 
             // Turn on shadows for this object

@@ -24,7 +24,7 @@ export default class Wall {
         this.object = new THREE.Group();
 
         // Create the front face (a rectangle)
-        let geometry = new THREE.PlaneGeometry(1.05, 3.0);
+        let geometry = new THREE.PlaneGeometry(1.05, 3.35);
         let material = new THREE.MeshPhongMaterial({ color: 0xffffff, map: texture });
         let face = new THREE.Mesh(geometry, material);
         face.position.set(0.0, 0.0, 0.025);
