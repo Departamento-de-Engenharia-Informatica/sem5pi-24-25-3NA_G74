@@ -86,6 +86,8 @@ public class OperationTypeController : ControllerBase
     {
         try
         {
+            Console.WriteLine($"Criteria: OperationTypeID = {criteria.operationTypeID}, Name = {criteria.name}, Duration = {criteria.duration}");
+
             var operationTypes = await _operationTypeService.SearchOperationTypeByFilters(criteria);
 
             if (!operationTypes.Any())
@@ -98,8 +100,8 @@ public class OperationTypeController : ControllerBase
         catch (Exception ex)
         {
             string errorMessage = "An error occurred searching for operation types: " + ex.Message;
-
             return BadRequest(errorMessage);
         }
     }
+
 }
