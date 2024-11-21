@@ -26,7 +26,7 @@ public class PatientAppService : IPatientAppService
         _patientMapper = mapper;
         _configuration = configuration;
     }
-
+    
     public async Task<PatientDTO> RegisterPatient(PatientDTO patientDto)
     {
         MedicalRecordNumber medicalRecordNumber = _medicalRecordNumberGenerator.GenerateMedicalNumber().Result;
@@ -188,4 +188,12 @@ public class PatientAppService : IPatientAppService
             throw new Exception($"An error occurred while searching for patients: {ex.Message}", ex);
         }
     }
+
+    public async Task<string> GetMedicalRecordNumberByEmail(string email)
+    {
+
+        return await _patientRepository.GetMedicalRecordNumberByEmail(email);
+
+    }
+
 }

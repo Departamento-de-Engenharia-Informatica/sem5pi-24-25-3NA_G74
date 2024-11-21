@@ -7,6 +7,7 @@ import { AdminMenuComponent } from './presentation/components/admin-menu/admin-m
 import { PatientCreateComponent } from './presentation/components/patient-create/patient-create.component';
 import { PatientUpdateComponent } from './presentation/components/patient-update/patient-update.component';
 import { PatientDeleteComponent } from './presentation/components/patient-delete/patient-delete.component';
+import { PatientListComponent } from './presentation/components/patient-list/patient-list.component';
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule } from '@angular/forms';
 import { RegisterUserComponent } from './presentation/components/register-user/register-user.component';
@@ -29,6 +30,7 @@ import { LoginComponent } from './presentation/components/login/login.component'
     PatientCreateComponent,  // Add the component here
     PatientUpdateComponent,
     PatientDeleteComponent,
+    PatientListComponent,
     RegisterUserComponent,
     UpdateUserComponent,
     DeleteUserComponent,

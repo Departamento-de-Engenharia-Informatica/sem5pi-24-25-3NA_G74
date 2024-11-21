@@ -9,7 +9,7 @@ public interface IPatientRepository : IGenericRepository<Patient>
     Task<Patient> AddPatient(Patient patient);
     Task<Patient?> GetPatientByMedicalRecordNumber(MedicalRecordNumber medicalRecordNumber);
     Task<Patient?> UpdatePatient(Patient patient);
-
+    
     Task MarkPatientToBeDeleted(Patient patient, TimeSpan retainInfoPeriod);
 
     Task<IEnumerable<Patient>> GetPatientsReadyForDeletion();
@@ -20,5 +20,8 @@ public interface IPatientRepository : IGenericRepository<Patient>
         string? gender, string? phoneNumber, string? email, DateOfBirthDTO? dateOfBirth);
 
     Task<int> GetMaxMedicalRecordNumberSequentialPartAsync();
+
+    Task<string> GetMedicalRecordNumberByEmail(string email);
+    
     Task ExportPatientDataToProlog();
 }

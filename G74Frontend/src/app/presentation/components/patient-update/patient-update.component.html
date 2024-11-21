@@ -1,21 +1,38 @@
-<h2>Update Patient Profile</h2>
-<form (ngSubmit)="onSubmit()" #patientForm="ngForm">
-  <label for="medicalRecordNumber">Medical Record Number:</label>
-  <input type="text" id="medicalRecordNumber" [(ngModel)]="medicalRecordNumber" name="medicalRecordNumber" required>
+<h2>Manage Patients</h2>
 
-  <label for="name">Name:</label>
-  <input type="text" id="name" [(ngModel)]="patient.name" name="name">
-
-  <label for="dateOfBirth">Date of Birth:</label>
-  <input type="date" id="dateOfBirth" [(ngModel)]="dateOfBirthInput" name="dateOfBirth">
-
-  <label for="phoneNumber">Phone Number:</label>
-  <input type="text" id="phoneNumber" [(ngModel)]="phoneNumber" name="phoneNumber">
-
-  <label for="emailAddress">Email Address:</label>
-  <input type="email" id="emailAddress" [(ngModel)]="emailAddress" name="emailAddress">
-
-  <button type="submit">Update Patient</button>
-</form>
+<table>
+  <thead>
+    <tr>
+      <th>Medical Record Number</th>
+      <th>Email</th>
+      <th>Name</th>
+      <th>Date of Birth</th>
+      <th>Phone Number</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let patient of patients">
+      <td>{{ patient.medicalRecordNumber || 'Loading...' }}</td>
+      <td>{{ patient.contactInformation.emailAddress }}</td>
+      <td>
+        <input [(ngModel)]="patient.name" name="name-{{patient.contactInformation.emailAddress}}" />
+      </td>
+      <td>
+        <input
+          type="date"
+          [(ngModel)]="dateInputs[patient.contactInformation.emailAddress]"
+          name="dob-{{patient.contactInformation.emailAddress}}"
+        />
+      </td>
+      <td>
+        <input [(ngModel)]="patient.contactInformation.phoneNumber" name="phone-{{patient.contactInformation.emailAddress}}" />
+      </td>
+      <td>
+        <button (click)="updatePatient(patient)">Update</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 <p *ngIf="message">{{ message }}</p>

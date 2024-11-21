@@ -1,5 +1,6 @@
 export interface Patient {
 
+  medicalRecordNumber?: string; // optional property
   name: string;
   gender: string;
   dateOfBirth: {

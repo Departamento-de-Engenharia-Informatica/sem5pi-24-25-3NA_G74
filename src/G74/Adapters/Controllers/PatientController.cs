@@ -18,7 +18,7 @@ public class PatientController : ControllerBase
         _patientAppService = patientAppService;
     }
 
-    [Authorize(Roles = "Admin,Patient")]
+    //[Authorize(Roles = "Admin,Patient")]
     [HttpPost]
     public async Task<ActionResult<PatientDTO>> RegisterPatient([FromBody] PatientDTO receivedPatient)
     {
@@ -86,7 +86,7 @@ public class PatientController : ControllerBase
 
     //[Authorize(Roles = "Admin")]
     [HttpGet("find")]
-    public async Task<IActionResult> ListPatientsByFilter([FromQuery] PatientDTO criteria)
+    public async Task<IActionResult> ListPatientsByFilter([FromQuery] PatientDTO? criteria)
     {
         try
         {
@@ -105,5 +105,20 @@ public class PatientController : ControllerBase
 
             return BadRequest(errorMessage);
         }
+    }
+
+    [HttpGet("getMedicalRecordNumber")]
+    public async Task<IActionResult> GetPatientMedicalRecordNumber([FromQuery] string email)
+    {
+        try
+        {
+            var patientMedicalRecordNumber = await _patientAppService.GetMedicalRecordNumberByEmail(email);
+
+            return Ok(patientMedicalRecordNumber);
+        }
+        catch (ArgumentNullException e)
+        {
+            return BadRequest("Could not find a patient with this email");
+        };
     }
 }

@@ -1,0 +1,78 @@
+<h2>Patient List</h2>
+
+<div class="filters">
+  <form (submit)="fetchPatients()" #filterForm="ngForm">
+    <div class="filter-group">
+      <label for="name">Name:</label>
+      <input type="text" id="name" [(ngModel)]="filters.name" name="name" />
+    </div>
+
+    <div class="filter-group">
+        <label for="gender">Gender:</label>
+        <select id="gender" [(ngModel)]="filters.gender" name="gender">
+          <option value="" disabled selected>-- Select Gender --</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      
+
+    <div class="filter-group">
+      <label for="phoneNumber">Phone Number:</label>
+      <input
+        type="text"
+        id="phoneNumber"
+        [(ngModel)]="phoneNumberFilter"
+        name="phoneNumber"
+      />
+    </div>
+
+    <div class="filter-group">
+      <label for="emailAddress">Email Address:</label>
+      <input
+        type="email"
+        id="emailAddress"
+        [(ngModel)]="emailAddressFilter"
+        name="emailAddress"
+      />
+    </div>
+
+    <div class="filter-group">
+      <label for="dateOfBirth">Date of Birth:</label>
+      <input type="date" id="dateOfBirth" [(ngModel)]="dateOfBirthInput" name="dateOfBirth" />
+    </div>
+
+    <div class="actions">
+      <button type="submit">Search</button>
+      <button type="button" (click)="clearFilters()">Clear Filters</button>
+    </div>
+  </form>
+</div>
+
+<div class="message" *ngIf="message">{{ message }}</div>
+
+<table *ngIf="patients.length">
+  <thead>
+    <tr>
+      <th>Medical Record Number</th>
+      <th>Name</th>
+      <th>Gender</th>
+      <th>Date of Birth</th>
+      <th>Phone Number</th>
+      <th>Email Address</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let patient of patients">
+      <td>{{ patient.medicalRecordNumber || 'N/A' }}</td>
+      <td>{{ patient.name }}</td>
+      <td>{{ patient.gender }}</td>
+      <td>
+        {{ patient.dateOfBirth.yearOfBirth }}-{{ patient.dateOfBirth.monthOfBirth | number: '2.0' }}-{{ patient.dateOfBirth.dayOfBirth | number: '2.0' }}
+      </td>
+      <td>{{ patient.contactInformation.phoneNumber || 'N/A' }}</td>
+      <td>{{ patient.contactInformation.emailAddress || 'N/A' }}</td>
+    </tr>
+  </tbody>
+</table>

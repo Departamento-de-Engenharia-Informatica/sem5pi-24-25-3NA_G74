@@ -33,7 +33,7 @@ namespace G74.Adapters.Controllers
         [HttpPost("iam-login")]
         public async Task<IActionResult> IAMLogin([FromBody] IAMLoginRequest request)
         {
-            if (request.Token == null) return BadRequest("Google token not received");
+            if (request.Token == null) return BadRequest("IAM token not received");
 
             var (token, message, userDto) = await _authService.IAMLogin(request.Token);
 

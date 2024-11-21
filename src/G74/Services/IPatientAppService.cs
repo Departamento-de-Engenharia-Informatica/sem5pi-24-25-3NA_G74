@@ -11,4 +11,5 @@ public interface IPatientAppService
     Task MarkPatientToBeDeleted(string medicalRecordNumber);
     Task<PatientDTO?> GetPatientByMedicalRecordNumber(MedicalRecordNumber medicalRecordNumber);
     Task<IEnumerable<PatientDTO>> SearchPatientsByFilters(PatientDTO criteria);
+    Task<string> GetMedicalRecordNumberByEmail(string email);
 }

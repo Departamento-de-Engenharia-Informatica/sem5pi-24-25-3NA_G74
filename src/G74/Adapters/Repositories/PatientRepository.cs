@@ -5,6 +5,7 @@ using G74.Domain.Value_Objects.Patient;
 using G74.DTO;
 using G74.Infrastructure;
 using G74.Mappers;
+using Google.Apis.Util;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -19,9 +20,10 @@ public class PatientRepository : GenericRepository<Patient>, IPatientRepository
         _patientMapper = mapper;
     }
 
+
     public async Task<Patient?> GetPatientByMedicalRecordNumber(MedicalRecordNumber medicalRecordNumber)
     {
-        var patientDataModel =  GetPatientDataModelByMedicalRecordNumber(medicalRecordNumber).Result;
+        var patientDataModel = GetPatientDataModelByMedicalRecordNumber(medicalRecordNumber).Result;
 
         if (patientDataModel != null && patientDataModel.MarkedForDeletion == false)
         {
@@ -70,6 +72,7 @@ public class PatientRepository : GenericRepository<Patient>, IPatientRepository
         return patient;
     }
 
+
     public async Task MarkPatientToBeDeleted(Patient patient, TimeSpan retainInfoPeriod)
     {
         PatientDataModel patientDataModel = await _context.Set<PatientDataModel>()
@@ -110,7 +113,7 @@ public class PatientRepository : GenericRepository<Patient>, IPatientRepository
         string? gender, string? phoneNumber, string? email, DateOfBirthDTO? dateOfBirth)
     {
         IQueryable<PatientDataModel> myQueryable = _context.Set<PatientDataModel>();
-        
+
         if (name != null && name.Length > 0)
         {
             myQueryable = ApplyNameFilter(myQueryable, name);
@@ -141,12 +144,12 @@ public class PatientRepository : GenericRepository<Patient>, IPatientRepository
         return _patientMapper.ToDomain(patientsFound);
     }
 
-    
+
     private IQueryable<PatientDataModel> ApplyNameFilter(IQueryable<PatientDataModel> query, string name)
     {
         if (!string.IsNullOrEmpty(name))
         {
-            return query.Where(p => p.PatientName.Equals(name));
+            return query.Where(p => p.PatientName.ToLower().Trim().Equals(name.ToLower().Trim()));
         }
 
         return query;
@@ -158,7 +161,7 @@ public class PatientRepository : GenericRepository<Patient>, IPatientRepository
     {
         if (!string.IsNullOrEmpty(phoneNumber))
         {
-            return query.Where(p => p.PersonalPhoneNumber.Equals(phoneNumber));
+            return query.Where(p => p.PersonalPhoneNumber.Replace(" ", "").Equals(phoneNumber.Replace(" ", "")));
         }
 
         return query;
@@ -169,7 +172,7 @@ public class PatientRepository : GenericRepository<Patient>, IPatientRepository
     {
         if (!string.IsNullOrEmpty(email))
         {
-            return query.Where(p => p.PersonalEmail.Equals(email));
+            return query.Where(p => p.PersonalEmail.ToLower().Trim().Equals(email.ToLower().Trim()));
         }
 
         return query;
@@ -179,7 +182,7 @@ public class PatientRepository : GenericRepository<Patient>, IPatientRepository
     {
         if (!string.IsNullOrEmpty(gender))
         {
-            return query.Where(p => p.PatientGender.Equals(gender));
+            return query.Where(p => p.PatientGender.ToLower().Trim().Equals(gender.ToLower().Trim()));
         }
 
         return query;
@@ -188,18 +191,17 @@ public class PatientRepository : GenericRepository<Patient>, IPatientRepository
     private static IQueryable<PatientDataModel> ApplyDateOfBirthFilter(IQueryable<PatientDataModel> query,
         DateOfBirthDTO dateOfBirth)
     {
-        if (dateOfBirth.YearOfBirth != null && dateOfBirth.MonthOfBirth != null && dateOfBirth.DayOfBirth != null)
-        {
-            if (dateOfBirth.YearOfBirth != 0 && dateOfBirth.MonthOfBirth != 0 && dateOfBirth.DayOfBirth != 0)
-            {
-                DateOnly searchDateTime =
-                    new DateOnly(dateOfBirth.YearOfBirth, dateOfBirth.MonthOfBirth, dateOfBirth.DayOfBirth);
+        if (dateOfBirth.YearOfBirth == null || dateOfBirth.MonthOfBirth == null ||
+            dateOfBirth.DayOfBirth == null) throw new InvalidOperationException("All date fields must be filled");
 
-                return query.Where(p => p.BirthDate.Equals(searchDateTime));
-            }
-        }
 
-        return query;
+        if (dateOfBirth.YearOfBirth == 0 || dateOfBirth.MonthOfBirth == 0 || dateOfBirth.DayOfBirth == 0) return query;
+        
+        var searchDateTime =
+            new DateOnly(dateOfBirth.YearOfBirth, dateOfBirth.MonthOfBirth, dateOfBirth.DayOfBirth);
+
+        return query.Where(p => p.BirthDate.Equals(searchDateTime));
+
     }
 
 
@@ -232,7 +234,19 @@ public class PatientRepository : GenericRepository<Patient>, IPatientRepository
 
         return maxSequentialNumber;
     }
-    
+
+
+    public async Task<string> GetMedicalRecordNumberByEmail(string email)
+    {
+        var patientDataModel = await _context.Set<PatientDataModel>()
+            .FirstAsync(p => p.PersonalEmail == email);
+
+        ArgumentNullException.ThrowIfNull(patientDataModel);
+
+        return patientDataModel.MedicalRecordNumber;
+    }
+
+
     public async Task ExportPatientDataToProlog()
     {
         //TODO:Terminar Rui Beloto.

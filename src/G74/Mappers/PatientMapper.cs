@@ -60,4 +60,13 @@ public class PatientMapper
             
         return new Patient(name, medicalnumber, dateOfBirth, gender, contactInformation, emergencyContact);
     }
+
+    public IEnumerable<PatientDTO> ToDTO(IEnumerable<Patient> patients)
+    {
+
+        var patientDtoList = patients.Select(ToDTO).ToList();
+
+        return patientDtoList.ToList();
+
+    }
 }

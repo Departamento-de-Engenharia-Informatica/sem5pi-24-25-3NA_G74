@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { PatientCreateComponent } from './presentation/components/patient-create/patient-create.component';
 import { PatientUpdateComponent } from './presentation/components/patient-update/patient-update.component';
 import { PatientDeleteComponent } from './presentation/components/patient-delete/patient-delete.component';
+import { PatientListComponent } from './presentation/components/patient-list/patient-list.component';
 import { StaffCreateComponent } from './presentation/components/staff-create/staff-create.component';
 import { StaffUpdateComponent } from './presentation/components/staff-update/staff-update.component';
 import { ListAllStaffComponent } from './presentation/components/list-all-staff/list-all-staff.component';
@@ -32,6 +33,7 @@ const routes: Routes = [
   { path: 'admin/create-patient', component: PatientCreateComponent },
   { path: 'admin/update-patient', component: PatientUpdateComponent },
   { path: 'admin/delete-patient', component: PatientDeleteComponent },
+  { path: 'admin/list-patient', component: PatientListComponent },
   { path: 'admin/register-user', component: RegisterUserComponent },
   { path: 'admin/create-staff', component: StaffCreateComponent },
   { path: 'admin/list-all-staff', component: ListAllStaffComponent },
