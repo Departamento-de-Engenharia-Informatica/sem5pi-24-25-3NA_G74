@@ -69,6 +69,8 @@ public class OperationTypeService
     {
         try
         {
+            Console.WriteLine($"Searching with criteria: OperationTypeID = {criteria.operationTypeID}, Name = {criteria.name}, Duration = {criteria.duration}");
+
             var operationTypesFound = await _operationTypeRepository.SearchOperationTypeByFiltersAsync(
                 criteria.operationTypeID,
                 criteria.name,
@@ -76,6 +78,13 @@ public class OperationTypeService
                 criteria.duration
             );
 
+            Console.WriteLine($"Operation types found: {operationTypesFound.Count()}");
+
+            // Logando a lista de OperationTypes antes de devolver ao controlador
+            foreach (var op in operationTypesFound)
+            {
+                Console.WriteLine($"OperationType - ID: {op.operationTypeID}, Name: {op.name}, Duration: {op.duration}, RequiredStaff: {op.requiredStaffBySpecialization}");
+            }
 
             return operationTypesFound.Select(_operationTypeDtoMapper.OperationTypeToDto).ToList() ??
                    new List<OperationTypeDTO>();

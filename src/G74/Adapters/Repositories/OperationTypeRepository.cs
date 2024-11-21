@@ -58,77 +58,98 @@ public class OperationTypeRepository : GenericRepository<OperationType>, IOperat
         return operationTypeDataModel;
     }
 
-    public async Task<IEnumerable<OperationType>> SearchOperationTypeByFiltersAsync(string? OperationTypeID,
-        string? Name, string? RequiredStaffBySpecialization, string? Duration)
+    public async Task<IEnumerable<OperationType>> SearchOperationTypeByFiltersAsync(
+        string? operationTypeId, 
+        string? name, 
+        string? requiredStaffBySpecialization, 
+        string? duration)
     {
-        IQueryable<OperationTypeDataModel> myQueryable = _context.Set<OperationTypeDataModel>();
+        // Criação de uma consulta base, sem nenhum filtro ainda
+        IQueryable<OperationTypeDataModel> query = _context.Set<OperationTypeDataModel>();
+
+        Console.WriteLine("Building query...");
         
-        if (OperationTypeID != null && OperationTypeID.Length > 0)
+        // Filtrando com base no operationTypeID
+        if (!string.IsNullOrEmpty(operationTypeId) && int.TryParse(operationTypeId, out int parsedOperationTypeID))
         {
-            myQueryable = ApplyOperationTypeIdFilter(myQueryable, OperationTypeID);
+            query = query.Where(p => p.OperationTypeID == parsedOperationTypeID);
         }
 
-        if (Name != null && Name.Length > 0)
-        {
-            myQueryable = ApplyNameFilter(myQueryable, Name);
-        }
-
-        if (RequiredStaffBySpecialization != null && RequiredStaffBySpecialization.Length > 0)
-        {
-            myQueryable = ApplyRequiredStaffBySpecializationFilter(myQueryable, RequiredStaffBySpecialization);
-        }
-
-        if (Duration != null && Duration.Length > 0)
-        {
-            myQueryable = ApplyDurationFilter(myQueryable, Duration);
-        }
-
-        var operationTypeFound = await myQueryable.ToListAsync();
-
-        return _operationTypeToDataModelMapper.ToDomain(operationTypeFound);
-    }
-    
-    private IQueryable<OperationTypeDataModel> ApplyOperationTypeIdFilter(IQueryable<OperationTypeDataModel> query, string operationTypeID)
-    {
-        if (!string.IsNullOrEmpty(operationTypeID))
-        {
-            return query.Where(p => p.OperationTypeID.Equals(int.Parse(operationTypeID)));
-        }
-        return query;
-    }
-
-
-    private static IQueryable<OperationTypeDataModel> ApplyNameFilter(IQueryable<OperationTypeDataModel> query,
-        string name)
-    {
+        // Filtrando com base no name
         if (!string.IsNullOrEmpty(name))
         {
-            return query.Where(p => p.Name.Equals(name));
+            query = query.Where(p => p.Name.Contains(name));  // Use Contains para permitir buscas parciais
         }
 
-        return query;
-    }
-
-    private static IQueryable<OperationTypeDataModel> ApplyRequiredStaffBySpecializationFilter(IQueryable<OperationTypeDataModel> query,
-        string requiredStaffBySpecialization)
-    {
+        // Filtrando com base no requiredStaffBySpecialization
         if (!string.IsNullOrEmpty(requiredStaffBySpecialization))
         {
-            return query.Where(p => p.RequiredStaffBySpecialization.Equals(requiredStaffBySpecialization));
+            query = query.Where(p => p.RequiredStaffBySpecialization.Contains(requiredStaffBySpecialization));
         }
 
-        return query;
-    }
-
-    private static IQueryable<OperationTypeDataModel> ApplyDurationFilter(IQueryable<OperationTypeDataModel> query, string duration)
-    {
-        if (!string.IsNullOrEmpty(duration))
+        // Filtrando com base no duration
+        if (!string.IsNullOrEmpty(duration) && int.TryParse(duration, out int parsedDuration))
         {
-            return query.Where(p => p.EstimatedDuration.Equals(duration));
+            query = query.Where(p => p.EstimatedDuration == parsedDuration);
+            Console.WriteLine($"Filtering by duration: {duration}");
         }
 
+        // Executando a consulta no banco de dados e retornando os resultados
+        var operationTypesFound = await query.ToListAsync();
+        Console.WriteLine($"Found {operationTypesFound.Count} operation types in the database.");
+
+        // Convertendo os dados retornados para o modelo de domínio (se necessário)
+        return _operationTypeToDataModelMapper.ToDomain(operationTypesFound);
+    }
+
+
+
+    
+    private IQueryable<OperationTypeDataModel> ApplyOperationTypeIdFilter(
+        IQueryable<OperationTypeDataModel> query,
+        string operationTypeID)
+    {
+        if (int.TryParse(operationTypeID, out int parsedId))
+        {
+            return query.Where(p => p.OperationTypeID == parsedId);
+        }
         return query;
     }
+
+
+
+    private static IQueryable<OperationTypeDataModel> ApplyNameFilter(
+        IQueryable<OperationTypeDataModel> query,
+        string name)
+    {
+        return query.Where(p => !string.IsNullOrEmpty(p.Name) && p.Name.Equals(name));
+    }
+
+
+    private static IQueryable<OperationTypeDataModel> ApplyRequiredStaffBySpecializationFilter(
+        IQueryable<OperationTypeDataModel> query,
+        string requiredStaffBySpecialization)
+    {
+        return query.Where(p => !string.IsNullOrEmpty(p.RequiredStaffBySpecialization) &&
+                                p.RequiredStaffBySpecialization.Equals(requiredStaffBySpecialization));
+    }
+
+
+    private static IQueryable<OperationTypeDataModel> ApplyDurationFilter(
+        IQueryable<OperationTypeDataModel> query,
+        string duration)
+    {
+        if (int.TryParse(duration, out int parsedDuration))
+        {
+            return query.Where(p => p.EstimatedDuration == parsedDuration);
+        }
+
+        // Se a conversão falhar, não aplica nenhum filtro
+        return query;
+    }
+
+
+
 
     public async Task<OperationType?> GetOperationTypeByID(
         int operationTypeID)
