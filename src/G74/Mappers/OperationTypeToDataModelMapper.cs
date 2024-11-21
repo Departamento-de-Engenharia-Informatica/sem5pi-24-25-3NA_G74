@@ -35,19 +35,42 @@ public class OperationTypeToDataModelMapper
         return dictionary;
     } 
 
-    //example input: "Surgeon:1,Anesthesiologist:2"
-    private static Dictionary<StaffSpecialization,int> makeStringIntoDictionary(string specializationStaffList){
-        List<string> list = specializationStaffList.Split(',').ToList();
+    private static Dictionary<StaffSpecialization, int> makeStringIntoDictionary(string specializationStaffList)
+    {
+        // Divide a string principal em itens separados por ";"
+        List<string> list = specializationStaffList.Split(';').ToList();
         List<string> specializations = new List<string>();
         List<int> quantities = new List<int>();
+
         foreach (string item in list)
         {
-            string[] split = item.Split(':');
-            specializations.Add(split[0]);
-            quantities.Add(int.Parse(split[1]));
+            // Para cada item, divide em 2 partes separadas por vírgula
+            string[] split = item.Split(',');
+
+            // Verifica se o item está no formato esperado
+            if (split.Length != 2)
+            {
+                Console.WriteLine($"Invalid item format in specializationStaffList: {item}");
+                continue; // Ignora item inválido
+            }
+
+            // A primeira parte é a quantidade, a segunda parte é a especialização
+            if (int.TryParse(split[0], out int quantity))  // A quantidade
+            {
+                specializations.Add(split[1]); // A especialização
+                quantities.Add(quantity);
+            }
+            else
+            {
+                Console.WriteLine($"Invalid quantity in specializationStaffList: {split[0]}");
+            }
         }
-        return turnListIntoDictionary(specializations, quantities); 
+
+        // Agora criamos o dicionário a partir das listas de especializações e quantidades
+        return turnListIntoDictionary(specializations, quantities);
     }
+
+
     
     public bool UpdateDataModel(OperationTypeDataModel operationTypeDataModel, OperationType operationType)
     {

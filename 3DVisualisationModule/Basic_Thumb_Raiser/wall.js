@@ -24,7 +24,7 @@ export default class Wall {
         this.object = new THREE.Group();
 
         // Create the front face (a rectangle)
-        let geometry = new THREE.PlaneGeometry(1.05, 3.0);
+        let geometry = new THREE.PlaneGeometry(1.05, 3.35);
         let material = new THREE.MeshPhongMaterial({ color: 0xffffff, map: texture });
         let face = new THREE.Mesh(geometry, material);
         face.position.set(0.0, 0.0, 0.025);
@@ -40,15 +40,15 @@ export default class Wall {
 
         // Create the two left faces (a four-triangle mesh)
         let points = new Float32Array([
-            -0.475, -1, 0.025,
-            -0.475, 1, 0.025,
-            -0.5, 1, 0.0,
-            -0.5, -1, 0.0,
+            -0.475, -1.675, 0.025,
+            -0.475, 1.675, 0.025,
+            -0.5, 1.675, 0.0,
+            -0.5, -1.675, 0.0,
 
-            -0.5, 1, 0.0,
-            -0.475, 1, -0.025,
-            -0.475, -1, -0.025,
-            -0.5, -1, 0.0
+            -0.5, 1.675, 0.0,
+            -0.475, 1.675, -0.025,
+            -0.475, -1.675, -0.025,
+            -0.5, -1.675, 0.0
         ]);
 
         let normals = new Float32Array([
@@ -84,12 +84,12 @@ export default class Wall {
 
         // Create the top face (a four-triangle mesh)
         points = new Float32Array([
-            -0.5, 1, 0.0,
-            -0.475, 1, 0.025,
-            -0.475, 1, -0.025,
-            0.475, 1, 0.025,
-            0.475, 1, -0.025,
-            0.5, 1, 0.0
+            -0.5, 1.675, 0.0,
+            -0.475, 1.675, 0.025,
+            -0.475, 1.675, -0.025,
+            0.475, 1.675, 0.025,
+            0.475, 1.675, -0.025,
+            0.5, 1.675, 0.0
         ]);
 
         normals = new Float32Array([

@@ -13,7 +13,7 @@
 import * as THREE from "three";
 import Stats from "three/addons/libs/stats.module.js";
 import Orientation from "./orientation.js";
-import { generalData, buildingA1Data, playerData, lightsData, fogData, cameraData, doorData, hospitalBedData, patientData, hospitalBedPositions, patientPresence} from "./default_data.js";
+import { generalData, buildingA1Data, playerData, lightsData, fogData, cameraData, doorData, hospitalBedData, patientData, hospitalBedPositions, patientPresence } from "./default_data.js";
 import { merge } from "./merge.js";
 import Maze from "./maze.js";
 import Player from "./player.js";
@@ -30,16 +30,16 @@ import ChandelierLight from "./chandelier_light.js";
 
 
 export default class ThumbRaiser {
-    constructor(generalParameters,mazeParameters, buildingParameters, playerParameters, lightsParameters, fogParameters, fixedViewCameraParameters, firstPersonViewCameraParameters, thirdPersonViewCameraParameters, topViewCameraParameters, miniMapCameraParameters, doorParameters) {
-       
+    constructor(generalParameters, mazeParameters, buildingParameters, playerParameters, lightsParameters, fogParameters, fixedViewCameraParameters, firstPersonViewCameraParameters, thirdPersonViewCameraParameters, topViewCameraParameters, miniMapCameraParameters, doorParameters) {
+
         this.generalParameters = merge({}, generalData, generalParameters);
 
-        this.buildingA1Parameters = merge({},buildingA1Data,mazeParameters);
+        this.buildingA1Parameters = merge({}, buildingA1Data, mazeParameters);
         this.hospitalBedParameters = hospitalBedData;
         this.patientParameters = patientData;
-    
 
-       
+
+
         this.playerParameters = merge({}, playerData, playerParameters);
         this.lightsParameters = merge({}, lightsData, lightsParameters);
         this.fogParameters = merge({}, fogData, fogParameters);
@@ -67,7 +67,7 @@ export default class ThumbRaiser {
         this.scene3D = new THREE.Scene();
 
         // Create the maze
-        this.maze = new Maze(buildingParameters,this.doorParameters,0);
+        this.maze = new Maze(buildingParameters, this.doorParameters, 0);
 
         // Create the hospital bed
         this.hospitalBed = new HospitalBed(this.hospitalBedParameters);
@@ -100,18 +100,18 @@ export default class ThumbRaiser {
 
         //Create the Automatic Movement Table and make its node invisible
 
-        
-        this.container= document.createElement('container');
+
+        this.container = document.createElement('container');
 
         this.buttonContainer = document.createElement('matrix');
 
 
-       
+
         //document.body.appendChild(this.buttonContainer);
 
 
 
-       // this.buttonMatrixList = this.container.querySelectorAll('buttonMatrix');
+        // this.buttonMatrixList = this.container.querySelectorAll('buttonMatrix');
 
 
 
@@ -439,7 +439,7 @@ export default class ThumbRaiser {
             if (event.code == this.player.keyCodes.dance) {
                 this.player.keyStates.dance = state;
             }
-            
+
         }
     }
 
@@ -598,13 +598,13 @@ export default class ThumbRaiser {
     }
 
     collision(position) {
-        return this.maze.distanceToEastWall(position) < (this.player.radius/2) || this.maze.distanceToWestWall(position) < (this.player.radius/2) ||
-        this.maze.distanceToSouthWall(position) < (this.player.radius/2) || this.maze.distanceToNorthWall(position) < (this.player.radius/2)
+        return this.maze.distanceToEastWall(position) < (this.player.radius / 2) || this.maze.distanceToWestWall(position) < (this.player.radius / 2) ||
+            this.maze.distanceToSouthWall(position) < (this.player.radius / 2) || this.maze.distanceToNorthWall(position) < (this.player.radius / 2)
     }
 
     collision_door(position) {
-        return this.maze.distanceToWestDoor(position) < (this.player.radius/2) || this.maze.distanceToEastDoor(position) < (this.player.radius/2)
-        || this.maze.distanceToNorthDoor(position) < (this.player.radius/2) || this.maze.distanceToSouthDoor(position) < (this.player.radius/2);
+        return this.maze.distanceToWestDoor(position) < (this.player.radius / 2) || this.maze.distanceToEastDoor(position) < (this.player.radius / 2)
+            || this.maze.distanceToNorthDoor(position) < (this.player.radius / 2) || this.maze.distanceToSouthDoor(position) < (this.player.radius / 2);
     }
 
     setHospitalBedsAndPatients(hospitalBedsUrl, patientsUrl) {
@@ -617,56 +617,56 @@ export default class ThumbRaiser {
 
 
         fetch(hospitalBedsUrl)
-        .then(response => response.json())
-        .then(data => {
-        data.Surgery_Rooms.forEach(room => {
-                //console.log(`Room Number: ${room["Room Number"]}`);
-                //console.log(`Hospital Bed Position: x=${room.hospitalBedPosition[0]}, y=${room.hospitalBedPosition[1]}`);
-                //console.log(`Rotation: ${room.rotation}`);
-                //console.log('---------------------');
-                hospitalBedObject = this.hospitalBed.object.clone();
-                let hospitalBedPosition = this.maze.cellToCartesian(room.hospitalBedPosition);
-                this.scene3D.add(hospitalBedObject);
-                hospitalBedObject.position.set(hospitalBedPosition.x,hospitalBedPosition.y,hospitalBedPosition.z);
-                hospitalBedObject.rotation.y = room.rotation;
+            .then(response => response.json())
+            .then(data => {
+                data.Surgery_Rooms.forEach(room => {
+                    //console.log(`Room Number: ${room["Room Number"]}`);
+                    //console.log(`Hospital Bed Position: x=${room.hospitalBedPosition[0]}, y=${room.hospitalBedPosition[1]}`);
+                    //console.log(`Rotation: ${room.rotation}`);
+                    //console.log('---------------------');
+                    hospitalBedObject = this.hospitalBed.object.clone();
+                    let hospitalBedPosition = this.maze.cellToCartesian(room.hospitalBedPosition);
+                    this.scene3D.add(hospitalBedObject);
+                    hospitalBedObject.position.set(hospitalBedPosition.x, hospitalBedPosition.y, hospitalBedPosition.z);
+                    hospitalBedObject.rotation.y = room.rotation;
 
-                patientPositionArray.push(room.patientPosition);
-                patientRotationArray.push(room.patientRotation);
+                    patientPositionArray.push(room.patientPosition);
+                    patientRotationArray.push(room.patientRotation);
 
-            });
-        })
-        .catch(error => console.error('Error loading JSON:', error));
-        
+                });
+            })
+            .catch(error => console.error('Error loading JSON:', error));
+
         let index = 0;
-        
+
         fetch(patientsUrl)
-        .then(response => response.json())
-        .then(data => {
-        data.Surgery_Rooms.forEach(room => {
+            .then(response => response.json())
+            .then(data => {
+                data.Surgery_Rooms.forEach(room => {
 
-            if(room.IsBeingUsed == true){
-                patientObject = this.patient.object.clone();
-                let patientPosition = this.maze.cellToCartesianWithHeight(patientPositionArray[index]);
-                this.scene3D.add(patientObject);
-                patientObject.position.set(patientPosition.x, patientPosition.y, patientPosition.z);
-                patientObject.rotation.y = (patientRotationArray[index]);
+                    if (room.IsBeingUsed == true) {
+                        patientObject = this.patient.object.clone();
+                        let patientPosition = this.maze.cellToCartesianWithHeight(patientPositionArray[index]);
+                        this.scene3D.add(patientObject);
+                        patientObject.position.set(patientPosition.x, patientPosition.y, patientPosition.z);
+                        patientObject.rotation.y = (patientRotationArray[index]);
 
-                // Create the chandelierLight
-                let chandelierLightObject = new ChandelierLight(this.lightsParameters,patientPosition.x,patientPosition.y+0.5,patientPosition.z);
-                this.scene3D.add(chandelierLightObject.object)
+                        // Create the chandelierLight
+                        let chandelierLightObject = new ChandelierLight(this.lightsParameters, patientPosition.x, patientPosition.y + 0.5, patientPosition.z);
+                        this.scene3D.add(chandelierLightObject.object)
 
-            }
-            index++;
+                    }
+                    index++;
 
-        });
-        })
-        .catch(error => console.error('Error loading JSON:', error));
+                });
+            })
+            .catch(error => console.error('Error loading JSON:', error));
 
 
 
 
     }
-    
+
     update() {
         if (!this.gameRunning) {
 
@@ -684,64 +684,64 @@ export default class ThumbRaiser {
                 console.log("Map")
                 console.log(this.maze.map);
 
-                this.matriz= this.maze.map;
+                this.matriz = this.maze.map;
 
                 this.scene3D.add(this.maze.object);
 
-                let y=0;
+                let y = 0;
 
                 this.doorsTR = this.maze.doors;
 
-                if(this.maze.doorObjectVertical.length>0){
+                if (this.maze.doorObjectVertical.length > 0) {
                     //5
-                    for(let i=0; i<this.maze.doorObjectVertical.length; i++){
+                    for (let i = 0; i < this.maze.doorObjectVertical.length; i++) {
                         this.scene3D.add(this.doorsTR[y].object);
-                        this.doorsTR[y].object.position.set(this.maze.doorObjectVertical[i].x,this.maze.doorObjectVertical[i].y,this.maze.doorObjectVertical[i].z);
+                        this.doorsTR[y].object.position.set(this.maze.doorObjectVertical[i].x, this.maze.doorObjectVertical[i].y, this.maze.doorObjectVertical[i].z);
                         this.doorsTR[y].object.rotation.y = Math.PI / 2.0;
                         y++;
                     }
                 }
 
-                if(this.maze.doorObjectHorizontal.length>0){
+                if (this.maze.doorObjectHorizontal.length > 0) {
                     //4
-                    for(let i=0; i< this.maze.doorObjectHorizontal.length; i++){
+                    for (let i = 0; i < this.maze.doorObjectHorizontal.length; i++) {
                         // Create the door
                         this.scene3D.add(this.doorsTR[y].object);
-                        this.doorsTR[y].object.position.set(this.maze.doorObjectHorizontal[i].x,this.maze.doorObjectHorizontal[i].y,this.maze.doorObjectHorizontal[i].z);
+                        this.doorsTR[y].object.position.set(this.maze.doorObjectHorizontal[i].x, this.maze.doorObjectHorizontal[i].y, this.maze.doorObjectHorizontal[i].z);
                         y++;
                     }
                 }
-  
+
 
                 this.scene3D.add(this.player.object);
                 this.scene3D.add(this.lights.object);
-                
-                
+
+
                 // Create the clock
                 this.clock = new THREE.Clock();
-                
+
                 // Create model animations (states)
                 this.animations = new Animations(this.player.object, this.player.animations);
-                
-                
+
+
                 this.animationsDoors = new Array();
-                for(let i=0; i<this.doorsTR.length; i++){
+                for (let i = 0; i < this.doorsTR.length; i++) {
                     this.animationsDoors.push(new Animations_door(this.doorsTR[i].object, this.doorsTR[i].animations_door, this.doorsTR[i].location));
                 }
-                
-                
+
+
                 // Set the player's position and direction
                 this.player.position = this.maze.initialPosition;
                 this.player.direction = this.maze.initialDirection;
-                
+
 
                 // Setting the hospital beds
                 this.setHospitalBedsAndPatients(hospitalBedPositions.url, patientPresence.url);
 
-                
+
                 if (this.userInterface == null) {
                     // Create the user interface
-                    this.userInterface = new UserInterface(this.scene3D, this.renderer, this.lights, this.maze,this,this.animations);
+                    this.userInterface = new UserInterface(this.scene3D, this.renderer, this.lights, this.maze, this, this.animations);
                 }
 
                 // Start the game
@@ -755,14 +755,31 @@ export default class ThumbRaiser {
         }
     }
 
-    buildMaze(){
+    slideAlongWall(newPosition, currentPosition) {
+        // Try to slide horizontally
+        const horizontalSlide = new THREE.Vector3(newPosition.x, currentPosition.y, currentPosition.z);
+        if (!this.collision(horizontalSlide) && !this.collision_door(horizontalSlide)) {
+            return horizontalSlide;
+        }
+
+        // Try to slide vertically
+        const verticalSlide = new THREE.Vector3(currentPosition.x, currentPosition.y, newPosition.z);
+        if (!this.collision(verticalSlide) && !this.collision_door(verticalSlide)) {
+            return verticalSlide;
+        }
+
+        // If neither sliding direction works, return current position
+        return currentPosition;
+    }
+
+    buildMaze() {
         // Update the model animations
         const deltaT = this.clock.getDelta();
         this.animations.update(deltaT);
-        
 
 
-        for(let i=0; i<this.animationsDoors.length; i++){
+
+        for (let i = 0; i < this.animationsDoors.length; i++) {
             this.animationsDoors[i].update(deltaT);
         }
 
@@ -772,7 +789,7 @@ export default class ThumbRaiser {
             if (this.maze.foundExit(this.player.position)) {
                 this.finalSequence();
             }
-            
+
             let coveredDistance = this.player.walkingSpeed * deltaT;
             let directionIncrement = this.player.turningSpeed * deltaT;
             if (this.player.keyStates.run) {
@@ -791,6 +808,9 @@ export default class ThumbRaiser {
                 if (!this.collision(newPosition) && !this.collision_door(newPosition)) {
                     this.animations.fadeToAction("metarig|Walk", 0.2);
                     this.player.position = newPosition;
+                } else {
+                    // Try to slide along the wall
+                    this.player.position = this.slideAlongWall(newPosition, this.player.position);
                 }
             }
             else if (this.player.keyStates.forward) {
@@ -799,6 +819,9 @@ export default class ThumbRaiser {
                 if (!this.collision(newPosition) && !this.collision_door(newPosition)) {
                     this.animations.fadeToAction("metarig|Walk", 0.2);
                     this.player.position = newPosition;
+                } else {
+                    // Try to slide along the wall
+                    this.player.position = this.slideAlongWall(newPosition, this.player.position);
                 }
             }
             else if (this.player.keyStates.dance) {
@@ -809,7 +832,7 @@ export default class ThumbRaiser {
             }
             this.player.object.position.set(this.player.position.x, this.player.position.y, this.player.position.z);
             this.player.object.rotation.y = direction - this.player.initialDirection;
-            
+
         }
 
         // Update first-person, third-person and top view cameras parameters (player direction and target)
