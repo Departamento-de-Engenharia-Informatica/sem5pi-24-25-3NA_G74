@@ -16,5 +16,10 @@ export class LoginViewModel {
         return this.authService.login(login);
     }
     
+    googleLogin(token: string): Observable<LoginResponse> {
+        return this.authService.googleLogin(token);
+    }
+    
+
 }
 

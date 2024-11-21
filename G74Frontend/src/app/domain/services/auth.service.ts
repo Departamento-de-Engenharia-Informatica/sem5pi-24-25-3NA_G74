@@ -32,6 +32,18 @@ export class AuthService {
         );
     }
 
+    googleLogin(token: string): Observable<LoginResponse> {
+        return this.http.post<LoginResponse>(`${this.apiUrl}/iam-login`, { token }).pipe(
+            map((response) => {
+                localStorage.setItem('token', response.token);
+                this.currentUserSubject.next(this.decodeToken(response.token));
+                return response; // Return the structured LoginResponse
+            })
+        );
+    }
+
+
+
     logout() {
         localStorage.removeItem('token');
         this.currentUserSubject.next(null);

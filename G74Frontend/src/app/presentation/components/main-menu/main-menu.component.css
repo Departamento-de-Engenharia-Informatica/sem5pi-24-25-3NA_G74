@@ -1,50 +1,51 @@
-body {
-    background: linear-gradient(90deg, #02012c, #06235a); 
+/* Main Menu Container */
+#main-menu {
+    background: linear-gradient(135deg, #02012c, #06235a);
     height: 100vh;
-    margin: 0; 
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-}
-
-#companyTitle {
-    font-size: 2em;
     color: white;
-    margin-bottom: 1em;
+}
+  
+/* Title Styling */
+#company-title {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+  
+/* Buttons Container */
+.buttons-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+  
+/* Login Button */
+.login-button {
+    background-color: #ff6f3c; /* Vibrant orange for contrast */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Adds a subtle shadow */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+  
+.login-button:hover {
+    background-color: #e65c30; /* Slightly darker orange on hover */
+    transform: scale(1.05); /* Subtle zoom effect */
+}
+  
+/* Google Sign-In Button */
+.google-signin-button {
+    width: 260px;
     display: flex;
     justify-content: center;
-}
-
-#box {
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-}
-
-#registerNewUserTitle {
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
-}
-
-#registerNewUserTitle button {
-    border: none; 
-    background: none; 
-    color: #14105b; 
-    text-decoration: underline; 
-    cursor: pointer; 
-    font-size: 0.8em; 
-    padding: 10px; 
-    
-}
-
-#registerNewUserTitle button:hover {
-    color: #06235a; 
-}
-
-#loginGoogleButton{
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
 }
