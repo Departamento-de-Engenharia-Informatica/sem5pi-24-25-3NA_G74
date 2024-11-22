@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { catchError } from 'rxjs/operators';
-import { StaffService } from '../../../application/services/staff.service';
+import { StaffViewModel } from '../../../application/viewmodels/staff.viewmodel';
 import { Staff } from '../../../domain/models/staff.model';
 import { of } from 'rxjs';
 
@@ -14,7 +14,7 @@ import { of } from 'rxjs';
   styleUrl: './staff-create.component.css'
 })
 export class StaffCreateComponent {
-  staffService = inject(StaffService);
+  staffService = inject(StaffViewModel);
 
   message = '';
 

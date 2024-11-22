@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Staff } from '../../../domain/models/staff.model';
-import { StaffService } from '../../../application/services/staff.service';
+import { StaffViewModel } from '../../../application/viewmodels/staff.viewmodel';
 import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
@@ -15,7 +15,7 @@ import { Validators } from '@angular/forms';
   styleUrl: './staff-update.component.css'
 })
 export class StaffUpdateComponent {
-  staffService = inject(StaffService);
+  staffService = inject(StaffViewModel);
 
   licenceNumber: string = '';
   staff = {} as Staff;

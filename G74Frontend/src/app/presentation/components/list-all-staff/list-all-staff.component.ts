@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { StaffService } from '../../../application/services/staff.service';
+import { StaffViewModel } from '../../../application/viewmodels/staff.viewmodel';
 import { Staff } from '../../../domain/models/staff.model';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
@@ -15,7 +15,7 @@ import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation
   styleUrl: './list-all-staff.component.css'
 })
 export class ListAllStaffComponent {
-  staffService = inject(StaffService);
+  staffService = inject(StaffViewModel);
   router = inject(Router);
   staffMembers: Staff[] = [];
   message = '';

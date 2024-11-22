@@ -1,5 +1,4 @@
 import { Injectable, inject } from '@angular/core';
-import { IStaffRepository } from '../../domain/interfaces/istaff-repository';
 import { Observable } from 'rxjs';
 import { Staff } from '../../domain/models/staff.model';
 import { environment } from '../../../environments/environment';
@@ -9,7 +8,7 @@ import { catchError, tap } from 'rxjs/operators';
 @Injectable({
     providedIn: 'root'
 })
-export class StaffRepository implements IStaffRepository {
+export class StaffService {
     http = inject(HttpClient);
 
     private apiUrl = `${environment.apiUrl}/staff/`;
