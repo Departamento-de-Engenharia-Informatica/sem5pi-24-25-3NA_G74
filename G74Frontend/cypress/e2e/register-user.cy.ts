@@ -11,7 +11,14 @@ describe('User Register Page Test', () =>{
     cy.get('button[type="submit"]').should('exist');
   });
 
+  //Teste com acesso ao backend, desativei porque é valido apenas uma vez visto que se trata de um registo.
+  //Optei por fazer um mock da resposta do backend para testar um registo bem sucedido.
   it('Should register a user successfully', () => {
+    cy.intercept('POST', '**/User/register', {
+      statusCode: 201,
+      body: { message: 'User profile created successfully!' },
+    });
+
     cy.get('#username').type('testuser');
     cy.get('#email').type('testuser@example.com');
     cy.get('#role').select('Admin');
@@ -20,6 +27,7 @@ describe('User Register Page Test', () =>{
 
     cy.contains('User profile created successfully!').should('be.visible');
   });
+
 
   it('Should handle backend error gracefully', () => {
     cy.intercept('POST', '**/User/register', {
@@ -35,5 +43,6 @@ describe('User Register Page Test', () =>{
 
     cy.contains('Failed to create new user. User already exists').should('be.visible');
   });
+
 
 });
