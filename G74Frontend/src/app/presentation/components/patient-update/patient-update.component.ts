@@ -32,23 +32,10 @@ export class PatientUpdateComponent implements OnInit {
       )
       .subscribe((patients) => {
         this.patients = patients;
-  
-        // Pre-fill date inputs for each patient and fetch medicalRecordNumber
+
+        // Pre-fill date inputs for each patient
         this.patients.forEach((patient) => {
           this.dateInputs[patient.contactInformation.emailAddress] = this.formatDate(patient.dateOfBirth);
-  
-          // Fetch medical record number for each patient
-          this.patientViewModel
-            .getMedicalRecordNumber(patient.contactInformation.emailAddress)
-            .pipe(
-              catchError((error) => {
-                console.error(`Error fetching medical record number for ${patient.contactInformation.emailAddress}:`, error);
-                return of(null);
-              })
-            )
-            .subscribe((medicalRecordNumber) => {
-              patient.medicalRecordNumber = medicalRecordNumber || 'N/A'; // Assign fetched value or 'N/A'
-            });
         });
       });
   }
@@ -61,39 +48,25 @@ export class PatientUpdateComponent implements OnInit {
   updatePatient(patient: Patient): void {
     const email = patient.contactInformation.emailAddress;
 
-    // Get the medical record number before updating
+    const dateInput = this.dateInputs[patient.contactInformation.emailAddress];
+    if (dateInput) {
+      const [year, month, day] = dateInput.split('-').map(Number);
+      patient.dateOfBirth = { yearOfBirth: year, monthOfBirth: month, dayOfBirth: day };
+    }
+
+    // Proceed to update the patient
     this.patientViewModel
-      .getMedicalRecordNumber(email)
+      .updatePatientProfile(patient, email)
       .pipe(
         catchError((error) => {
-          console.error(`Error fetching medical record number for ${email}:`, error);
-          this.message = `Failed to fetch medical record number for ${email}.`;
+          console.error(`Error updating patient with email ${email}:`, error);
+          this.message = `Failed to update patient ${email}.`;
           return of(null);
         })
       )
-      .subscribe((medicalRecordNumber) => {
-        if (medicalRecordNumber) {
-          const dateInput = this.dateInputs[patient.contactInformation.emailAddress];
-          if (dateInput) {
-            const [year, month, day] = dateInput.split('-').map(Number);
-            patient.dateOfBirth = { yearOfBirth: year, monthOfBirth: month, dayOfBirth: day };
-          }
-
-          // Proceed to update the patient
-          this.patientViewModel
-            .updatePatientProfile(patient, medicalRecordNumber)
-            .pipe(
-              catchError((error) => {
-                console.error(`Error updating patient with email ${email}:`, error);
-                this.message = `Failed to update patient ${email}.`;
-                return of(null);
-              })
-            )
-            .subscribe((response) => {
-              if (response) {
-                this.message = `Patient ${email} updated successfully!`;
-              }
-            });
+      .subscribe((response) => {
+        if (response) {
+          this.message = `Patient ${email} updated successfully!`;
         }
       });
   }

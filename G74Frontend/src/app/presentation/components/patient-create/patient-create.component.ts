@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { PatientService } from '../../../application/services/patient.service';
 import { Patient } from '../../../domain/models/patient.model';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { PatientViewModel } from '../../../application/viewmodels/patient-viewmodel';
 
 @Component({
   selector: 'app-patient-create',
@@ -31,7 +31,7 @@ export class PatientCreateComponent {
   dateOfBirthInput: string = '';  // Holds the date input in YYYY-MM-DD format from the form
   message: string = '';
 
-  constructor(private patientService: PatientService) { }
+  constructor(private patientViewModel: PatientViewModel) { }
 
   onSubmit(): void {
     // Parse the date input (YYYY-MM-DD) to extract year, month, and day
@@ -45,7 +45,7 @@ export class PatientCreateComponent {
     };
 
     // Call the service to create the patient profile
-    this.patientService.createPatientProfile(this.patient).pipe(
+    this.patientViewModel.createPatientProfile(this.patient).pipe(
       catchError(error => {
         console.error('Error creating patient profile:', error);  // Log the error details
         this.message = `Failed to create patient profile. ${error?.error?.message || 'Please try again.'}`;

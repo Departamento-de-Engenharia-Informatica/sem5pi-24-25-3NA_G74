@@ -8,15 +8,14 @@
     </div>
 
     <div class="filter-group">
-        <label for="gender">Gender:</label>
-        <select id="gender" [(ngModel)]="filters.gender" name="gender">
-          <option value="" disabled selected>-- Select Gender --</option>
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
-          <option value="Other">Other</option>
-        </select>
-      </div>
-      
+      <label for="gender">Gender:</label>
+      <select id="gender" [(ngModel)]="filters.gender" name="gender">
+        <option value="" disabled selected>-- Select Gender --</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
 
     <div class="filter-group">
       <label for="phoneNumber">Phone Number:</label>
@@ -55,7 +54,6 @@
 <table *ngIf="patients.length">
   <thead>
     <tr>
-      <th>Medical Record Number</th>
       <th>Name</th>
       <th>Gender</th>
       <th>Date of Birth</th>
@@ -65,7 +63,6 @@
   </thead>
   <tbody>
     <tr *ngFor="let patient of patients">
-      <td>{{ patient.medicalRecordNumber || 'N/A' }}</td>
       <td>{{ patient.name }}</td>
       <td>{{ patient.gender }}</td>
       <td>

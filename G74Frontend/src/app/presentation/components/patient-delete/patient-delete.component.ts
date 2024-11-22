@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { PatientService } from '../../../application/services/patient.service';
 import { catchError } from 'rxjs';
 import { of } from 'rxjs';
+import { PatientViewModel } from '../../../application/viewmodels/patient-viewmodel';
 
 @Component({
   selector: 'app-patient-delete',
@@ -14,7 +14,7 @@ export class PatientDeleteComponent {
   message: string = '';
 
 
-  constructor(private patientService: PatientService) { }
+  constructor(private patientViewModel: PatientViewModel) { }
 
   onSubmit(): void {
     if (!this.medicalRecordNumber) {
@@ -22,7 +22,7 @@ export class PatientDeleteComponent {
       return;
     }
 
-    this.patientService.markPatientProfileAsDeleted(this.medicalRecordNumber).pipe(
+    this.patientViewModel.markPatientProfileAsDeleted(this.medicalRecordNumber).pipe(
       catchError(error => {
         console.error('Error deleting patient profile: ', error);
         this.message = `Failed to delete patient profile. ${error?.error?.message || 'Please try again.'}`

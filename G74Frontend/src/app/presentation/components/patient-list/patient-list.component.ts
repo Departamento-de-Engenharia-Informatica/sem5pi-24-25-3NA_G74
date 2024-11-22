@@ -57,36 +57,8 @@ export class PatientListComponent implements OnInit {
       )
       .subscribe((patients) => {
         this.patients = patients;
-
-        // Fetch medical record numbers for each patient
-        this.patients.forEach((patient) => {
-          if (patient.contactInformation?.emailAddress) {
-            this.fetchMedicalRecordNumber(patient);
-          }
-        });
-
         this.message = patients.length ? '' : 'No patients found.';
         this.isLoading = false;
-      });
-  }
-
-  fetchMedicalRecordNumber(patient: Patient): void {
-    this.patientViewModel
-      .getMedicalRecordNumber(patient.contactInformation.emailAddress!)
-      .pipe(
-        catchError((error) => {
-          console.error(
-            `Error fetching medical record number for email ${patient.contactInformation?.emailAddress}:`,
-            error
-          );
-          patient.medicalRecordNumber = 'Error'; // Set an error message in case of failure
-          return of(null);
-        })
-      )
-      .subscribe((medicalRecordNumber) => {
-        if (medicalRecordNumber) {
-          patient.medicalRecordNumber = medicalRecordNumber;
-        }
       });
   }
 

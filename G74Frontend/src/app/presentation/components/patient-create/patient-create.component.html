@@ -1,37 +1,53 @@
-<h2>Create Patient Profile</h2>
-<form (ngSubmit)="onSubmit()" #patientForm="ngForm">
-  <label for="name">Name:</label>
-  <input type="text" id="name" [(ngModel)]="patient.name" name="name" required>
+<div id="create-patient-container">
+  <h2>Create Patient Profile</h2>
+  <form (ngSubmit)="onSubmit()" #patientForm="ngForm" id="create-patient-form">
+    <div class="form-group">
+      <label for="name">Name:</label>
+      <input type="text" id="name" [(ngModel)]="patient.name" name="name" required>
+    </div>
 
-  <label for="dateOfBirth">Date of Birth:</label>
-  <input type="date" id="dateOfBirth" [(ngModel)]="dateOfBirthInput" name="dateOfBirthInput" required>
+    <div class="form-group">
+      <label for="dateOfBirth">Date of Birth:</label>
+      <input type="date" id="dateOfBirth" [(ngModel)]="dateOfBirthInput" name="dateOfBirthInput" required>
+    </div>
 
-  <label for="gender">Gender:</label>
-  <select id="gender" [(ngModel)]="patient.gender" name="gender" required>
-    <option value="Male">Male</option>
-    <option value="Female">Female</option>
-    <option value="Other">Other</option>
-  </select>
+    <div class="form-group">
+      <label for="gender">Gender:</label>
+      <select id="gender" [(ngModel)]="patient.gender" name="gender" required>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
 
-  <fieldset>
-    <legend>Contact Information</legend>
-    <label for="phoneNumber">Phone Number:</label>
-    <input type="text" id="phoneNumber" [(ngModel)]="patient.contactInformation.phoneNumber" name="phoneNumber" required>
+    <fieldset class="fieldset-group">
+      <legend>Contact Information</legend>
+      <div class="form-group">
+        <label for="phoneNumber">Phone Number:</label>
+        <input type="text" id="phoneNumber" [(ngModel)]="patient.contactInformation.phoneNumber" name="phoneNumber" required>
+      </div>
 
-    <label for="emailAddress">Email Address:</label>
-    <input type="email" id="emailAddress" [(ngModel)]="patient.contactInformation.emailAddress" name="emailAddress" required>
-  </fieldset>
+      <div class="form-group">
+        <label for="emailAddress">Email Address:</label>
+        <input type="email" id="emailAddress" [(ngModel)]="patient.contactInformation.emailAddress" name="emailAddress" required>
+      </div>
+    </fieldset>
 
-  <fieldset>
-    <legend>Emergency Contact</legend>
-    <label for="emergencyName">Name:</label>
-    <input type="text" id="emergencyName" [(ngModel)]="patient.emergencyContact.name" name="emergencyName" required>
+    <fieldset class="fieldset-group">
+      <legend>Emergency Contact</legend>
+      <div class="form-group">
+        <label for="emergencyName">Name:</label>
+        <input type="text" id="emergencyName" [(ngModel)]="patient.emergencyContact.name" name="emergencyName" required>
+      </div>
 
-    <label for="emergencyPhoneNumber">Phone Number:</label>
-    <input type="text" id="emergencyPhoneNumber" [(ngModel)]="patient.emergencyContact.phoneNumber" name="emergencyPhoneNumber" required>
-  </fieldset>
+      <div class="form-group">
+        <label for="emergencyPhoneNumber">Phone Number:</label>
+        <input type="text" id="emergencyPhoneNumber" [(ngModel)]="patient.emergencyContact.phoneNumber" name="emergencyPhoneNumber" required>
+      </div>
+    </fieldset>
 
-  <button type="submit" [disabled]="!patientForm.form.valid">Create Patient</button>
-</form>
+    <button class="submit-button" type="submit" [disabled]="!patientForm.form.valid">Create Patient</button>
+  </form>
 
-<p *ngIf="message">{{ message }}</p>
+  <p *ngIf="message" id="form-message">{{ message }}</p>
+</div>

@@ -1,0 +1,86 @@
+/* Form Container */
+#create-patient-container {
+    background: linear-gradient(135deg, #02012c, #06235a);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 500px;
+    margin: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+  }
+  
+  #create-patient-container h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+  }
+  
+  /* Form Styling */
+  #create-patient-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  /* Form Group */
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+  }
+  
+  .form-group label {
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+  }
+  
+  .form-group input,
+  .form-group select {
+    padding: 8px 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+  
+  /* Fieldset Styling */
+  .fieldset-group {
+    border: 1px solid white;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: left;
+  }
+  
+  .fieldset-group legend {
+    font-size: 1rem;
+    padding: 0 5px;
+    text-align: center;
+  }
+  
+  /* Button Styling */
+  .submit-button {
+    background-color: #00b894;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .submit-button:hover {
+    background-color: #009874;
+  }
+  
+  .submit-button:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+  }
+  
+  /* Message Styling */
+  #form-message {
+    margin-top: 15px;
+    font-size: 0.9rem;
+    color: #f5e623;
+  }
+  

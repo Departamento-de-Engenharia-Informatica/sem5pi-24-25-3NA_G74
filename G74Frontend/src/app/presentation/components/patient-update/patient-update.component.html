@@ -1,9 +1,8 @@
-<h2>Manage Patients</h2>
+<h2>Update Patients</h2>
 
 <table>
   <thead>
     <tr>
-      <th>Medical Record Number</th>
       <th>Email</th>
       <th>Name</th>
       <th>Date of Birth</th>
@@ -13,7 +12,6 @@
   </thead>
   <tbody>
     <tr *ngFor="let patient of patients">
-      <td>{{ patient.medicalRecordNumber || 'Loading...' }}</td>
       <td>{{ patient.contactInformation.emailAddress }}</td>
       <td>
         <input [(ngModel)]="patient.name" name="name-{{patient.contactInformation.emailAddress}}" />
