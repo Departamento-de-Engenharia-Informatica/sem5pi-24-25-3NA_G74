@@ -11,8 +11,9 @@ export class AdminMenuComponent {
   constructor(private router: Router, private loginViewModel: LoginViewModel) {}
 
   navigateTo(path: string): void {
-    this.router.navigate([`/admin/${path}`]);
+    this.router.navigate([path], { relativeTo: this.router.routerState.root.firstChild }); // Navigate relative to 'admin'
   }
+  
 
   logout(): void {
     this.loginViewModel.logout(); // Calls the logout function in LoginViewModel

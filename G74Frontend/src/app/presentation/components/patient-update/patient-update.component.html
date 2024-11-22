@@ -1,36 +1,27 @@
-<h2>Update Patients</h2>
+<div class="update-popup">
+  <div class="update-header">
+    <h3>Update Patient</h3>
+    <button class="close-button" (click)="cancelUpdate()">×</button>
+  </div>
 
-<table>
-  <thead>
-    <tr>
-      <th>Email</th>
-      <th>Name</th>
-      <th>Date of Birth</th>
-      <th>Phone Number</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let patient of patients">
-      <td>{{ patient.contactInformation.emailAddress }}</td>
-      <td>
-        <input [(ngModel)]="patient.name" name="name-{{patient.contactInformation.emailAddress}}" />
-      </td>
-      <td>
-        <input
-          type="date"
-          [(ngModel)]="dateInputs[patient.contactInformation.emailAddress]"
-          name="dob-{{patient.contactInformation.emailAddress}}"
-        />
-      </td>
-      <td>
-        <input [(ngModel)]="patient.contactInformation.phoneNumber" name="phone-{{patient.contactInformation.emailAddress}}" />
-      </td>
-      <td>
-        <button (click)="updatePatient(patient)">Update</button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+  <div class="update-form">
+    <label for="email">Email (Read-Only):</label>
+    <input type="email" id="email" [value]="patient.contactInformation.emailAddress" readonly />
 
-<p *ngIf="message">{{ message }}</p>
+    <label for="name">Name:</label>
+    <input type="text" id="name" [(ngModel)]="patient.name" />
+
+    <label for="dateOfBirth">Date of Birth:</label>
+    <input type="date" id="dateOfBirth" [(ngModel)]="dateInput" />
+
+    <label for="phoneNumber">Phone Number:</label>
+    <input type="text" id="phoneNumber" [(ngModel)]="patient.contactInformation.phoneNumber" />
+
+    <button (click)="updatePatient()" [disabled]="isLoading">
+      {{ isLoading ? 'Updating...' : 'Update' }}
+    </button>
+    <button (click)="cancelUpdate()">Cancel</button>
+  </div>
+
+  <p class="update-message" *ngIf="message">{{ message }}</p>
+</div>

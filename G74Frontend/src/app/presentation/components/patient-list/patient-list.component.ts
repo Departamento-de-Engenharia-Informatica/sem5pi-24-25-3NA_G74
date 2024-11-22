@@ -23,6 +23,9 @@ export class PatientListComponent implements OnInit {
   message: string = '';
   isLoading: boolean = false;
 
+  selectedPatientForUpdate: Patient | null = null; // Patient to update
+  selectedPatientForDelete: Patient | null = null; // Patient to delete
+
   constructor(private patientViewModel: PatientViewModel) {}
 
   ngOnInit(): void {
@@ -60,6 +63,28 @@ export class PatientListComponent implements OnInit {
         this.message = patients.length ? '' : 'No patients found.';
         this.isLoading = false;
       });
+  }
+
+  openUpdatePopup(patient: Patient): void {
+    this.selectedPatientForUpdate = { ...patient };
+  }
+
+  closeUpdatePopup(refresh: boolean): void {
+    this.selectedPatientForUpdate = null;
+    if (refresh) {
+      this.fetchPatients();
+    }
+  }
+
+  openDeletePopup(patient: Patient): void {
+    this.selectedPatientForDelete = { ...patient };
+  }
+
+  closeDeletePopup(refresh: boolean): void {
+    this.selectedPatientForDelete = null;
+    if (refresh) {
+      this.fetchPatients();
+    }
   }
 
   clearFilters(): void {
