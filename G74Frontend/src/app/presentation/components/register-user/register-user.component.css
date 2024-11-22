@@ -1,89 +1,81 @@
-/* Fundo geral */
-body {
-  background: linear-gradient(90deg, #02012c, #06235a);
-  margin: 0;
+.container {
+  background: linear-gradient(135deg, #02012c, #06235a);
   height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  font-family: Arial, sans-serif;
-}
-
-/* Container principal */
-form {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: 1px solid black;
-  border-radius: 10px;
-  padding: 30px;
-  background-color: #06235a;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  width: 90%;
-  max-width: 400px;
-  box-sizing: border-box;
-}
-
-/* Título */
-h2 {
-  margin-bottom: 20px;
-  color: #143ea1;
+  color: white;
+  padding: 20px;
   text-align: center;
 }
 
-/* Campos de formulário */
-form div {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  margin-bottom: 15px;
+.container h2 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
 }
 
-label {
+form {
+  background-color: #1e1e3f;
+  padding: 20px;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  margin-bottom: 2rem;
+}
+
+form label {
+  font-size: 1.1rem;
   margin-bottom: 5px;
-  font-weight: bold;
+  display: block;
+}
+
+form input,
+form select {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #cccccc;
+  margin-bottom: 1.2rem;
+  background-color: #2c2c55;
   color: white;
 }
 
-input, select {
-  width: 90%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 14px;
-  box-sizing: border-box;
-  outline: none;
-}
-
-input:focus, select:focus {
-  border-color: #0a3990;
-  box-shadow: 0 0 5px rgba(10, 57, 144, 0.5);
-}
-
-/* Botão de envio */
-button[type="submit"] {
-  background-color: #06235a;
+button {
+  background-color: #ff6f3c;
   color: white;
   border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 1.2rem;
   cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s ease;
+  font-weight: bold;
+  width: 220px;
+  text-align: center;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 1rem;
 }
 
 button[type="submit"]:hover {
-  background-color: #0a3990;
+  background-color: #e65c30;
+  transform: scale(1.05);
 }
 
-/* Mensagem de feedback */
-div[ngIf] {
-  margin-top: 20px;
-  text-align: center;
-  font-weight: bold;
+
+div.message {
+  background-color: #4caf50;
   color: white;
+  padding: 10px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 400px;
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+div.message.error {
+  background-color: #f44336;
 }

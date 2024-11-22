@@ -8,15 +8,31 @@ public class OperationTypeDtoMapper
 {
     public OperationTypeDTO OperationTypeToDto(OperationType operationType)
     {
-        if (operationType == null)
+        return new OperationTypeDTO
         {
-            throw new ArgumentNullException(nameof(operationType), "Operation type cannot be null.");
-        }
-        
-        OperationTypeDTO operationTypeDto = new OperationTypeDTO(operationType.operationTypeID.ToString(),operationType.name.ToString(),operationType.requiredStaffBySpecialization.SpecializationStaffList.ToString(),operationType.duration.ToString());
-
-        return operationTypeDto;
+            operationTypeID = operationType.operationTypeID.ToString(),
+            name = operationType.name.ToString(),
+            requiredStaffBySpecialization = FormatRequiredStaff(operationType.requiredStaffBySpecialization.SpecializationStaffList),
+            duration = operationType.duration.ToString()
+        };
     }
+
+    private string FormatRequiredStaff(Dictionary<StaffSpecialization, int> requiredStaff)
+    {
+        if (requiredStaff == null || !requiredStaff.Any())
+            return string.Empty;
+
+        // Formata o dicionário no estilo "Specialization1:Quantity1; Specialization2:Quantity2"
+        List<string> staffEntries = new List<string>();
+        foreach (var specialization in requiredStaff)
+        {
+            staffEntries.Add($"{specialization.Key.Value}:{specialization.Value}");
+        }
+        return string.Join("; ", staffEntries);
+    }
+
+
+
 
     public OperationType OperationTypeDtoToDomain(OperationTypeDTO operationTypeDto)
     {

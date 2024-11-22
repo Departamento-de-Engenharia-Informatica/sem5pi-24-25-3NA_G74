@@ -1,49 +1,50 @@
 <div class="container">
-  <h2>Search Operation Types</h2>
+  <div class="filters">
+    <form (ngSubmit)="fetchOperationType()" #filterForm="ngForm">
+      <div class="filter-group">
+        <label for="operationTypeId">Operation Type Id:</label>
+        <input type="text" id="operationTypeId" [(ngModel)]="filters.operationTypeId" name="operationTypeId" />
+      </div>
+      <div class="filter-group">
+        <label for="name">Name:</label>
+        <input type="text" id="name" [(ngModel)]="filters.name" name="name" />
+      </div>
+      <div class="filter-group">
+        <label for="requiredStaffBySpecialization">Required Staff by Specialization:</label>
+        <input type="text" id="requiredStaffBySpecialization" [(ngModel)]="filters.requiredStaffBySpecialization" name="requiredStaffBySpecialization" />
+      </div>
+      <div class="filter-group">
+        <label for="duration">Duration:</label>
+        <input type="text" id="duration" [(ngModel)]="filters.duration" name="duration" />
+      </div>
+      <div class="actions">
+        <button type="submit">Search</button>
+        <button type="button" (click)="clearFilters()">Clear Filters</button>
+      </div>
+    </form>
+  </div>
 
-  <!-- Formulário para filtros -->
-  <form (ngSubmit)="search()">
-    <div>
-      <label for="operationTypeID">Operation Type ID:</label>
-      <input id="operationTypeID" type="text" [(ngModel)]="filters.operationTypeId" name="operationTypeID" />
-    </div>
+  <div class="message" *ngIf="message">{{ message }}</div>
 
-    <div>
-      <label for="name">Name:</label>
-      <input id="name" type="text" [(ngModel)]="filters.name" name="name" />
-    </div>
+  <table *ngIf="operationTypes.length">
+    <thead>
+    <tr>
+      <th>Operation Type Id</th>
+      <th>Name</th>
+      <th>Duration</th>
+      <th>Required Staff by Specialization</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let type of operationTypes">
+      <td>{{ type.operationTypeId || 'N/A' }}</td>
+      <td>{{ type.name }}</td>
+      <td>{{ type.duration }}</td>
+      <td>{{ type.requiredStaffBySpecialization || 'N/A' }}</td>
+    </tr>
+    </tbody>
+  </table>
 
-    <div>
-      <label for="requiredStaffBySpecialization">Required Staff by Specialization:</label>
-      <input
-        id="requiredStaffBySpecialization"
-        type="text"
-        [(ngModel)]="filters.requiredStaffBySpecialization"
-        name="requiredStaffBySpecialization"
-      />
-    </div>
-
-    <div>
-      <label for="duration">Duration:</label>
-      <input id="duration" type="text" [(ngModel)]="filters.duration" name="duration" />
-    </div>
-
-    <button type="submit">Search</button>
-  </form>
-
-  <!-- Mensagem de erro -->
-  <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
-
-  <!-- Lista de resultados -->
-  <ul *ngIf="operationTypes.length > 0; else noData">
-    <li *ngFor="let type of operationTypes">
-      <strong>{{ type.name }}</strong> (ID: {{ type.operationTypeId }})<br />
-      Duration: {{ type.duration }}<br />
-      Required Staff: {{ type.requiredStaffBySpecialization }}
-    </li>
-  </ul>
-
-  <!-- Mensagem caso não haja resultados -->
   <ng-template #noData>
     <p>No operation types found.</p>
   </ng-template>
