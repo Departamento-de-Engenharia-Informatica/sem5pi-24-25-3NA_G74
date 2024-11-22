@@ -4,14 +4,11 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { catchError, tap } from 'rxjs/operators';
 import {User} from '../../domain/models/user.model';
-import {IUserRepository} from '../../domain/interfaces/iuser-repository';
-import {Patient} from '../../domain/models/patient.model';
-import {response} from 'express';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserRepository implements IUserRepository {
+export class UserService {
   private apiUrl = `${environment.apiUrl}/User`;
 
   constructor(private http: HttpClient) {}

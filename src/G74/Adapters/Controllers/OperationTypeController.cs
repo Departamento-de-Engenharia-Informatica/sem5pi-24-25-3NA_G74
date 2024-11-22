@@ -86,7 +86,7 @@ public class OperationTypeController : ControllerBase
     {
         try
         {
-            Console.WriteLine($"Criteria: OperationTypeID = {criteria.operationTypeID}, Name = {criteria.name}, Duration = {criteria.duration}");
+            Console.WriteLine($"Criteria: OperationTypeID = {criteria.operationTypeId}, Name = {criteria.name}, Duration = {criteria.duration}");
 
             var operationTypes = await _operationTypeService.SearchOperationTypeByFilters(criteria);
 

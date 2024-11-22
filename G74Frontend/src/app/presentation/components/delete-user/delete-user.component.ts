@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import {UserService} from '../../../application/services/user.service';
 import {catchError, of} from 'rxjs';
+import {UserViewmodel} from '../../../application/viewmodels/user.viewmodel';
 
 @Component({
   selector: 'app-delete-user',
@@ -11,12 +11,12 @@ export class DeleteUserComponent {
   message: string = '';
   email: string = '';
 
-  constructor(private userService: UserService) {
+  constructor(private userViewmodel: UserViewmodel) {
   }
 
   onSubmit(): void {
 
-    this.userService.markUserAsDeleted(this.email).pipe(
+    this.userViewmodel.markUserAsDeleted(this.email).pipe(
       catchError(error => {
         console.error('Error deleting user profile: ', error);
         this.message = `Failed to delete user profile. ${error?.error?.message || 'Please try again.'}`

@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {NgIf} from '@angular/common';
-import {UserService} from '../../../application/services/user.service';
 import {catchError} from 'rxjs/operators';
 import {of} from 'rxjs';
 import {User} from '../../../domain/models/user.model';
+import {UserViewmodel} from '../../../application/viewmodels/user.viewmodel';
 
 @Component({
   selector: 'app-update-user',
@@ -19,7 +17,7 @@ export class UpdateUserComponent {
   newEmail: string = '';
   user: Partial<User> = {};
 
-  constructor(private userService: UserService) {
+  constructor(private userViewmodel: UserViewmodel) {
   }
 
   submitEmail() {
@@ -34,7 +32,7 @@ export class UpdateUserComponent {
 
   updateUser() {
     if (this.user.username && this.user.email && this.user.role) {
-      this.userService.updateUser(this.email,this.user).pipe(
+      this.userViewmodel.updateUser(this.email,this.user).pipe(
         catchError(error => {
           console.error('Error updating user profile:', error);
           this.message = `Failed to update user profile. ${error?.error?.message || 'Please try again.'}`;

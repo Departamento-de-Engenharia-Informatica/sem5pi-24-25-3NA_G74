@@ -10,7 +10,7 @@ public class OperationTypeDtoMapper
     {
         return new OperationTypeDTO
         {
-            operationTypeID = operationType.operationTypeID.ToString(),
+            operationTypeId = operationType.operationTypeID.ToString(),
             name = operationType.name.ToString(),
             requiredStaffBySpecialization = FormatRequiredStaff(operationType.requiredStaffBySpecialization.SpecializationStaffList),
             duration = operationType.duration.ToString()
@@ -41,7 +41,7 @@ public class OperationTypeDtoMapper
             throw new ArgumentNullException(nameof(operationTypeDto), "Operation type cannot be null.");
         }
 
-        OperationType operationType = new OperationType(int.Parse(operationTypeDto.operationTypeID),
+        OperationType operationType = new OperationType(int.Parse(operationTypeDto.operationTypeId),
             new Name(operationTypeDto.name),
             new RequiredStaffBySpecialization(makeStringIntoDictionary(operationTypeDto.requiredStaffBySpecialization)),
             (int.Parse(operationTypeDto.duration)));

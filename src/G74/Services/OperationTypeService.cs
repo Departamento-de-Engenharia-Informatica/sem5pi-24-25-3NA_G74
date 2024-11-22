@@ -69,10 +69,10 @@ public class OperationTypeService
     {
         try
         {
-            Console.WriteLine($"Searching with criteria: OperationTypeID = {criteria.operationTypeID}, Name = {criteria.name}, Duration = {criteria.duration}");
+            Console.WriteLine($"Searching with criteria: OperationTypeID = {criteria.operationTypeId}, Name = {criteria.name}, Duration = {criteria.duration}");
 
             var operationTypesFound = await _operationTypeRepository.SearchOperationTypeByFiltersAsync(
-                criteria.operationTypeID,
+                criteria.operationTypeId,
                 criteria.name,
                 criteria.requiredStaffBySpecialization,
                 criteria.duration

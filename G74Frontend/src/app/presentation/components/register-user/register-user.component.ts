@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import {User} from '../../../domain/models/user.model';
 import {catchError} from 'rxjs/operators';
 import {of} from 'rxjs';
-import {UserService} from '../../../application/services/user.service';
+import {UserViewmodel} from '../../../application/viewmodels/user.viewmodel';
 
 @Component({
   selector: 'app-register-user',
@@ -17,11 +17,11 @@ export class RegisterUserComponent {
   };
   message: string = "";
 
-  constructor(private userService: UserService) { }
+  constructor(private userViewModel: UserViewmodel) { }
 
   onSubmit(): void {
 
-    this.userService.registerUser(this.user).pipe(
+    this.userViewModel.registerUser(this.user).pipe(
       catchError(error => {
         console.error('Error creating new user:', error);
         this.message = `Failed to create new user. ${error?.error?.message || 'Please try again.'}`;
