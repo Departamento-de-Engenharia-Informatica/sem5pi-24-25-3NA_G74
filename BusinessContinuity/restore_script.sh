@@ -3,7 +3,7 @@
 # Simple Server Restore Script
 REMOTE_HOST="vsgate-ssh.dei.isep.ipp.pt"
 REMOTE_PORT="11047"
-REMOTE_USER="deployer"
+REMOTE_USER="root"
 BACKUP_DIR="$HOME/server_backups"
 
 # Get the latest backup file
