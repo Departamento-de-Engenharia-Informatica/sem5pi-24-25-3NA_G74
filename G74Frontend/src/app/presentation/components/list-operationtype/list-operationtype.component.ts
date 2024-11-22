@@ -2,18 +2,17 @@ import {Component, OnInit} from '@angular/core';
 import {catchError} from 'rxjs/operators';
 import {of} from 'rxjs';
 import {OperationType} from '../../../domain/models/operationType.model';
-import {OperationTypeRepository} from '../../../infrastructure/repositories/operationType-repository';
-import {OperationTypeService} from '../../../application/services/operationType.service';
+import {OperationTypeViewModel} from '../../../application/viewmodels/operationtype-viewmodel';
 
 @Component({
   selector: 'app-list-operationtype',
   templateUrl: './list-operationtype.component.html',
   styleUrl: './list-operationtype.component.css'
 })
-export class ListOperationtypeComponent{
+export class ListOperationtypeComponent implements OnInit{
 
   operationTypes: OperationType[] = [];
-  errorMessage: string = '';
+  message: string = '';
 
   filters: Partial<OperationType> = {
     operationTypeId: '',
@@ -21,28 +20,44 @@ export class ListOperationtypeComponent{
     requiredStaffBySpecialization: '',
     duration: ''
   };
+  isLoading: boolean=false;
 
-  constructor(private operationTypeService: OperationTypeService) {}
+  constructor(private operationTypeViewModel: OperationTypeViewModel) {}
 
-  search(): void {
-    const criteria: Partial<OperationType> = {};
-    for (const key in this.filters) {
-      const typedKey = key as keyof OperationType; 
-      if (this.filters[typedKey]) {
-        criteria[typedKey] = this.filters[typedKey];
-      }
-    }
-    this.operationTypeService.listOperationTypesByFilter(criteria).subscribe({
-      next: (data) => {
-        this.operationTypes = data;
-        this.errorMessage = '';
-      },
-      error: (error) => {
-        this.operationTypes = [];
-        this.errorMessage = 'Failed to load operation types.';
-        console.error(error);
-      }
-    });
+  ngOnInit(): void {
+    this.fetchOperationType();
+  }
+
+  fetchOperationType(): void {
+    this.isLoading = true;
+
+    const filters: Partial<OperationType> = { ...this.filters };
+
+    this.operationTypeViewModel
+      .listOperationType(Object.keys(filters).length ? filters : null)
+      .pipe(
+        catchError((error) => {
+          console.error('Error fetching operation types:', error);
+          this.message = 'Failed to fetch operation types. Please try again.';
+          this.isLoading = false;
+          return of([]);
+        })
+      )
+      .subscribe((operationtypes) => {
+        this.operationTypes = operationtypes;
+        console.log('Operation Types:', operationtypes);
+        this.message = operationtypes.length ? '' : 'No operation types found.';
+        this.isLoading = false;
+      });
+  }
+
+  clearFilters(): void {
+    this.filters = {
+      operationTypeId: '',
+      name: '',
+      requiredStaffBySpecialization: '',
+      duration: ''
+    };
   }
 }
 

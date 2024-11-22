@@ -3,7 +3,7 @@
   background: linear-gradient(135deg, #02012c, #06235a);
   height: 100vh;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
   color: white;
   padding: 20px;

@@ -26,7 +26,7 @@ export class PatientListComponent implements OnInit {
   constructor(private patientViewModel: PatientViewModel) {}
 
   ngOnInit(): void {
-    this.fetchPatients(); // Fetch all patients initially
+    this.fetchPatients();
   }
 
   fetchPatients(): void {

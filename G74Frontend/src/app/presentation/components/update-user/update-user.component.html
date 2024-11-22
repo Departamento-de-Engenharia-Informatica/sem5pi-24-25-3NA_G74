@@ -1,7 +1,6 @@
 <div class="container">
   <h2>Update User Profile</h2>
 
-  <!-- Formulário para introduzir o email -->
   <form *ngIf="!isEditing" (ngSubmit)="submitEmail()">
     <div>
       <label for="email">Enter User Email:</label>
@@ -10,7 +9,6 @@
     <button type="submit">Submit</button>
   </form>
 
-  <!-- Formulário para editar os dados do usuário -->
   <form *ngIf="isEditing" (ngSubmit)="updateUser()">
     <div>
       <label for="username">Username:</label>

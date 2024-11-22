@@ -1,44 +1,58 @@
-body {
-  background: linear-gradient(90deg, #02012c, #06235a);
-  margin: 0;
+/* Container Styling */
+.container {
+  background: linear-gradient(135deg, #02012c, #06235a);
   height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-family: Arial, sans-serif;
   color: white;
-}
-
-.container {
-  text-align: center;
-  width: 90%;
-  max-width: 400px;
-  background-color: #06235a;
   padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  text-align: center;
 }
 
-h2 {
-  margin-bottom: 20px;
+/* Title Styling */
+.container h2 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
 }
 
+/* Button Container Styling */
 .button-container {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  align-items: center;
+  gap: 1.5rem;
 }
 
+/* Button Styling */
 button {
-  background-color: #0a3990;
+  background-color: #14105b;
   color: white;
   border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 1.2rem;
   cursor: pointer;
-  font-size: 16px;
+  font-weight: bold;
+  width: 220px;
+  text-align: center;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
+/* Button Hover Effect */
 button:hover {
-  background-color: #094080;
+  background-color: #06235a;
+  transform: scale(1.05);
+}
+
+/* Specific Button Styling (Optional) */
+button:nth-child(2) {
+  background-color: #ff6f3c;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+button:nth-child(2):hover {
+  background-color: #e65c30;
+  transform: scale(1.05);
 }

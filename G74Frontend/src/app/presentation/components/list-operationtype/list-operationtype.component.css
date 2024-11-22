@@ -1,0 +1,101 @@
+.container {
+  background: linear-gradient(135deg, #02012c, #06235a);
+  min-height: 100vh; /* Garante altura mínima */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  box-sizing: border-box;
+  padding-top: 100px; /* Espaço para os filtros fixos */
+}
+
+.filters {
+  background-color: #1e1e3f;
+  padding: 20px;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 800px; /* Limita a largura */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative; /* Fixa os filtros no topo */
+  top: 0; /* Sempre no topo */
+  left: 20%; /* Centraliza horizontalmente */
+  transform: translateX(-50%); /* Ajuste para centralizar */
+  z-index: 100; /* Fica acima de outros elementos */
+}
+
+.filters label {
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.filters input {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #cccccc;
+  margin-bottom: 1.2rem;
+  background-color: #2c2c55;
+  color: white;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.actions button {
+  background-color: #ff6f3c;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.actions button:hover {
+  background-color: #e65c30;
+  transform: scale(1.05);
+}
+
+table {
+  width: 100%;
+  max-width: 900px;
+  margin-top: 200px; /* Espaço abaixo dos filtros fixos */
+  border-collapse: collapse;
+  text-align: left;
+  background-color: #2c2c55;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+table th, table td {
+  padding: 10px 15px;
+  border: 1px solid #444;
+  color: white;
+}
+
+table th {
+  background-color: #1e1e3f;
+  font-weight: bold;
+}
+
+table tr:nth-child(even) {
+  background-color: #3b3b5a;
+}
+
+.message {
+  margin-top: 200px; /* Espaço para alinhar com os filtros */
+  font-size: 1.2rem;
+  color: #f44336;
+}
+
+p {
+  font-size: 1.2rem;
+  color: #f44336;
+  margin-top: 2rem;
+}
