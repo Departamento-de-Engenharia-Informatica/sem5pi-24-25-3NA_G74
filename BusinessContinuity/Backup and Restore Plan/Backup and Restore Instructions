@@ -1,0 +1,15 @@
+The backup and restore scripts should be run on a Separate machine than the Active machine and the Backup machine.
+
+On the Separate linux machine git clone the repository to have access to these scripts.
+then do ```chmod +x backup.sh restore.sh``` in the same folder as them to make them executable.
+
+In both the Active and the Backup add a public ssh key from the Separate to the .ssh/authorized_keys file, in a new
+line.
+
+On the Separate add the crontab configuration so the backup.sh runs every hour:
+```crontab -e``` and then add to the file ```10 * * * * /bin/sh backup.sh    # every hour at 10"```, which will make
+backup.sh run every hour on the 10th minute.
+
+On the Backup machine, .net 8.0 sdk should be preinstalled, along with nano and nginx.
+
+In case of disaster all that is needed is to run on the Separate .restore.sh.
