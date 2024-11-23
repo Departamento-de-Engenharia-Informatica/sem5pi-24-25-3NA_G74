@@ -45,4 +45,11 @@ export class MockPatientViewModel {
     const patient = this.mockPatients.find((p) => p.contactInformation.emailAddress === email);
     return of(patient ? 'mock-medical-record-number' : '');
   }
+
+  public getMockPatients() {
+
+    return this.mockPatients;
+
+  }
+
 }
