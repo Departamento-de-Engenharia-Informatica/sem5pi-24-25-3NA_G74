@@ -1,3 +1,0 @@
-# run this command in the same directory as the script to schedule it
-# to run every day at 2am
-0 2 * * * /bin/sh backup_script.sh
