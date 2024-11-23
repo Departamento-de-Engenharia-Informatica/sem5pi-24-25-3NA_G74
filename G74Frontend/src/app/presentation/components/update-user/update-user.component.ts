@@ -3,9 +3,7 @@ import {catchError} from 'rxjs/operators';
 import {of} from 'rxjs';
 import {User} from '../../../domain/models/user.model';
 import {UserViewmodel} from '../../../application/viewmodels/user.viewmodel';
-import {AuthService} from '../../../domain/services/auth.service';
 import {LoginViewModel} from '../../../application/viewmodels/login-viewmodel';
-import {log} from 'node:util';
 
 @Component({
   selector: 'app-update-user',

@@ -3,10 +3,6 @@ import { Component, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { OperationRequest } from '../../../domain/models/operationRequest.model';
 import { OperationRequestService } from '../../../application/services/operationRequest.service';
-import { OperationType } from '../../../domain/models/operationType.model';
-import { OperationRequestRepository } from '../../../infrastructure/repositories/operationRequest-repository';
-import { HttpClient } from '@angular/common/http';
-import { error } from 'console';
 
 @Component({
   selector: 'app-register-operation',
@@ -14,20 +10,20 @@ import { error } from 'console';
   imports: [CommonModule,FormsModule],
   templateUrl: './register-operation.component.html',
   styleUrl: './register-operation.component.css',
-  encapsulation: ViewEncapsulation.None 
+  encapsulation: ViewEncapsulation.None
 })
 
 export class RegisterOperationComponent {
 
   constructor(private operationRequestService: OperationRequestService) { }
-  
+
   priority: string = "";
   medicalRecordNumber: string = "";
   operationType: number = -1;
   licenceNumber: number = 0;
   operationDate: string = "";
   operationTypeId: number = 0;
-  
+
   operationRequest: OperationRequest = {
     medicalRecordNumber: "",
     licenceNumber: 0,
@@ -36,7 +32,7 @@ export class RegisterOperationComponent {
     deadlineDate: ""
   }
 
-  
+
 
   trackByIndex(index: number, obj: any): any {
     return index;
@@ -47,10 +43,10 @@ export class RegisterOperationComponent {
     this.operationRequest.licenceNumber = this.licenceNumber;
     this.operationRequest.operationTypeId = this.operationTypeId;
     this.operationRequest.priority = this.priority;
-    
+
     if (typeof this.operationDate === 'string') {
       this.operationRequest.deadlineDate = this.operationDate;
-      
+
     } ;
     console.log(this.operationRequest);
 
