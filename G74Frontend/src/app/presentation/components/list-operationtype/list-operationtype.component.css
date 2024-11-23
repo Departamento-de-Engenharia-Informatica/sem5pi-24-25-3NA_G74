@@ -18,8 +18,7 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   position: relative; /* Fixa os filtros no topo */
   top: 0; /* Sempre no topo */
-  left: 20%; /* Centraliza horizontalmente */
-  transform: translateX(-50%); /* Ajuste para centralizar */
+
   z-index: 100; /* Fica acima de outros elementos */
 }
 
@@ -71,6 +70,7 @@ table {
   background-color: #2c2c55;
   border-radius: 8px;
   overflow: hidden;
+
 }
 
 table th, table td {

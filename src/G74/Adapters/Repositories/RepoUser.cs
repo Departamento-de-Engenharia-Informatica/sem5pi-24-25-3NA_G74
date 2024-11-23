@@ -63,10 +63,10 @@ public class RepoUser : GenericRepository<User>, IRepoUser
             .AnyAsync(u => u.Email.Equals(email));
     }
 
-    public async Task<User> UpdateUser(User updatedUser)
+    public async Task<User> UpdateUser(string email, User updatedUser)
     {
         UserDataModel userDataModel = await _context.Set<UserDataModel>()
-            .FirstAsync(p => p.Email == updatedUser.email.email);
+            .FirstAsync(p => p.Email == email);
 
         _userToDataModelMapper.UpdateDataModel(userDataModel, updatedUser);
         _context.Entry(userDataModel).State = EntityState.Modified;

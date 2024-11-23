@@ -2,10 +2,6 @@
   <div class="filters">
     <form (ngSubmit)="fetchOperationType()" #filterForm="ngForm">
       <div class="filter-group">
-        <label for="operationTypeId">Operation Type Id:</label>
-        <input type="text" id="operationTypeId" [(ngModel)]="filters.operationTypeId" name="operationTypeId" />
-      </div>
-      <div class="filter-group">
         <label for="name">Name:</label>
         <input type="text" id="name" [(ngModel)]="filters.name" name="name" />
       </div>

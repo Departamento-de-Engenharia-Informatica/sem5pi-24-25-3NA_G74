@@ -70,4 +70,9 @@ export class AuthService {
         const user = this.currentUserSubject.value;
         return user?.role === 'Admin';
     }
+
+    loginEmail(): string {
+      const user = this.currentUserSubject.value;
+      return user.email;
+    }
 }

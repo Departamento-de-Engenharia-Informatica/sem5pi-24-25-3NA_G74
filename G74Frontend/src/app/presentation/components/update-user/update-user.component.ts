@@ -3,6 +3,9 @@ import {catchError} from 'rxjs/operators';
 import {of} from 'rxjs';
 import {User} from '../../../domain/models/user.model';
 import {UserViewmodel} from '../../../application/viewmodels/user.viewmodel';
+import {AuthService} from '../../../domain/services/auth.service';
+import {LoginViewModel} from '../../../application/viewmodels/login-viewmodel';
+import {log} from 'node:util';
 
 @Component({
   selector: 'app-update-user',
@@ -17,14 +20,13 @@ export class UpdateUserComponent {
   newEmail: string = '';
   user: Partial<User> = {};
 
-  constructor(private userViewmodel: UserViewmodel) {
+  constructor(private userViewmodel: UserViewmodel, private loginViewModel: LoginViewModel) {
   }
 
   submitEmail() {
     if (this.email) {
       this.isEditing = true;
       this.message = '';
-      this.user.email = this.email;
     } else {
       this.message = 'Please enter a valid email.';
     }

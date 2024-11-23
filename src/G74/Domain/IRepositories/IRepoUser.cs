@@ -10,7 +10,7 @@ public interface IRepoUser
     Task<User> Save(User user);
     Task<User> GetUserByEmail(string email);
     Task<bool> UserExists(string email);
-    Task<User> UpdateUser(User updatedUser);
+    Task<User> UpdateUser(string email, User updatedUser);
     Task MarkUserToBeDeleted(User user, TimeSpan retainInfoPeriod);
     Task ExportUserDataToProlog();
 }

@@ -55,6 +55,10 @@ public class UserAppService
 
         if (updatedInfoUserDto.Email != null)
         {
+            if (_repoUser.UserExists(updatedInfoUserDto.Email).Result && !updatedInfoUserDto.Email.Equals(email))
+            {
+                throw new InvalidOperationException("Changed email already exists.");
+            }
             user.UpdateEmail(new Email(updatedInfoUserDto.Email));
         }
 
@@ -63,8 +67,9 @@ public class UserAppService
             user.UpdateRole(updatedInfoUserDto.Role);
         }
 
-        var updatedUser = _repoUser.UpdateUser(user).Result;
-
+        var updatedUser = _repoUser.UpdateUser(email, user).Result;
+        
+        
         if (updatedUser == null)
         {
             throw new InvalidOperationException("Could not update user info");
