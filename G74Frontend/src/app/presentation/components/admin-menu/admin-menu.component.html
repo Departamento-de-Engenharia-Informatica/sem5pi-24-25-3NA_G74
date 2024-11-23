@@ -7,7 +7,7 @@
 
     <!-- Patient Management -->
     <button class="menu-button" (click)="navigateTo('create-patient')">Create Patient Profile</button>
-    
+
     <button class="menu-button" (click)="navigateTo('list-patient')">Manage Patient Profiles</button>
 
     <!-- Staff Management -->
@@ -19,6 +19,8 @@
   </div>
 
   <!-- Logout Button -->
-  <button class="logout-button" (click)="logout()">Logout</button>
+  <div class="logout-container">
+    <button class="logout-button" (click)="logout()">Logout</button>
+  </div>
 </div>
 <router-outlet></router-outlet>

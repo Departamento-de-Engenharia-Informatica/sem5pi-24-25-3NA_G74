@@ -114,6 +114,8 @@ public class PatientRepository : GenericRepository<Patient>, IPatientRepository
     {
         IQueryable<PatientDataModel> myQueryable = _context.Set<PatientDataModel>();
 
+        myQueryable = myQueryable.Where(p => p.MarkedForDeletion == false);
+
         if (name != null && name.Length > 0)
         {
             myQueryable = ApplyNameFilter(myQueryable, name);
