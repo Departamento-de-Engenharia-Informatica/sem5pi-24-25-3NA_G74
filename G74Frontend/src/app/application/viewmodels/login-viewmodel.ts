@@ -15,7 +15,7 @@ export class LoginViewModel {
     login(login: LoginInfo): Observable<LoginResponse> {
         return this.authService.login(login);
     }
-    
+
     googleLogin(token: string): Observable<LoginResponse> {
         return this.authService.googleLogin(token);
     }
@@ -23,7 +23,10 @@ export class LoginViewModel {
     logout(): void {
         this.authService.logout(); // This removes the token and resets the user session
     }
-    
+
+    loginEmail() {
+        return this.authService.loginEmail();
+    }
 
 }
 

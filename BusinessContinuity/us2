@@ -1,0 +1,37 @@
+Realizada por Rui Beloto 1121200:
+US 6.4.8 - As system administrator, I only want clients on the DEI's internal network (wired
+           or via VPN) to be able to access the solution.
+           
+Para limitar o acesso a clientes que usam a rede interna do DEI é preciso colocar o intervalo de IPs da rede do DEI na iptables.
+Para conseguir isso seria necessário conhecer o intervalo de IPs usado pelo DHCP. Como não conhecemos, usaremos um script para simular de que forma seria feita essa restrição.
+O objetivo é usar um ficheiro de texto com os IPs que queremos permitir e depois correr o script que faz a leitura para colocar os mesmos na iptable.
+
+Para começar verifico como está a iptable com os seguintes comandos da imagem.
+
+#img 1#
+
+De seguida, crio o ficheiro de texto que vai receber a lista de IPs e crio o ficheiro onde vai ter o script.
+
+#img 4#
+
+Depois adiciono os comandos ao script. Vou usar um while para ler os IPs do ficheiro e dois comandos para colocar o IP aceite e rejeitado na iptable:
+
+sudo iptables -A INPUT -p tcp -s "$IP" --dport 4200 -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 4200 -j DROP
+
+#img 7#
+
+O comando iptables-save permite guardar em persistencia a iptable, neste caso, no ficheiro rules.v4.
+
+Antes de poder executar o script necessito instalar a persistencia.
+
+#img 6#
+
+Por fim, corro o script e automaticamente coloca os ips do ficheiro na iptable.
+
+#img 8#
+
+Como a lista de IPs é ficticia e serve apenas para simular os IPs da rede do DEI fizemos flush à iptable.
+Para demonstrações basta colocar os ips e correr o script.
+
+#img 9#
