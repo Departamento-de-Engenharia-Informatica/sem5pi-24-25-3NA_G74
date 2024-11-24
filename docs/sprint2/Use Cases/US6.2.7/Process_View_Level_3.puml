@@ -1,0 +1,51 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+participant "patient-update component" as puc
+
+participant "patient viewmodel" as pvm
+
+participant "patient service" as ps
+
+participant "backend api" as bapi
+
+
+-> puc : Clicks update button
+
+activate puc
+
+puc -> pvm : getMedicalRecordNumber(email) 
+
+activate pvm
+
+pvm --> puc : medicalRecordNumber
+
+pvm -> ps : updatePatientProfile(patient, \nmedicalRecordNumber)
+
+activate ps
+
+ps -> bapi : PATCH
+
+activate bapi
+
+bapi --> ps : response
+
+deactivate bapi
+
+ps --> pvm : response
+
+deactivate ps
+
+pvm --> puc : response
+
+deactivate pvm
+
+<-- puc : Informs update success/failure
+
+deactivate puc
+
+
+
+@enduml

@@ -1,0 +1,48 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor "Administrator" as admin
+
+
+box "<<Context (C4)>>\n Surgical Appointment and Resource Management"
+
+participant Visualization as ui <<Container(C4)>>
+participant Backoffice as bo <<Container(C4)>>
+
+activate admin
+
+admin -> ui : Asks to update patient profile
+
+activate ui
+
+ui --> admin : Shows the update form
+
+admin -> ui: Fills the update form and submits
+
+
+ui -> bo : PATCH update Patient 
+
+activate bo
+
+alt success
+
+bo --> ui : Status Code 200, Patient updated
+
+ui --> admin : Confirms update success
+
+else failure
+
+bo --> ui:  Client/Server error Status Code
+
+deactivate bo
+
+ui --> admin: Informs update failure
+
+deactivate ui
+
+end
+
+
+@enduml
