@@ -1,0 +1,30 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+
+actor "Administrator" as admin
+
+participant ":SARM" as sys
+
+activate admin
+
+admin -> sys : Asks to list \na patient profiles
+
+activate sys
+
+alt success
+
+sys --> admin : Shows list of patient profiles
+
+else failure
+
+sys --> admin : Informs that no patient was found
+
+deactivate sys
+deactivate admin
+
+end
+
+@enduml

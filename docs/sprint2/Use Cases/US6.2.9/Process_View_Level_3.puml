@@ -1,0 +1,49 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+participant "patient-list component" as plc
+
+participant "patient viewmodel" as pvm
+
+participant "patient service" as ps
+
+participant "backend api" as bapi
+
+
+-> plc : Clicks search button
+
+activate plc
+
+plc -> pvm : listPatients(filters) 
+
+activate pvm
+
+pvm -> ps : listPatients(filters)
+
+activate ps
+
+ps -> bapi : GET
+
+activate bapi
+
+bapi --> ps : response
+
+deactivate bapi
+
+ps --> pvm : response
+
+deactivate ps
+
+pvm --> plc : response
+
+deactivate pvm
+
+<-- plc : Shows patient profiles
+
+deactivate plc
+
+
+
+@enduml
