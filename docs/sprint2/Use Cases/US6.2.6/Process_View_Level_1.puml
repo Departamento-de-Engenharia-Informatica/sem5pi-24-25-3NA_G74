@@ -1,0 +1,34 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+
+actor "Administrator" as admin
+
+participant ":SARM" as sys
+
+activate admin
+
+admin -> sys : Asks to register \na patient profile
+
+activate sys
+
+sys --> admin : Shows the form
+
+admin -> sys: Fills the form and submits
+
+alt success
+
+sys --> admin : Informs registration success
+
+else failure
+
+sys --> admin : Informs registration was unsuccessful
+
+deactivate sys
+deactivate admin
+
+end
+
+@enduml

@@ -1,0 +1,49 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+participant "patient-create component" as pcc
+
+participant "patient viewmodel" as pvm
+
+participant "patient service" as ps
+
+participant "backend api" as bapi
+
+
+-> pcc : Clicks create button
+
+activate pcc
+
+pcc -> pvm : createPatientProfile(patient) 
+
+activate pvm
+
+pvm -> ps : createPatientProfile(patient)
+
+activate ps
+
+ps -> bapi : POST
+
+activate bapi
+
+bapi --> ps : response
+
+deactivate bapi
+
+ps --> pvm : response
+
+deactivate ps
+
+pvm --> pcc : response
+
+deactivate pvm
+
+<-- pcc : Informs registration success/failure
+
+deactivate pcc
+
+
+
+@enduml
