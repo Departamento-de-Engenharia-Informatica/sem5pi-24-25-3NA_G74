@@ -21,12 +21,12 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import {ListOperationtypeComponent} from './presentation/components/list-operationtype/list-operationtype.component';
 import { JwtInterceptor } from './domain/services/jwt-interceptor.service';
 import { LoginComponent } from './presentation/components/login/login.component';
+import { HeaderStaticComponent } from './presentation/components/header-static/header-static.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    AdminMenuComponent,
     PatientCreateComponent,  // Add the component here
     PatientUpdateComponent,
     PatientDeleteComponent,
@@ -34,11 +34,10 @@ import { LoginComponent } from './presentation/components/login/login.component'
     RegisterUserComponent,
     UpdateUserComponent,
     DeleteUserComponent,
-    MainMenuComponent,
     PatientMenuComponent,
     HeaderComponent,
     ListOperationtypeComponent,
-    LoginComponent
+    LoginComponent,
   ],
   imports: [
     BrowserModule,

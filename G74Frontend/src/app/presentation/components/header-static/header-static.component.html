@@ -1,0 +1,16 @@
+<header class="header" style="margin-bottom: 60px; ">
+    <div style="display: flex; flex-direction: row; gap: 40px;">
+        <img src="https://portal.isep.ipp.pt/global/images/intranet/escolas/i_isep_portal_logo_2023.png" style="height: 50px;width: auto; margin-top: 5px;">
+        <h1 class="header-title">G74 - SARM</h1>
+    
+    
+        <div class="url-buttons" style="gap: 0; margin-top: 10px;">
+            <button id="butaoUrl" (click)="navigateToHome()">
+                /main
+            </button>
+            <button *ngFor="let segment of urlSegments" (click)="navigateTo(segment)" id="butaoUrl">
+            /{{ segment }}
+            </button>
+        </div>
+    </div>
+</header>

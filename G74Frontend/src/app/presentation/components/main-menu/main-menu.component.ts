@@ -1,6 +1,7 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginViewModel } from '../../../application/viewmodels/login-viewmodel';
+import { HeaderStaticComponent } from '../header-static/header-static.component';
 
 declare const google: any; // Reference the Google Sign-In library
 
@@ -8,7 +9,9 @@ declare const google: any; // Reference the Google Sign-In library
   selector: 'app-main-menu',
   templateUrl: './main-menu.component.html',
   styleUrls: ['./main-menu.component.css'],
+  standalone:true,
   encapsulation: ViewEncapsulation.None,
+  imports: [HeaderStaticComponent],
 })
 export class MainMenuComponent {
   constructor(private router: Router, private loginViewModel: LoginViewModel) { }

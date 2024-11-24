@@ -10,11 +10,12 @@ public class AppServiceOperationRequest : IAppServiceOperationRequest
 {
     private readonly IOperationRequestRepository _operationRepository;
     private readonly IPatientAppService _patientAppService;
-    private readonly StaffService _staffService;
+    private readonly IStaffService _staffService;
 
 
-    public AppServiceOperationRequest(IOperationRequestRepository operationRepository, IPatientAppService patientAppService, StaffService staffService)
+    public AppServiceOperationRequest(IOperationRequestRepository operationRepository, IPatientAppService patientAppService, IStaffService staffService)
     {
+
         _operationRepository = operationRepository;
         _patientAppService = patientAppService;
         _staffService = staffService;
@@ -57,8 +58,7 @@ public class AppServiceOperationRequest : IAppServiceOperationRequest
         {
             throw new ArgumentException("Invalid priority");
         }
-
-
+    
         if (await _patientAppService.GetPatientByMedicalRecordNumber(new MedicalRecordNumber(operationDto.MedicalRecordNumber)) == null)
         {
             throw new ArgumentException("No patient found with this medical record number");

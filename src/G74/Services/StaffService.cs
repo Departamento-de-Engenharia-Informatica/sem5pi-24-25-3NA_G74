@@ -89,7 +89,7 @@ public class StaffService : IStaffService
         {
             return null;
         }
-        
+        Console.WriteLine("POIS");
         staff.Deactivate();
 
         Staff? updatedStaff = await _repo.Update(new LicenceNumber(licenceNumber), staff);
