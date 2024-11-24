@@ -1,15 +1,15 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { OperationRequest, OperationRequestDTO } from '../../../domain/models/operationRequest.model';
 import {OperationRequestService} from '../../../application/services/operationRequest.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-
+import {HeaderStaticComponent} from '../header-static/header-static.component';
 @Component({
   selector: 'app-list-all-operation',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, HeaderStaticComponent],
   templateUrl: './list-all-operation.component.html',
   styleUrl: './list-all-operation.component.css',
   encapsulation: ViewEncapsulation.None 
