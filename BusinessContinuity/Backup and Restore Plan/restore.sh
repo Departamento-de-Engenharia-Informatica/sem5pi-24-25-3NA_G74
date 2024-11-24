@@ -2,7 +2,7 @@
 
 # Configuration Variables
 REMOTE_HOST="vsgate-ssh.dei.isep.ipp.pt"
-REMOTE_PORT="11047"
+REMOTE_PORT="10657"
 REMOTE_USER="root"
 BACKUP_DIR="$HOME/sarm_server_backups"
 RESTORE_LOG="$HOME/server_restore.log"
