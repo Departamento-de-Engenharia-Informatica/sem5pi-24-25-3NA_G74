@@ -1,3 +1,11 @@
+
+US 7.2.2
+
+What information is to be known in an Allergy? Like designation, and anything more?
+
+it consist of a code (for instance, SNOMED CT (Systematized Nomenclature of Medicine - Clinical Terms) or ICD-11 (International Classification of Diseases, 11th Revision)), a designation and an optional longer description
+
+
 Acceptance Criteria
 
         The system must provide an interface for the Admin to add new allergies.
