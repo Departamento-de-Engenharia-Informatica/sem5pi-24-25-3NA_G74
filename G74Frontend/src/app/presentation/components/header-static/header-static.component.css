@@ -1,37 +1,80 @@
-.header {
-     /* Cor de fundo do header */
-    padding: 20px; /* Espaçamento interno */
-    text-align: center; /* Centralizar o texto */
-    position:absolute;
-    top: 0;
-    left: 0;
-    
-     /* Linha inferior */
-    width: 100%;
+#header {
+  position: fixed;
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  height: 60px;
+  width: 100%;
+  z-index: 1000;
+  background-color: white;
+  
 }
-  
-  .header-title {
-    margin: 0; /* Remover margem padrão */
-    font-size: 24px; /* Tamanho da fonte do título */
-    color: white; /* Cor do texto do título */
-  }
-  
-  .header-message {
-    margin: 5px 0 0; /* Margem superior de 5px e zero nas laterais e inferior */
-    font-size: 16px; /* Tamanho da fonte da mensagem */
-    color: #666; /* Cor do texto da mensagem */
-  }
 
-  #butaoUrl{
-    padding: 10px;
-    border: none;
-   
-    color:black;
-    cursor:pointer;
-    font-size: 18px;
-  }
+#title{
+  color: rgb(117, 2, 2);
+  margin-top: 16px;
+  margin-left: 20px;
+  font-size: 40px;
+  font-weight: bold;
+}
 
-#butaoUrl:hover{
-  color:blue;
-  text-decoration: underline;
+#menuIcon{
+  color: rgb(117, 2, 2);
+  margin-left: 10px;
+  font-size: 24px;
+}
+
+#menuIcon:hover{
+  color: orange;
+  margin-left: 10px;
+  font-size: 25px;
+}
+
+#closeIcon{
+  color: rgb(117, 2, 2);
+  margin-left: 10px;
+  font-size: 24px;
+}
+
+#closeIcon:hover{
+  color: orange;
+  margin-left: 10px;
+  font-size: 25px;
+}
+
+#path{
+  margin-left: 20px;
+}
+
+#title-path-logout{
+  display: flex;
+  gap: 15px;
+  width: 100%;
+  
+  height: 40px;
+  flex-direction: row;
+  justify-content: end;
+  align-items: center;
+}
+
+#login-button{
+  padding: 3px;
+  margin-right: 20px;
+  color: white;
+  font-size: 20px;
+ 
+  border-radius: 5px;
+  background-color: rgb(117, 2, 2);
+  cursor: pointer;
+}
+
+#login-button:hover{
+  margin-right: 20px;
+  color: white;
+  font-size: 20px;
+  padding: 4px;
+  border-radius: 5px;
+  background-color: rgb(66, 1, 1);
+  cursor: pointer;
 }

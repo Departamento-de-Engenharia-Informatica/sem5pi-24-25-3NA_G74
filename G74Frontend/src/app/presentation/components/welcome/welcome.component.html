@@ -1,0 +1,13 @@
+<div>
+    <app-header-static></app-header-static>
+</div>
+
+<div id="welcome-message">
+    <h1 id="welcome-text">Welcome, {{user.username}} !!!</h1>
+    <div *ngIf="user?.role === 'Patient'">
+        <img src="https://cdn-icons-png.flaticon.com/512/843/843293.png" style="width: 180px;">
+    </div>
+    <div *ngIf="user?.role === 'Patient'" >
+        <img src="https://cdn-icons-png.flaticon.com/512/843/843216.png" style="width: 180px;">
+    </div>
+</div>

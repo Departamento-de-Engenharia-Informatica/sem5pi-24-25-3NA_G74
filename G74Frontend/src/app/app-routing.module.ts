@@ -18,16 +18,17 @@ import { RegisterOperationComponent } from './presentation/components/register-o
 import { UpdateOperationComponent } from './presentation/components/update-operation/update-operation.component';
 import { ListAllOperationComponent } from './presentation/components/list-all-operation/list-all-operation.component';
 import { DeleteOperationComponent } from './presentation/components/delete-operation/delete-operation.component';
-
 import {ListOperationtypeComponent} from './presentation/components/list-operationtype/list-operationtype.component';
 import { LoginComponent } from './presentation/components/login/login.component';
 import { AuthGuard } from './domain/services/auth-guard.service';
 import { UnauthorizedComponent } from './presentation/components/unauthorized/unauthorized.component';
+import { WelcomeComponent } from './presentation/components/welcome/welcome.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/main', pathMatch: 'full' },
   { path: 'main', component: MainMenuComponent },
   { path: 'login', component: LoginComponent},
+  { path: 'home', component: WelcomeComponent },
   { path: 'admin', component: AdminMenuComponent, canActivate: [AuthGuard], data: {role : 'Admin'} },
   { path: 'patient', component: PatientMenuComponent , canActivate: [AuthGuard], data: { role: 'Patient' } }, //Mete tu se quiseres Rui
   { path: 'admin/create-patient', component: PatientCreateComponent },

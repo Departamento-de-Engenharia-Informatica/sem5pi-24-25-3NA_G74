@@ -1,0 +1,16 @@
+body{
+    background: linear-gradient(135deg, #02012c, #06235a);
+}
+
+#welcome-message{
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+    height: 100vh;
+    text-align: center;
+    
+    
+}

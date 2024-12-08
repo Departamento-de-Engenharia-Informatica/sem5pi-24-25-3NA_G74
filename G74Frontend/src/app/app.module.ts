@@ -22,6 +22,8 @@ import {ListOperationtypeComponent} from './presentation/components/list-operati
 import { JwtInterceptor } from './domain/services/jwt-interceptor.service';
 import { LoginComponent } from './presentation/components/login/login.component';
 import { HeaderStaticComponent } from './presentation/components/header-static/header-static.component';
+import { NavbarComponent } from './presentation/components/navbar/navbar.component';
+import { WelcomeComponent } from './presentation/components/welcome/welcome.component';
 
 
 @NgModule({
@@ -34,10 +36,10 @@ import { HeaderStaticComponent } from './presentation/components/header-static/h
     RegisterUserComponent,
     UpdateUserComponent,
     DeleteUserComponent,
-    PatientMenuComponent,
     HeaderComponent,
     ListOperationtypeComponent,
     LoginComponent,
+    
   ],
   imports: [
     BrowserModule,
