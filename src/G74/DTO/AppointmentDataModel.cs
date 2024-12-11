@@ -24,4 +24,12 @@ public class AppointmentDataModel : Entity<Guid>
         time = appointment.time;
         status = appointment.status.ToString();
     }
+    public AppointmentDataModel(int operationRequestId, int surgeryRoomId, string date, int time, string status) : base(Guid.NewGuid())
+        {
+            this.operationRequestId = operationRequestId;
+            this.surgeryRoomId = surgeryRoomId;
+            this.date = date;
+            this.time = time;
+            this.status = status;
+        }
 }
