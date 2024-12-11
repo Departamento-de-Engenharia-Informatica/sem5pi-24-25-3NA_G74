@@ -1,0 +1,30 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor "Doctor" as adm
+
+
+participant ControllerAppointment as ct
+participant CreateAppointmentDTO as cdto
+participant AppServiceAppointment as service
+participant AppointmentBuilder as builder
+participant Appointment as ap
+participant AppointmentMapper as mapper
+participant DataAppointment as data
+participant AppointmentRepository as repository
+participant BackofficeAppDbContext as db
+
+
+adm -> ct: POST [FormBody]
+
+
+
+
+
+
+
+
+
+@enduml

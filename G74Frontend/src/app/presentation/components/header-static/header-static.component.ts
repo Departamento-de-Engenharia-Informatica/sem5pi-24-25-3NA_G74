@@ -3,7 +3,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { AuthService } from '../../../domain/services/auth.service';
-
+import {LoginViewModel} from '../../../application/viewmodels/login-viewmodel'
 @Component({
   selector: 'app-header-static',
   templateUrl: './header-static.component.html',
@@ -17,13 +17,14 @@ export class HeaderStaticComponent implements OnInit{
   urlSegments: string[] = [];
   isMenuVisible = true;
   user: any;
-  constructor(private router:Router,private authService: AuthService) {
+  constructor(private router:Router,private authService: AuthService, private loginViewModel: LoginViewModel) {
   }
 
   ngOnInit(): void {
     this.currentUrl = this.router.url;
     this.urlSegments = this.currentUrl.split('/').filter(segment => segment);
     this.user = this.authService.currentUserSubject.value;
+  
   }
 
   navigateTo(segment: string): void {
@@ -38,6 +39,11 @@ export class HeaderStaticComponent implements OnInit{
 
   toggleMenu() {
     this.isMenuVisible = !this.isMenuVisible;
+  }
+
+  logout(){
+    console.log("Ola");
+    this.loginViewModel.logout();
   }
 
   

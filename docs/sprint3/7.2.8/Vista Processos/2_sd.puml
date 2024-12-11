@@ -13,18 +13,18 @@ participant Backoffice as bo <<Container(C4)>>
 
 activate adm
 
-adm -> ui : Create Appointment
+adm -> ui : Request new operation
 
 activate ui
 
-ui -> bo : Create OperationRequest
+ui -> bo : POST request OperationRequest
 
 activate bo
 
 
 alt success
 
-bo --> ui : Status Code 200, OperationRequest(s) readed
+bo --> ui : Status Code 201, OperationRequest created
 
 else failure
 
@@ -39,5 +39,3 @@ deactivate bo
 
 
 
-
-@enduml

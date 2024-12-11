@@ -28,4 +28,11 @@ public class AppointmentRepository : GenericRepository<Appointment>, IAppointmen
     {
         //TODO:Terminar Rui Beloto.
     }
+
+    public async Task<Appointment> Create(AppointmentDataModel appointmentDataModel)
+    {
+        _context.Appointments.Add(appointmentDataModel);
+        await _context.SaveChangesAsync();
+        return AppointmentToDataModelMapper.FromDataModelToDomain(appointmentDataModel);
+    }
 }

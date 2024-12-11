@@ -148,6 +148,7 @@ public class Startup
         services.AddScoped<StaffController>();
         services.AddScoped<IOperationTypeRepository,OperationTypeRepository>();
         services.AddScoped<IAppointmentRepository,AppointmentRepository>();
+        services.AddScoped<IAppServiceAppointment,AppServiceAppointment>();
         services.AddScoped<ISurgeryRoomRepository,SurgeryRoomRepository>();
         services.AddTransient<OperationTypeToDataModelMapper>();
         services.AddTransient<AppointmentToDataModelMapper>();

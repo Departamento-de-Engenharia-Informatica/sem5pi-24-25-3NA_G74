@@ -1,0 +1,25 @@
+@startuml
+
+actor "Doctor" as doctor
+
+participant ":SARM" as sys
+
+activate doctor
+
+doctor -> sys : create appointment 
+
+activate sys 
+
+alt success
+
+sys --> doctor : 201 Created Status
+
+else failure
+
+sys --> doctor : Error Status Code
+
+
+end
+
+
+@enduml
