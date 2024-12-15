@@ -3,6 +3,7 @@ import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 import { Guard } from "../core/logic/Guard";
 import { Result } from "../core/logic/Result";
 import { IMedicalConditionDTO } from "../dto/IMedicalConditionDTO";
+import { Allergy } from "./Allergy";
 
 interface MedicalConditionProps {
     medicalConditionCode: string;
