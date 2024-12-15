@@ -11,7 +11,7 @@ interface MedicalRecordProps
     designation: string;
 }
 
-class MedicalRecord extends AggregateRoot<MedicalRecordProps>{
+export class MedicalRecord extends AggregateRoot<MedicalRecordProps>{
 
     get getId(): UniqueEntityID 
     {
@@ -46,6 +46,10 @@ class MedicalRecord extends AggregateRoot<MedicalRecordProps>{
     set setDesignation(value: string)
     {
         this.props.designation = value;
+    }
+
+    private constructor(props:MedicalRecordProps, id?: UniqueEntityID){
+        super(props,id);
     }
 
     
