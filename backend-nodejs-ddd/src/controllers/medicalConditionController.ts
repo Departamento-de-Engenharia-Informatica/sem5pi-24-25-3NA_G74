@@ -62,7 +62,7 @@ export default class MedicalConditionController extends BaseController implement
 
     public async searchMedicalCondition(req: Request, res: Response, next: NextFunction) {
         try {
-            const medicalConditionOrError = await this.medicalConditionServiceInstance.SearchMedicalCondition(req.params.description) as Result<IMedicalConditionDTO[]>;
+            const medicalConditionOrError = await this.medicalConditionServiceInstance.SearchMedicalCondition(req.params.medicalConditionCode, req.params.designation) as Result<IMedicalConditionDTO[]>;
 
             if (medicalConditionOrError.isFailure) {
                 return res.status(404).send();

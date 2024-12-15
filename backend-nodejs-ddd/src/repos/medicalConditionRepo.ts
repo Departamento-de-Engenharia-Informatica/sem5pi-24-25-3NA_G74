@@ -47,7 +47,10 @@ export default class MedicalConditionRepo implements IMedicalConditionRepo {
 
                 return MedicalConditionMap.toDomain(medicalConditionCreated);
             } else {
+
+                medicalConditionDocument.designation = medicalCondition.designation;
                 medicalConditionDocument.description = medicalCondition.description;
+
                 await medicalConditionDocument.save();
 
                 return medicalCondition;
@@ -55,9 +58,8 @@ export default class MedicalConditionRepo implements IMedicalConditionRepo {
         } catch (err) {
             throw err;
         }
-
-
     }
+
     public async update(medicalCondition: MedicalCondition): Promise<MedicalCondition> {
 
         const query = { domainId: medicalCondition.id.toString() };
@@ -88,6 +90,19 @@ export default class MedicalConditionRepo implements IMedicalConditionRepo {
         }
     }
 
+    public async findByDesignation(designation: string): Promise<MedicalCondition[]> {
+    
+        const query = { designation: designation.toString() };
+        const medicalConditionRecords = await this.medicalConditionSchema.find(query);
+
+        if (medicalConditionRecords != null) {
+            return medicalConditionRecords.map((medicalConditionRecord) => MedicalConditionMap.toDomain(medicalConditionRecord));
+        } else {
+            throw Error("medical condition not found");
+        }
+    }
+
+
     public async findAll(): Promise<MedicalCondition[]> {
 
         const medicalConditionRecord = await this.medicalConditionSchema.find();
@@ -108,6 +123,19 @@ export default class MedicalConditionRepo implements IMedicalConditionRepo {
 
         if (medicalConditionDocument != null) {
             return MedicalConditionMap.toDomain(medicalConditionDocument);
+        }
+        else {
+            throw Error("medical condition not found");
+        }
+    }
+
+    public async findByMedicalConditionCode(medicalConditionCode: string): Promise<MedicalCondition> {
+        
+        const query = { medicalConditionCode: medicalConditionCode.toString() };
+        const medicalConditionRecord = await this.medicalConditionSchema.findOne(query)
+
+        if (medicalConditionRecord != null) {
+            return MedicalConditionMap.toDomain(medicalConditionRecord);
         }
         else {
             throw Error("medical condition not found");

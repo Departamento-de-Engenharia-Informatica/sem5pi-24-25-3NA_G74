@@ -17,15 +17,27 @@ export class MedicalConditionMap extends Mapper<MedicalCondition> {
 
         return {
             id: medicalCondition.id.toString(),
-            description: medicalCondition.description
+            medicalConditionCode: medicalCondition.medicalConditionCode,
+            designation: medicalCondition.designation,
+            description: medicalCondition.description,
+            commonSymptoms: medicalCondition.commonSymptoms
+
         } as IMedicalConditionDTO;
 
     }
 
     public static toDomain (raw: any | Model<IMedicalConditionPersistence & Document>): MedicalCondition {
 
+        const medicalConditionDTO: IMedicalConditionDTO = {
+            id: raw._id,
+            medicalConditionCode: raw.medicalConditionCode,
+            designation: raw.designation,
+            description: raw.description,
+            commonSymptoms: raw.commonSymptoms
+        }
+
         const medicalConditionOrError = MedicalCondition.create(
-            raw.description,
+            medicalConditionDTO,
             new UniqueEntityID(raw.domainId));
 
         medicalConditionOrError.isFailure ? console.log(medicalConditionOrError.error) : '';
@@ -37,7 +49,10 @@ export class MedicalConditionMap extends Mapper<MedicalCondition> {
     public static toPersistence (medicalCondition: MedicalCondition): any {
         return {
             domainId: medicalCondition.id.toString(),
-            description: medicalCondition.description
+            medicalConditionCode: medicalCondition.medicalConditionCode,
+            designation: medicalCondition.designation,
+            description: medicalCondition.description,
+            commonSymptoms: medicalCondition.commonSymptoms
         }
     }
 

@@ -6,6 +6,6 @@ export default interface IMedicalConditionService  {
 
     createMedicalCondition(medicalConditionDTO: IMedicalConditionDTO): Promise<Result<IMedicalConditionDTO>>;
     UpdateMedicalCondition(medicalConditionDTO: IMedicalConditionDTO): Promise<Result<IMedicalConditionDTO>>;
-    SearchMedicalCondition(description?: string): Promise<Result<IMedicalConditionDTO[]>>;
+    SearchMedicalCondition(medicalConditionCode?:string, designation?: string): Promise<Result<IMedicalConditionDTO[]>>;
 
 }

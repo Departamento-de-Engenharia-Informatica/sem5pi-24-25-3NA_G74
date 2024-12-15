@@ -1,4 +1,7 @@
 export interface IMedicalConditionPersistence {
 	_id: string;
-	description: string
+	medicalConditionCode: string;
+	designation: string;
+	description: string;
+	commonSymptoms: string;
   }

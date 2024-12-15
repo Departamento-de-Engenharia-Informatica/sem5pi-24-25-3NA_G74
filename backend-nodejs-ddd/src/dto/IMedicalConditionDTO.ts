@@ -1,4 +1,7 @@
 export interface IMedicalConditionDTO {
-    id: string;
-    description: string;
+    id?: string;
+    medicalConditionCode: string;
+    description?: string;
+    designation?: string;
+    commonSymptoms?: string;
 }

@@ -14,7 +14,7 @@ import { Result } from "../core/logic/Result";
 @Service()
 export default class MedicalConditionService implements IMedicalConditionService {
     constructor(
-        @Inject(config.repos.medicalCondition) private medicalConditionRepo: IMedicalConditionRepo,
+        @Inject(config.repos.medicalCondition.name) private medicalConditionRepo: IMedicalConditionRepo,
     ) { }
 
 
@@ -41,14 +41,18 @@ export default class MedicalConditionService implements IMedicalConditionService
 
     public async UpdateMedicalCondition(medicalConditionDTO: IMedicalConditionDTO): Promise<Result<IMedicalConditionDTO>> {
         try {
-            const medicalCondition = await this.medicalConditionRepo.findById(medicalConditionDTO.id);
+            const medicalCondition = await this.medicalConditionRepo.findByMedicalConditionCode(medicalConditionDTO.medicalConditionCode);
 
             if (medicalCondition === null) {
                 return Result.fail<IMedicalConditionDTO>("MedicalCondition not found");
             }
             else {
-
-                medicalCondition.description = medicalConditionDTO.description;
+                if(medicalConditionDTO.designation != null){
+                    medicalCondition.designation = medicalConditionDTO.designation;
+                }
+                if(medicalConditionDTO.description != null){
+                    medicalCondition.description = medicalConditionDTO.description;
+                }
                 await this.medicalConditionRepo.save(medicalCondition);
 
 
@@ -60,22 +64,34 @@ export default class MedicalConditionService implements IMedicalConditionService
         }
     }
 
-    public async SearchMedicalCondition(description?: string): Promise<Result<IMedicalConditionDTO[]>> {
+    public async SearchMedicalCondition(medicalConditionCode?:string, designation?: string): Promise<Result<IMedicalConditionDTO[]>> {
 
         try {
 
-            if (description != null) {
-                const medicalConditions = await this.medicalConditionRepo.findByDescription(description);
-                const medicalConditionDTO = MedicalConditionMap.toDTO(medicalConditions) as IMedicalConditionDTO;
-
+            if(medicalConditionCode != null){
+            
+                const medicalCondition = await this.medicalConditionRepo.findByMedicalConditionCode(medicalConditionCode);
+                const medicalConditionDTO = MedicalConditionMap.toDTO(medicalCondition) as IMedicalConditionDTO;
+            
                 let medicalConditionDTOsArray = new Array<IMedicalConditionDTO>();
                 medicalConditionDTOsArray.push(medicalConditionDTO);
                 return Result.ok<IMedicalConditionDTO[]>(medicalConditionDTOsArray);
+
+            }
+
+            if (designation != null) {
+                const medicalConditions = await this.medicalConditionRepo.findByDesignation(designation);
+
+                const medicalConditionDTOs = medicalConditions.map((medicalCondition) => MedicalConditionMap.toDTO(medicalCondition) as IMedicalConditionDTO);
+
+                return Result.ok<IMedicalConditionDTO[]>(medicalConditionDTOs);
             }
             else {
+            
                 const medicalConditions = await this.medicalConditionRepo.findAll();
                 const medicalConditionDTOs = medicalConditions.map(medicalCondition => MedicalConditionMap.toDTO(medicalCondition) as IMedicalConditionDTO);
                 return Result.ok<IMedicalConditionDTO[]>(medicalConditionDTOs);
+            
             }
 
         } catch (e) {

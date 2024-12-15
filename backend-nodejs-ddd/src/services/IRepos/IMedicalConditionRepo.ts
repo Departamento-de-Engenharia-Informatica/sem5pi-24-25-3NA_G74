@@ -8,7 +8,9 @@ export default interface IMedicalConditionRepo extends Repo<MedicalCondition> {
     save(medicalCondition: MedicalCondition): Promise<MedicalCondition>;
     update(medicalCondition: MedicalCondition): Promise<MedicalCondition>;
     findByDescription(description: string): Promise<MedicalCondition>;
+    findByDesignation(designation: string): Promise<MedicalCondition[]>;
     findAll(): Promise<MedicalCondition[]>;
     findById(id: MedicalConditionId | string): Promise<MedicalCondition>;
+    findByMedicalConditionCode(medicalConditionCode: string): Promise<MedicalCondition>;
 
 }
