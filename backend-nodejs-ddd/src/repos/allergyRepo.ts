@@ -7,6 +7,8 @@ import {Allergy} from "../domain/Allergy";
 import {AllergyMap} from "../mappers/AllergyMap";
 import {MedicalCondition} from "../domain/medicalCondition";
 import {MedicalConditionMap} from "../mappers/MedicalConditionMap";
+import IAllergyRepo from '../services/IRepos/IAllergyRepo';
+
 @Service()
 export default class AllergyRepo implements IAllergyRepo {
     private models: any;

@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+import path from 'path';
 
 // Set the NODE_ENV to 'development' by default
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
@@ -52,6 +53,10 @@ export default {
     allergy: {
       name: "AllergyController",
       path: "../controllers/allergyController"
+    },
+    medicalRecord: {
+      name: "MedicalRecordController",
+      path: "../controllers/medicalRecordController"
     }
   },
 
@@ -71,6 +76,10 @@ export default {
     allergy: {
       name: "AllergyRepo",
       path: "../repos/allergyRepo"
+    },
+    medicalRecord: {
+      name: "MedicalRecordRepo",
+      path: "../repos/medicalRecordRepo"
     }
   },
 
@@ -86,6 +95,10 @@ export default {
     allergy: {
       name: "AllergyService",
       path: "../services/allergyService"
+    },
+    medicalRecord: {
+      name: "MedicalRecordService",
+      path: "../services/medicalRecordService"
     }
   }
 };
