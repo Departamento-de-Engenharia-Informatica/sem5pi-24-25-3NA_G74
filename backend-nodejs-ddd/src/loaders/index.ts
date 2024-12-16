@@ -16,7 +16,10 @@ export default async ({ expressApp }) => {
     schema: '../persistence/schemas/medicalConditionSchema',
   };
 
-
+  const medicalRecordSchema = {
+    name: 'medicalRecordSchema',
+    schema: '../persistence/schemas/medicalConditionSchema',
+  };
 
   const userSchema = {
     // compare with the approach followed in repos and services
@@ -35,6 +38,11 @@ export default async ({ expressApp }) => {
     path: config.controllers.medicalCondition.path
   }
 
+  const medicalRecordController = {
+    name: config.controllers.medicalRecord.name,
+    path: config.controllers.medicalRecord.path
+  }
+
   const roleController = {
     name: config.controllers.role.name,
     path: config.controllers.role.path
@@ -43,6 +51,11 @@ export default async ({ expressApp }) => {
   const medicalConditionRepo = {
     name: config.repos.medicalCondition.name,
     path: config.repos.medicalCondition.path
+  }
+  
+  const medicalRecordRepo = {
+    name: config.repos.medicalRecord.name,
+    path: config.repos.medicalRecord.path
   }
 
   const roleRepo = {
@@ -65,25 +78,34 @@ export default async ({ expressApp }) => {
     path: config.services.medicalCondition.path
   }
 
+  const medicalRecordService = {
+    name: config.services.medicalRecord.name,
+    path: config.services.medicalRecord.path
+  }
+
   await dependencyInjectorLoader({
     mongoConnection,
     schemas: [
       userSchema,
       roleSchema,
-      medicalConditionSchema
+      medicalConditionSchema,
+      medicalRecordSchema
     ],
     controllers: [
       roleController,
-      medicalConditionController
+      medicalConditionController,
+      medicalRecordController
     ],
     repos: [
       roleRepo,
       userRepo,
-      medicalConditionRepo
+      medicalConditionRepo,
+      medicalRecordRepo
     ],
     services: [
       roleService,
-      medicalConditionService
+      medicalConditionService,
+      medicalRecordService
     ]
   });
   Logger.info('✌️ Schemas, Controllers, Repositories, Services, etc. loaded');

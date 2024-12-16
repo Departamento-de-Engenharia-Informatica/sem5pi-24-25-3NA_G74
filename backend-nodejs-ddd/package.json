@@ -56,7 +56,6 @@
     "mongodb": "^4.2.1",
     "mongoose": "^6.1.0",
     "morgan": "^1.9.1",
-    "nodemon": "^3.0.1",
     "reflect-metadata": "^0.1.13",
     "shallow-equal-object": "^1.1.1",
     "sinon": "^7.5.0",
@@ -65,7 +64,7 @@
     "winston": "^3.2.1"
   },
   "devDependencies": {
-    "@types/agenda": "^4.1.0",
+    "@types/agenda": "^4.1.4",
     "@types/express": "^4.16.0",
     "@types/jest": "^23.3.14",
     "@types/lodash": "^4.14.118",
@@ -79,6 +78,7 @@
     "eslint-plugin-prettier": "^3.0.1",
     "jest": "^29.7.0",
     "mocha": "^10.1.0",
+    "nodemon": "^3.1.9",
     "prettier": "^1.17.0",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.4.0",
