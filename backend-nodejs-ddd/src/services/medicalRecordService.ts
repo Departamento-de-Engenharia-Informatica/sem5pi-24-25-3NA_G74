@@ -1,26 +1,25 @@
-import { Inject, Service } from "typedi";
-import config from "../../config";
-import IMedicalRecordRepo from "./IRepos/IMedicalRecordRepo";
-import IMedicalRecordService from "./IServices/IMedcialRecordService";
-import { Result } from "../core/logic/Result";
-import IMedicalRecordDTO from "../dto/IMedicalRecordDTO";
-
-
-
+import { Service, Inject } from 'typedi';
+import MedicalRecordRepo from '../repos/medicalRecordRepo';
 
 @Service()
-export default class MedicalRecordService implements IMedicalRecordService
-{
-    constructor(
-        @Inject(config.repos.medicalRecord.name) private medicalRecordRepo: IMedicalRecordRepo,
-    ) { }
-    createMedicalRecord(medicalRecordDTO: IMedicalRecordDTO): Promise<Result<IMedicalRecordDTO>> {
-        throw new Error("Method not implemented.");
+export default class MedicalRecordService {
+  constructor(@Inject('MedicalRecordRepo') private medicalRecordRepo: MedicalRecordRepo) {}
+
+  public async getAll() {
+    try {
+      const records = await this.medicalRecordRepo.findAll();
+      return { records };
+    } catch (e) {
+      throw e;
     }
-    UpdateMedicalRecord(medicalRecordDTO: IMedicalRecordDTO): Promise<Result<IMedicalRecordDTO>> {
-        throw new Error("Method not implemented.");
+  }
+
+  public async create(recordData) {
+    try {
+      const record = await this.medicalRecordRepo.create(recordData);
+      return record;
+    } catch (e) {
+      throw e;
     }
-    SearchMedicalRecord(medicalRecordCode?: string, designation?: string): Promise<Result<IMedicalRecordDTO[]>> {
-        throw new Error("Method not implemented.");
-    }
+  }
 }

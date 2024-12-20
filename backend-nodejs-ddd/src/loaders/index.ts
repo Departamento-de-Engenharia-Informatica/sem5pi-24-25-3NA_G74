@@ -18,7 +18,7 @@ export default async ({ expressApp }) => {
 
   const medicalRecordSchema = {
     name: 'medicalRecordSchema',
-    schema: '../persistence/schemas/medicalConditionSchema',
+    schema: '../persistence/schemas/medicalRecordSchema',
   };
 
   const userSchema = {
@@ -35,78 +35,60 @@ export default async ({ expressApp }) => {
 
   const medicalConditionController = {
     name: config.controllers.medicalCondition.name,
-    path: config.controllers.medicalCondition.path
-  }
+    path: config.controllers.medicalCondition.path,
+  };
 
   const medicalRecordController = {
     name: config.controllers.medicalRecord.name,
-    path: config.controllers.medicalRecord.path
-  }
+    path: config.controllers.medicalRecord.path,
+  };
 
   const roleController = {
     name: config.controllers.role.name,
-    path: config.controllers.role.path
-  }
+    path: config.controllers.role.path,
+  };
 
   const medicalConditionRepo = {
     name: config.repos.medicalCondition.name,
-    path: config.repos.medicalCondition.path
-  }
-  
+    path: config.repos.medicalCondition.path,
+  };
+
   const medicalRecordRepo = {
     name: config.repos.medicalRecord.name,
-    path: config.repos.medicalRecord.path
-  }
+    path: config.repos.medicalRecord.path,
+  };
 
   const roleRepo = {
     name: config.repos.role.name,
-    path: config.repos.role.path
-  }
+    path: config.repos.role.path,
+  };
 
   const userRepo = {
     name: config.repos.user.name,
-    path: config.repos.user.path
-  }
+    path: config.repos.user.path,
+  };
 
   const roleService = {
     name: config.services.role.name,
-    path: config.services.role.path
-  }
+    path: config.services.role.path,
+  };
 
   const medicalConditionService = {
     name: config.services.medicalCondition.name,
-    path: config.services.medicalCondition.path
-  }
+    path: config.services.medicalCondition.path,
+  };
 
   const medicalRecordService = {
     name: config.services.medicalRecord.name,
-    path: config.services.medicalRecord.path
-  }
+    path: config.services.medicalRecord.path,
+  };
 
   await dependencyInjectorLoader({
     mongoConnection,
-    schemas: [
-      userSchema,
-      roleSchema,
-      medicalConditionSchema,
-      medicalRecordSchema
-    ],
-    controllers: [
-      roleController,
-      medicalConditionController,
-      medicalRecordController
-    ],
-    repos: [
-      roleRepo,
-      userRepo,
-      medicalConditionRepo,
-      medicalRecordRepo
-    ],
-    services: [
-      roleService,
-      medicalConditionService,
-      medicalRecordService
-    ]
+    schemas: [userSchema, roleSchema, medicalConditionSchema, medicalRecordSchema],
+    controllers: [roleController, medicalConditionController, medicalRecordController],
+    repos: [roleRepo, userRepo, medicalConditionRepo, medicalRecordRepo],
+    services: [roleService, medicalConditionService, medicalRecordService],
   });
   Logger.info('✌️ Schemas, Controllers, Repositories, Services, etc. loaded');
 

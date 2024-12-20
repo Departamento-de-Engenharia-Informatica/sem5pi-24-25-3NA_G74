@@ -1,29 +1,44 @@
-import { Router } from "express";
-import { celebrate, Joi } from "celebrate";
-
-import { Container } from "typedi";
-
-
-import config from "../../../config";
-import common from "mocha/lib/interfaces/common";
-import IMedicalRecordController from "../../controllers/IControllers/IMedicalRecordController";
+import { Router } from 'express';
+import { celebrate, Joi } from 'celebrate';
+import { Container } from 'typedi';
+import MedicalRecordService from '../../services/medicalRecordService';
 
 const route = Router();
 
-export default (app: Router) =>
-{
-    app.use("/medical-record", route);
+export default (app: Router) => {
+  app.use('/medical-record', route);
 
-    const ctrl = Container.get(config.controllers.medicalRecord.name) as IMedicalRecordController;
+  // Get all medical records
+  route.get(
+    '', // empty string means this handles the base route /medical-record
+    async (req, res, next) => {
+      try {
+        const medicalRecordServiceInstance = Container.get(MedicalRecordService);
+        const { records } = await medicalRecordServiceInstance.getAll();
+        return res.status(200).json({ records });
+      } catch (e) {
+        return next(e);
+      }
+    },
+  );
 
-    route.patch(
-        '',
-        celebrate({
-            body: Joi.object({
-                allergies: Joi.array().items(Joi.string().guid({ version: 'uuidv4' })).optional(),
-                medicalConditions: Joi.array().items(Joi.string().guid({ version: 'uuidv4' })).optional(),
-            }).or('allergies', 'medicalConditions'),
-        }),
-        (req, res, next) => ctrl.updateMedicalCondition(req, res, next)
-    );
-}
+  // Create new medical record
+  route.post(
+    '',
+    celebrate({
+      body: Joi.object({
+        patientId: Joi.string().required(),
+        freeText: Joi.string(),
+      }),
+    }),
+    async (req, res, next) => {
+      try {
+        const medicalRecordServiceInstance = Container.get(MedicalRecordService);
+        const record = await medicalRecordServiceInstance.create(req.body);
+        return res.status(201).json({ record });
+      } catch (e) {
+        return next(e);
+      }
+    },
+  );
+};

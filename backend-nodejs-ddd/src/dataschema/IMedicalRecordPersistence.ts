@@ -1,12 +1,8 @@
-import { Allergy } from "../domain/Allergy";
-import { MedicalCondition } from "../domain/medicalCondition";
+import mongoose from 'mongoose';
 
-export interface IMedicalRecordPersistence
-{
-    _id: string;
-    medicalRecordCode: string;
-    allergies: Set<Allergy>;
-    medicalCondition: Set<MedicalCondition>;
-    designation: string;
-    
+export interface IMedicalRecordPersistence {
+    domainId: string;
+    allergies: mongoose.Types.ObjectId[];
+    medicalConditions: mongoose.Types.ObjectId[];
+    freeText: string;
 }

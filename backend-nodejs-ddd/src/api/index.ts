@@ -6,13 +6,13 @@ import medicalCondition from './routes/medicalConditionRoute';
 import medicalRecord from './routes/medicalRecordRoute';
 
 export default () => {
-	const app = Router();
+  const app = Router();
 
-	auth(app);
-	user(app);
-	role(app);
-	medicalCondition(app);
-	medicalRecord(app);
-	
-	return app
-}
+  auth(app);
+  user(app);
+  role(app);
+  medicalCondition(app);
+  medicalRecord(app);
+
+  return app;
+};

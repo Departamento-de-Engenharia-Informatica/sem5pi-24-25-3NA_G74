@@ -1,43 +1,38 @@
-import { Inject, Service } from "typedi";
-import { MedicalRecord } from "../domain/MedicalRecord";
-import MedicalRecordId from "../domain/medicalRecordId";
-import IMedicalRecordRepo from "../services/IRepos/IMedicalRecordRepo";
-import { Document, Model } from "mongoose";
-
+import { Service, Inject } from 'typedi';
+import MedicalRecordSchema from '../persistence/schemas/medicalRecordSchema';
 
 @Service()
-export default class MedicalRecordRepo implements IMedicalRecordRepo
-{
+export default class MedicalRecordRepo {
+  constructor(@Inject('medicalRecordSchema') private medicalRecordSchema = MedicalRecordSchema) {}
 
-    constructor(
-        @Inject('medicalRecordSchema') private medicalRecordSchema: Model<any & Document>,
-        @Inject('logger') private logger
-    ) { }
+  public async findAll() {
+    try {
+      // Using populate to get the full allergy and condition objects instead of just IDs
+      const records = await this.medicalRecordSchema.find({});
+      // .populate('allergies')
+      // .populate('medicalConditions');
+      return records;
+    } catch (err) {
+      throw err;
+    }
+  }
 
-    
-    save(MedicalRecord: MedicalRecord): Promise<MedicalRecord> {
-        throw new Error("Method not implemented.");
-    }
-    update(MedicalRecord: MedicalRecord): Promise<MedicalRecord> {
-        throw new Error("Method not implemented.");
-    }
-    findByDescription(description: string): Promise<MedicalRecord> {
-        throw new Error("Method not implemented.");
-    }
-    findByDesignation(designation: string): Promise<MedicalRecord[]> {
-        throw new Error("Method not implemented.");
-    }
-    findAll(): Promise<MedicalRecord[]> {
-        throw new Error("Method not implemented.");
-    }
-    findById(id: MedicalRecordId | string): Promise<MedicalRecord> {
-        throw new Error("Method not implemented.");
-    }
-    findByMedicalConditionCode(medicalConditionCode: string): Promise<MedicalRecord> {
-        throw new Error("Method not implemented.");
-    }
-    exists(t: MedicalRecord): Promise<boolean> {
-        throw new Error("Method not implemented.");
-    }
+  public async create(recordData) {
+    try {
+      // First check if a record with this patientId already exists
+      const existingRecord = await this.medicalRecordSchema.findOne({ patientId: recordData.patientId });
+      if (existingRecord) {
+        throw new Error('Medical record already exists for this patient');
+      }
 
+      const record = new this.medicalRecordSchema(recordData);
+      const savedRecord = await record.save();
+      return savedRecord;
+    } catch (err) {
+      if (err.code === 11000) {
+        throw new Error('Medical record already exists for this patient');
+      }
+      throw err;
+    }
+  }
 }

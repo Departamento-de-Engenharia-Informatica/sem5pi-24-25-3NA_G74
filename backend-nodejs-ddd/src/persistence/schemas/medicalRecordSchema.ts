@@ -1,18 +1,28 @@
-import { IMedicalConditionPersistence } from '../../dataschema/IMedicalConditionPersistence';
 import mongoose from 'mongoose';
-import { MedicalRecord } from '../../domain/MedicalRecord';
-import { Allergy } from '../../domain/Allergy';
-
 
 const MedicalRecordSchema = new mongoose.Schema(
-    {
-      domainId: { type: String, unique: true },
-      medicalRecords: { type: Set<MedicalRecord> },
-      allergies: { type: Set<Allergy> },
-      description: { type: String },
-      
+  {
+    patientId: {
+      type: String,
+      required: true,
+      unique: true,
+      index: true, // Optimize queries on this field
     },
-    {
-      timestamps: true
-    }
-  );
+    // allergies: [
+    //   {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'Allergy',
+    //   },
+    // ],
+    // medicalConditions: [
+    //   {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'MedicalCondition',
+    //   },
+    // ],
+    freeText: String,
+  },
+  { timestamps: true },
+);
+
+export default mongoose.model('MedicalRecord', MedicalRecordSchema);
