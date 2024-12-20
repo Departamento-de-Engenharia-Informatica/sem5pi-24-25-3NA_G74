@@ -14,6 +14,18 @@ export default class MedicalRecordService {
     }
   }
 
+  public async getByPatientId(patientId: string) {
+    try {
+      const record = await this.medicalRecordRepo.findByPatientId(patientId);
+      if (!record) {
+        throw new Error('Medical record not found for this patient');
+      }
+      return { record };
+    } catch (e) {
+      throw e;
+    }
+  }
+
   public async create(recordData) {
     try {
       const record = await this.medicalRecordRepo.create(recordData);

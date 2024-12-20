@@ -22,6 +22,24 @@ export default (app: Router) => {
     },
   );
 
+  route.get(
+    '/:patientId',
+    celebrate({
+      params: Joi.object({
+        patientId: Joi.string().required(),
+      }),
+    }),
+    async (req, res, next) => {
+      try {
+        const medicalRecordServiceInstance = Container.get(MedicalRecordService);
+        const record = await medicalRecordServiceInstance.getByPatientId(req.params.patientId);
+        return res.status(200).json({ record });
+      } catch (e) {
+        return next(e);
+      }
+    },
+  );
+
   route.post(
     '',
     celebrate({
