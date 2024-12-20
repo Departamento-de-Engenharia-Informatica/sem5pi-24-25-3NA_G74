@@ -35,4 +35,40 @@ export default class MedicalRecordRepo {
       throw err;
     }
   }
+
+  public async findById(id: string) {
+    try {
+      const record = await this.medicalRecordSchema.findById(id);
+      return record;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  public async findByPatientId(patientId: string) {
+    try {
+      const record = await this.medicalRecordSchema.findOne({ patientId });
+      return record;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  public async updateByPatientId(patientId: string, updateData: any) {
+    try {
+      const updatedRecord = await this.medicalRecordSchema.findOneAndUpdate(
+        { patientId },
+        { $set: updateData },
+        { new: true, runValidators: true },
+      );
+
+      if (!updatedRecord) {
+        throw new Error('Medical record not found for this patient');
+      }
+
+      return updatedRecord;
+    } catch (err) {
+      throw err;
+    }
+  }
 }

@@ -22,7 +22,6 @@ export default (app: Router) => {
     },
   );
 
-  // Create new medical record
   route.post(
     '',
     celebrate({
@@ -36,6 +35,27 @@ export default (app: Router) => {
         const medicalRecordServiceInstance = Container.get(MedicalRecordService);
         const record = await medicalRecordServiceInstance.create(req.body);
         return res.status(201).json({ record });
+      } catch (e) {
+        return next(e);
+      }
+    },
+  );
+
+  route.patch(
+    '/:patientId',
+    celebrate({
+      params: Joi.object({
+        patientId: Joi.string().required(),
+      }),
+      body: Joi.object({
+        freeText: Joi.string().allow('', null),
+      }),
+    }),
+    async (req, res, next) => {
+      try {
+        const medicalRecordServiceInstance = Container.get(MedicalRecordService);
+        const record = await medicalRecordServiceInstance.updateByPatientId(req.params.patientId, req.body);
+        return res.status(200).json({ record });
       } catch (e) {
         return next(e);
       }

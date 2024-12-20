@@ -22,4 +22,19 @@ export default class MedicalRecordService {
       throw e;
     }
   }
+
+  public async updateByPatientId(patientId: string, updateData: any) {
+    try {
+      // Validate that record exists before update
+      const existingRecord = await this.medicalRecordRepo.findByPatientId(patientId);
+      if (!existingRecord) {
+        throw new Error('Medical record not found for this patient');
+      }
+
+      const record = await this.medicalRecordRepo.updateByPatientId(patientId, updateData);
+      return record;
+    } catch (e) {
+      throw e;
+    }
+  }
 }
