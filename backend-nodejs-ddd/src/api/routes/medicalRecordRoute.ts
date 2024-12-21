@@ -67,6 +67,8 @@ export default (app: Router) => {
       }),
       body: Joi.object({
         freeText: Joi.string().allow('', null),
+        allergies: Joi.array().items(Joi.string().required()).optional(),
+        medicalConditions: Joi.array().items(Joi.string().required()).optional(),
       }),
     }),
     async (req, res, next) => {
@@ -79,4 +81,10 @@ export default (app: Router) => {
       }
     },
   );
+
+  route.get(
+    '/:patientId/'
+  )
+
+  
 };
