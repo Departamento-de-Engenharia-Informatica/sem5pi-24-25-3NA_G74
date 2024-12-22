@@ -7,6 +7,10 @@ import IMedicalConditionController from "../../controllers/IControllers/IMedical
 import config from "../../../config";
 import common from "mocha/lib/interfaces/common";
 
+import isAuth from "../middlewares/isAuth";
+import checkRole from "../middlewares/checkRole";
+
+
 const route = Router();
 
 export default (app: Router) => {
@@ -16,8 +20,18 @@ export default (app: Router) => {
 
     //console.log("Controller loaded:", ctrl);
 
+    const Roles = {
+        Admin: "Admin",
+        Doctor: "Doctor",
+        Patient: "Patient",
+        Nurse: "Nurse",
+        Technician: "Technician",
+    }
+
     route.post(
         '',
+        isAuth,
+        checkRole([Roles.Admin]),
         celebrate({
             body: Joi.object({
                 medicalConditionCode: Joi.string().required(),
@@ -31,6 +45,8 @@ export default (app: Router) => {
 
     route.patch(
         '',
+        isAuth,
+        checkRole([Roles.Admin]),
         celebrate({
             body: Joi.object({
                 designation: Joi.string().optional(),
