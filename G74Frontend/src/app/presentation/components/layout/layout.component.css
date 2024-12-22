@@ -1,0 +1,182 @@
+/* layout.component.css */
+
+/* RESET SOME DEFAULTS (optional) */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* The header always on top */
+  #header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 60px;
+    width: 100%;
+    background-color: white;
+    z-index: 1000;
+  
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  /* The ISEP logo on the left */
+  .header-logo {
+    height: 40px;
+    margin: 10px;
+  }
+  
+  /* The icon to toggle the navbar */
+  #menuToggleIcon {
+    cursor: pointer;
+    font-size: 22px;
+    margin-right: 10px;
+    color: #750202; /* a dark red */
+  }
+  
+  #menuToggleIcon:hover {
+    color: orange;
+  }
+  
+  /* The container for the path, title, and login/logout on the right side */
+  #title-path-logout {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 15px; /* space between elements */
+    margin-right: 20px;
+  }
+  
+  /* The path buttons on the left side of the title */
+  #path {
+    display: flex;
+    align-items: center;
+    margin-right: auto; /* so they push the title to the center or right */
+  }
+  
+  /* The main layout body, below the header */
+  #layout-body {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    margin-top: 60px; /* so it sits below the 60px header */
+    width: 100%;
+    height: calc(100vh - 60px); /* fill the rest of the screen below the header */
+  }
+  
+  /* NAVBAR styling */
+  #navbar {
+    background-color: #fff;
+    border-right: 1px solid #ccc;
+    width: 200px; /* default width */
+    min-width: 150px; /* don't let it get too small if resizable */
+    overflow: auto;
+    position: relative;
+    padding-top: 10px;
+  }
+  
+  /* The handle to resize horizontally (optional) */
+  #resize-handle {
+    width: 6px;
+    background-color: #ccc;
+    cursor: ew-resize;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+  }
+  
+  /* The user info in the navbar */
+  #user-info {
+    padding: 0 10px;
+    margin-bottom: 20px;
+  }
+  
+  #user-role {
+    color: #520000;
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+  
+  #user-name {
+    font-size: 14px;
+    color: #333;
+  }
+  
+  /* The menu items container */
+  #menuElementos {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 0 10px;
+  }
+  
+  /* The buttons in the navbar */
+  #botaoElemento {
+    background-color: white;
+    border: 2px solid #520000;
+    border-radius: 4px;
+    color: black;
+    font-size: 15px;
+    padding: 6px;
+    text-align: left;
+    cursor: pointer;
+    outline: none;
+    width: 100%;
+    display: flex; /* so the <a> inside can stretch */
+  }
+  
+  #botaoElemento:hover {
+    background-color: #eee;
+    color: black;
+  }
+  
+  /* The center content area */
+  #layout-content {
+    flex: 1;
+    overflow: auto;
+    background-color: #f3f3f3;
+    padding: 10px;
+  }
+  
+  /* The path + title + logout button area in the header */
+  #title {
+    color: #750202;
+    font-size: 24px;
+    margin-left: 15px;
+    font-weight: bold;
+    text-transform: uppercase; /* optional */
+  }
+  
+  /* A general style for .url-buttons, etc. */
+  .url-buttons button {
+    background: none;
+    border: none;
+    color: #750202;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 5px;
+  }
+  
+  .url-buttons button:hover {
+    color: orange;
+  }
+  
+  /* The login/logout button in the header */
+  #login-button {
+    padding: 6px 12px;
+    font-size: 14px;
+    color: white;
+    background-color: #750202;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  #login-button:hover {
+    background-color: #420101;
+  }
+  

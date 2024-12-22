@@ -1,0 +1,145 @@
+<!-- layout.component.html -->
+<header class="header" id="header">
+
+  <!-- LOGO (always visible) -->
+  <img
+    src="https://portal.isep.ipp.pt/global/images/intranet/escolas/i_isep_portal_logo_2023.png"
+    class="header-logo"
+    alt="ISEP Logo"
+  />
+
+  <!-- Toggle Icons (always rendered) -->
+  <!-- If the navbar is visible, show the close icon. Otherwise, show the bars icon. -->
+  <i
+    class="fa-solid"
+    [ngClass]="{
+      'fa-bars': !isMenuVisible,
+      'fa-angle-left': isMenuVisible
+    }"
+    id="menuToggleIcon"
+    (click)="toggleMenu()"
+  >
+  </i>
+
+  <!-- HEADER PATH + TITLE + LOGIN/LOGOUT -->
+  <div id="title-path-logout">
+    <div class="url-buttons" id="path">
+      <button id="butaoUrl" (click)="navigateToHome()">/main</button>
+      <button
+        *ngFor="let segment of urlSegments"
+        (click)="navigateTo(segment)"
+        id="butaoUrl"
+      >
+        /{{ segment }}
+      </button>
+    </div>
+
+    <h1 class="header-title" id="title">G74 - SARM</h1>
+
+    <!-- If no user: show Login button -->
+    <div *ngIf="!user">
+      <button id="login-button">Login</button>
+    </div>
+
+    <!-- If user: show Logout button -->
+    <div *ngIf="user" (click)="logout()">
+      <button id="login-button">Logout</button>
+    </div>
+  </div>
+</header>
+
+<!-- BODY: NAVBAR (LEFT) + ROUTER-OUTLET (CENTER) -->
+<div id="layout-body">
+  <!-- NAVBAR on the left (only if isMenuVisible) -->
+  <nav id="navbar" *ngIf="isMenuVisible">
+    <div id="resize-handle"></div>
+
+    <!-- User Info -->
+    <div id="user-info">
+      <div id="user-role">
+        <i class="fa-regular fa-user" id="user"></i>
+        {{ user?.role }}
+      </div>
+      <div *ngIf="user" id="user-name">
+        Username: {{ user.username }} <br />
+        Email: {{ user.email }} <br />
+      </div>
+    </div>
+
+    <!-- MENU ITEMS -->
+    <div id="menuElementos">
+      <!-- Home (all roles) -->
+      
+      <!-- Admin-only -->
+      <ng-container *ngIf="user?.role === 'Admin'">
+        <button id="botaoElemento">
+          <a routerLink="/admin/register-user" routerLinkActive="active">
+            Register Users
+          </a>
+        </button>
+        <button id="botaoElemento">
+          <a routerLink="/admin/create-patient" routerLinkActive="active">
+            Create Patient Profile
+          </a>
+        </button>
+        <button id="botaoElemento">
+          <a routerLink="/admin/list-patient" routerLinkActive="active">
+            Manage Patient Profiles
+          </a>
+        </button>
+        <button id="botaoElemento">
+          <a routerLink="/admin/create-staff" routerLinkActive="active">
+            Create Staff Profile
+          </a>
+        </button>
+        <button id="botaoElemento">
+          <a routerLink="/admin/list-all-staff" routerLinkActive="active">
+            List Staff Profiles
+          </a>
+        </button>
+        <button id="botaoElemento">
+          <a routerLink="/admin/list-operationtype" routerLinkActive="active">
+            List Operation Types
+          </a>
+        </button>
+      </ng-container>
+
+      <!-- Doctor-only -->
+
+      <ng-container *ngIf="user?.role === 'Doctor'">
+        <button id="botaoElemento">
+          <a routerLink="/doctor/create-operation" routerLinkActive="active">
+            Create Operation
+          </a>
+        </button>
+
+        <button id="botaoElemento">
+          <a routerLink="/doctor/list-operation" routerLinkActive="active">
+            List Operations
+          </a>
+        </button>
+        
+      </ng-container>
+
+      <ng-container *ngIf="user?.role === 'Patient'">
+        <button id="botaoElemento">
+          <a routerLink="/patient/update-user" routerLinkActive="active">
+            Update User
+          </a>
+        </button>
+        <button id="botaoElemento">
+          <a routerLink="/patient/delete-user" routerLinkActive="active">
+            Delete User
+          </a>
+        </button>
+
+      </ng-container>  
+      <!-- Add Doctor/Patient links if needed (like /doctor/list-operation, etc.) -->
+    </div>
+  </nav>
+
+  <!-- CENTER AREA: loads each route's component -->
+  <div id="layout-content">
+    <router-outlet></router-outlet>
+  </div>
+</div>

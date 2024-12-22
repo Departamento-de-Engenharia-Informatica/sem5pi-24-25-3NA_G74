@@ -23,32 +23,51 @@ import { LoginComponent } from './presentation/components/login/login.component'
 import { AuthGuard } from './domain/services/auth-guard.service';
 import { UnauthorizedComponent } from './presentation/components/unauthorized/unauthorized.component';
 import { WelcomeComponent } from './presentation/components/welcome/welcome.component';
+import { LayoutComponent } from './presentation/components/layout/layout.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/main', pathMatch: 'full' },
   { path: 'main', component: MainMenuComponent },
   { path: 'login', component: LoginComponent},
-  { path: 'home', component: WelcomeComponent },
+
+
+  { path: '', component : LayoutComponent,
+    children: [
+      { path: '', redirectTo: 'welcome', pathMatch: 'full' },
+      { path: 'welcome', component: WelcomeComponent },
+
+      //Admin routes
+      { path: 'register-user', component: RegisterUserComponent },
+      { path: 'admin/create-patient', component: PatientCreateComponent },
+      { path: 'admin/update-patient', component: PatientUpdateComponent },
+      { path: 'admin/delete-patient', component: PatientDeleteComponent },
+      { path: 'admin/list-patient', component: PatientListComponent },
+      { path: 'admin/register-user', component: RegisterUserComponent },
+      { path: 'admin/create-staff', component: StaffCreateComponent },
+      { path: 'admin/list-all-staff', component: ListAllStaffComponent },
+      { path: 'admin/update-staff/:licenceNumber', component: StaffUpdateComponent },
+      { path: 'admin/list-operationtype', component: ListOperationtypeComponent},
+
+      //Patient routes
+      { path: 'patient/update-user', component: UpdateUserComponent },
+      { path: 'patient/delete-user', component: DeleteUserComponent },
+
+      //Doctor routes
+      { path: 'doctor/create-operation', component: RegisterOperationComponent, canActivate: [AuthGuard], data: {role: 'Doctor'}  },
+      { path: 'doctor/update-operation', component: UpdateOperationComponent, canActivate: [AuthGuard], data: {role: 'Doctor'}  },
+      { path: 'doctor/list-operation', component: ListAllOperationComponent, canActivate: [AuthGuard], data: {role: 'Doctor'}  },
+      { path: 'doctor/delete-operation', component: DeleteOperationComponent, canActivate: [AuthGuard], data: {role: 'Doctor'}  }
+
+    ]
+
+
+
+  },
+
   { path: 'admin', component: AdminMenuComponent, canActivate: [AuthGuard], data: {role : 'Admin'} },
   { path: 'patient', component: PatientMenuComponent , canActivate: [AuthGuard], data: { role: 'Patient' } }, //Mete tu se quiseres Rui
-  { path: 'admin/create-patient', component: PatientCreateComponent },
-  { path: 'admin/update-patient', component: PatientUpdateComponent },
-  { path: 'admin/delete-patient', component: PatientDeleteComponent },
-  { path: 'admin/list-patient', component: PatientListComponent },
-  { path: 'admin/register-user', component: RegisterUserComponent },
-  { path: 'admin/create-staff', component: StaffCreateComponent },
-  { path: 'admin/list-all-staff', component: ListAllStaffComponent },
-  { path: 'admin/update-staff/:licenceNumber', component: StaffUpdateComponent },
   { path: 'patient', component: PatientMenuComponent },
-  { path: 'register-user', component: RegisterUserComponent },
-  { path: 'patient/update-user', component: UpdateUserComponent },
-  { path: 'patient/delete-user', component: DeleteUserComponent },
   { path: 'doctor', component: DoctorMenuComponent, canActivate: [AuthGuard], data: {role: 'Doctor'} },
-  { path: 'doctor/create-operation', component: RegisterOperationComponent, canActivate: [AuthGuard], data: {role: 'Doctor'}  },
-  { path: 'doctor/update-operation', component: UpdateOperationComponent, canActivate: [AuthGuard], data: {role: 'Doctor'}  },
-  { path: 'doctor/list-operation', component: ListAllOperationComponent, canActivate: [AuthGuard], data: {role: 'Doctor'}  },
-  { path: 'doctor/delete-operation', component: DeleteOperationComponent, canActivate: [AuthGuard], data: {role: 'Doctor'}  },
-  { path: 'admin/list-operationtype', component: ListOperationtypeComponent},
   { path: 'unauthorized', component: UnauthorizedComponent },
   { path: '**', redirectTo: '/main' },
   { path: '', redirectTo: '/main', pathMatch: 'full' }

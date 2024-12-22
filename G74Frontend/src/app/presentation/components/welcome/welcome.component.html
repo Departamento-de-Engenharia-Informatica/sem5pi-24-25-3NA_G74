@@ -1,13 +1,31 @@
-<div>
-    <app-header-static></app-header-static>
-</div>
+<!-- welcome.component.html -->
 
 <div id="welcome-message">
-    <h1 id="welcome-text">Welcome, {{user.username}} !!!</h1>
+    <h1 id="welcome-text">
+      Welcome, {{ user?.username }} !!!
+    </h1>
+  
+    <!-- Optional role-based images (Patient) -->
     <div *ngIf="user?.role === 'Patient'">
-        <img src="https://cdn-icons-png.flaticon.com/512/843/843293.png" style="width: 180px;">
+      <img
+        src="https://cdn-icons-png.flaticon.com/512/843/843293.png"
+        style="width: 180px;"
+        alt="Patient Icon 1"
+      />
     </div>
-    <div *ngIf="user?.role === 'Patient'" >
-        <img src="https://cdn-icons-png.flaticon.com/512/843/843216.png" style="width: 180px;">
+    <div *ngIf="user?.role === 'Patient'">
+      <img
+        src="https://cdn-icons-png.flaticon.com/512/843/843216.png"
+        style="width: 180px;"
+        alt="Patient Icon 2"
+      />
     </div>
-</div>
+  
+    <!-- You can add similar blocks for Doctor/Admin if desired, e.g.:
+    <div *ngIf="user?.role === 'Doctor'">
+      <img src="..." style="width: 180px;" alt="Doctor Icon" />
+    </div>
+    -->
+  
+  </div>
+  

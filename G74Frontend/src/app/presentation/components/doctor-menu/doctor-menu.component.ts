@@ -1,11 +1,10 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
-import { HeaderStaticComponent } from '../header-static/header-static.component';
 @Component({
   selector: 'app-doctor-menu',
   standalone: true,
-  imports: [HeaderStaticComponent],
+  imports: [],
   templateUrl: './doctor-menu.component.html',
   styleUrl: './doctor-menu.component.css',
   encapsulation: ViewEncapsulation.None 

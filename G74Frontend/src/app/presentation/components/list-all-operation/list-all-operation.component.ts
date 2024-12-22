@@ -5,11 +5,10 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import {HeaderStaticComponent} from '../header-static/header-static.component';
 @Component({
   selector: 'app-list-all-operation',
   standalone: true,
-  imports: [CommonModule, HeaderStaticComponent],
+  imports: [CommonModule],
   templateUrl: './list-all-operation.component.html',
   styleUrl: './list-all-operation.component.css',
   encapsulation: ViewEncapsulation.None 

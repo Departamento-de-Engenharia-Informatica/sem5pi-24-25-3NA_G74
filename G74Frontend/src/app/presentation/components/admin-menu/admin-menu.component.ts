@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginViewModel } from '../../../application/viewmodels/login-viewmodel';
-import { HeaderStaticComponent } from '../header-static/header-static.component';
 
 @Component({
   selector: 'app-admin-menu',
   templateUrl: './admin-menu.component.html',
   styleUrls: ['./admin-menu.component.css'],
   standalone:true,
-  imports: [HeaderStaticComponent],
+  imports: [],
 })
 export class AdminMenuComponent {
   constructor(private router: Router, private loginViewModel: LoginViewModel) {}

@@ -16,14 +16,12 @@ import { DeleteUserComponent } from './presentation/components/delete-user/delet
 import { MainMenuComponent } from './presentation/components/main-menu/main-menu.component';
 import { PatientMenuComponent } from './presentation/components/patient-menu/patient-menu.component';
 import { RegisterOperationComponent } from './presentation/components/register-operation/register-operation.component';
-import { HeaderComponent } from './presentation/components/header/header.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import {ListOperationtypeComponent} from './presentation/components/list-operationtype/list-operationtype.component';
 import { JwtInterceptor } from './domain/services/jwt-interceptor.service';
 import { LoginComponent } from './presentation/components/login/login.component';
-import { HeaderStaticComponent } from './presentation/components/header-static/header-static.component';
-import { NavbarComponent } from './presentation/components/navbar/navbar.component';
 import { WelcomeComponent } from './presentation/components/welcome/welcome.component';
+import { LayoutComponent } from './presentation/components/layout/layout.component';
 
 
 @NgModule({
@@ -36,10 +34,8 @@ import { WelcomeComponent } from './presentation/components/welcome/welcome.comp
     RegisterUserComponent,
     UpdateUserComponent,
     DeleteUserComponent,
-    HeaderComponent,
     ListOperationtypeComponent,
-    LoginComponent,
-    
+    LoginComponent    
   ],
   imports: [
     BrowserModule,

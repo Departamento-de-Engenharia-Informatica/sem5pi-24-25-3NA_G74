@@ -23,16 +23,8 @@ export class LoginComponent {
       (response) => {
         this.isLoading = false;
 
-        // Navigate based on the user's role
-        if (response.user.role === 'Admin') {
-          this.router.navigate(['/admin']);
-        } else if (response.user.role === 'Patient') {
-          this.router.navigate(['/patient']);
-        } else if (response.user.role === 'Doctor') {
-          this.router.navigate(['/doctor']);
-        } else {
-          this.router.navigate(['/']); // Fallback
-        }
+        this.router.navigate(['/welcome']);
+
       },
       (error) => {
         this.isLoading = false;

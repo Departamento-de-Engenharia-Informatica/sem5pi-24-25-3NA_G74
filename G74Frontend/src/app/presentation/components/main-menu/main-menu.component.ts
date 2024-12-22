@@ -1,7 +1,6 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginViewModel } from '../../../application/viewmodels/login-viewmodel';
-import { HeaderStaticComponent } from '../header-static/header-static.component';
 
 declare const google: any; // Reference the Google Sign-In library
 
@@ -11,7 +10,7 @@ declare const google: any; // Reference the Google Sign-In library
   styleUrls: ['./main-menu.component.css'],
   standalone:true,
   encapsulation: ViewEncapsulation.None,
-  imports: [HeaderStaticComponent],
+  imports: [],
 })
 export class MainMenuComponent {
   constructor(private router: Router, private loginViewModel: LoginViewModel) { }
@@ -38,19 +37,8 @@ export class MainMenuComponent {
   }
 
   redirectUser(role: string) {
-    switch (role) {
-      case 'Admin':
-        this.router.navigate(['/admin']);
-        break;
-      case 'Patient':
-        this.router.navigate(['/patient']);
-        break;
-      case 'Doctor':
-        this.router.navigate(['/doctor']);
-        break;
-      default:
-        this.router.navigate(['/main']);
-    }
+    
+    this.router.navigate(['/welcome']);
   }
 
   ngOnInit() {
