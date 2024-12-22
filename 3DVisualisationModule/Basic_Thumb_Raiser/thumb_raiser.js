@@ -81,6 +81,9 @@ export default class ThumbRaiser {
         // Create the lights
         this.lights = new Lights(this.lightsParameters);
 
+        this.chandelierLights = new Map();
+        this.currentRoomNumberTarget = 0;
+
         // Create the fog
         this.fog = new Fog(this.fogParameters);
 
@@ -417,33 +420,43 @@ export default class ThumbRaiser {
                 const camera = this.activeViewCamera.getActiveProjection();
                 const currentPosition = camera.position.clone();
 
-                //Current camera target
-                const currentTarget = new THREE.Vector3();
-                camera.getWorldDirection(currentTarget).add(camera.position);
+                if(pickedObject.number !== this.currentRoomNumberTarget) {
 
-                //the duration of the animations have to be the same so it is synched
-                //the duration is calculated based on the distance to ensure farther objects are not too fast to center
-                const distance = currentPosition.distanceTo(newPosition);
-                const duration = Math.min(4000, 500*distance);
+                    //Current camera target
+                    const currentTarget = new THREE.Vector3();
+                    camera.getWorldDirection(currentTarget).add(camera.position);
 
-                //The Tween for the position and target had to be separate so a glitching move does not happen.
-                // Tween the camera position
-                new TWEEN.Tween(currentPosition)
-                    .to(newPosition, duration) // Transition duration in milliseconds
-                    .easing(TWEEN.Easing.Cubic.InOut) // Easing function
-                    .onUpdate(() => {
-                        camera.position.set(currentPosition.x, currentPosition.y, currentPosition.z);
-                    })
-                    .start();
+                    //the duration of the animations have to be the same so it is synched
+                    //the duration is calculated based on the distance to ensure farther objects are not too fast to center
+                    const distance = currentPosition.distanceTo(newPosition);
+                    const duration = Math.min(4000, 500 * distance);
 
-                //Tween camera lookAt target
-                new TWEEN.Tween(currentTarget)
-                    .to(objectPosition, duration)
-                    .easing(TWEEN.Easing.Cubic.InOut)
-                    .onUpdate(() => {
-                        camera.lookAt(currentTarget);
-                    })
-                    .start();
+                    //The Tween for the position and target had to be separate so a glitching move does not happen.
+                    // Tween the camera position
+                    new TWEEN.Tween(currentPosition)
+                        .to(newPosition, duration) // Transition duration in milliseconds
+                        .easing(TWEEN.Easing.Cubic.InOut) // Easing function
+                        .onUpdate(() => {
+                            camera.position.set(currentPosition.x, currentPosition.y, currentPosition.z);
+                        })
+                        .start();
+
+                    //Tween camera lookAt target
+                    new TWEEN.Tween(currentTarget)
+                        .to(objectPosition, duration)
+                        .easing(TWEEN.Easing.Cubic.InOut)
+                        .onUpdate(() => {
+                            camera.lookAt(currentTarget);
+                        })
+                        .start();
+
+                    if(this.currentRoomNumberTarget!==0) {
+                        this.chandelierLights.get(this.currentRoomNumberTarget).hideLight(duration);
+                    }
+                    let light = this.chandelierLights.get(pickedObject.number);
+                    light.showLight(duration);
+                    this.currentRoomNumberTarget=pickedObject.number;
+                }
             }
         }
     }
@@ -694,9 +707,15 @@ export default class ThumbRaiser {
                     hospitalBedObject.position.set(hospitalBedPosition.x, hospitalBedPosition.y, hospitalBedPosition.z);
                     hospitalBedObject.rotation.y = room.rotation;
                     hospitalBedObject.name = `HospitalBed_${room["Room Number"]}`;
+                    hospitalBedObject.number = room["Room Number"];
 
                     patientPositionArray.push(room.patientPosition);
                     patientRotationArray.push(room.patientRotation);
+                    
+                    // Create the chandelierLight
+                    let chandelierLightObject = new ChandelierLight(this.lightsParameters, hospitalBedPosition.x, hospitalBedPosition.y + 0.8, hospitalBedPosition.z);
+                    this.chandelierLights.set(room["Room Number"], chandelierLightObject);
+                    this.scene3D.add(chandelierLightObject.object);
 
                 });
             })
@@ -715,11 +734,6 @@ export default class ThumbRaiser {
                         this.scene3D.add(patientObject);
                         patientObject.position.set(patientPosition.x, patientPosition.y, patientPosition.z);
                         patientObject.rotation.y = (patientRotationArray[index]);
-
-                        // Create the chandelierLight
-                        let chandelierLightObject = new ChandelierLight(this.lightsParameters, patientPosition.x, patientPosition.y + 0.5, patientPosition.z);
-                        this.scene3D.add(chandelierLightObject.object)
-
                     }
                     index++;
 
