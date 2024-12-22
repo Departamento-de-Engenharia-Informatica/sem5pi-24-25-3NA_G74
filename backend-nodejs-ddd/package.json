@@ -56,7 +56,7 @@
     "mongodb": "^4.2.1",
     "mongoose": "^6.1.0",
     "morgan": "^1.9.1",
-    "reflect-metadata": "^0.1.13",
+    "reflect-metadata": "^0.1.14",
     "shallow-equal-object": "^1.1.1",
     "sinon": "^7.5.0",
     "sinon-chai": "^3.3.0",

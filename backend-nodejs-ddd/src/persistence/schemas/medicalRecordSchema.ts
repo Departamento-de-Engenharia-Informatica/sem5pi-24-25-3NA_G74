@@ -8,18 +8,18 @@ const MedicalRecordSchema = new mongoose.Schema(
       unique: true,
       index: true, // Optimize queries on this field
     },
-    // allergies: [
-    //   {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'Allergy',
-    //   },
-    // ],
-    // medicalConditions: [
-    //   {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'MedicalCondition',
-    //   },
-    // ],
+     allergies: [
+       {
+         type: String,
+         ref: 'Allergy',
+       },
+     ],
+     medicalConditions: [
+       {
+         type: String,
+         ref: 'MedicalCondition',
+       },
+    ],
     freeText: String,
   },
   { timestamps: true },

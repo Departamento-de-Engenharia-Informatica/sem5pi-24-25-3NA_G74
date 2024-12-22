@@ -10,8 +10,10 @@ export default class ChandelierLight {
         this.object = new THREE.Group();
 
         // Create a PointLight for the chandelier
-        this.object.chandelierLight = new THREE.PointLight(this.chandelierLight.color, this.chandelierLight.intensity, this.chandelierLight.distance);
+        this.object.chandelierLight = new THREE.SpotLight(this.chandelierLight.color, this.chandelierLight.intensity, this.chandelierLight.distance, Math.PI / 4, 0.5, 2);
         this.object.chandelierLight.position.set(x, y, z);
+        this.object.chandelierLight.target.position.set(0, -5000, 0);
+        this.object.add(this.object.chandelierLight.target);
 
         // Set up shadow properties for this light
         this.object.chandelierLight.shadow.mapSize.width = 512;
