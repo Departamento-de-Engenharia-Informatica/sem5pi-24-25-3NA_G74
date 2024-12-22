@@ -409,14 +409,41 @@ export default class ThumbRaiser {
                     + "{ x:" + objectPosition.x
                     + ", y:" + objectPosition.y
                     + ", z:" + objectPosition.z + " }");
+                // Define the new camera position
                 const offset = new THREE.Vector3(0,6,0);
                 const newPosition = objectPosition.clone().add(offset);
 
-                // Move the camera to the new position
-                this.activeViewCamera.getActiveProjection().position.copy(newPosition);
+                // Current camera position
+                const camera = this.activeViewCamera.getActiveProjection();
+                const currentPosition = camera.position.clone();
 
-                // Make the camera look at the object's position
-                this.activeViewCamera.getActiveProjection().lookAt(objectPosition);
+                //Current camera target
+                const currentTarget = new THREE.Vector3();
+                camera.getWorldDirection(currentTarget).add(camera.position);
+
+                //the duration of the animations have to be the same so it is synched
+                //the duration is calculated based on the distance to ensure farther objects are not too fast to center
+                const distance = currentPosition.distanceTo(newPosition);
+                const duration = Math.min(4000, 500*distance);
+
+                //The Tween for the position and target had to be separate so a glitching move does not happen.
+                // Tween the camera position
+                new TWEEN.Tween(currentPosition)
+                    .to(newPosition, duration) // Transition duration in milliseconds
+                    .easing(TWEEN.Easing.Cubic.InOut) // Easing function
+                    .onUpdate(() => {
+                        camera.position.set(currentPosition.x, currentPosition.y, currentPosition.z);
+                    })
+                    .start();
+
+                //Tween camera lookAt target
+                new TWEEN.Tween(currentTarget)
+                    .to(objectPosition, duration)
+                    .easing(TWEEN.Easing.Cubic.InOut)
+                    .onUpdate(() => {
+                        camera.lookAt(currentTarget);
+                    })
+                    .start();
             }
         }
     }
