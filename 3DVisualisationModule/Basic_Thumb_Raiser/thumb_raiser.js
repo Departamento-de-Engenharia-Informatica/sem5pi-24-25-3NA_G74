@@ -187,6 +187,10 @@ export default class ThumbRaiser {
         // Register the event handler to be called on key release
         document.addEventListener("keyup", event => this.keyChange(event, false));
 
+        this.raycaster = new THREE.Raycaster();
+        // Register the event handler to be called on a click on a bed
+        window.addEventListener("click", event => this.centerSelectedBed(event))
+
         // Register the event handler to be called on mouse down
         this.renderer.domElement.addEventListener("mousedown", event => this.mouseDown(event));
 
@@ -382,6 +386,39 @@ export default class ThumbRaiser {
         this.topViewCamera.updateWindowSize(window.innerWidth, window.innerHeight);
         this.miniMapCamera.updateWindowSize(window.innerWidth, window.innerHeight);
         this.renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    centerSelectedBed(event) {
+        // Convert mouse position to normalized device coordinates (-1 to +1)
+        this.mousePosition.x = (event.clientX / window.innerWidth) * 2 - 1;
+        this.mousePosition.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+        // Update raycaster with camera and mouse position
+        this.raycaster.setFromCamera(this.mousePosition, this.activeViewCamera.getActiveProjection());
+
+        // Perform raycasting
+        const intersects = this.raycaster.intersectObjects(this.scene3D.children, true);
+        if (intersects.length > 0) {
+            const pickedObject = intersects[0].object.parent.parent.parent.parent.parent;
+
+            //console.log(pickedObject.userData);
+            if (pickedObject.userData.selectable) {
+                const objectPosition = pickedObject.position;
+
+                console.log("Selected " + pickedObject.name + " in position "
+                    + "{ x:" + objectPosition.x
+                    + ", y:" + objectPosition.y
+                    + ", z:" + objectPosition.z + " }");
+                const offset = new THREE.Vector3(0,6,0);
+                const newPosition = objectPosition.clone().add(offset);
+
+                // Move the camera to the new position
+                this.activeViewCamera.getActiveProjection().position.copy(newPosition);
+
+                // Make the camera look at the object's position
+                this.activeViewCamera.getActiveProjection().lookAt(objectPosition);
+            }
+        }
     }
 
     keyChange(event, state) {
@@ -629,6 +666,7 @@ export default class ThumbRaiser {
                     this.scene3D.add(hospitalBedObject);
                     hospitalBedObject.position.set(hospitalBedPosition.x, hospitalBedPosition.y, hospitalBedPosition.z);
                     hospitalBedObject.rotation.y = room.rotation;
+                    hospitalBedObject.name = `HospitalBed_${room["Room Number"]}`;
 
                     patientPositionArray.push(room.patientPosition);
                     patientRotationArray.push(room.patientRotation);
