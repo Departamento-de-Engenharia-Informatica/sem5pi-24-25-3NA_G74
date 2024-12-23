@@ -47,10 +47,10 @@ export default class MedicalConditionService implements IMedicalConditionService
                 return Result.fail<IMedicalConditionDTO>("MedicalCondition not found");
             }
             else {
-                if(medicalConditionDTO.designation != null){
+                if (medicalConditionDTO.designation != null) {
                     medicalCondition.designation = medicalConditionDTO.designation;
                 }
-                if(medicalConditionDTO.description != null){
+                if (medicalConditionDTO.description != null) {
                     medicalCondition.description = medicalConditionDTO.description;
                 }
                 await this.medicalConditionRepo.save(medicalCondition);
@@ -64,15 +64,15 @@ export default class MedicalConditionService implements IMedicalConditionService
         }
     }
 
-    public async SearchMedicalCondition(medicalConditionCode?:string, designation?: string): Promise<Result<IMedicalConditionDTO[]>> {
+    public async SearchMedicalCondition(medicalConditionCode?: string, designation?: string): Promise<Result<IMedicalConditionDTO[]>> {
 
         try {
 
-            if(medicalConditionCode != null){
-            
+            if (medicalConditionCode != null) {
+
                 const medicalCondition = await this.medicalConditionRepo.findByMedicalConditionCode(medicalConditionCode);
                 const medicalConditionDTO = MedicalConditionMap.toDTO(medicalCondition) as IMedicalConditionDTO;
-            
+
                 let medicalConditionDTOsArray = new Array<IMedicalConditionDTO>();
                 medicalConditionDTOsArray.push(medicalConditionDTO);
                 return Result.ok<IMedicalConditionDTO[]>(medicalConditionDTOsArray);
@@ -87,11 +87,11 @@ export default class MedicalConditionService implements IMedicalConditionService
                 return Result.ok<IMedicalConditionDTO[]>(medicalConditionDTOs);
             }
             else {
-            
+
                 const medicalConditions = await this.medicalConditionRepo.findAll();
                 const medicalConditionDTOs = medicalConditions.map(medicalCondition => MedicalConditionMap.toDTO(medicalCondition) as IMedicalConditionDTO);
                 return Result.ok<IMedicalConditionDTO[]>(medicalConditionDTOs);
-            
+
             }
 
         } catch (e) {
