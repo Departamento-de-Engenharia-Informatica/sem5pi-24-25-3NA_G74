@@ -177,6 +177,7 @@ export default class Maze {
     }
 
     cellToCartesian(position) {
+        //console.log("X:"+(position[1] - this.size.width / 2.0 + 0.5) * this.scale.x+" Z:"+(position[0] - this.size.height / 2.0 + 0.5) * this.scale.z);
         return new THREE.Vector3((position[1] - this.size.width / 2.0 + 0.5) * this.scale.x, 0.0, (position[0] - this.size.height / 2.0 + 0.5) * this.scale.z)
     }
 

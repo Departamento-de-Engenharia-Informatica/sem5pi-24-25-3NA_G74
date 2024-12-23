@@ -81,6 +81,9 @@ export default class ThumbRaiser {
         // Create the lights
         this.lights = new Lights(this.lightsParameters);
 
+        this.chandelierLights = new Map();
+        this.currentRoomNumberTarget = 0;
+
         // Create the fog
         this.fog = new Fog(this.fogParameters);
 
@@ -186,6 +189,10 @@ export default class ThumbRaiser {
 
         // Register the event handler to be called on key release
         document.addEventListener("keyup", event => this.keyChange(event, false));
+
+        this.raycaster = new THREE.Raycaster();
+        // Register the event handler to be called on a click on a bed
+        window.addEventListener("click", event => this.centerSelectedBed(event))
 
         // Register the event handler to be called on mouse down
         this.renderer.domElement.addEventListener("mousedown", event => this.mouseDown(event));
@@ -382,6 +389,76 @@ export default class ThumbRaiser {
         this.topViewCamera.updateWindowSize(window.innerWidth, window.innerHeight);
         this.miniMapCamera.updateWindowSize(window.innerWidth, window.innerHeight);
         this.renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    centerSelectedBed(event) {
+        // Convert mouse position to normalized device coordinates (-1 to +1)
+        this.mousePosition.x = (event.clientX / window.innerWidth) * 2 - 1;
+        this.mousePosition.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+        // Update raycaster with camera and mouse position
+        this.raycaster.setFromCamera(this.mousePosition, this.activeViewCamera.getActiveProjection());
+
+        // Perform raycasting
+        const intersects = this.raycaster.intersectObjects(this.scene3D.children, true);
+        if (intersects.length > 0) {
+            const pickedObject = intersects[0].object?.parent?.parent?.parent?.parent?.parent;
+
+            //console.log(pickedObject.userData);
+            if (pickedObject?.userData?.selectable) {
+                const objectPosition = pickedObject.position;
+
+                console.log("Selected " + pickedObject.name + " in position "
+                    + "{ x:" + objectPosition.x
+                    + ", y:" + objectPosition.y
+                    + ", z:" + objectPosition.z + " }");
+                // Define the new camera position
+                const offset = new THREE.Vector3(0,6,0);
+                const newPosition = objectPosition.clone().add(offset);
+
+                // Current camera position
+                const camera = this.activeViewCamera.getActiveProjection();
+                const currentPosition = camera.position.clone();
+
+                if(pickedObject.number !== this.currentRoomNumberTarget) {
+
+                    //Current camera target
+                    const currentTarget = new THREE.Vector3();
+                    camera.getWorldDirection(currentTarget).add(camera.position);
+
+                    //the duration of the animations have to be the same so it is synched
+                    //the duration is calculated based on the distance to ensure farther objects are not too fast to center
+                    const distance = currentPosition.distanceTo(newPosition);
+                    const duration = Math.min(4000, 500 * distance);
+
+                    //The Tween for the position and target had to be separate so a glitching move does not happen.
+                    // Tween the camera position
+                    new TWEEN.Tween(currentPosition)
+                        .to(newPosition, duration) // Transition duration in milliseconds
+                        .easing(TWEEN.Easing.Cubic.InOut) // Easing function
+                        .onUpdate(() => {
+                            camera.position.set(currentPosition.x, currentPosition.y, currentPosition.z);
+                        })
+                        .start();
+
+                    //Tween camera lookAt target
+                    new TWEEN.Tween(currentTarget)
+                        .to(objectPosition, duration)
+                        .easing(TWEEN.Easing.Cubic.InOut)
+                        .onUpdate(() => {
+                            camera.lookAt(currentTarget);
+                        })
+                        .start();
+
+                    if(this.currentRoomNumberTarget!==0) {
+                        this.chandelierLights.get(this.currentRoomNumberTarget).hideLight(duration);
+                    }
+                    let light = this.chandelierLights.get(pickedObject.number);
+                    light.showLight(duration);
+                    this.currentRoomNumberTarget=pickedObject.number;
+                }
+            }
+        }
     }
 
     keyChange(event, state) {
@@ -629,9 +706,16 @@ export default class ThumbRaiser {
                     this.scene3D.add(hospitalBedObject);
                     hospitalBedObject.position.set(hospitalBedPosition.x, hospitalBedPosition.y, hospitalBedPosition.z);
                     hospitalBedObject.rotation.y = room.rotation;
+                    hospitalBedObject.name = `HospitalBed_${room["Room Number"]}`;
+                    hospitalBedObject.number = room["Room Number"];
 
                     patientPositionArray.push(room.patientPosition);
                     patientRotationArray.push(room.patientRotation);
+                    
+                    // Create the chandelierLight
+                    let chandelierLightObject = new ChandelierLight(this.lightsParameters, hospitalBedPosition.x, hospitalBedPosition.y + 0.8, hospitalBedPosition.z);
+                    this.chandelierLights.set(room["Room Number"], chandelierLightObject);
+                    this.scene3D.add(chandelierLightObject.object);
 
                 });
             })
@@ -650,11 +734,6 @@ export default class ThumbRaiser {
                         this.scene3D.add(patientObject);
                         patientObject.position.set(patientPosition.x, patientPosition.y, patientPosition.z);
                         patientObject.rotation.y = (patientRotationArray[index]);
-
-                        // Create the chandelierLight
-                        let chandelierLightObject = new ChandelierLight(this.lightsParameters, patientPosition.x, patientPosition.y + 0.5, patientPosition.z);
-                        this.scene3D.add(chandelierLightObject.object)
-
                     }
                     index++;
 

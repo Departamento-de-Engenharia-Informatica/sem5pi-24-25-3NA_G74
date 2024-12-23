@@ -7,6 +7,7 @@ export default class HospitalBed {
         this.onLoad = function (description) {
             this.object = description.scene;
             this.animations = description.animations;
+            this.object.userData = { selectable: true };
 
             // Turn on shadows for this object
             this.setShadow(this.object);

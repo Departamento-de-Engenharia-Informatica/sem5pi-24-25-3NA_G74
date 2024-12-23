@@ -133,6 +133,10 @@ export default class Camera {
         }
     }
 
+    getActiveProjection() {
+        return this.object;
+    }
+
     initialize() {
         this.orientation = this.initialOrientation.clone();
         this.distance = this.initialDistance;
