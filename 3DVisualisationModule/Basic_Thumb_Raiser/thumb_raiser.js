@@ -402,10 +402,10 @@ export default class ThumbRaiser {
         // Perform raycasting
         const intersects = this.raycaster.intersectObjects(this.scene3D.children, true);
         if (intersects.length > 0) {
-            const pickedObject = intersects[0].object.parent.parent.parent.parent.parent;
+            const pickedObject = intersects[0].object?.parent?.parent?.parent?.parent?.parent;
 
             //console.log(pickedObject.userData);
-            if (pickedObject.userData.selectable) {
+            if (pickedObject?.userData?.selectable) {
                 const objectPosition = pickedObject.position;
 
                 console.log("Selected " + pickedObject.name + " in position "
