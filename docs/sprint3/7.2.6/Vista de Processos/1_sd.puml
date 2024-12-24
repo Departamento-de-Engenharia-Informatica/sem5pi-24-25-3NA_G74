@@ -1,0 +1,28 @@
+@startuml
+
+title "PATCH Medical Record"
+
+actor Doctor as doc
+
+participant ":SARM"  as sys
+
+activate doc
+
+doc -> sys : patch medical record
+
+activate sys
+
+alt success
+
+sys --> doc : 200 OK Status
+
+else failure
+
+sys --> doc : Error Code
+
+end
+
+
+
+
+@enduml

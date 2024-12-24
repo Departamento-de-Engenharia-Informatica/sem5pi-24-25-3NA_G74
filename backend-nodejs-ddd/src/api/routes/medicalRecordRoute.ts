@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { celebrate, Joi } from 'celebrate';
 import { Container } from 'typedi';
 import MedicalRecordService from '../../services/medicalRecordService';
+import MedicalRecordController from '../../controllers/medicalRecordController';
 
 const route = Router();
 
@@ -31,6 +32,7 @@ export default (app: Router) => {
     }),
     async (req, res, next) => {
       try {
+        console.log(req.body)
         const medicalRecordServiceInstance = Container.get(MedicalRecordService);
         const record = await medicalRecordServiceInstance.getByPatientId(req.params.patientId);
         return res.status(200).json({ record });
@@ -73,8 +75,9 @@ export default (app: Router) => {
     }),
     async (req, res, next) => {
       try {
-        const medicalRecordServiceInstance = Container.get(MedicalRecordService);
-        const record = await medicalRecordServiceInstance.updateByPatientId(req.params.patientId, req.body);
+        
+        const medicalRecordControllerInstance = Container.get(MedicalRecordController);
+        const record = await medicalRecordControllerInstance.updateByPatientId(req.params.patientId, req.body);
         return res.status(200).json({ record });
       } catch (e) {
         return next(e);
@@ -83,7 +86,45 @@ export default (app: Router) => {
   );
 
   route.get(
-    '/:patientId/'
+    '/medicalCondition/:medicalConditionCode',
+    celebrate({
+      params: Joi.object({
+        medicalConditionCode: Joi.string().required(),
+      })
+    }),
+    async (req, res, next) =>{
+      try {
+        console.log('Received request for medical condition:', req.params.medicalConditionCode);
+        const medicalRecordControllerInstance = Container.get(MedicalRecordController);
+        const records = await medicalRecordControllerInstance.findByMedicalCondition(req.params.medicalConditionCode);
+        console.log('Sending response with records');
+        return res.status(200).json({ records });
+      } catch (e) {
+        console.error('Error in route handler:', e);
+        return next(e);
+      }
+    }
+  )
+
+  route.get(
+    '/allergy/:allergyCode',
+    celebrate({
+      params: Joi.object({
+        allergyCode: Joi.string().required(),
+      })
+    }),
+    async (req, res, next) =>{
+      try {
+        console.log('Received request for allergy:', req.params.allergyCode);
+        const medicalRecordControllerInstance = Container.get(MedicalRecordController);
+        const records = await medicalRecordControllerInstance.findByAllergy(req.params.allergyCode);
+        console.log('Sending response with records');
+        return res.status(200).json({ records });
+      } catch (e) {
+        console.error('Error in route handler:', e);
+        return next(e);
+      }
+    }
   )
 
   
