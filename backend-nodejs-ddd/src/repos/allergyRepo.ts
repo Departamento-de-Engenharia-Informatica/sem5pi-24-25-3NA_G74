@@ -15,13 +15,8 @@ export default class AllergyRepo implements IAllergyRepo {
 
     constructor(
         @Inject('allergySchema') private allergySchema : Model<IAllergyPersistence & Document>,
+        @Inject('logger') private logger
     ) { }
-
-    private createBaseQuery (): any {
-        return {
-            where: {},
-        }
-    }
 
     public async exists (allergyId: AllergyId | string): Promise<boolean> {
 
@@ -30,7 +25,7 @@ export default class AllergyRepo implements IAllergyRepo {
         const query = { domainId: idX};
         const allergyDocument = await this.allergySchema.findOne( query );
 
-        return !!allergyDocument === true;
+        return !!allergyDocument;
     }
 
     public async save (allergy: Allergy): Promise<Allergy> {
@@ -126,5 +121,17 @@ export default class AllergyRepo implements IAllergyRepo {
         }
 
     }
-    
+
+    public async findByDescription(description: string): Promise<Allergy> {
+
+        const query = { description: description.toString() };
+        const allergyRecord = await this.allergySchema.findOne(query)
+
+        if (allergyRecord != null) {
+            return AllergyMap.toDomain(allergyRecord);
+        }
+        else {
+            throw Error("Allergy not found");
+        }
+    }
 }

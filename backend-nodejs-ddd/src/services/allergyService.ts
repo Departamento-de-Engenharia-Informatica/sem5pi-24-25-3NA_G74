@@ -14,7 +14,7 @@ export default class AllergyService implements IAllergyService {
     ) { }
 
 
-    public async createAllergy(allergyDTO: IAllergyDTO): Promise<Result<IAllergyDTO>> {
+    public async CreateAllergy(allergyDTO: IAllergyDTO): Promise<Result<IAllergyDTO>> {
 
         try {
             const allergyOrError = Allergy.create(allergyDTO);

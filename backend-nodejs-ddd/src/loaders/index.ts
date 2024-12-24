@@ -5,11 +5,17 @@ import Logger from './logger';
 
 import config from '../../config';
 import path from 'path';
+import {ALL} from "node:dns";
 
 export default async ({ expressApp }) => {
   const mongoConnection = await mongooseLoader();
   Logger.info('✌️ DB loaded and connected!');
 
+  const allergySchema = {
+    name: 'allergySchema',
+    schema: '../persistence/schemas/allergySchema',
+  };
+  
   const medicalConditionSchema = {
     // compare with the approach followed in repos and services
     name: 'medicalConditionSchema',
@@ -33,6 +39,11 @@ export default async ({ expressApp }) => {
     schema: '../persistence/schemas/roleSchema',
   };
 
+  const allergyController = {
+    name: config.controllers.allergy.name,
+    path: config.controllers.allergy.path,
+  };
+  
   const medicalConditionController = {
     name: config.controllers.medicalCondition.name,
     path: config.controllers.medicalCondition.path,
@@ -46,6 +57,11 @@ export default async ({ expressApp }) => {
   const roleController = {
     name: config.controllers.role.name,
     path: config.controllers.role.path,
+  };
+  
+  const allergyRepo = {
+    name: config.repos.allergy.name,
+    path: config.repos.allergy.path,
   };
 
   const medicalConditionRepo = {
@@ -67,6 +83,11 @@ export default async ({ expressApp }) => {
     name: config.repos.user.name,
     path: config.repos.user.path,
   };
+  
+  const allergyService = {
+    name: config.services.allergy.name,
+    path: config.services.allergy.path,
+  };
 
   const roleService = {
     name: config.services.role.name,
@@ -85,10 +106,10 @@ export default async ({ expressApp }) => {
 
   await dependencyInjectorLoader({
     mongoConnection,
-    schemas: [userSchema, roleSchema, medicalConditionSchema, medicalRecordSchema],
-    controllers: [roleController, medicalConditionController, medicalRecordController],
-    repos: [roleRepo, userRepo, medicalConditionRepo, medicalRecordRepo],
-    services: [roleService, medicalConditionService, medicalRecordService],
+    schemas: [userSchema, roleSchema, medicalConditionSchema, medicalRecordSchema, allergySchema],
+    controllers: [roleController, medicalConditionController, medicalRecordController, allergyController],
+    repos: [roleRepo, userRepo, medicalConditionRepo, medicalRecordRepo, allergyRepo],
+    services: [roleService, medicalConditionService, medicalRecordService, allergyService],
   });
   Logger.info('✌️ Schemas, Controllers, Repositories, Services, etc. loaded');
 

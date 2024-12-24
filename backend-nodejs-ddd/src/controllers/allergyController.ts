@@ -2,10 +2,10 @@ import { Request, Response, NextFunction } from 'express';
 import { Inject, Service } from 'typedi';
 import config from "../../config";
 import {BaseController} from "../core/infra/BaseController";
-import IAllergyRepo from "../services/IRepos/IAllergyRepo";
 import IAllergyService from "../services/IServices/IAllergyService";
 import {IAllergyDTO} from "../dto/IAllergyDTO";
 import {Result} from "../core/logic/Result";
+import IAllergyController from "./IControllers/IAllergyController";
 
 @Service()
 export default class AllergyController extends BaseController implements IAllergyController {
@@ -23,7 +23,7 @@ export default class AllergyController extends BaseController implements IAllerg
     public async createAllergy(req: Request, res: Response, next: NextFunction) {
 
         try {
-            const allergyOrError = await this.allergyServiceInstance.createAllergy(req.body as IAllergyDTO) as Result<IAllergyDTO>;
+            const allergyOrError = await this.allergyServiceInstance.CreateAllergy(req.body as IAllergyDTO) as Result<IAllergyDTO>;
             if (allergyOrError.isFailure) {
                 return res.status(402).send();
             }
