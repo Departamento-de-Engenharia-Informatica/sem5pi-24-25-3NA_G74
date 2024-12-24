@@ -32,5 +32,8 @@ export default (app: Router) => {
         (req, res, next) => ctrl.updateAllergy(req, res, next)
     );
 
+
+    
+
     route.get('', (req, res, next) => ctrl.searchAllergy(req, res, next));
 }

@@ -1,6 +1,13 @@
 import { Result } from '../../core/logic/Result';
+import { MedicalRecord } from '../../domain/medicalRecord';
 import IMedicalRecordDTO from '../../dto/IMedicalRecordDTO';
 
 export default interface IMedicalRecordService {
-  getAll(): Promise<Result</*x*/>>;
+
+  updateByPatientId(patientId: string, updateData: any): Promise<any>;
+
+  findByMedicalCondition(medicalCondition: string): Promise<any[]>;
+  
+  findByAllergy(allergy: string): Promise<any[]>;
+
 }

@@ -1,8 +1,10 @@
 import { Service, Inject } from 'typedi';
 import MedicalRecordRepo from '../repos/medicalRecordRepo';
+import IMedicalRecordService from './IServices/IMedicalRecordService';
 
 @Service()
-export default class MedicalRecordService {
+export default class MedicalRecordService implements IMedicalRecordService {
+  
   constructor(@Inject('MedicalRecordRepo') private medicalRecordRepo: MedicalRecordRepo) {}
 
   public async getAll() {
@@ -49,4 +51,44 @@ export default class MedicalRecordService {
       throw e;
     }
   }
+
+  public async findByMedicalCondition(medicalCondition: string) {
+    try {
+      console.log('Fetching all records');
+      const records = await this.medicalRecordRepo.findAll();
+      
+      const filteredRecords = records.filter(record => record.medicalConditions.includes(medicalCondition));
+      
+      if (filteredRecords.length === 0) {
+        throw new Error("Medical Condition doesn't exist.");
+      }
+      
+      console.log('Filtered records:', filteredRecords);
+      return filteredRecords;
+    } catch (e) {
+      console.error('Error in findByMedicalCondition:', e);
+      throw e;
+    }
+  }
+  
+  public async findByAllergy(allergy: string) {
+    try {
+      console.log('Fetching all records');
+      const records = await this.medicalRecordRepo.findAll();
+      
+      const filteredRecords = records.filter(record => record.allergies.includes(allergy));
+      
+      if (filteredRecords.length === 0) {
+        throw new Error("Allergy doesn't exist.");
+      }
+      
+      console.log('Filtered records:', filteredRecords);
+      return filteredRecords;
+    } catch (e) {
+      console.error('Error in findByMedicalCondition:', e);
+      throw e;
+    }
+  }
+
+  
 }

@@ -1,0 +1,22 @@
+@startuml
+
+
+autonumber
+
+actor "Doctor" as doc
+
+title "PATCH Medical Record"
+
+box "<<Backoffice Module Node>>"
+
+participant MedicalRecordRoute
+participant MedicalRecordController
+participant MedicalRecordService
+participant MedicalRecordRepo
+participant MedicalRecordSchema
+participant MedicalRecordDTO
+participant MedicalRecord
+
+
+
+@enduml
