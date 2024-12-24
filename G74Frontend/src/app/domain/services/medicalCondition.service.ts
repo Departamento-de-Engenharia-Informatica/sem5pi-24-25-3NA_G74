@@ -14,7 +14,7 @@ import { MedicalConditionMapper } from '../../mappers/medicalConditionMapper';
 
 export class MedicalConditionService {
 
-    private apiUrl = `${environment.nodeApiUrl}/medical-conditions/`;
+    private apiUrl = `${environment.apiUrlNode}/medical-conditions/`;
 
     constructor(private http: HttpClient) { }
 
