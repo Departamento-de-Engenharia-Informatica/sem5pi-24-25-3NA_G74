@@ -1,0 +1,66 @@
+<div id="mc-list-container">
+    <h2>Medical Conditions</h2>
+  
+    <!-- Search Filters -->
+    <div class="filters">
+      <div class="filter-group">
+        <label for="code">Code:</label>
+        <input
+          type="text"
+          id="code"
+          [(ngModel)]="codeFilter"
+          placeholder="e.g. MC001"
+        />
+      </div>
+      <div class="filter-group">
+        <label for="designation">Designation:</label>
+        <input
+          type="text"
+          id="designation"
+          [(ngModel)]="designationFilter"
+          placeholder="e.g. Hypertension"
+        />
+      </div>
+  
+      <div class="actions">
+        <button (click)="search()">Search</button>
+        <button (click)="clearFilters()">Clear</button>
+      </div>
+    </div>
+  
+    <!-- Message / Loading -->
+    <div class="message" *ngIf="message">{{ message }}</div>
+    <div class="loading" *ngIf="isLoading">Loading...</div>
+  
+    <!-- Table of Medical Conditions -->
+    <table *ngIf="medicalConditions.length && !isLoading">
+      <thead>
+        <tr>
+          <th>Code</th>
+          <th>Designation</th>
+          <th>Description</th>
+          <th>Common Symptoms</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let mc of medicalConditions">
+          <td>{{ mc.medicalConditionCode }}</td>
+          <td>{{ mc.designation }}</td>
+          <td>{{ mc.description }}</td>
+          <td>{{ mc.commonSymptoms }}</td>
+          <td>
+            <button class="update-button" (click)="openUpdatePopup(mc)">Update</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <!-- Update Popup -->
+    <app-update-medical-condition
+      *ngIf="selectedForUpdate"
+      [medicalCondition]="selectedForUpdate"
+      (close)="closeUpdatePopup($event)"
+    ></app-update-medical-condition>
+  </div>
+  

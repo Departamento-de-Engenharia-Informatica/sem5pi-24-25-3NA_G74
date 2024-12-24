@@ -1,0 +1,42 @@
+<div class="modal-overlay">
+    <div class="update-popup">
+      <div class="update-header">
+        <h3>Update Medical Condition</h3>
+        <button class="close-button" (click)="cancel()">×</button>
+      </div>
+  
+      <div class="update-form">
+        <label for="code">Code (Read Only):</label>
+        <input
+          type="text"
+          id="code"
+          [value]="medicalCondition.medicalConditionCode"
+          readonly
+        />
+  
+        <label for="designation">Designation:</label>
+        <input
+          type="text"
+          id="designation"
+          [(ngModel)]="medicalCondition.designation"
+        />
+  
+        <label for="description">Description:</label>
+        <textarea
+          id="description"
+          rows="3"
+          [(ngModel)]="medicalCondition.description"
+        ></textarea>
+      </div>
+  
+      <div class="actions">
+        <button (click)="update()" [disabled]="isLoading">
+          {{ isLoading ? 'Updating...' : 'Update' }}
+        </button>
+        <button (click)="cancel()">Cancel</button>
+      </div>
+  
+      <p class="update-message" *ngIf="message">{{ message }}</p>
+    </div>
+  </div>
+  

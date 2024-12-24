@@ -17,11 +17,14 @@ import { MainMenuComponent } from './presentation/components/main-menu/main-menu
 import { PatientMenuComponent } from './presentation/components/patient-menu/patient-menu.component';
 import { RegisterOperationComponent } from './presentation/components/register-operation/register-operation.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import {ListOperationtypeComponent} from './presentation/components/list-operationtype/list-operationtype.component';
+import { ListOperationtypeComponent } from './presentation/components/list-operationtype/list-operationtype.component';
 import { JwtInterceptor } from './domain/services/jwt-interceptor.service';
 import { LoginComponent } from './presentation/components/login/login.component';
 import { WelcomeComponent } from './presentation/components/welcome/welcome.component';
 import { LayoutComponent } from './presentation/components/layout/layout.component';
+import { CreateMedicalConditionComponent } from './presentation/components/medical-condition-create/medical-condition-create.component';
+import { MedicalConditionListComponent } from './presentation/components/medical-condition-list/medical-condition-list.component';
+import { UpdateMedicalConditionComponent } from './presentation/components/medical-condition-update/medical-condition-update.component';
 
 
 @NgModule({
@@ -35,7 +38,10 @@ import { LayoutComponent } from './presentation/components/layout/layout.compone
     UpdateUserComponent,
     DeleteUserComponent,
     ListOperationtypeComponent,
-    LoginComponent    
+    LoginComponent,
+    CreateMedicalConditionComponent,
+    MedicalConditionListComponent,
+    UpdateMedicalConditionComponent
   ],
   imports: [
     BrowserModule,
@@ -46,7 +52,7 @@ import { LayoutComponent } from './presentation/components/layout/layout.compone
   ],
   providers: [
     provideAnimationsAsync(),
-    {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true}
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

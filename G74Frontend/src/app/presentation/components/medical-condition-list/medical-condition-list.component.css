@@ -1,0 +1,115 @@
+#mc-list-container {
+    max-width: 900px;
+    margin: 30px auto;
+    background-color: #fefefe;
+    padding: 20px 25px;
+    border-radius: 6px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+  }
+  
+  #mc-list-container h2 {
+    font-size: 1.6rem;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+  }
+  
+  /* Filters */
+  .filters {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 15px;
+  }
+  
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .filter-group label {
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  .filter-group input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .actions button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    background-color: #0366d6;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .actions button:hover {
+    background-color: #024ea1;
+  }
+  
+  /* Messages */
+  .message {
+    margin: 10px 0;
+    color: #444;
+    font-weight: bold;
+  }
+  
+  .loading {
+    font-style: italic;
+    color: #999;
+  }
+  
+  /* Table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+  }
+  
+  thead {
+    background-color: #f0f0f0;
+  }
+  
+  th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+  }
+  
+  th {
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+  }
+  
+  td {
+    font-size: 0.95rem;
+  }
+  
+  /* Update Button */
+  .update-button {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .update-button:hover {
+    background-color: #218838;
+  }
+  

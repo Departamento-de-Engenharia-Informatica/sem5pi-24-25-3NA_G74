@@ -35,7 +35,7 @@ export default class MedicalConditionController extends BaseController implement
             }
 
             const medicalConditionDTO = medicalConditionOrError.getValue();
-            return this.created(res)
+            return this.created(res);
 
         } catch (e) {
             this.fail(e);
@@ -62,7 +62,13 @@ export default class MedicalConditionController extends BaseController implement
 
     public async searchMedicalCondition(req: Request, res: Response, next: NextFunction) {
         try {
-            const medicalConditionOrError = await this.medicalConditionServiceInstance.SearchMedicalCondition(req.params.medicalConditionCode, req.params.designation) as Result<IMedicalConditionDTO[]>;
+
+
+            const { medicalConditionCode, designation } = req.query;
+
+            const medicalConditionOrError = await this.medicalConditionServiceInstance.SearchMedicalCondition(
+                medicalConditionCode as string,
+                designation as string) as Result<IMedicalConditionDTO[]>;
 
             if (medicalConditionOrError.isFailure) {
                 return res.status(404).send();

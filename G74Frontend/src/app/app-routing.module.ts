@@ -25,6 +25,10 @@ import { UnauthorizedComponent } from './presentation/components/unauthorized/un
 import { WelcomeComponent } from './presentation/components/welcome/welcome.component';
 import { LayoutComponent } from './presentation/components/layout/layout.component';
 
+import { CreateMedicalConditionComponent } from './presentation/components/medical-condition-create/medical-condition-create.component';
+import { UpdateMedicalConditionComponent } from './presentation/components/medical-condition-update/medical-condition-update.component';
+import { MedicalConditionListComponent} from './presentation/components/medical-condition-list/medical-condition-list.component'
+
 const routes: Routes = [
   { path: '', redirectTo: '/main', pathMatch: 'full' },
   { path: 'main', component: MainMenuComponent },
@@ -47,6 +51,8 @@ const routes: Routes = [
       { path: 'admin/list-all-staff', component: ListAllStaffComponent },
       { path: 'admin/update-staff/:licenceNumber', component: StaffUpdateComponent },
       { path: 'admin/list-operationtype', component: ListOperationtypeComponent},
+      { path: 'admin/create-medical-condition', component: CreateMedicalConditionComponent },
+      { path: 'admin/list-medical-condition', component: MedicalConditionListComponent },
 
       //Patient routes
       { path: 'patient/update-user', component: UpdateUserComponent },
@@ -56,7 +62,9 @@ const routes: Routes = [
       { path: 'doctor/create-operation', component: RegisterOperationComponent, canActivate: [AuthGuard], data: {role: 'Doctor'}  },
       { path: 'doctor/update-operation', component: UpdateOperationComponent, canActivate: [AuthGuard], data: {role: 'Doctor'}  },
       { path: 'doctor/list-operation', component: ListAllOperationComponent, canActivate: [AuthGuard], data: {role: 'Doctor'}  },
-      { path: 'doctor/delete-operation', component: DeleteOperationComponent, canActivate: [AuthGuard], data: {role: 'Doctor'}  }
+      { path: 'doctor/delete-operation', component: DeleteOperationComponent, canActivate: [AuthGuard], data: {role: 'Doctor'}  },
+      { path: 'doctor/list-medical-condition', component: MedicalConditionListComponent}
+
 
     ]
 
