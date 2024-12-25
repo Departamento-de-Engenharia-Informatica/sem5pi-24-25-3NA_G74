@@ -1,4 +1,4 @@
-import { Container, Service, Inject } from "typedi";
+
 import config from "../../config";
 import IAllergyService from "./IServices/IAllergyService";
 import IAllergyRepo from "./IRepos/IAllergyRepo";
@@ -6,11 +6,12 @@ import {IAllergyDTO} from "../dto/IAllergyDTO";
 import {Result} from "../core/logic/Result";
 import {Allergy} from "../domain/Allergy";
 import {AllergyMap} from "../mappers/AllergyMap";
+import {Inject, Service} from "typedi";
 
 @Service()
 export default class AllergyService implements IAllergyService {
     constructor(
-        @Inject(config.repos.allergy) private allergyRepo: IAllergyRepo,
+        @Inject(config.repos.allergy.name) private allergyRepo: IAllergyRepo,
     ) { }
 
 

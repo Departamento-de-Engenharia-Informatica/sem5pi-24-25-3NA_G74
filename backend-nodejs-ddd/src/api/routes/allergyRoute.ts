@@ -1,11 +1,12 @@
 import { Router } from "express";
 import { celebrate, Joi } from "celebrate";
 
-import { Container } from "typedi";
+
 import config from "../../../config";
 import IAllergyController from "../../controllers/IControllers/IAllergyController";
 import isAuth from "../middlewares/isAuth";
 import checkRole from "../middlewares/checkRole";
+import {Container} from "typedi";
 
 const route = Router();
 

@@ -1,6 +1,8 @@
 
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
+import {AllergyService} from "../../domain/services/allergy.service";
+import {AllergyDTO} from "../../dto/allergy.dto";
 
 @Injectable({
   providedIn: 'root'

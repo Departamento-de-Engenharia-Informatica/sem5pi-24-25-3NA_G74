@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Observable, catchError, throwError, tap, map } from 'rxjs';
 import { HttpParams } from '@angular/common/http';
-import { MedicalConditionDto } from '../../dto/medicalCondition.dto';
-import { MedicalConditionMapper } from '../../mappers/medicalConditionMapper';
+import {AllergyDTO} from "../../dto/allergy.dto";
+import {AllergyMapper} from "../../mappers/AllergyMapper";
 
 
 @Injectable({
@@ -14,7 +14,7 @@ import { MedicalConditionMapper } from '../../mappers/medicalConditionMapper';
 
 export class AllergyService {
 
-    private apiUrl = `${environment.nodeApiUrl}/allergy/`;
+    private apiUrl = `${environment.apiUrlNode}/allergy/`;
 
     constructor(private http: HttpClient) { }
 
