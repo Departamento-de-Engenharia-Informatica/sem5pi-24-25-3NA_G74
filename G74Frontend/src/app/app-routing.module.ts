@@ -28,6 +28,9 @@ import { LayoutComponent } from './presentation/components/layout/layout.compone
 import { CreateMedicalConditionComponent } from './presentation/components/medical-condition-create/medical-condition-create.component';
 import { UpdateMedicalConditionComponent } from './presentation/components/medical-condition-update/medical-condition-update.component';
 import { MedicalConditionListComponent} from './presentation/components/medical-condition-list/medical-condition-list.component'
+import {AllergyCreateComponent} from './presentation/components/allergy-create/allergy-create.component';
+import {AllergyUpdateComponent} from './presentation/components/allergy-update/allergy-update.component';
+import {AllergyListComponent} from './presentation/components/allergy-list/allergy-list.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/main', pathMatch: 'full' },
@@ -53,6 +56,8 @@ const routes: Routes = [
       { path: 'admin/list-operationtype', component: ListOperationtypeComponent},
       { path: 'admin/create-medical-condition', component: CreateMedicalConditionComponent },
       { path: 'admin/list-medical-condition', component: MedicalConditionListComponent },
+      { path: 'admin/create-allergy', component: AllergyCreateComponent },
+      { path: 'admin/update-allergy', component: AllergyUpdateComponent },
 
       //Patient routes
       { path: 'patient/update-user', component: UpdateUserComponent },
@@ -63,7 +68,8 @@ const routes: Routes = [
       { path: 'doctor/update-operation', component: UpdateOperationComponent, canActivate: [AuthGuard], data: {role: 'Doctor'}  },
       { path: 'doctor/list-operation', component: ListAllOperationComponent, canActivate: [AuthGuard], data: {role: 'Doctor'}  },
       { path: 'doctor/delete-operation', component: DeleteOperationComponent, canActivate: [AuthGuard], data: {role: 'Doctor'}  },
-      { path: 'doctor/list-medical-condition', component: MedicalConditionListComponent}
+      { path: 'doctor/list-medical-condition', component: MedicalConditionListComponent},
+      { path: 'doctor/list-allergy', component: AllergyListComponent }
 
 
     ]

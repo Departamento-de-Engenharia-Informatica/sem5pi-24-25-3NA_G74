@@ -29,7 +29,7 @@ export default class AllergyController extends BaseController implements IAllerg
             }
 
             const allergyDTO = allergyOrError.getValue();
-            return this.created(res)
+            return this.created(res);
 
         } catch (e) {
             this.fail(e);

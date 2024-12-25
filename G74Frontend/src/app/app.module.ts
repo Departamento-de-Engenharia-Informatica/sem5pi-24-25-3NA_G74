@@ -25,6 +25,9 @@ import { LayoutComponent } from './presentation/components/layout/layout.compone
 import { CreateMedicalConditionComponent } from './presentation/components/medical-condition-create/medical-condition-create.component';
 import { MedicalConditionListComponent } from './presentation/components/medical-condition-list/medical-condition-list.component';
 import { UpdateMedicalConditionComponent } from './presentation/components/medical-condition-update/medical-condition-update.component';
+import { AllergyCreateComponent } from './presentation/components/allergy-create/allergy-create.component';
+import { AllergyUpdateComponent } from './presentation/components/allergy-update/allergy-update.component';
+import { AllergyListComponent } from './presentation/components/allergy-list/allergy-list.component';
 
 
 @NgModule({
@@ -41,7 +44,10 @@ import { UpdateMedicalConditionComponent } from './presentation/components/medic
     LoginComponent,
     CreateMedicalConditionComponent,
     MedicalConditionListComponent,
-    UpdateMedicalConditionComponent
+    UpdateMedicalConditionComponent,
+    AllergyCreateComponent,
+    AllergyUpdateComponent,
+    AllergyListComponent
   ],
   imports: [
     BrowserModule,
