@@ -41,10 +41,11 @@ export default class MedicalConditionService implements IMedicalConditionService
 
     public async UpdateMedicalCondition(medicalConditionDTO: IMedicalConditionDTO): Promise<Result<IMedicalConditionDTO>> {
         try {
+
             const medicalCondition = await this.medicalConditionRepo.findByMedicalConditionCode(medicalConditionDTO.medicalConditionCode);
 
             if (medicalCondition === null) {
-                return Result.fail<IMedicalConditionDTO>("MedicalCondition not found");
+                return Result.fail<IMedicalConditionDTO>("Medical Condition not found");
             }
             else {
                 if (medicalConditionDTO.designation != null) {

@@ -31,9 +31,12 @@ export class MedicalConditionService {
 
     }
 
-    updateMedicalCondition(medicalCondition: MedicalConditionDto): Observable<MedicalConditionDto> {
+    updateMedicalCondition(medicalConditionCode: string, updatedData: Partial<MedicalConditionDto>): Observable<MedicalConditionDto> {
         // PATCH /medical-conditions
-        return this.http.patch<MedicalConditionDto>(this.apiUrl, medicalCondition)
+
+        const url = `${this.apiUrl}${medicalConditionCode}`;
+
+        return this.http.patch<MedicalConditionDto>(url, updatedData)
             .pipe(
                 tap(response => console.log('Update response:', response)),
                 catchError(error => {
