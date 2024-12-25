@@ -1,1 +1,47 @@
-<p>allergy-create works!</p>
+<div id="create-allergy-container">
+  <h2>Create Allergy</h2>
+  <form (ngSubmit)="onSubmit()" id="create-allergy-form">
+    <div class="form-group">
+      <label for="allergyCode">Allergy Code:</label>
+      <input
+        type="text"
+        id="allergyCode"
+        [(ngModel)]="allergy.code"
+        name="allergyCode"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="designation">Designation:</label>
+      <input
+        type="text"
+        id="designation"
+        [(ngModel)]="allergy.designation"
+        name="designation"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description:</label>
+      <textarea
+        id="description"
+        [(ngModel)]="allergy.description"
+        name="description"
+        rows="3"
+        required
+      ></textarea>
+    </div>
+
+    <button
+      class="submit-button"
+      type="submit"
+      [disabled]="isLoading"
+    >
+      {{ isLoading ? 'Creating...' : 'Create Allergy' }}
+    </button>
+  </form>
+
+  <p *ngIf="message" id="form-message">{{ message }}</p>
+</div>
