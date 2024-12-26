@@ -1,0 +1,61 @@
+<div class="container">
+    <!--Title-->
+    <h2>Patients Medical Records</h2>
+
+    
+    <!--Search Bar-->
+    <div class="filter-section">
+        <select [(ngModel)]="selectedOption" (keydown.enter)="onSearch()" >
+          <option value="medical condition">Medical Condition</option>
+          <option value="allergy">Allergy</option>
+        </select>
+        <div class="search-container">
+          <input type="text" [(ngModel)]="searchInput" [placeholder]="'Search name '" (keydown.enter)="onSearch()">
+          <button class="search-btn"  aria-label="Search" (click)="onSearch()">
+            Search
+          </button>
+        </div>
+    </div>
+
+    <!--Not Found Message-->
+    <div *ngIf="medicalRecords.length === 0" class="no-records">
+      <p>Medical Records Not Found.</p>
+    </div>
+
+    <!--Loading -->
+    <div class="no-records" *ngIf="isLoading">Loading...</div>
+    
+    <!--Medical Records List-->
+    <div *ngFor="let record of medicalRecords; let i = index; trackBy: trackByIndex" class="medical-record">
+
+      <ng-template #viewMode>
+        <div><strong>Patient ID:</strong> {{ record.patientId }}</div>
+        <div><strong>Alergies:</strong> {{ record.allergies.join(', ') }}</div>
+        <div><strong>Medical Conditions:</strong> {{ record.medicalConditions.join(', ') }}</div>
+        <div><strong>Free Text:</strong> {{ record.freeText }}</div>
+        <div class="actions">
+            <button class="edit-btn" (click)="editMedicalRecord(record)">Edit</button>
+        </div>
+      </ng-template>
+
+        <!--If edit button is pressed-->
+        <div *ngIf="selectedForUpdate && selectedForUpdate.patientId === record.patientId; else viewMode" class="medical-record">
+          <div><strong>Patient ID:</strong></div>
+          <input type="text" [(ngModel)]="selectedForUpdate!.patientId" />
+          <div><strong>Allergies:</strong></div>
+          <input type="text" [(ngModel)]="selectedForUpdate!.allergies">
+          <div><strong>Medical Conditions:</strong></div>
+          <input type="text" [(ngModel)]="selectedForUpdate!.medicalConditions" />
+          <div><strong>Free Text:</strong></div>
+          <input type="text" [(ngModel)]="selectedForUpdate!.freeText" />
+          <div class="actions">
+            <button class="edit-btn">Save</button>
+            <button class="edit-btn" (click)="cancelEdit()">Cancel</button>
+          </div>
+
+        </div>
+        <hr>
+    </div>
+
+
+</div>
