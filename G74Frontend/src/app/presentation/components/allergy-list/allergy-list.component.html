@@ -1,0 +1,54 @@
+<div id="allergy-list-container">
+  <h2>Allergies</h2>
+
+  <!-- Search Filters -->
+  <div class="filters">
+    <div class="filter-group">
+      <label for="code">Code:</label>
+      <input
+        type="text"
+        id="code"
+        [(ngModel)]="codeFilter"
+        placeholder="e.g. ALG001"
+      />
+    </div>
+
+    <div class="actions">
+      <button (click)="search()">Search</button>
+      <button (click)="clearFilters()">Clear</button>
+    </div>
+  </div>
+
+  <!-- Message / Loading -->
+  <div class="message" *ngIf="message">{{ message }}</div>
+  <div class="loading" *ngIf="isLoading">Loading...</div>
+
+  <!-- Table of Allergies -->
+  <table *ngIf="allergy.length && !isLoading">
+    <thead>
+    <tr>
+      <th>Code</th>
+      <th>Designation</th>
+      <th>Description</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let alg of allergy">
+      <td>{{ alg.code }}</td>
+      <td>{{ alg.designation }}</td>
+      <td>{{ alg.description }}</td>
+      <td>
+        <button class="update-button" (click)="openUpdatePopup(alg)">Update</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <!-- Update Popup -->
+  <app-allergy-update
+    *ngIf="selectedForUpdate"
+    [allergy]="selectedForUpdate"
+    (close)="closeUpdatePopup($event)"
+  ></app-allergy-update>
+</div>

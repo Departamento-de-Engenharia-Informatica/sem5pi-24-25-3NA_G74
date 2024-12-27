@@ -44,7 +44,7 @@ export default (app: Router) => {
     );
 
     route.patch(
-        '',
+        '/:medicalConditionCode',
         isAuth,
         checkRole([Roles.Admin]),
         celebrate({
@@ -56,5 +56,5 @@ export default (app: Router) => {
         (req, res, next) => ctrl.updateMedicalCondition(req, res, next)
     );
 
-    route.get('', isAuth, checkRole([Roles.Admin]), (req, res, next) => ctrl.searchMedicalCondition(req, res, next));
+    route.get('', isAuth, checkRole([Roles.Admin, Roles.Doctor]), (req, res, next) => ctrl.searchMedicalCondition(req, res, next));
 }

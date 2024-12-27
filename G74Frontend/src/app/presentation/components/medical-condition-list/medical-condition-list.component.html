@@ -40,7 +40,10 @@
           <th>Designation</th>
           <th>Description</th>
           <th>Common Symptoms</th>
-          <th>Actions</th>
+          <ng-container *ngIf="isAdmin">
+            <th *ngIf="isAdmin" >Actions</th>
+          </ng-container>
+          
         </tr>
       </thead>
       <tbody>
@@ -49,9 +52,12 @@
           <td>{{ mc.designation }}</td>
           <td>{{ mc.description }}</td>
           <td>{{ mc.commonSymptoms }}</td>
-          <td>
-            <button class="update-button" (click)="openUpdatePopup(mc)">Update</button>
-          </td>
+          <ng-container *ngIf="isAdmin">
+            <td>
+              <button class="update-button" *ngIf="isAdmin" (click)="openUpdatePopup(mc)">Update</button>
+            </td>
+          </ng-container>
+          
         </tr>
       </tbody>
     </table>

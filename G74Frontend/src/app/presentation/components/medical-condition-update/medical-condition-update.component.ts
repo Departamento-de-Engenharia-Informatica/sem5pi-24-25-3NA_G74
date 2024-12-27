@@ -23,7 +23,7 @@ export class UpdateMedicalConditionComponent implements OnInit {
   isLoading = false;
   message = '';
 
-  constructor(private mcVM: MedicalConditionViewModel) {}
+  constructor(private mcVM: MedicalConditionViewModel) { }
 
   ngOnInit(): void {
     // You might store an original copy if you want to revert changes.

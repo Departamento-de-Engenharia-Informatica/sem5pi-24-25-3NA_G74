@@ -1,0 +1,133 @@
+/* Dark overlay that covers the page */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 999;
+}
+
+/* Popup Container */
+.update-popup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  width: 500px;
+  padding: 25px 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Header */
+.update-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.update-header h3 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #333;
+}
+
+/* Close Button */
+.close-button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #555;
+  cursor: pointer;
+}
+
+.close-button:hover {
+  color: #000;
+}
+
+/* Form */
+.update-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.update-form label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  font-size: 1rem;
+  color: #555;
+}
+
+.update-form input,
+.update-form textarea {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  color: #333;
+  background-color: #f9f9f9;
+}
+
+.update-form input:focus,
+.update-form textarea:focus {
+  outline: none;
+  border-color: #0366d6;
+  box-shadow: 0 0 5px rgba(3, 102, 214, 0.5);
+}
+
+/* Actions */
+.actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 15px;
+}
+
+.actions button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.actions button:first-child {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.actions button:first-child:hover {
+  background-color: #218838;
+}
+
+.actions button:last-child {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.actions button:last-child:hover {
+  background-color: #c82333;
+}
+
+/* Disabled state */
+button[disabled] {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+
+/* Message */
+.update-message {
+  margin-top: 15px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1rem;
+  color: #555;
+}

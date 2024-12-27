@@ -4,7 +4,7 @@ import user from './routes/userRoute';
 import role from './routes/roleRoute';
 import medicalCondition from './routes/medicalConditionRoute';
 import medicalRecord from './routes/medicalRecordRoute';
-import allergyRoute from "./routes/allergyRoute";
+import allergy from "./routes/allergyRoute";
 
 export default () => {
   const app = Router();
@@ -12,7 +12,7 @@ export default () => {
   auth(app);
   user(app);
   role(app);
-  allergyRoute(app)
+  allergy(app)
   medicalCondition(app);
   medicalRecord(app);
 

@@ -3,6 +3,7 @@ import { MedicalConditionDto } from '../../../dto/medicalCondition.dto';
 import { MedicalConditionViewModel } from '../../../application/viewmodels/medicalCondition.viewmodel';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { AuthService } from '../../../domain/services/auth.service';
 
 @Component({
   selector: 'app-medical-condition-list',
@@ -21,7 +22,15 @@ export class MedicalConditionListComponent implements OnInit {
   // Update popup
   selectedForUpdate: MedicalConditionDto | null = null;
 
-  constructor(private medicalConditionVM: MedicalConditionViewModel) {}
+  get isAdmin(): boolean {
+    // If the stored user role is 'Admin', return true
+    return this.authService.currentUserSubject.value?.role === 'Admin';
+  }
+
+
+  constructor(
+    private medicalConditionVM: MedicalConditionViewModel,
+    private authService: AuthService) { }
 
   ngOnInit(): void {
     this.fetchMedicalConditions();

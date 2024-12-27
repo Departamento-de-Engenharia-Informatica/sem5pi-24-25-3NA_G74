@@ -17,7 +17,14 @@ export class MedicalConditionViewModel {
     }
 
     updateMedicalCondition(dto: MedicalConditionDto): Observable<MedicalConditionDto> {
-        return this.medicalConditionService.updateMedicalCondition(dto);
+
+        const code = dto.medicalConditionCode;
+        const updatedData = {
+            designation: dto.designation,
+            description: dto.description
+        }
+
+        return this.medicalConditionService.updateMedicalCondition(code, updatedData);
     }
 
 

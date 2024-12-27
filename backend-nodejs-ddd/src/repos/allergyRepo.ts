@@ -5,8 +5,6 @@ import {IAllergyPersistence} from "../dataschema/IAllergyPersistence";
 import {AllergyId} from "../domain/AllergyId";
 import {Allergy} from "../domain/Allergy";
 import {AllergyMap} from "../mappers/AllergyMap";
-import {MedicalCondition} from "../domain/medicalCondition";
-import {MedicalConditionMap} from "../mappers/MedicalConditionMap";
 import IAllergyRepo from '../services/IRepos/IAllergyRepo';
 
 @Service()
