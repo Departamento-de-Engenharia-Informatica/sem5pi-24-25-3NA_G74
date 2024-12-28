@@ -1,5 +1,5 @@
 export interface IAllergyDTO {
-    id: string;
+    id?: string;
     code: string;
     designation: string;
     description: string;

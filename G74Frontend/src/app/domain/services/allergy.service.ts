@@ -31,21 +31,23 @@ export class AllergyService {
 
     }
 
-    updateAllergy(allergy: AllergyDTO): Observable<AllergyDTO> {
-        // PATCH /allergy
-        return this.http.patch<AllergyDTO>(this.apiUrl, allergy)
+    updateAllergy(code: string, updatedData: Partial<AllergyDTO>): Observable<AllergyDTO> {
+
+        const url = `${this.apiUrl}${code}`;
+
+        return this.http.patch<AllergyDTO>(url, updatedData)
             .pipe(
                 tap(response => console.log('Update response:', response)),
                 catchError(error => {
                     console.error('Update error:', error);
-                    return throwError(() => new Error('Failed to update medical condition.'));
+                    return throwError(() => new Error('Failed to update allergy.'));
                 })
             );
     }
 
-    searchAllergy(code?: string): Observable<AllergyDTO[]> {
+    searchAllergy(code?: string, designation?: string): Observable<AllergyDTO[]> {
 
-        const params = this.buildQueryParams(code);
+        const params = this.buildQueryParams(code, designation);
 
         return this.http.get<AllergyDTO[]>(this.apiUrl, { params }).pipe(
             map((dtos: AllergyDTO[]) => {
@@ -62,11 +64,14 @@ export class AllergyService {
 
     }
 
-    private buildQueryParams(code?: string): HttpParams {
+    private buildQueryParams(code?: string, designation?: string): HttpParams {
         let params = new HttpParams();
 
         if (code) {
             params = params.set('code', code);
+        }
+        if (designation) {
+            params = params.set('designation', designation);
         }
         return params;
     }

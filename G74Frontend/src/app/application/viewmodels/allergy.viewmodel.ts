@@ -18,12 +18,19 @@ export class AllergyViewModel {
   }
 
   updateAllergy(dto: AllergyDTO): Observable<AllergyDTO> {
-    return this.allergyService.updateAllergy(dto);
+
+    const code = dto.code;
+    const updatedData = {
+      designation: dto.designation,
+      description: dto.description
+    }
+
+    return this.allergyService.updateAllergy(code, updatedData);
   }
 
 
-  searchAllergy(code?: string): Observable<AllergyDTO[]> {
-    return this.allergyService.searchAllergy(code);
+  searchAllergy(code?: string, designation?: string): Observable<AllergyDTO[]> {
+    return this.allergyService.searchAllergy(code, designation);
   }
 
 }

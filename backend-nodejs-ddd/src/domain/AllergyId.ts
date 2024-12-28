@@ -8,7 +8,7 @@ export class AllergyId extends Entity<any>{
     }
     
     private constructor(id?: UniqueEntityID) {
-        super(null, id);
+        super(null, id)
     }
     
 }

@@ -69,7 +69,7 @@
     <!-- MENU ITEMS -->
     <div id="menuElementos">
       <!-- Home (all roles) -->
-      
+
       <!-- Admin-only -->
       <ng-container *ngIf="user?.role === 'Admin'">
         <button id="botaoElemento">
@@ -112,6 +112,16 @@
             Manage Medical Conditions
           </a>
         </button>
+        <button id="botaoElemento">
+          <a routerLink="admin/create-allergy" routerLinkActive="active">
+            Create Allergy
+          </a>
+        </button>
+        <button id="botaoElemento">
+          <a routerLink="admin/list-allergy" routerLinkActive="active">
+            Manage Allergies
+          </a>
+        </button>
       </ng-container>
 
       <!-- Doctor-only -->
@@ -136,6 +146,12 @@
         </button>
 
         <button id="botaoElemento">
+          <a routerLink="admin/list-allergies" routerLinkActive="active">
+            Search Allergies
+          </a>
+        </button>
+
+        <button id="botaoElemento">
           <a routerLink="doctor/medical-records" routerLinkActive="active">
             Medical Records
           </a>
@@ -146,8 +162,8 @@
             3D Hospital Viewer
           </a>
         </button>
-      
-        
+
+
       </ng-container>
 
       <ng-container *ngIf="user?.role === 'Patient'">
@@ -162,7 +178,7 @@
           </a>
         </button>
 
-      </ng-container>  
+      </ng-container>
       <!-- Add Doctor/Patient links if needed (like /doctor/list-operation, etc.) -->
     </div>
   </nav>

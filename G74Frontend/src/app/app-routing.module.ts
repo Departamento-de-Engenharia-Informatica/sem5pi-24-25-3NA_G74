@@ -60,6 +60,7 @@ const routes: Routes = [
       { path: 'admin/list-medical-condition', component: MedicalConditionListComponent },
       { path: 'admin/create-allergy', component: AllergyCreateComponent },
       { path: 'admin/update-allergy', component: AllergyUpdateComponent },
+      { path: 'admin/list-allergy', component: AllergyListComponent },
 
       //Patient routes
       { path: 'patient/update-user', component: UpdateUserComponent },
