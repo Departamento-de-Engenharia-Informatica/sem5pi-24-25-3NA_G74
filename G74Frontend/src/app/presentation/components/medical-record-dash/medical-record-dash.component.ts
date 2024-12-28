@@ -4,8 +4,6 @@ import { MedicalRecordViewModel } from '../../../application/viewmodels/medicalR
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
-
-
 @Component({
   selector: 'app-medical-record-dash',
   templateUrl: './medical-record-dash.component.html',
@@ -13,6 +11,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [FormsModule,CommonModule]
 })
+
 export class MedicalRecordDashComponent implements OnInit {
   medicalRecords: MedicalRecordDTO[] = []; // Armazena os registros médicos como um array
   isLoading = false;
