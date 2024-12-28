@@ -1,13 +1,20 @@
-import {Component, EventEmitter, HostListener, Input, OnInit, Output} from '@angular/core';
-import {catchError} from 'rxjs/operators';
-import {of} from 'rxjs';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  OnInit,
+  HostListener
+} from '@angular/core';
 import {AllergyDTO} from '../../../dto/allergy.dto';
 import {AllergyViewModel} from '../../../application/viewmodels/allergy.viewmodel';
+import {catchError} from 'rxjs/operators';
+import {of} from 'rxjs';
 
 @Component({
   selector: 'app-allergy-update',
   templateUrl: './allergy-update.component.html',
-  styleUrl: './allergy-update.component.css'
+  styleUrls: ['./allergy-update.component.css']
 })
 export class AllergyUpdateComponent implements OnInit{
   @Input() allergy!: AllergyDTO;

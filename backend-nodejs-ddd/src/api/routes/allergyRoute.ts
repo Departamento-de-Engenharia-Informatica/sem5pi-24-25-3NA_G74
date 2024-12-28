@@ -38,17 +38,17 @@ export default (app: Router) => {
     );
 
     route.patch(
-        '',
+        '/:code',
         isAuth,
         checkRole([Roles.Admin]),
         celebrate({
             body: Joi.object({
                 designation: Joi.string().required(),
                 description: Joi.string().required(),
-            }),
+            }).or('designation', 'description'),
         }),
         (req, res, next) => ctrl.updateAllergy(req, res, next)
     );
 
-    route.get('', isAuth, checkRole([Roles.Doctor]), (req, res, next) => ctrl.searchAllergy(req, res, next));
+    route.get('', isAuth, checkRole([Roles.Admin, Roles.Doctor]), (req, res, next) => ctrl.searchAllergy(req, res, next));
 }

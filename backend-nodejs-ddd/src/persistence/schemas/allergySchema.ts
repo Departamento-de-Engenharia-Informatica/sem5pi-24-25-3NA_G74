@@ -2,31 +2,14 @@
 import mongoose from 'mongoose';
 import {IAllergyPersistence} from "../../dataschema/IAllergyPersistence";
 
-const Allergy = new mongoose.Schema(
+const AllergySchema = new mongoose.Schema(
     {
-        domainId: {
-            type: String,
-            unique: true
-        },
-
-        code: {
-            type: String,
-            unique: true,
-            required: [true, 'Please enter code']
-        },
-
-        designation: {
-            type: String,
-            required: [true, 'Please enter designation']
-        },
-
-        description: {
-            type: String,
-            required: [true, 'Please enter description']
-        },
-        
+        domainId: { type: String, unique: true },
+        code: { type: String, unique: true },
+        designation: { type: String },
+        description: { type: String },
     },
     { timestamps: true },
 );
 
-export default mongoose.model<IAllergyPersistence & mongoose.Document>('Allergy', Allergy);
+export default mongoose.model<IAllergyPersistence & mongoose.Document>('Allergy', AllergySchema);

@@ -1,4 +1,4 @@
-<div id="allergy-list-container">
+<div id="list-allergy-container">
   <h2>Allergies</h2>
 
   <!-- Search Filters -->
@@ -12,6 +12,15 @@
         placeholder="e.g. ALG001"
       />
     </div>
+    <div class="filter-group">
+      <label for="designation">Designation:</label>
+      <input
+        type="text"
+        id="designation"
+        [(ngModel)]="designationFilter"
+        placeholder="e.g. Nuts Allergy"
+      />
+    </div>
 
     <div class="actions">
       <button (click)="search()">Search</button>
@@ -23,14 +32,17 @@
   <div class="message" *ngIf="message">{{ message }}</div>
   <div class="loading" *ngIf="isLoading">Loading...</div>
 
-  <!-- Table of Allergies -->
+  <!-- Table of Medical Conditions -->
   <table *ngIf="allergy.length && !isLoading">
     <thead>
     <tr>
       <th>Code</th>
       <th>Designation</th>
       <th>Description</th>
-      <th>Actions</th>
+      <ng-container *ngIf="isAdmin">
+        <th *ngIf="isAdmin" >Actions</th>
+      </ng-container>
+
     </tr>
     </thead>
     <tbody>
@@ -38,9 +50,12 @@
       <td>{{ alg.code }}</td>
       <td>{{ alg.designation }}</td>
       <td>{{ alg.description }}</td>
-      <td>
-        <button class="update-button" (click)="openUpdatePopup(alg)">Update</button>
-      </td>
+      <ng-container *ngIf="isAdmin">
+        <td>
+          <button class="update-button" *ngIf="isAdmin" (click)="openUpdatePopup(alg)">Update</button>
+        </td>
+      </ng-container>
+
     </tr>
     </tbody>
   </table>

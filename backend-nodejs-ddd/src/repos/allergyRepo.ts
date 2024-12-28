@@ -1,11 +1,15 @@
 import { Service, Inject } from 'typedi';
 
-import { Document, Model } from 'mongoose';
+import {Document, FilterQuery, Model} from 'mongoose';
 import {IAllergyPersistence} from "../dataschema/IAllergyPersistence";
 import {AllergyId} from "../domain/AllergyId";
 import {Allergy} from "../domain/Allergy";
 import {AllergyMap} from "../mappers/AllergyMap";
 import IAllergyRepo from '../services/IRepos/IAllergyRepo';
+import {IMedicalConditionPersistence} from "../dataschema/IMedicalConditionPersistence";
+import {MedicalConditionId} from "../domain/medicalConditionId";
+import {MedicalCondition} from "../domain/medicalCondition";
+import {MedicalConditionMap} from "../mappers/MedicalConditionMap";
 
 @Service()
 export default class AllergyRepo implements IAllergyRepo {
@@ -51,18 +55,20 @@ export default class AllergyRepo implements IAllergyRepo {
         }
     }
 
-    public async findById (allergyId: AllergyId | string): Promise<Allergy> {
+    public async findById(allergyId: AllergyId | string): Promise<Allergy> {
 
         const idX = allergyId instanceof AllergyId ? (<AllergyId>allergyId).id.toValue() : allergyId;
+        console.log("ID usado na query:", idX);
 
         const query = { domainId: idX };
-        const allergyRecord = await this.allergySchema.findOne( query );
+        const allergyDocument = await this.allergySchema.findOne(query as FilterQuery<IAllergyPersistence & Document>);
 
-        if( allergyRecord != null) {
-            return AllergyMap.toDomain(allergyRecord);
+        if (allergyDocument != null) {
+            return AllergyMap.toDomain(allergyDocument);
         }
-        else
-            return null;
+        else {
+            throw Error("Allergy not found");
+        }
     }
 
     public async update(allergy: Allergy): Promise<Allergy> {
@@ -73,8 +79,6 @@ export default class AllergyRepo implements IAllergyRepo {
         if (allergyDocument === null) {
             throw Error("Allergy not found, couldn't update");
         } else {
-            allergyDocument.code = allergy.code;
-            allergyDocument.designation = allergy.designation;
             allergyDocument.description = allergy.description;
             await allergyDocument.save();
 
@@ -95,13 +99,13 @@ export default class AllergyRepo implements IAllergyRepo {
         }
     }
 
-    public async findByDesignation(designation: string): Promise<Allergy> {
+    public async findByDesignation(designation: string): Promise<Allergy[]> {
 
         const query = { designation: designation.toString() };
-        const allergyRecord = await this.allergySchema.findOne(query)
+        const allergyRecords = await this.allergySchema.find(query);
 
-        if (allergyRecord != null) {
-            return AllergyMap.toDomain(allergyRecord);
+        if (allergyRecords != null) {
+            return allergyRecords.map((allergyRecord) => AllergyMap.toDomain(allergyRecord));
         }
         else {
             throw Error("Allergy not found");

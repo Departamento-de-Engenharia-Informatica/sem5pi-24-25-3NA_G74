@@ -6,6 +6,7 @@ import IAllergyService from "../services/IServices/IAllergyService";
 import {IAllergyDTO} from "../dto/IAllergyDTO";
 import {Result} from "../core/logic/Result";
 import IAllergyController from "./IControllers/IAllergyController";
+import {IMedicalConditionDTO} from "../dto/IMedicalConditionDTO";
 
 @Service()
 export default class AllergyController extends BaseController implements IAllergyController {
@@ -29,7 +30,7 @@ export default class AllergyController extends BaseController implements IAllerg
             }
 
             const allergyDTO = allergyOrError.getValue();
-            return this.created(res);
+            return res.status(201).json(allergyDTO);
 
         } catch (e) {
             this.fail(e);
@@ -39,10 +40,15 @@ export default class AllergyController extends BaseController implements IAllerg
 
     public async updateAllergy(req: Request, res: Response, next: NextFunction) {
         try {
-            const allergyOrError = await this.allergyServiceInstance.UpdateAllergy(req.body as IAllergyDTO) as Result<IAllergyDTO>;
+
+            const { code } = req.params;
+            const updatedData = req.body;
+
+            const allergyOrError = await this.allergyServiceInstance.UpdateAllergy
+                ({ code, ...updatedData } as IAllergyDTO);
 
             if (allergyOrError.isFailure) {
-                return res.status(404).send();
+                return this.notFound("Allergy not found");
             }
 
             const allergyDTO = allergyOrError.getValue();
@@ -56,7 +62,13 @@ export default class AllergyController extends BaseController implements IAllerg
 
     public async searchAllergy(req: Request, res: Response, next: NextFunction) {
         try {
-            const allergyOrError = await this.allergyServiceInstance.SearchAllergy(req.params.code) as Result<IAllergyDTO[]>;
+
+
+            const { code, designation } = req.query;
+
+            const allergyOrError = await this.allergyServiceInstance.SearchAllergy(
+                code as string,
+                designation as string) as Result<IAllergyDTO[]>;
 
             if (allergyOrError.isFailure) {
                 return res.status(404).send();

@@ -3,11 +3,13 @@ import {catchError} from 'rxjs/operators';
 import {of} from 'rxjs';
 import {AllergyDTO} from '../../../dto/allergy.dto';
 import {AllergyViewModel} from '../../../application/viewmodels/allergy.viewmodel';
+import { AuthService } from '../../../domain/services/auth.service';
+import {ALL} from "node:dns";
 
 @Component({
   selector: 'app-allergy-list',
   templateUrl: './allergy-list.component.html',
-  styleUrl: './allergy-list.component.css'
+  styleUrls: ['./allergy-list.component.css']
 })
 export class AllergyListComponent implements OnInit {
   allergy: AllergyDTO[] = [];
@@ -15,10 +17,16 @@ export class AllergyListComponent implements OnInit {
   message = '';
 
   codeFilter = '';
+  designationFilter = '';
 
   selectedForUpdate: AllergyDTO | null = null;
 
-  constructor(private allergyVM: AllergyViewModel) {}
+  get isAdmin(): boolean {
+    // If the stored user role is 'Admin', return true
+    return this.authService.currentUserSubject.value?.role === 'Admin';
+  }
+
+  constructor(private allergyVM: AllergyViewModel, private authService: AuthService) {}
 
   ngOnInit(): void {
     this.fetchAllergy();
@@ -28,7 +36,7 @@ export class AllergyListComponent implements OnInit {
     this.isLoading = true;
     this.message = '';
 
-    this.allergyVM.searchAllergy(this.codeFilter)
+    this.allergyVM.searchAllergy(this.codeFilter, this.designationFilter)
       .pipe(
         catchError(error => {
           console.error('Error searching allergy:', error);
@@ -52,6 +60,7 @@ export class AllergyListComponent implements OnInit {
 
   clearFilters(): void {
     this.codeFilter = '';
+    this.designationFilter = '';
     this.fetchAllergy();
   }
 
@@ -66,4 +75,5 @@ export class AllergyListComponent implements OnInit {
       this.fetchAllergy();
     }
   }
+
 }

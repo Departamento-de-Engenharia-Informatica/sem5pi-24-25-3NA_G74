@@ -5,6 +5,6 @@ export default interface IAllergyService  {
 
     CreateAllergy(allergyDTO: IAllergyDTO): Promise<Result<IAllergyDTO>>;
     UpdateAllergy(allergyDTO: IAllergyDTO): Promise<Result<IAllergyDTO>>;
-    SearchAllergy(code?: string): Promise<Result<IAllergyDTO[]>>;
+    SearchAllergy(code?: string, designation?: string): Promise<Result<IAllergyDTO[]>>;
 
 }

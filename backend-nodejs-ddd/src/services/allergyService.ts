@@ -7,6 +7,8 @@ import {Result} from "../core/logic/Result";
 import {Allergy} from "../domain/Allergy";
 import {AllergyMap} from "../mappers/AllergyMap";
 import {Inject, Service} from "typedi";
+import {MedicalConditionMap} from "../mappers/MedicalConditionMap";
+import {IMedicalConditionDTO} from "../dto/IMedicalConditionDTO";
 
 @Service()
 export default class AllergyService implements IAllergyService {
@@ -35,7 +37,7 @@ export default class AllergyService implements IAllergyService {
 
     public async UpdateAllergy(allergyDTO: IAllergyDTO): Promise<Result<IAllergyDTO>> {
         try {
-            const allergy = await this.allergyRepo.findById(allergyDTO.id);
+            const allergy = await this.allergyRepo.findByCode(allergyDTO.code);
             if (allergy === null) {
                 return Result.fail<IAllergyDTO>("Allergy not found");
             }
@@ -52,22 +54,34 @@ export default class AllergyService implements IAllergyService {
         }
     }
 
-    public async SearchAllergy(code?: string): Promise<Result<IAllergyDTO[]>> {
+    public async SearchAllergy(code?: string, designation?: string): Promise<Result<IAllergyDTO[]>> {
 
         try {
 
             if (code != null) {
-                const allergies = await this.allergyRepo.findByCode(code);
-                const allergyDTO = AllergyMap.toDTO(allergies) as IAllergyDTO;
 
-                let allergyDTOArray = new Array<IAllergyDTO>();
-                allergyDTOArray.push(allergyDTO);
-                return Result.ok<IAllergyDTO[]>(allergyDTOArray);
+                const allergy = await this.allergyRepo.findByCode(code);
+                const allergyDTO = AllergyMap.toDTO(allergy) as IAllergyDTO;
+
+                let allergyDTOsArray = new Array<IAllergyDTO>();
+                allergyDTOsArray.push(allergyDTO);
+                return Result.ok<IAllergyDTO[]>(allergyDTOsArray);
+
+            }
+
+            if (designation != null) {
+                const allergies = await this.allergyRepo.findByDesignation(designation);
+
+                const allergyDTOs = allergies.map((allergy) => AllergyMap.toDTO(allergy) as IAllergyDTO);
+
+                return Result.ok<IAllergyDTO[]>(allergyDTOs);
             }
             else {
+
                 const allergies = await this.allergyRepo.findAll();
-                const allergyDTO = allergies.map(allergy => AllergyMap.toDTO(allergy) as IAllergyDTO);
-                return Result.ok<IAllergyDTO[]>(allergyDTO);
+                const allergyDTOs = allergies.map(allergy => AllergyMap.toDTO(allergy) as IAllergyDTO);
+                return Result.ok<IAllergyDTO[]>(allergyDTOs);
+
             }
 
         } catch (e) {
