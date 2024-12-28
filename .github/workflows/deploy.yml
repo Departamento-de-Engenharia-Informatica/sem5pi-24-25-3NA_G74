@@ -67,6 +67,9 @@ jobs:
             # Recreate the directories to ensure they exist
             sudo mkdir -p /var/www/sarm/backend/
             sudo mkdir -p /var/www/sarm/frontend/
+            
+            # Set ownership to deployer for the sarm directory
+            sudo chown -R deployer:deployer /var/www/sarm/
       
       # 6. Deploy to Server Using SCP
       - name: Deploy to Server
@@ -77,7 +80,7 @@ jobs:
           key: ${{ secrets.DEPLOY_KEY }}
           port: 10568
           source: "sarm/"
-          target: "/var/www/"
+          target: "/var/www/sarm/"
           strip_components: 0
           # Optional: Enable verbose output for debugging
           # args: "-avz"
@@ -94,7 +97,7 @@ jobs:
             # Set ownership to www-data (Nginx user) for frontend
             sudo chown -R www-data:www-data /var/www/sarm/frontend/
             
-            # Set ownership to deployer or www-data for backend if needed
+            # Set ownership to deployer or the appropriate user for backend
             sudo chown -R deployer:www-data /var/www/sarm/backend/
             
             # Set directory permissions
