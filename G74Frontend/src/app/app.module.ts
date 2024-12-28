@@ -23,8 +23,6 @@ import { UpdateMedicalConditionComponent } from './presentation/components/medic
 import { AllergyCreateComponent } from './presentation/components/allergy-create/allergy-create.component';
 import { AllergyUpdateComponent } from './presentation/components/allergy-update/allergy-update.component';
 import {AllergyListComponent} from './presentation/components/allergy-list/allergy-list.component';
-import { AllergyListComponent } from './presentation/components/allergy-list/allergy-list.component';
-import { MedicalRecordDashComponent } from './presentation/components/medical-record-dash/medical-record-dash.component';
 import { ThreejsViewerComponent } from './presentation/components/threejs-viewer/threejs-viewer.component';
 
 
