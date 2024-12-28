@@ -9,60 +9,103 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+      # 1. Checkout Repository
       - uses: actions/checkout@v3
       
-      # Backend
+      # 2. Backend Setup
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.0.x'
 
-      - name: Restore backend dependencies
+      - name: Restore Backend Dependencies
         run: dotnet restore src/G74/G74.csproj
 
-      - name: Build backend
+      - name: Build Backend
         run: dotnet build src/G74/G74.csproj --configuration Release --no-restore
 
-      - name: Test backend
+      - name: Test Backend
         run: dotnet test src/G74.Tests/G74.Tests.csproj
 
-      - name: Publish backend
+      - name: Publish Backend
         run: dotnet publish src/G74/G74.csproj -c Release -o backend-publish
       
-      # Frontend
+      # 3. Frontend Setup
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20'
 
-      - name: Install frontend dependencies
+      - name: Install Frontend Dependencies
         working-directory: G74Frontend
         run: npm install
 
-      - name: Build frontend
+      - name: Build Frontend
         working-directory: G74Frontend
         run: npm run build --prod -- --base-href /main/ --output-path=dist/g74-frontend/browser
       
-      # Reorganize files for deployment
-      - name: Prepare deployment structure
+      # 4. Prepare Deployment Structure
+      - name: Prepare Deployment Structure
         run: |
-          sudo mkdir -p sarm/backend sarm/frontend
-          sudo cp -r backend-publish/* sarm/backend/
-          sudo cp -r G74Frontend/dist/g74-frontend/browser/* sarm/frontend/
+          mkdir -p sarm/backend sarm/frontend
+          cp -r backend-publish/* sarm/backend/
+          cp -r G74Frontend/dist/g74-frontend/browser/* sarm/frontend/
       
-      # Deploy
-      - name: Deploy to server
+      # 5. Clean Existing Deployment on Server
+      - name: Clean Existing Deployment on Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: vsgate-ssh.dei.isep.ipp.pt
+          username: deployer
+          key: ${{ secrets.DEPLOY_KEY }}
+          port: 10568
+          script: |
+            # Remove existing backend and frontend directories
+            sudo rm -rf /var/www/sarm/backend/
+            sudo rm -rf /var/www/sarm/frontend/
+            
+            # Recreate the directories to ensure they exist
+            sudo mkdir -p /var/www/sarm/backend/
+            sudo mkdir -p /var/www/sarm/frontend/
+            
+            # Set ownership to deployer for the sarm directory
+            sudo chown -R deployer:deployer /var/www/sarm/
+      
+      # 6. Deploy to Server Using SCP
+      - name: Deploy to Server
         uses: appleboy/scp-action@master
         with:
           host: vsgate-ssh.dei.isep.ipp.pt
           username: deployer
           key: ${{ secrets.DEPLOY_KEY }}
           port: 10568
-          source: "sarm"
-          target: "/var/www/"
+          source: "sarm/"
+          target: "/var/www/sarm/"
           strip_components: 0
+          # Optional: Enable verbose output for debugging
+          # args: "-avz"
 
-      - name: Restart services
+      # 7. Set Permissions on Server
+      - name: Set Permissions on Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: vsgate-ssh.dei.isep.ipp.pt
+          username: deployer
+          key: ${{ secrets.DEPLOY_KEY }}
+          port: 10568
+          script: |
+            # Set ownership to www-data (Nginx user) for frontend
+            sudo chown -R www-data:www-data /var/www/sarm/frontend/
+            
+            # Set ownership to deployer or the appropriate user for backend
+            sudo chown -R deployer:www-data /var/www/sarm/backend/
+            
+            # Set directory permissions
+            sudo chmod -R 755 /var/www/sarm/frontend/
+            sudo chmod -R 755 /var/www/sarm/backend/
+      
+      # 8. Restart Services
+      - name: Restart Services
         uses: appleboy/ssh-action@master
         with:
           host: vsgate-ssh.dei.isep.ipp.pt
