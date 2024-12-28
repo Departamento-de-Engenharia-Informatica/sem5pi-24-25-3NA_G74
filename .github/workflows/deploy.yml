@@ -46,7 +46,7 @@ jobs:
       # Reorganize files for deployment
       - name: Prepare deployment structure
         run: |
-          mkdir -p sarm/backend sarm/frontend
+          sudo mkdir -p sarm/backend sarm/frontend
           sudo cp -r backend-publish/* sarm/backend/
           sudo cp -r G74Frontend/dist/g74-frontend/* sarm/frontend/
       
