@@ -39,6 +39,9 @@ public class Startup
                         "https://localhost:4200",
                         "http://127.0.0.1:4200",
                         "https://127.0.0.1:4200"
+						"http://vsgate-http.dei.isep.ipp.pt:10568/main/",
+						"http://localhost:5000/main/"
+						
                     )
                     .AllowAnyMethod()
                     .AllowAnyHeader()
