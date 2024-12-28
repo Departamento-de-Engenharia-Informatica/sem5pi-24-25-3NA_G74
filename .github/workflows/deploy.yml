@@ -41,14 +41,14 @@ jobs:
 
       - name: Build frontend
         working-directory: G74Frontend
-        run: npm run build --prod
+        run: npm run build --prod -- --base-href /main/ --output-path=dist/g74-frontend/browser
       
       # Reorganize files for deployment
       - name: Prepare deployment structure
         run: |
           sudo mkdir -p sarm/backend sarm/frontend
           sudo cp -r backend-publish/* sarm/backend/
-          sudo cp -r G74Frontend/dist/g74-frontend/* sarm/frontend/
+          sudo cp -r G74Frontend/dist/g74-frontend/browser/* sarm/frontend/
       
       # Deploy
       - name: Deploy to server
