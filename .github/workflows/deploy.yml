@@ -64,6 +64,10 @@ jobs:
         # you might skip "npm run build" and just rely on "npm install".
         # e.g. run: echo "Skipping build for Node"
 
+      # 4.5 Create .env for Node backend from GitHub Secret
+      - name: Create .env for Node backend
+        run: echo "${{ secrets.NODE_ENV_FILE }}" > backend-nodejs-ddd/.env
+        
       # 5. Prepare Deployment Structure
       - name: Prepare Deployment Structure
         run: |
