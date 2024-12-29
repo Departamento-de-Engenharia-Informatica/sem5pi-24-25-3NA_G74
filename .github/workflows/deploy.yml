@@ -52,11 +52,11 @@ jobs:
           node-version: '18'
 
       - name: Install Node Backend Dependencies
-        working-directory: NodeBackend  # The directory where your node backend code lives
+        working-directory: backend-nodejs-ddd  # The directory where your node backend code lives
         run: npm install
 
       - name: Build Node Backend
-        working-directory: NodeBackend
+        working-directory: backend-nodejs-ddd
         # if you have a compile step:
         run: npm run build
         
