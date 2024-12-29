@@ -71,12 +71,12 @@ jobs:
           cp -r backend-publish/* sarm/backend/
           cp -r G74Frontend/dist/g74-frontend/browser/* sarm/frontend/
           
-          # For Node backend code (and .env)
-          cp -r NodeBackend/dist/* sarm/nodebackend/
-          cp NodeBackend/.env sarm/nodebackend/.env
+        # For Node backend code (and .env)
+          cp -r backend-nodejs-ddd/build/* sarm/nodebackend/
+          cp backend-nodejs-ddd/.env sarm/nodebackend/.env
 
-          # If your code is pure JS in NodeBackend/src, adjust as needed
-          # e.g., "cp -r NodeBackend/src sarm/nodebackend/" or "cp NodeBackend/package.json sarm/nodebackend/"
+        # If your code is pure JS in NodeBackend/src, adjust as needed
+        # e.g., "cp -r NodeBackend/src sarm/nodebackend/" or "cp NodeBackend/package.json sarm/nodebackend/"
 
       # 6. Clean Existing Deployment on Server
       - name: Clean Existing Deployment on Server
