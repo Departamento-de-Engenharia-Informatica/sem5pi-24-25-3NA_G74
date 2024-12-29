@@ -75,8 +75,11 @@ export default class MedicalConditionController extends BaseController implement
                 medicalConditionCode as string,
                 designation as string) as Result<IMedicalConditionDTO[]>;
 
+            console.log("medical condition or error:", medicalConditionOrError);
+
             if (medicalConditionOrError.isFailure) {
-                return res.status(404).send();
+                return this.notFound("No medical conditions found");
+                //return res.status(404).send();
             }
 
             const medicalConditionDTOs = medicalConditionOrError.getValue();
