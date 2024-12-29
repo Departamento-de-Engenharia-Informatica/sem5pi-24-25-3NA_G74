@@ -8,6 +8,7 @@
         <select [(ngModel)]="selectedOption" (keydown.enter)="onSearch()" >
           <option value="medical condition">Medical Condition</option>
           <option value="allergy">Allergy</option>
+          <option value="patientId">Patient ID</option>
         </select>
         <div class="search-container">
           <input type="text" [(ngModel)]="searchInput" [placeholder]="'Search name '" (keydown.enter)="onSearch()">
@@ -16,11 +17,55 @@
           </button>
         </div>
 
-        <button class="edit-btn" style="margin-left: 5px;">
+        <button class="edit-btn" (click)="toggleAddForm()" style="margin-left: 5px;">
           Add
         </button>
     </div>
 
+    <!--Add Medical Record Form-->
+    <div *ngIf="showAddForm" class="add-form">
+      
+      <form (ngSubmit)="addMedicalRecord()">
+          <div>
+              <label for="patientId">Patient ID:</label>
+              <br>
+              <select id="patientId" [(ngModel)]="medicalRecord.patientId" name="patientId" required>
+                <option *ngFor="let patient of patients" [value]="patient.medicalRecordNumber">{{ patient.medicalRecordNumber }}</option>
+              </select>
+          </div>
+          <div>
+              <label for="medicalConditions">Medical Conditions:</label>
+              <br>
+              <select id="medicalConditions" name="medicalConditions" multiple
+                (change)="onMedicalConditionsChange($event)">
+              <option *ngFor="let condition of medicalConditions" [value]="condition.medicalConditionCode">
+                {{ condition.designation }}
+              </option>
+            </select>
+          </div>
+          <div>
+              <label for="allergies">Allergies:</label>
+              <br>
+              <select id="allergies" name="allergies" multiple
+                (change)="onAllergiesChange($event)">
+                <option *ngFor="let allergy of allergies" [value]="allergy.code">
+                  {{ allergy.designation }}
+                </option>
+              </select>
+          </div>
+          <div>
+              <label for="freeText">Free Text:</label>
+              <textarea type="text" id="freeText" [(ngModel)]="medicalRecord.freeText" name="freeText" required style="height: 200px;width: 100%;text-align: left; vertical-align: top;"></textarea>
+          </div>
+          <div style="margin-top: 15px;">
+            <button type="submit" class="edit-btn" style="margin-right: 5px;" (click)="onSubmit()" >Add</button>
+            <button type="button" class="edit-btn" (click)="toggleAddForm()">Cancel</button>
+          </div>
+          <hr>
+      </form>
+    </div>
+
+  
     <!--Not Found Message-->
     <div *ngIf="medicalRecords.length === 0" class="no-records">
       <p>Medical Records Not Found.</p>
@@ -44,18 +89,42 @@
 
         <!--If edit button is pressed-->
         <div *ngIf="selectedForUpdate && selectedForUpdate.patientId === record.patientId; else viewMode" class="medical-record">
-          <div><strong>Patient ID:</strong></div>
-          <input type="text" [(ngModel)]="selectedForUpdate!.patientId" />
-          <div><strong>Allergies:</strong></div>
-          <input type="text" [(ngModel)]="selectedForUpdate!.allergies">
-          <div><strong>Medical Conditions:</strong></div>
-          <input type="text" [(ngModel)]="selectedForUpdate!.medicalConditions" />
-          <div><strong>Free Text:</strong></div>
-          <input type="text" [(ngModel)]="selectedForUpdate!.freeText" />
-          <div class="actions">
-            <button class="edit-btn">Save</button>
-            <button class="edit-btn" (click)="cancelEdit()">Cancel</button>
-          </div>
+          <form (ngSubmit)="editMedicalRecord(selectedForUpdate)">
+            
+            <div>
+                <div><strong>Patient ID:</strong> {{ selectedForUpdate.patientId }}</div>
+                
+
+
+                <label for="medicalConditions">Medical Conditions:</label>
+                <br>
+                <select id="medicalConditions" name="medicalConditions" multiple
+                  (change)="onMedicalConditionsChange($event)">
+                <option *ngFor="let condition of medicalConditions" [value]="condition.medicalConditionCode">
+                  {{ condition.designation }}
+                </option>
+              </select>
+            </div>
+            <div>
+                <label for="allergies">Allergies:</label>
+                <br>
+                <select id="allergies" name="allergies" multiple
+                  (change)="onAllergiesChange($event)">
+                  <option *ngFor="let allergy of allergies" [value]="allergy.code">
+                    {{ allergy.designation }}
+                  </option>
+                </select>
+            </div>
+            <div>
+                <label for="freeText">Free Text:</label>
+                <textarea type="text" id="freeText" [(ngModel)]="medicalRecord.freeText" name="freeText" required style="height: 200px;width: 100%;text-align: left; vertical-align: top;"></textarea>
+            </div>
+            <div style="margin-top: 15px;">
+              <button type="submit" class="edit-btn" style="margin-right: 5px;" (click)="onSubmit()" >Save</button>
+              <button type="button" class="edit-btn" (click)="cancelEdit()">Cancel</button>
+            </div>
+            <hr>
+        </form>
 
         </div>
         <hr>
