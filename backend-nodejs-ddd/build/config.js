@@ -20,11 +20,11 @@ exports.default = {
     /**
      * That long string from mlab
      */
-    databaseURL: process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/test",
+    databaseURL: process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/test',
     /**
      * Your secret sauce
      */
-    jwtSecret: process.env.JWT_SECRET || "my sakdfho2390asjod$%jl)!sdjas0i secret",
+    jwtSecret: process.env.JWT_SECRET || 'gRffUX0awziyoHA12LnqbheRYYlMttxg',
     /**
      * Used by winston logger
      */
@@ -39,61 +39,61 @@ exports.default = {
     },
     controllers: {
         role: {
-            name: "RoleController",
-            path: "../controllers/roleController"
+            name: 'RoleController',
+            path: '../controllers/roleController',
         },
         medicalCondition: {
-            name: "MedicalConditionController",
-            path: "../controllers/medicalConditionController"
+            name: 'MedicalConditionController',
+            path: '../controllers/medicalConditionController',
         },
         allergy: {
-            name: "AllergyController",
-            path: "../controllers/allergyController"
+            name: 'AllergyController',
+            path: '../controllers/allergyController',
         },
         medicalRecord: {
-            name: "MedicalRecordController",
-            path: "../controllers/medicalRecordController"
-        }
+            name: 'MedicalRecordController',
+            path: '../controllers/medicalRecordController',
+        },
     },
     repos: {
         role: {
-            name: "RoleRepo",
-            path: "../repos/roleRepo"
+            name: 'RoleRepo',
+            path: '../repos/roleRepo',
         },
         user: {
-            name: "UserRepo",
-            path: "../repos/userRepo"
+            name: 'UserRepo',
+            path: '../repos/userRepo',
         },
         medicalCondition: {
-            name: "MedicalConditionRepo",
-            path: "../repos/medicalConditionRepo"
+            name: 'MedicalConditionRepo',
+            path: '../repos/medicalConditionRepo',
         },
         allergy: {
-            name: "AllergyRepo",
-            path: "../repos/allergyRepo"
+            name: 'AllergyRepo',
+            path: '../repos/allergyRepo',
         },
         medicalRecord: {
-            name: "MedicalRecordRepo",
-            path: "../repos/medicalRecordRepo"
-        }
+            name: 'MedicalRecordRepo',
+            path: '../repos/medicalRecordRepo',
+        },
     },
     services: {
         role: {
-            name: "RoleService",
-            path: "../services/roleService"
+            name: 'RoleService',
+            path: '../services/roleService',
         },
         medicalCondition: {
-            name: "MedicalConditionService",
-            path: "../services/medicalConditionService"
+            name: 'MedicalConditionService',
+            path: '../services/medicalConditionService',
         },
         allergy: {
-            name: "AllergyService",
-            path: "../services/allergyService"
+            name: 'AllergyService',
+            path: '../services/allergyService',
         },
         medicalRecord: {
-            name: "MedicalRecordService",
-            path: "../services/medicalRecordService"
-        }
-    }
+            name: 'MedicalRecordService',
+            path: '../services/medicalRecordService',
+        },
+    },
 };
 //# sourceMappingURL=config.js.map

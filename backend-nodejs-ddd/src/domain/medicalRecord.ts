@@ -15,8 +15,9 @@ export class MedicalRecord extends AggregateRoot<MedicalRecordProps> {
     return this._id;
   }
 
+  //Isto precisa ser revisto Águia
   get medicalRecordId(): MedicalRecordId {
-    return new MedicalRecordId(this.medicalRecordId.toValue());
+    return new MedicalRecordId(/*this.medicalRecordId.toValue()*/);
   }
 
   get allergies(): string[] {

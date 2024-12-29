@@ -16,25 +16,92 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const typedi_1 = require("typedi");
-const config_1 = __importDefault(require("../../config"));
+const medicalRecordRepo_1 = __importDefault(require("../repos/medicalRecordRepo"));
 let MedicalRecordService = class MedicalRecordService {
     constructor(medicalRecordRepo) {
         this.medicalRecordRepo = medicalRecordRepo;
     }
-    createMedicalRecord(medicalRecordDTO) {
-        throw new Error("Method not implemented.");
+    async getAll() {
+        try {
+            const records = await this.medicalRecordRepo.findAll();
+            return { records };
+        }
+        catch (e) {
+            throw e;
+        }
     }
-    UpdateMedicalRecord(medicalRecordDTO) {
-        throw new Error("Method not implemented.");
+    async getByPatientId(patientId) {
+        try {
+            const record = await this.medicalRecordRepo.findByPatientId(patientId);
+            if (!record) {
+                throw new Error('Medical record not found for this patient');
+            }
+            return { record };
+        }
+        catch (e) {
+            throw e;
+        }
     }
-    SearchMedicalRecord(medicalRecordCode, designation) {
-        throw new Error("Method not implemented.");
+    async create(recordData) {
+        try {
+            const record = await this.medicalRecordRepo.create(recordData);
+            return record;
+        }
+        catch (e) {
+            throw e;
+        }
+    }
+    async updateByPatientId(patientId, updateData) {
+        try {
+            // Validate that record exists before update
+            const existingRecord = await this.medicalRecordRepo.findByPatientId(patientId);
+            if (!existingRecord) {
+                throw new Error('Medical record not found for this patient');
+            }
+            const record = await this.medicalRecordRepo.updateByPatientId(patientId, updateData);
+            return record;
+        }
+        catch (e) {
+            throw e;
+        }
+    }
+    async findByMedicalCondition(medicalCondition) {
+        try {
+            console.log('Fetching all records');
+            const records = await this.medicalRecordRepo.findAll();
+            const filteredRecords = records.filter(record => record.medicalConditions.includes(medicalCondition));
+            if (filteredRecords.length === 0) {
+                throw new Error("Medical Condition doesn't exist.");
+            }
+            console.log('Filtered records:', filteredRecords);
+            return filteredRecords;
+        }
+        catch (e) {
+            console.error('Error in findByMedicalCondition:', e);
+            throw e;
+        }
+    }
+    async findByAllergy(allergy) {
+        try {
+            console.log('Fetching all records');
+            const records = await this.medicalRecordRepo.findAll();
+            const filteredRecords = records.filter(record => record.allergies.includes(allergy));
+            if (filteredRecords.length === 0) {
+                throw new Error("Allergy doesn't exist.");
+            }
+            console.log('Filtered records:', filteredRecords);
+            return filteredRecords;
+        }
+        catch (e) {
+            console.error('Error in findByMedicalCondition:', e);
+            throw e;
+        }
     }
 };
 MedicalRecordService = __decorate([
     (0, typedi_1.Service)(),
-    __param(0, (0, typedi_1.Inject)(config_1.default.repos.medicalRecord.name)),
-    __metadata("design:paramtypes", [Object])
+    __param(0, (0, typedi_1.Inject)('MedicalRecordRepo')),
+    __metadata("design:paramtypes", [medicalRecordRepo_1.default])
 ], MedicalRecordService);
 exports.default = MedicalRecordService;
 //# sourceMappingURL=medicalRecordService.js.map

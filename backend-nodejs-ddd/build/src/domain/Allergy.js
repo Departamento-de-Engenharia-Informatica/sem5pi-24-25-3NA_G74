@@ -27,20 +27,53 @@ class Allergy extends AggregateRoot_1.AggregateRoot {
         this.props.description = value;
     }
     constructor(props, id) {
+        if (!Allergy.validateAllergyCode(props.code)) {
+            throw new Error("Invalid medical condition code");
+        }
+        if (!Allergy.validateDesignationLenght(props.designation)) {
+            throw new Error("Invalid designation length");
+        }
+        if (!Allergy.validateDescriptionLenght(props.description)) {
+            throw new Error("Invalid description length");
+        }
         super(props, id);
     }
-    static create(props, id) {
+    static validateAllergyCode(allergyCode) {
+        const SNOMED_CT_PATTERN = /^\d{6,18}$/;
+        const ICD_11_PATTERN = /^[A-Z][0-9A-Z]{1,2}\.[0-9A-Z]{1,4}$/;
+        if (!allergyCode.match(SNOMED_CT_PATTERN) && !allergyCode.match(ICD_11_PATTERN)) {
+            return false;
+        }
+        return true;
+    }
+    static validateDesignationLenght(designation) {
+        if (designation.length > 100) {
+            return false;
+        }
+        return true;
+    }
+    static validateDescriptionLenght(description) {
+        if (description.length > 2048) {
+            return false;
+        }
+        return true;
+    }
+    static create(allergyDTO, id) {
         const guardedProps = [
-            { argument: props.code, argumentName: 'code' },
-            { argument: props.designation, argumentName: 'designation' },
-            { argument: props.description, argumentName: 'description' }
+            { argument: allergyDTO.code, argumentName: 'code' },
+            { argument: allergyDTO.designation, argumentName: 'designation' },
+            { argument: allergyDTO.description, argumentName: 'description' }
         ];
         const guardResult = Guard_1.Guard.againstNullOrUndefinedBulk(guardedProps);
         if (!guardResult.succeeded) {
             return Result_1.Result.fail(guardResult.message);
         }
         else {
-            const allergy = new Allergy(Object.assign({}, props), id);
+            const allergy = new Allergy({
+                code: allergyDTO.code,
+                description: allergyDTO.description,
+                designation: allergyDTO.designation,
+            }, id);
             return Result_1.Result.ok(allergy);
         }
     }

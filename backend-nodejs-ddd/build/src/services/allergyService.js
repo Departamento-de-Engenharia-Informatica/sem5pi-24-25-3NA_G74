@@ -15,16 +15,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const typedi_1 = require("typedi");
 const config_1 = __importDefault(require("../../config"));
 const Result_1 = require("../core/logic/Result");
 const Allergy_1 = require("../domain/Allergy");
 const AllergyMap_1 = require("../mappers/AllergyMap");
+const typedi_1 = require("typedi");
 let AllergyService = class AllergyService {
     constructor(allergyRepo) {
         this.allergyRepo = allergyRepo;
     }
-    async createAllergy(allergyDTO) {
+    async CreateAllergy(allergyDTO) {
         try {
             const allergyOrError = Allergy_1.Allergy.create(allergyDTO);
             if (allergyOrError.isFailure) {
@@ -41,7 +41,7 @@ let AllergyService = class AllergyService {
     }
     async UpdateAllergy(allergyDTO) {
         try {
-            const allergy = await this.allergyRepo.findById(allergyDTO.id);
+            const allergy = await this.allergyRepo.findByCode(allergyDTO.code);
             if (allergy === null) {
                 return Result_1.Result.fail("Allergy not found");
             }
@@ -58,19 +58,24 @@ let AllergyService = class AllergyService {
             throw e;
         }
     }
-    async SearchAllergy(code) {
+    async SearchAllergy(code, designation) {
         try {
             if (code != null) {
-                const allergies = await this.allergyRepo.findByCode(code);
-                const allergyDTO = AllergyMap_1.AllergyMap.toDTO(allergies);
-                let allergyDTOArray = new Array();
-                allergyDTOArray.push(allergyDTO);
-                return Result_1.Result.ok(allergyDTOArray);
+                const allergy = await this.allergyRepo.findByCode(code);
+                const allergyDTO = AllergyMap_1.AllergyMap.toDTO(allergy);
+                let allergyDTOsArray = new Array();
+                allergyDTOsArray.push(allergyDTO);
+                return Result_1.Result.ok(allergyDTOsArray);
+            }
+            if (designation != null) {
+                const allergies = await this.allergyRepo.findByDesignation(designation);
+                const allergyDTOs = allergies.map((allergy) => AllergyMap_1.AllergyMap.toDTO(allergy));
+                return Result_1.Result.ok(allergyDTOs);
             }
             else {
                 const allergies = await this.allergyRepo.findAll();
-                const allergyDTO = allergies.map(allergy => AllergyMap_1.AllergyMap.toDTO(allergy));
-                return Result_1.Result.ok(allergyDTO);
+                const allergyDTOs = allergies.map(allergy => AllergyMap_1.AllergyMap.toDTO(allergy));
+                return Result_1.Result.ok(allergyDTOs);
             }
         }
         catch (e) {
@@ -80,7 +85,7 @@ let AllergyService = class AllergyService {
 };
 AllergyService = __decorate([
     (0, typedi_1.Service)(),
-    __param(0, (0, typedi_1.Inject)(config_1.default.repos.allergy)),
+    __param(0, (0, typedi_1.Inject)(config_1.default.repos.allergy.name)),
     __metadata("design:paramtypes", [Object])
 ], AllergyService);
 exports.default = AllergyService;
