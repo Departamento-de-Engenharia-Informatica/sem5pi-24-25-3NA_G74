@@ -127,7 +127,7 @@ jobs:
           port: 10568
           script: |
             # cd to the Node backend directory
-            cd /var/www/sarm/nodebackend
+            cd /var/www/sarm/sarm/nodebackend
             # Install runtime dependencies (skips devDeps)
             npm install --production    
 
