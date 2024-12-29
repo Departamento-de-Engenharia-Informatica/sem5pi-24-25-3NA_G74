@@ -5,6 +5,7 @@ using G74.DTO;
 
 public class PatientDTO
 {
+    public string? MedicalRecordNumber { get; set; }
     public string? Name { get; set; }
 
     public string? Gender { get; set; }
@@ -19,8 +20,10 @@ public class PatientDTO
 
     public PatientDTO(string? name = null, string? gender = null, DateOfBirthDTO? dateOfBirth = null,
         ContactInformationDTO? contactInformation = null,
-        EmergencyContactDTO? emergencyContact = null)
+        EmergencyContactDTO? emergencyContact = null, string? medicalRecordNumber = null)
     {
+        
+        MedicalRecordNumber = medicalRecordNumber;
         Name = name;
         Gender = gender;
         DateOfBirth = dateOfBirth;

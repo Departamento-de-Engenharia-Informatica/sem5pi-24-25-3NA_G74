@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { MedicalRecordService } from "../../domain/services/medicalRecord.service";
 import { MedicalRecordDTO } from "../../dto/medicalRecord.dto";
+import { Observable } from "rxjs";
 
 @Injectable({
     providedIn: 'root'
@@ -32,6 +33,12 @@ export class MedicalRecordViewModel {
     }
     searchMedicalRecordByAllergy(allergy: string){
         return this.medicalRecordService.searchByAllergies(allergy);
+    }
+    searchMedicalRecordByPatientId(id: string){
+        return this.medicalRecordService.searchByPatientId(id);
+    }
+    create(medicalRecordDTO: MedicalRecordDTO): Observable<MedicalRecordDTO>{
+        return this.medicalRecordService.create(medicalRecordDTO);
     }
 
 }

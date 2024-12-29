@@ -30,6 +30,20 @@ export class MedicalRecordService {
     searchByAllergies(allergy: string): Observable<{records: MedicalRecordDTO[]}>{
         return this.http.get<{ records: MedicalRecord[] }>(this.apiUrl + 'allergy/' + allergy);
     }
+
+    searchByPatientId(id: string){
+        return this.http.get<{ records: MedicalRecord[] }> (this.apiUrl + id);
+    }
+
+    create(medicalRecordDTO: MedicalRecordDTO){
+        return this.http.post<MedicalRecordDTO>(this.apiUrl, medicalRecordDTO).pipe(
+            tap(response => console.log('Received response from backend:', response)), // Log successful response
+            catchError(error => {
+                console.error('Error response from backend:', error); // Log error response
+                throw error; // Re-throw error to be handled by calling service
+            })
+        );
+    }
    
     // addMedicalRecord(medicalRecord: MedicalRecordDTO): Observable<MedicalRecord> {
     //     return this.http.post<MedicalRecordDTO>(this.apiUrl, medicalRecord).pipe(

@@ -26,7 +26,7 @@ public class PatientMapper
 
 
         return new PatientDTO(patient.Name.Value, patient.Gender.GenderDescription, dateOfBirthDto,
-            contactInformationDto, emergencyContactDto);
+            contactInformationDto, emergencyContactDto,patient.MedicalRecordNumber.ToString());
     }
 
 
