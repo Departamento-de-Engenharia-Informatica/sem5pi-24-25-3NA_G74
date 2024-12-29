@@ -67,7 +67,7 @@ jobs:
       # 4.5 Create .env for Node backend from GitHub Secret
       - name: Create .env for Node backend
         run: echo "${{ secrets.NODE_ENV_FILE }}" > backend-nodejs-ddd/.env
-        
+
       # 5. Prepare Deployment Structure
       - name: Prepare Deployment Structure
         run: |
@@ -78,6 +78,7 @@ jobs:
           # For Node backend code (and .env)
           cp -r backend-nodejs-ddd/build/* sarm/nodebackend/
           cp backend-nodejs-ddd/.env sarm/nodebackend/.env
+          cp backend-nodejs-ddd/package.json sarm/nodebackend/package.json
 
           # If your code is pure JS in NodeBackend/src, adjust as needed
           # e.g., "cp -r NodeBackend/src sarm/nodebackend/" or "cp NodeBackend/package.json sarm/nodebackend/"
@@ -115,6 +116,20 @@ jobs:
           source: "sarm/"
           target: "/var/www/sarm/"
           strip_components: 0
+
+      # 7.5 Install Node Modules on Server
+      - name: Install Node Modules on Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: vsgate-ssh.dei.isep.ipp.pt
+          username: deployer
+          key: ${{ secrets.DEPLOY_KEY }}
+          port: 10568
+          script: |
+            # cd to the Node backend directory
+            cd /var/www/sarm/nodebackend
+            # Install runtime dependencies (skips devDeps)
+            npm install --production    
 
       # 8. Set Permissions on Server
       - name: Set Permissions on Server
