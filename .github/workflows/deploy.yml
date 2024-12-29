@@ -12,7 +12,7 @@ jobs:
       # 1. Checkout Repository
       - uses: actions/checkout@v3
       
-      # 2. Backend Setup
+      # 2. .NET Backend Setup
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
@@ -30,8 +30,8 @@ jobs:
       - name: Publish Backend
         run: dotnet publish src/G74/G74.csproj -c Release -o backend-publish
       
-      # 3. Frontend Setup
-      - name: Setup Node.js
+      # 3. Angular Frontend Setup
+      - name: Setup Node.js (Frontend)
         uses: actions/setup-node@v3
         with:
           node-version: '20'
@@ -44,14 +44,41 @@ jobs:
         working-directory: G74Frontend
         run: npm run build:prod -- --base-href /main/ --output-path=dist/g74-frontend/browser
       
-      # 4. Prepare Deployment Structure
+      # 4. Node.js Backend Setup
+      #    We'll use Node 18 specifically for the Node.js backend
+      - name: Setup Node.js (Node Backend)
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Node Backend Dependencies
+        working-directory: NodeBackend  # The directory where your node backend code lives
+        run: npm install
+
+      - name: Build Node Backend
+        working-directory: NodeBackend
+        # if you have a compile step:
+        run: npm run build
+        
+        # If your code is purely JavaScript (not TypeScript),
+        # you might skip "npm run build" and just rely on "npm install".
+        # e.g. run: echo "Skipping build for Node"
+
+      # 5. Prepare Deployment Structure
       - name: Prepare Deployment Structure
         run: |
-          mkdir -p sarm/backend sarm/frontend
+          mkdir -p sarm/backend sarm/frontend sarm/nodebackend
           cp -r backend-publish/* sarm/backend/
           cp -r G74Frontend/dist/g74-frontend/browser/* sarm/frontend/
-      
-      # 5. Clean Existing Deployment on Server
+          
+          # For Node backend code (and .env)
+          cp -r NodeBackend/dist/* sarm/nodebackend/
+          cp NodeBackend/.env sarm/nodebackend/.env
+
+          # If your code is pure JS in NodeBackend/src, adjust as needed
+          # e.g., "cp -r NodeBackend/src sarm/nodebackend/" or "cp NodeBackend/package.json sarm/nodebackend/"
+
+      # 6. Clean Existing Deployment on Server
       - name: Clean Existing Deployment on Server
         uses: appleboy/ssh-action@master
         with:
@@ -60,18 +87,20 @@ jobs:
           key: ${{ secrets.DEPLOY_KEY }}
           port: 10568
           script: |
-            # Remove existing backend and frontend directories
+            # Remove existing backend, frontend, and nodebackend
             sudo rm -rf /var/www/sarm/backend/
             sudo rm -rf /var/www/sarm/frontend/
+            sudo rm -rf /var/www/sarm/nodebackend/
             
-            # Recreate the directories to ensure they exist
+            # Recreate the directories
             sudo mkdir -p /var/www/sarm/backend/
             sudo mkdir -p /var/www/sarm/frontend/
+            sudo mkdir -p /var/www/sarm/nodebackend/
             
-            # Set ownership to deployer for the sarm directory
+            # Set ownership to deployer
             sudo chown -R deployer:deployer /var/www/sarm/
-      
-      # 6. Deploy to Server Using SCP
+
+      # 7. Deploy to Server Using SCP
       - name: Deploy to Server
         uses: appleboy/scp-action@master
         with:
@@ -82,10 +111,8 @@ jobs:
           source: "sarm/"
           target: "/var/www/sarm/"
           strip_components: 0
-          # Optional: Enable verbose output for debugging
-          # args: "-avz"
 
-      # 7. Set Permissions on Server
+      # 8. Set Permissions on Server
       - name: Set Permissions on Server
         uses: appleboy/ssh-action@master
         with:
@@ -94,17 +121,21 @@ jobs:
           key: ${{ secrets.DEPLOY_KEY }}
           port: 10568
           script: |
-            # Set ownership to www-data (Nginx user) for frontend
+            # Frontend -> owned by www-data for Nginx
             sudo chown -R www-data:www-data /var/www/sarm/frontend/
             
-            # Set ownership to deployer or the appropriate user for backend
+            # .NET backend -> deployer or group=www-data
             sudo chown -R deployer:www-data /var/www/sarm/backend/
+
+            # Node backend -> deployer or group=www-data
+            sudo chown -R deployer:www-data /var/www/sarm/nodebackend/
             
             # Set directory permissions
             sudo chmod -R 755 /var/www/sarm/frontend/
             sudo chmod -R 755 /var/www/sarm/backend/
+            sudo chmod -R 755 /var/www/sarm/nodebackend/
       
-      # 8. Restart Services
+      # 9. Restart Services
       - name: Restart Services
         uses: appleboy/ssh-action@master
         with:
@@ -114,4 +145,5 @@ jobs:
           port: 10568
           script: |
             sudo systemctl restart g74backend
+            sudo systemctl restart nodebackend
             sudo systemctl restart nginx
