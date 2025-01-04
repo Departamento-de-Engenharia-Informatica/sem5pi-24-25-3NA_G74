@@ -111,6 +111,8 @@ export default class ThumbRaiser {
         //For storing the selected room number
         this.selectedRoomNumber = null;
 
+        this.roomMap = new Map();
+
         //document.body.appendChild(this.buttonContainer);
 
 
@@ -402,6 +404,7 @@ export default class ThumbRaiser {
             const title = document.getElementById('room-info-title');
             const content = document.getElementById('room-info-content');
 
+    
             if (this.selectedRoomNumber) {
                 // Fetch the data for the selected room
                 fetch(patientsUrl)
@@ -412,36 +415,45 @@ export default class ThumbRaiser {
                             room => room["Room Number"] === this.selectedRoomNumber
                         );
 
-    
                         if (selectedRoom) {
                             const isBeingUsed = selectedRoom.IsBeingUsed;
                             let message;
 
+
                             if(isBeingUsed){
                             
-                                const randomDuration = Math.floor(Math.random() * 180) + 1;
+                                if(this.roomMap[this.selectedRoomNumber] === undefined){
 
-                                // Split the duration into two random parts
-                                const randomSplit = Math.random(); // Fraction between 0 and 1
-                                const part1 = Math.floor(randomDuration * randomSplit); // First part (past)
-                                const part2 = randomDuration - part1; // Second part (future)
+                                    const randomDuration = Math.floor(Math.random() * 180) + 1;
     
-                                const currentTime = new Date();
+                                    // Split the duration into two random parts
+                                    const randomSplit = Math.random(); // Fraction between 0 and 1
+                                    const part1 = Math.floor(randomDuration * randomSplit); // First part (past)
+                                    const part2 = randomDuration - part1; // Second part (future)
+        
+                                    const currentTime = new Date();
+        
+                                    // Calculate the start and end times
+                                    const startTime = new Date(
+                                        currentTime.getTime() - part1 * 60 * 1000
+                                    );
+                                    const endTime = new Date(
+                                        currentTime.getTime() + part2 * 60 * 1000
+                                    );
+                                
+                                    const formatTime = time =>
+                                        time.toTimeString().split(' ')[0].substring(0, 5);
     
-                                // Calculate the start and end times
-                                const startTime = new Date(
-                                    currentTime.getTime() - part1 * 60 * 1000
-                                );
-                                const endTime = new Date(
-                                    currentTime.getTime() + part2 * 60 * 1000
-                                );
-                            
-                                const formatTime = time =>
-                                    time.toTimeString().split(' ')[0].substring(0, 5);
+                                    message = `Room ${this.selectedRoomNumber} is currently in use.\nCurrent surgery time: ${formatTime(
+                                        startTime
+                                    )} - ${formatTime(endTime)}.`;
 
-                                message = `Room ${this.selectedRoomNumber} is currently in use.\nCurrent surgery time: ${formatTime(
-                                    startTime
-                                )} - ${formatTime(endTime)}.`;
+                                    this.roomMap[this.selectedRoomNumber] = message;
+                                
+                                } else {
+
+                                    message = this.roomMap[this.selectedRoomNumber];
+                                }
                             
                             
                             } else {
@@ -455,6 +467,9 @@ export default class ThumbRaiser {
                             // Toggle overlay visibility
                             overlay.style.display =
                                 overlay.style.display === "none" ? "block" : "none";
+
+                            
+
                         } else {
                             console.warn("Room data not found for selected room.");
                         }
