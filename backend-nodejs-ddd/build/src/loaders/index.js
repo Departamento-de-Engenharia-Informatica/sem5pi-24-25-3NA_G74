@@ -11,6 +11,10 @@ const config_1 = __importDefault(require("../../config"));
 exports.default = async ({ expressApp }) => {
     const mongoConnection = await (0, mongoose_1.default)();
     logger_1.default.info('✌️ DB loaded and connected!');
+    const allergySchema = {
+        name: 'allergySchema',
+        schema: '../persistence/schemas/allergySchema',
+    };
     const medicalConditionSchema = {
         // compare with the approach followed in repos and services
         name: 'medicalConditionSchema',
@@ -18,7 +22,7 @@ exports.default = async ({ expressApp }) => {
     };
     const medicalRecordSchema = {
         name: 'medicalRecordSchema',
-        schema: '../persistence/schemas/medicalConditionSchema',
+        schema: '../persistence/schemas/medicalRecordSchema',
     };
     const userSchema = {
         // compare with the approach followed in repos and services
@@ -30,70 +34,64 @@ exports.default = async ({ expressApp }) => {
         name: 'roleSchema',
         schema: '../persistence/schemas/roleSchema',
     };
+    const allergyController = {
+        name: config_1.default.controllers.allergy.name,
+        path: config_1.default.controllers.allergy.path,
+    };
     const medicalConditionController = {
         name: config_1.default.controllers.medicalCondition.name,
-        path: config_1.default.controllers.medicalCondition.path
+        path: config_1.default.controllers.medicalCondition.path,
     };
     const medicalRecordController = {
         name: config_1.default.controllers.medicalRecord.name,
-        path: config_1.default.controllers.medicalRecord.path
+        path: config_1.default.controllers.medicalRecord.path,
     };
     const roleController = {
         name: config_1.default.controllers.role.name,
-        path: config_1.default.controllers.role.path
+        path: config_1.default.controllers.role.path,
+    };
+    const allergyRepo = {
+        name: config_1.default.repos.allergy.name,
+        path: config_1.default.repos.allergy.path,
     };
     const medicalConditionRepo = {
         name: config_1.default.repos.medicalCondition.name,
-        path: config_1.default.repos.medicalCondition.path
+        path: config_1.default.repos.medicalCondition.path,
     };
     const medicalRecordRepo = {
         name: config_1.default.repos.medicalRecord.name,
-        path: config_1.default.repos.medicalRecord.path
+        path: config_1.default.repos.medicalRecord.path,
     };
     const roleRepo = {
         name: config_1.default.repos.role.name,
-        path: config_1.default.repos.role.path
+        path: config_1.default.repos.role.path,
     };
     const userRepo = {
         name: config_1.default.repos.user.name,
-        path: config_1.default.repos.user.path
+        path: config_1.default.repos.user.path,
+    };
+    const allergyService = {
+        name: config_1.default.services.allergy.name,
+        path: config_1.default.services.allergy.path,
     };
     const roleService = {
         name: config_1.default.services.role.name,
-        path: config_1.default.services.role.path
+        path: config_1.default.services.role.path,
     };
     const medicalConditionService = {
         name: config_1.default.services.medicalCondition.name,
-        path: config_1.default.services.medicalCondition.path
+        path: config_1.default.services.medicalCondition.path,
     };
     const medicalRecordService = {
         name: config_1.default.services.medicalRecord.name,
-        path: config_1.default.services.medicalRecord.path
+        path: config_1.default.services.medicalRecord.path,
     };
     await (0, dependencyInjector_1.default)({
         mongoConnection,
-        schemas: [
-            userSchema,
-            roleSchema,
-            medicalConditionSchema,
-            medicalRecordSchema
-        ],
-        controllers: [
-            roleController,
-            medicalConditionController,
-            medicalRecordController
-        ],
-        repos: [
-            roleRepo,
-            userRepo,
-            medicalConditionRepo,
-            medicalRecordRepo
-        ],
-        services: [
-            roleService,
-            medicalConditionService,
-            medicalRecordService
-        ]
+        schemas: [userSchema, roleSchema, medicalConditionSchema, medicalRecordSchema, allergySchema],
+        controllers: [roleController, medicalConditionController, medicalRecordController, allergyController],
+        repos: [roleRepo, userRepo, medicalConditionRepo, medicalRecordRepo, allergyRepo],
+        services: [roleService, medicalConditionService, medicalRecordService, allergyService],
     });
     logger_1.default.info('✌️ Schemas, Controllers, Repositories, Services, etc. loaded');
     await (0, express_1.default)({ app: expressApp });

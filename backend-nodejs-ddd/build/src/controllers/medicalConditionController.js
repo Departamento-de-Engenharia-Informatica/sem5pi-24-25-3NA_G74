@@ -33,7 +33,7 @@ let MedicalConditionController = class MedicalConditionController extends BaseCo
                 return res.status(402).send();
             }
             const medicalConditionDTO = medicalConditionOrError.getValue();
-            return this.created(res);
+            return res.status(201).json(medicalConditionDTO);
         }
         catch (e) {
             this.fail(e);
@@ -42,9 +42,11 @@ let MedicalConditionController = class MedicalConditionController extends BaseCo
     }
     async updateMedicalCondition(req, res, next) {
         try {
-            const medicalConditionOrError = await this.medicalConditionServiceInstance.UpdateMedicalCondition(req.body);
+            const { medicalConditionCode } = req.params;
+            const updatedData = req.body;
+            const medicalConditionOrError = await this.medicalConditionServiceInstance.UpdateMedicalCondition(Object.assign({ medicalConditionCode }, updatedData));
             if (medicalConditionOrError.isFailure) {
-                return res.status(404).send();
+                return this.notFound("Medical Condition not found");
             }
             const medicalConditionDTO = medicalConditionOrError.getValue();
             return this.ok(res, medicalConditionDTO);
@@ -56,7 +58,8 @@ let MedicalConditionController = class MedicalConditionController extends BaseCo
     }
     async searchMedicalCondition(req, res, next) {
         try {
-            const medicalConditionOrError = await this.medicalConditionServiceInstance.SearchMedicalCondition(req.params.medicalConditionCode, req.params.designation);
+            const { medicalConditionCode, designation } = req.query;
+            const medicalConditionOrError = await this.medicalConditionServiceInstance.SearchMedicalCondition(medicalConditionCode, designation);
             if (medicalConditionOrError.isFailure) {
                 return res.status(404).send();
             }

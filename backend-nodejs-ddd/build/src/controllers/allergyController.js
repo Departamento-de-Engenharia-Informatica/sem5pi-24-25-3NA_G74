@@ -28,12 +28,12 @@ let AllergyController = class AllergyController extends BaseController_1.BaseCon
     }
     async createAllergy(req, res, next) {
         try {
-            const allergyOrError = await this.allergyServiceInstance.createAllergy(req.body);
+            const allergyOrError = await this.allergyServiceInstance.CreateAllergy(req.body);
             if (allergyOrError.isFailure) {
                 return res.status(402).send();
             }
             const allergyDTO = allergyOrError.getValue();
-            return this.created(res);
+            return res.status(201).json(allergyDTO);
         }
         catch (e) {
             this.fail(e);
@@ -42,9 +42,11 @@ let AllergyController = class AllergyController extends BaseController_1.BaseCon
     }
     async updateAllergy(req, res, next) {
         try {
-            const allergyOrError = await this.allergyServiceInstance.UpdateAllergy(req.body);
+            const { code } = req.params;
+            const updatedData = req.body;
+            const allergyOrError = await this.allergyServiceInstance.UpdateAllergy(Object.assign({ code }, updatedData));
             if (allergyOrError.isFailure) {
-                return res.status(404).send();
+                return this.notFound("Allergy not found");
             }
             const allergyDTO = allergyOrError.getValue();
             return this.ok(res, allergyDTO);
@@ -56,7 +58,8 @@ let AllergyController = class AllergyController extends BaseController_1.BaseCon
     }
     async searchAllergy(req, res, next) {
         try {
-            const allergyOrError = await this.allergyServiceInstance.SearchAllergy(req.params.code);
+            const { code, designation } = req.query;
+            const allergyOrError = await this.allergyServiceInstance.SearchAllergy(code, designation);
             if (allergyOrError.isFailure) {
                 return res.status(404).send();
             }

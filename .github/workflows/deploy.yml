@@ -9,60 +9,153 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+      # 1. Checkout Repository
       - uses: actions/checkout@v3
       
-      # Backend
+      # 2. .NET Backend Setup
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.0.x'
 
-      - name: Restore backend dependencies
+      - name: Restore Backend Dependencies
         run: dotnet restore src/G74/G74.csproj
 
-      - name: Build backend
+      - name: Build Backend
         run: dotnet build src/G74/G74.csproj --configuration Release --no-restore
 
-      - name: Test backend
+      - name: Test Backend
         run: dotnet test src/G74.Tests/G74.Tests.csproj
 
-      - name: Publish backend
+      - name: Publish Backend
         run: dotnet publish src/G74/G74.csproj -c Release -o backend-publish
       
-      # Frontend
-      - name: Setup Node.js
+      # 3. Angular Frontend Setup
+      - name: Setup Node.js (Frontend)
         uses: actions/setup-node@v3
         with:
           node-version: '20'
 
-      - name: Install frontend dependencies
+      - name: Install Frontend Dependencies
         working-directory: G74Frontend
         run: npm install
 
-      - name: Build frontend
+      - name: Build Frontend
         working-directory: G74Frontend
-        run: npm run build --prod
+        run: npm run build:prod -- --base-href /main/ --output-path=dist/g74-frontend/browser
       
-      # Reorganize files for deployment
-      - name: Prepare deployment structure
+      # 4. Node.js Backend Setup
+      #    We'll use Node 18 specifically for the Node.js backend
+      - name: Setup Node.js (Node Backend)
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Node Backend Dependencies
+        working-directory: backend-nodejs-ddd  # The directory where your node backend code lives
+        run: npm install
+
+      - name: Build Node Backend
+        working-directory: backend-nodejs-ddd
+        # if you have a compile step:
+        run: npm run build
+        
+        # If your code is purely JavaScript (not TypeScript),
+        # you might skip "npm run build" and just rely on "npm install".
+        # e.g. run: echo "Skipping build for Node"
+
+      # 4.5 Create .env for Node backend from GitHub Secret
+      - name: Create .env for Node backend
+        run: echo "${{ secrets.NODE_ENV_FILE }}" > backend-nodejs-ddd/.env
+
+      # 5. Prepare Deployment Structure
+      - name: Prepare Deployment Structure
         run: |
-          sudo mkdir -p sarm/backend sarm/frontend
-          sudo cp -r backend-publish/* sarm/backend/
-          sudo cp -r G74Frontend/dist/g74-frontend/* sarm/frontend/
-      
-      # Deploy
-      - name: Deploy to server
+          mkdir -p sarm/backend sarm/frontend sarm/nodebackend
+          cp -r backend-publish/* sarm/backend/
+          cp -r G74Frontend/dist/g74-frontend/browser/* sarm/frontend/
+          
+          # For Node backend code (and .env)
+          cp -r backend-nodejs-ddd/build/* sarm/nodebackend/
+          cp backend-nodejs-ddd/.env sarm/nodebackend/.env
+          cp backend-nodejs-ddd/package.json sarm/nodebackend/package.json
+
+          # If your code is pure JS in NodeBackend/src, adjust as needed
+          # e.g., "cp -r NodeBackend/src sarm/nodebackend/" or "cp NodeBackend/package.json sarm/nodebackend/"
+
+      # 6. Clean Existing Deployment on Server
+      - name: Clean Existing Deployment on Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: vsgate-ssh.dei.isep.ipp.pt
+          username: deployer
+          key: ${{ secrets.DEPLOY_KEY }}
+          port: 10568
+          script: |
+            # Remove existing backend, frontend, and nodebackend
+            sudo rm -rf /var/www/sarm/backend/
+            sudo rm -rf /var/www/sarm/frontend/
+            sudo rm -rf /var/www/sarm/nodebackend/
+            
+            # Recreate the directories
+            sudo mkdir -p /var/www/sarm/backend/
+            sudo mkdir -p /var/www/sarm/frontend/
+            sudo mkdir -p /var/www/sarm/nodebackend/
+            
+            # Set ownership to deployer
+            sudo chown -R deployer:deployer /var/www/sarm/
+
+      # 7. Deploy to Server Using SCP
+      - name: Deploy to Server
         uses: appleboy/scp-action@master
         with:
           host: vsgate-ssh.dei.isep.ipp.pt
           username: deployer
           key: ${{ secrets.DEPLOY_KEY }}
           port: 10568
-          source: "sarm"
-          target: "/var/www/"
+          source: "sarm/"
+          target: "/var/www/sarm/"
           strip_components: 0
 
-      - name: Restart services
+      # 7.5 Install Node Modules on Server
+      - name: Install Node Modules on Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: vsgate-ssh.dei.isep.ipp.pt
+          username: deployer
+          key: ${{ secrets.DEPLOY_KEY }}
+          port: 10568
+          script: |
+            # cd to the Node backend directory
+            cd /var/www/sarm/sarm/nodebackend
+            # Install runtime dependencies (skips devDeps)
+            npm install --production    
+
+      # 8. Set Permissions on Server
+      - name: Set Permissions on Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: vsgate-ssh.dei.isep.ipp.pt
+          username: deployer
+          key: ${{ secrets.DEPLOY_KEY }}
+          port: 10568
+          script: |
+            # Frontend -> owned by www-data for Nginx
+            sudo chown -R www-data:www-data /var/www/sarm/frontend/
+            
+            # .NET backend -> deployer or group=www-data
+            sudo chown -R deployer:www-data /var/www/sarm/backend/
+
+            # Node backend -> deployer or group=www-data
+            sudo chown -R deployer:www-data /var/www/sarm/nodebackend/
+            
+            # Set directory permissions
+            sudo chmod -R 755 /var/www/sarm/frontend/
+            sudo chmod -R 755 /var/www/sarm/backend/
+            sudo chmod -R 755 /var/www/sarm/nodebackend/
+      
+      # 9. Restart Services
+      - name: Restart Services
         uses: appleboy/ssh-action@master
         with:
           host: vsgate-ssh.dei.isep.ipp.pt
@@ -71,4 +164,5 @@ jobs:
           port: 10568
           script: |
             sudo systemctl restart g74backend
+            sudo systemctl restart nodebackend
             sudo systemctl restart nginx

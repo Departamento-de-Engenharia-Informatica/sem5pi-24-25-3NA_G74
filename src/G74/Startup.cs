@@ -38,7 +38,10 @@ public class Startup
                         "http://localhost:4200", 
                         "https://localhost:4200",
                         "http://127.0.0.1:4200",
-                        "https://127.0.0.1:4200"
+                        "https://127.0.0.1:4200",
+						"http://vsgate-http.dei.isep.ipp.pt:10568/main/",
+						"http://localhost:5000/main/"
+						
                     )
                     .AllowAnyMethod()
                     .AllowAnyHeader()
@@ -146,6 +149,9 @@ public class Startup
         services.AddScoped<IStaffRepository, StaffRepository>();
         services.AddScoped<IStaffService, StaffService>();
         services.AddScoped<StaffController>();
+        services.AddScoped<ISpecializationRepository, SpecializationRepository>();
+        services.AddScoped<ISpecializationService, SpecializationService>();
+        services.AddScoped<SpecializationController>();
         services.AddScoped<IOperationTypeRepository,OperationTypeRepository>();
         services.AddScoped<IAppointmentRepository,AppointmentRepository>();
         services.AddScoped<IAppServiceAppointment,AppServiceAppointment>();

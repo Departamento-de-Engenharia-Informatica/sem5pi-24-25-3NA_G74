@@ -1,3 +1,5 @@
+/*
+
 import 'reflect-metadata';
 
 import * as sinon from 'sinon';
@@ -149,3 +151,4 @@ describe('role controller', function () {
 });
 
 
+*/

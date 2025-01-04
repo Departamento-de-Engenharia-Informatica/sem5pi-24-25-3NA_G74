@@ -24,10 +24,49 @@ let MedicalRecordController = class MedicalRecordController extends BaseControll
         this.medicalRecordServiceInstance = medicalRecordServiceInstance;
     }
     executeImpl() {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
-    updateMedicalCondition(req, res, next) {
-        throw new Error("Method not implemented.");
+    findByAllergy(allergy) {
+        try {
+            const medicalRecord = this.medicalRecordServiceInstance.findByAllergy(allergy);
+            if (medicalRecord) {
+                return medicalRecord;
+            }
+            else {
+                return null;
+            }
+        }
+        catch (e) {
+            throw new Error("Stopped on Controller");
+        }
+    }
+    findByMedicalCondition(medicalCondition) {
+        try {
+            const medicalRecords = this.medicalRecordServiceInstance.findByMedicalCondition(medicalCondition);
+            if (medicalRecords) {
+                return medicalRecords;
+            }
+            else {
+                return null;
+            }
+        }
+        catch (e) {
+            throw new Error('Stopped in Controller.');
+        }
+    }
+    updateByPatientId(patientId, updateData) {
+        try {
+            const medicalRecord = this.medicalRecordServiceInstance.updateByPatientId(patientId, updateData);
+            if (medicalRecord) {
+                return medicalRecord;
+            }
+            else {
+                return null;
+            }
+        }
+        catch (e) {
+        }
+        throw new Error('Method not implemented.');
     }
 };
 MedicalRecordController = __decorate([

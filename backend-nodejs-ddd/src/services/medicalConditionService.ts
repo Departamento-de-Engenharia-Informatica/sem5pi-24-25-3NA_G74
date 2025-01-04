@@ -72,6 +72,11 @@ export default class MedicalConditionService implements IMedicalConditionService
             if (medicalConditionCode != null) {
 
                 const medicalCondition = await this.medicalConditionRepo.findByMedicalConditionCode(medicalConditionCode);
+
+                if (!medicalCondition) {
+                    return Result.ok<IMedicalConditionDTO[]>([]);
+                }
+
                 const medicalConditionDTO = MedicalConditionMap.toDTO(medicalCondition) as IMedicalConditionDTO;
 
                 let medicalConditionDTOsArray = new Array<IMedicalConditionDTO>();
@@ -81,7 +86,7 @@ export default class MedicalConditionService implements IMedicalConditionService
             }
 
             if (designation != null) {
-                const medicalConditions = await this.medicalConditionRepo.findByDesignation(designation);
+                const medicalConditions = await this.medicalConditionRepo.findByDesignation(designation) || [];
 
                 const medicalConditionDTOs = medicalConditions.map((medicalCondition) => MedicalConditionMap.toDTO(medicalCondition) as IMedicalConditionDTO);
 
@@ -89,7 +94,7 @@ export default class MedicalConditionService implements IMedicalConditionService
             }
             else {
 
-                const medicalConditions = await this.medicalConditionRepo.findAll();
+                const medicalConditions = await this.medicalConditionRepo.findAll() || [];
                 const medicalConditionDTOs = medicalConditions.map(medicalCondition => MedicalConditionMap.toDTO(medicalCondition) as IMedicalConditionDTO);
                 return Result.ok<IMedicalConditionDTO[]>(medicalConditionDTOs);
 

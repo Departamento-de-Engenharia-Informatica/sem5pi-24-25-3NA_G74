@@ -15,6 +15,7 @@ public class BackofficeAppDbContext : DbContext
     public DbSet<PatientDataModel> Patients { get; set; }
     public DbSet<UserDataModel> Users { get; set; }
     public DbSet<StaffDataModel> Staff { get; set; }
+    public DbSet<SpecializationDataModel> Specialization { get; set; }
     public DbSet<OperationRequestDataModel> OperationRequests { get; set; }
     public DbSet<OperationTypeDataModel> OperationTypes { get; set; }
     public DbSet<SurgeryRoomDataModel> SurgeryRooms { get; set; }
@@ -24,6 +25,7 @@ public class BackofficeAppDbContext : DbContext
     {
         modelBuilder.ApplyConfiguration(new UserEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new StaffEntityTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new SpecializationEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new OperationRequestEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new OperationTypeEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new SurgeryRoomEntityTypeConfiguration());

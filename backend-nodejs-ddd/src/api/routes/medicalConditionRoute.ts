@@ -56,5 +56,6 @@ export default (app: Router) => {
         (req, res, next) => ctrl.updateMedicalCondition(req, res, next)
     );
 
-    route.get('', isAuth, checkRole([Roles.Admin, Roles.Doctor]), (req, res, next) => ctrl.searchMedicalCondition(req, res, next));
+    //route.get('', isAuth, checkRole([Roles.Admin, Roles.Doctor]), (req, res, next) => ctrl.searchMedicalCondition(req, res, next));
+    route.get('', (req, res, next) => ctrl.searchMedicalCondition(req, res, next));
 }

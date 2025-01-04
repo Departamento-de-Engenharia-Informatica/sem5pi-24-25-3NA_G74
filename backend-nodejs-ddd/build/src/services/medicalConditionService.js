@@ -43,7 +43,7 @@ let MedicalConditionService = class MedicalConditionService {
         try {
             const medicalCondition = await this.medicalConditionRepo.findByMedicalConditionCode(medicalConditionDTO.medicalConditionCode);
             if (medicalCondition === null) {
-                return Result_1.Result.fail("MedicalCondition not found");
+                return Result_1.Result.fail("Medical Condition not found");
             }
             else {
                 if (medicalConditionDTO.designation != null) {

@@ -8,26 +8,29 @@ class AllergyMap extends Mapper_1.Mapper {
     static toDTO(allergy) {
         return {
             id: allergy.id.toString(),
-            designation: allergy.designation
+            code: allergy.code,
+            designation: allergy.designation,
+            description: allergy.description,
         };
     }
-    static async toDomain(raw) {
-        const allergyOrError = Allergy_1.Allergy.create({
+    static toDomain(raw) {
+        const allergyDTO = {
+            id: raw._id,
             code: raw.code,
             designation: raw.designation,
-            description: raw.description,
-        }, new UniqueEntityID_1.UniqueEntityID(raw.domainId));
+            description: raw.description
+        };
+        const allergyOrError = Allergy_1.Allergy.create(allergyDTO, new UniqueEntityID_1.UniqueEntityID(raw.domainId));
         allergyOrError.isFailure ? console.log(allergyOrError.error) : '';
         return allergyOrError.isSuccess ? allergyOrError.getValue() : null;
     }
     static toPersistence(allergy) {
-        const a = {
+        return {
             domainId: allergy.id.toString(),
             code: allergy.code,
             designation: allergy.designation,
             description: allergy.description
         };
-        return a;
     }
 }
 exports.AllergyMap = AllergyMap;

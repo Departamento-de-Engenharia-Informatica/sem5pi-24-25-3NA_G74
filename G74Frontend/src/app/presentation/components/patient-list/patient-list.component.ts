@@ -63,6 +63,8 @@ export class PatientListComponent implements OnInit {
         this.message = patients.length ? '' : 'No patients found.';
         this.isLoading = false;
       });
+
+      
   }
 
   openUpdatePopup(patient: Patient): void {

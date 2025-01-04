@@ -47,6 +47,8 @@ export default (app: Router) => {
     celebrate({
       body: Joi.object({
         patientId: Joi.string().required(),
+        allergies: Joi.array().items(Joi.string().required()).optional(),
+        medicalConditions: Joi.array().items(Joi.string().required()).optional(),
         freeText: Joi.string(),
       }),
     }),

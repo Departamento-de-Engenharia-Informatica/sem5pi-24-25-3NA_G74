@@ -1,1 +1,1 @@
-{"version":3,"file":"MedicalRecordMap.js","sourceRoot":"","sources":["../../../src/mappers/MedicalRecordMap.ts"],"names":[],"mappings":";;;AAAA,iDAA8C;AAG9C,MAAa,gBAAiB,SAAQ,eAAqB;CAG1D;AAHD,4CAGC"}
+{"version":3,"file":"MedicalRecordMap.js","sourceRoot":"","sources":["../../../src/mappers/MedicalRecordMap.ts"],"names":[],"mappings":";;;AAAA,iDAA8C;AAG9C,MAAa,gBAAiB,SAAQ,eAAqB;CAAG;AAA9D,4CAA8D"}

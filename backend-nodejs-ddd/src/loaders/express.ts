@@ -10,7 +10,15 @@ export default ({ app }: { app: express.Application }) => {
    * @TODO Explain why they are here
    */
   app.get('/status', (req, res) => {
-    res.status(200).end();
+    res.json({
+      environmentUri: process.env.MONGODB_URI,
+      configUri: config.databaseURL,
+      apiPrefix: config.api.prefix,
+      nodeEnv: process.env.NODE_ENV,
+      portEnv: process.env.PORT,
+      configPort: config.port
+    })
+    //res.status(200).end();
   });
   app.head('/status', (req, res) => {
     res.status(200).end();
@@ -32,14 +40,14 @@ export default ({ app }: { app: express.Application }) => {
 
   // Middleware that transforms the raw string of req.body into json
   app.use(bodyParser.json());
-  
+
 
 
   // Load API routes
   app.use(config.api.prefix, routes());
 
 
-  
+
   /// catch 404 and forward to error handler
   app.use((req, res, next) => {
     const err = new Error('Not Found');

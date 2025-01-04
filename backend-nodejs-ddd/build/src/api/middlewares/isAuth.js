@@ -28,7 +28,7 @@ const getTokenFromHeader = req => {
 };
 const isAuth = jwt({
     secret: config_1.default.jwtSecret,
-    userProperty: 'token',
+    requestProperty: 'token',
     getToken: getTokenFromHeader,
     algorithms: ["HS256"], // Added by JRT
 });
