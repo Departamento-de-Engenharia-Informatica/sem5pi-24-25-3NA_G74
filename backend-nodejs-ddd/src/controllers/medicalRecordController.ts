@@ -42,10 +42,10 @@ export default class MedicalRecordController extends BaseController implements I
     }
   }
 
-  updateByPatientId(patientId: string, updateData: any): Promise<MedicalRecord> {
+  updateByPatientId(medicalRecordCode: string, updateData: any): Promise<MedicalRecord> {
     try{
 
-      const medicalRecord = this.medicalRecordServiceInstance.updateByPatientId(patientId, updateData);
+      const medicalRecord = this.medicalRecordServiceInstance.updateByPatientId(medicalRecordCode, updateData);
       if(medicalRecord){return medicalRecord}
       else{return null}
 

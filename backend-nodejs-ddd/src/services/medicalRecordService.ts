@@ -37,15 +37,15 @@ export default class MedicalRecordService implements IMedicalRecordService {
     }
   }
 
-  public async updateByPatientId(patientId: string, updateData: any) {
+  public async updateByPatientId(medicalRecordCode: string, updateData: any) {
     try {
       // Validate that record exists before update
-      const existingRecord = await this.medicalRecordRepo.findByPatientId(patientId);
+      const existingRecord = await this.medicalRecordRepo.findByPatientId(medicalRecordCode);
       if (!existingRecord) {
         throw new Error('Medical record not found for this patient');
       }
 
-      const record = await this.medicalRecordRepo.updateByPatientId(patientId, updateData);
+      const record = await this.medicalRecordRepo.updateByPatientId(medicalRecordCode, updateData);
       return record;
     } catch (e) {
       throw e;
@@ -57,8 +57,12 @@ export default class MedicalRecordService implements IMedicalRecordService {
       console.log('Fetching all records');
       const records = await this.medicalRecordRepo.findAll();
       
-      const filteredRecords = records.filter(record => record.medicalConditions.includes(medicalCondition));
-      
+      const filteredRecords = records.filter(record => 
+        record.medicalConditions.some(condition => 
+          condition.toLowerCase() === medicalCondition.toLowerCase()
+        )
+      );
+
       if (filteredRecords.length === 0) {
         throw new Error("Medical Condition doesn't exist.");
       }
@@ -71,13 +75,16 @@ export default class MedicalRecordService implements IMedicalRecordService {
     }
   }
   
-  public async findByAllergy(allergy: string) {
+  public async findByAllergy(allergy2: string) {
     try {
       console.log('Fetching all records');
       const records = await this.medicalRecordRepo.findAll();
       
-      const filteredRecords = records.filter(record => record.allergies.includes(allergy));
-      
+        const filteredRecords = records.filter(record => 
+        record.allergies.some(allergy => 
+          allergy.toLowerCase() === allergy2.toLowerCase()
+        )
+      );      
       if (filteredRecords.length === 0) {
         throw new Error("Allergy doesn't exist.");
       }

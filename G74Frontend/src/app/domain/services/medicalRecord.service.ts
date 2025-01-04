@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { Staff } from '../models/staff.model';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { MedicalRecord } from '../models/medicalRecord.model';
 import { MedicalRecordDTO } from '../../dto/medicalRecord.dto';
 
@@ -13,34 +13,77 @@ import { MedicalRecordDTO } from '../../dto/medicalRecord.dto';
 export class MedicalRecordService {
     http = inject(HttpClient);
 
-    private apiUrl = `${environment.apiUrlNode}/medical-record/`;
+    private apiUrl = `${environment.apiUrlNode}/medical-record`;
 
 
   
     constructor() {}
 
     getMedicalRecords(): Observable<{records: MedicalRecordDTO[] }> {
-        return this.http.get<{ records: MedicalRecord[] }>(this.apiUrl);
+        return this.http.get<{ records: MedicalRecord[] }>(this.apiUrl).pipe(
+            map(response => ({
+                records: response.records.map(record => ({
+                    medicalRecordCode: record.medicalRecordCode,
+                    medicalConditions: record.medicalConditions,
+                    allergies: record.allergies,
+                    freeText: record.freeText
+                }))
+            }))
+        );
     }
 
     searchByMedicalCondition(medicalCondition: string): Observable<{records: MedicalRecordDTO[]}>{
-        return this.http.get<{ records: MedicalRecord[] }>(this.apiUrl + 'medicalCondition/' + medicalCondition);
+        return this.http.get<{ records: MedicalRecord[] }>(this.apiUrl + '/medicalCondition/' + medicalCondition).pipe(
+            map(response => ({
+                records: response.records.map(record => ({
+                    medicalRecordCode: record.medicalRecordCode,
+                    medicalConditions: record.medicalConditions,
+                    allergies: record.allergies,
+                    freeText: record.freeText
+                }))
+            }))
+        );
     }
     
     searchByAllergies(allergy: string): Observable<{records: MedicalRecordDTO[]}>{
-        return this.http.get<{ records: MedicalRecord[] }>(this.apiUrl + 'allergy/' + allergy);
+        return this.http.get<{ records: MedicalRecord[] }>(this.apiUrl + '/allergy/' + allergy).pipe(
+            map(response => ({
+                records: response.records.map(record => ({
+                    medicalRecordCode: record.medicalRecordCode,
+                    medicalConditions: record.medicalConditions,
+                    allergies: record.allergies,
+                    freeText: record.freeText
+                }))
+            }))
+        );
     }
 
     searchByPatientId(id: string){
         return this.http.get<{ records: MedicalRecord[] }> (this.apiUrl + id);
     }
 
+    edit(medicalRecordCode: string, medicalRecord: MedicalRecordDTO): Observable<MedicalRecordDTO> {
+        if (!medicalRecordCode) {
+            return throwError(() => new Error('Medical record code is required.'));
+        }
+
+        const url = `${this.apiUrl}/${medicalRecordCode}`;
+        return this.http.patch<MedicalRecordDTO>(url, medicalRecord)
+            .pipe(
+                tap(response => console.log('Update response:', response)),
+                catchError(error => {
+                    console.error('Update error:', error);
+                    return throwError(() => new Error('Failed to update medical record.'));
+                })
+            );
+    }
+
     create(medicalRecordDTO: MedicalRecordDTO){
         return this.http.post<MedicalRecordDTO>(this.apiUrl, medicalRecordDTO).pipe(
-            tap(response => console.log('Received response from backend:', response)), // Log successful response
+            tap(response => console.log('Received response from backend:', response)), 
             catchError(error => {
-                console.error('Error response from backend:', error); // Log error response
-                throw error; // Re-throw error to be handled by calling service
+                console.error('Error response from backend:', error); 
+                throw error; 
             })
         );
     }

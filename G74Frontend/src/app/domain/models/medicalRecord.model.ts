@@ -1,6 +1,6 @@
 export interface MedicalRecord {
 
-    patientId: string;
+    medicalRecordCode: string;
     allergies: string[];
     medicalConditions: string[];
     freeText: string;

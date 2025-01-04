@@ -32,7 +32,7 @@ export class MedicalRecordDashComponent implements OnInit {
   filters: Partial<Patient> = {};
 
   medicalRecord: MedicalRecordDTO = {
-    patientId: '',
+    medicalRecordCode: '',
     medicalConditions: [],
     allergies: [],
     freeText: ''
@@ -56,7 +56,7 @@ export class MedicalRecordDashComponent implements OnInit {
 
 
   newMedicalRecord: MedicalRecordDTO = {
-    patientId: '',
+    medicalRecordCode: '',
     medicalConditions: [],
     allergies: [],
     freeText: ''
@@ -111,6 +111,7 @@ export class MedicalRecordDashComponent implements OnInit {
         if (response) {
           this.message = 'Medical Record created successfully!';
           this.resetForm();
+          location.reload();
         }
       });
       }else{
@@ -242,7 +243,53 @@ export class MedicalRecordDashComponent implements OnInit {
 
   editMedicalRecord(record: MedicalRecordDTO): void {
     this.selectedForUpdate = { ...record }; 
+    console.log(this.medicalRecordViewModel.edit(record.medicalRecordCode, record))
   }
+
+  async update(): Promise<void> {
+    this.isLoading = true;
+    this.message = '';
+
+    let updatedDto: MedicalRecordDTO = {
+      medicalRecordCode: this.selectedForUpdate?.medicalRecordCode || '',
+      allergies: this.selectedForUpdate?.allergies || [],
+      medicalConditions: this.selectedForUpdate?.medicalConditions || [],
+      freeText: this.selectedForUpdate?.freeText || ''
+    };
+
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: { message: 'Are you sure you want to update this medical record?' }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        if (this.medicalRecordViewModel && updatedDto.medicalRecordCode) {
+          this.medicalRecordViewModel.edit(this.medicalRecord.medicalRecordCode, updatedDto)
+            .pipe(
+              catchError(error => {
+                console.error('Error updating Medical Record:', error);
+                this.message = 'Failed to update Medical Record.';
+                this.isLoading = false;
+                return of(null);
+              })
+            )
+            .subscribe(response => {
+              this.isLoading = false;
+              if (response) {
+                this.message = 'Medical Record updated successfully!';
+                this.cancelEdit();
+                location.reload();
+              }
+            });
+        }
+      } else {
+        this.isLoading = false;
+      }
+    });
+  }
+
+    
+    
   
   cancelEdit(): void {
     this.showEditForm = false;
@@ -294,7 +341,7 @@ export class MedicalRecordDashComponent implements OnInit {
         map((response: any) => {
           const record = response.record.record; 
           return {
-            patientId: record.patientId,
+            medicalRecordCode: record.patientId,
             medicalConditions: record.medicalConditions,
             allergies: record.allergies,
             freeText: record.freeText,
@@ -327,7 +374,7 @@ export class MedicalRecordDashComponent implements OnInit {
   addMedicalRecord(): void {
     this.medicalRecords.push({ ...this.newMedicalRecord });
     this.newMedicalRecord = {
-      patientId: '',
+      medicalRecordCode: '',
       medicalConditions: [],
       allergies: [],
       freeText: ''
@@ -337,7 +384,7 @@ export class MedicalRecordDashComponent implements OnInit {
 
   resetForm(): void {
     this.medicalRecord = {
-      patientId: '',
+      medicalRecordCode: '',
       medicalConditions: [],
       allergies: [],
       freeText: ''

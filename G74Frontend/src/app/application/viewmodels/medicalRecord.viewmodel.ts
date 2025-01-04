@@ -27,7 +27,6 @@ export class MedicalRecordViewModel {
     readMedicalRecord(){
         return this.medicalRecordService.getMedicalRecords();
     }
-
     searchMedicalRecordByMedicalCondition(medicalCondition: string){
         return this.medicalRecordService.searchByMedicalCondition(medicalCondition);
     }
@@ -36,6 +35,9 @@ export class MedicalRecordViewModel {
     }
     searchMedicalRecordByPatientId(id: string){
         return this.medicalRecordService.searchByPatientId(id);
+    }
+    edit(patientId: string, medicalRecordDTO: MedicalRecordDTO){
+        return this.medicalRecordService.edit(medicalRecordDTO.medicalRecordCode,medicalRecordDTO);
     }
     create(medicalRecordDTO: MedicalRecordDTO): Observable<MedicalRecordDTO>{
         return this.medicalRecordService.create(medicalRecordDTO);
