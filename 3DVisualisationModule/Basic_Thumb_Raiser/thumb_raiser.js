@@ -108,7 +108,8 @@ export default class ThumbRaiser {
 
         this.buttonContainer = document.createElement('matrix');
 
-
+        //For storing the selected room number
+        this.selectedRoomNumber = null;
 
         //document.body.appendChild(this.buttonContainer);
 
@@ -227,6 +228,9 @@ export default class ThumbRaiser {
 
         this.activeElement = document.activeElement;
 
+
+        // Add event listener for the 'i' key to toggle room information
+        document.addEventListener('keydown', event => this.toggleRoomInfo(event, patientPresence.url));
 
     }
 
@@ -391,6 +395,78 @@ export default class ThumbRaiser {
         this.renderer.setSize(window.innerWidth, window.innerHeight);
     }
 
+     // Method to handle key press for showing/hiding room info
+     toggleRoomInfo(event, patientsUrl) {
+        if (event.code === "KeyI") {
+            const overlay = document.getElementById('room-info-overlay');
+            const title = document.getElementById('room-info-title');
+            const content = document.getElementById('room-info-content');
+
+            if (this.selectedRoomNumber) {
+                // Fetch the data for the selected room
+                fetch(patientsUrl)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Find the room that matches the selected room number
+                        const selectedRoom = data.Surgery_Rooms.find(
+                            room => room["Room Number"] === this.selectedRoomNumber
+                        );
+
+    
+                        if (selectedRoom) {
+                            const isBeingUsed = selectedRoom.IsBeingUsed;
+                            let message;
+
+                            if(isBeingUsed){
+                            
+                                const randomDuration = Math.floor(Math.random() * 180) + 1;
+
+                                // Split the duration into two random parts
+                                const randomSplit = Math.random(); // Fraction between 0 and 1
+                                const part1 = Math.floor(randomDuration * randomSplit); // First part (past)
+                                const part2 = randomDuration - part1; // Second part (future)
+    
+                                const currentTime = new Date();
+    
+                                // Calculate the start and end times
+                                const startTime = new Date(
+                                    currentTime.getTime() - part1 * 60 * 1000
+                                );
+                                const endTime = new Date(
+                                    currentTime.getTime() + part2 * 60 * 1000
+                                );
+                            
+                                const formatTime = time =>
+                                    time.toTimeString().split(' ')[0].substring(0, 5);
+
+                                message = `Room ${this.selectedRoomNumber} is currently in use.\nCurrent surgery time: ${formatTime(
+                                    startTime
+                                )} - ${formatTime(endTime)}.`;
+                            
+                            
+                            } else {
+                                message = `Room ${this.selectedRoomNumber} is not in use.`;
+                            }
+
+                            // Populate the overlay with the information
+                            title.textContent = `Room ${this.selectedRoomNumber}`;
+                            content.textContent = message;
+    
+                            // Toggle overlay visibility
+                            overlay.style.display =
+                                overlay.style.display === "none" ? "block" : "none";
+                        } else {
+                            console.warn("Room data not found for selected room.");
+                        }
+                    })
+                    .catch(error => console.error("Error loading JSON:", error));
+            } else {
+                console.warn("No room selected to display information.");
+            }
+        }
+    }
+
+
     centerSelectedBed(event) {
         // Convert mouse position to normalized device coordinates (-1 to +1)
         this.mousePosition.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -407,6 +483,7 @@ export default class ThumbRaiser {
             //console.log(pickedObject.userData);
             if (pickedObject?.userData?.selectable) {
                 const objectPosition = pickedObject.position;
+                this.selectedRoomNumber = pickedObject.number;
 
                 console.log("Selected " + pickedObject.name + " in position "
                     + "{ x:" + objectPosition.x
