@@ -7,6 +7,8 @@ import { PatientListComponent } from './presentation/components/patient-list/pat
 import { StaffCreateComponent } from './presentation/components/staff-create/staff-create.component';
 import { StaffUpdateComponent } from './presentation/components/staff-update/staff-update.component';
 import { ListAllStaffComponent } from './presentation/components/list-all-staff/list-all-staff.component';
+import { SpecializationCreateComponent } from './presentation/components/specialization-create/specialization-create.component';
+import { ListAllSpecializationComponent } from './presentation/components/list-all-specialization/list-all-specialization.component';
 import { AdminMenuComponent } from './presentation/components/admin-menu/admin-menu.component';
 import { RegisterUserComponent } from './presentation/components/register-user/register-user.component';
 import { UpdateUserComponent } from './presentation/components/update-user/update-user.component';
@@ -55,6 +57,8 @@ const routes: Routes = [
       { path: 'admin/create-staff', component: StaffCreateComponent },
       { path: 'admin/list-all-staff', component: ListAllStaffComponent },
       { path: 'admin/update-staff/:licenceNumber', component: StaffUpdateComponent },
+      { path: 'admin/create-specialization', component: SpecializationCreateComponent },
+      { path: 'admin/list-all-specialization', component: ListAllSpecializationComponent },
       { path: 'admin/list-operationtype', component: ListOperationtypeComponent},
       { path: 'admin/create-medical-condition', component: CreateMedicalConditionComponent },
       { path: 'admin/list-medical-condition', component: MedicalConditionListComponent },

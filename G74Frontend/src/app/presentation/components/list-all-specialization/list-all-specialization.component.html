@@ -1,0 +1,20 @@
+<table>
+    <thead>
+        <tr>
+            <th>Code</th>
+            <th>Designation</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let specialization of specializations">
+            <td>{{specialization.code}}</td>
+            <td>{{specialization.designation}}</td>
+        </tr>
+        <tr>
+        </tr>
+    </tbody>
+
+    @if (message) {
+    <div class="alert">{{ message }}</div>
+    }
+</table>

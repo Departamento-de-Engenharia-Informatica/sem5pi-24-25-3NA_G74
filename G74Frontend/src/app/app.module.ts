@@ -24,6 +24,8 @@ import { AllergyCreateComponent } from './presentation/components/allergy-create
 import { AllergyUpdateComponent } from './presentation/components/allergy-update/allergy-update.component';
 import {AllergyListComponent} from './presentation/components/allergy-list/allergy-list.component';
 import { ThreejsViewerComponent } from './presentation/components/threejs-viewer/threejs-viewer.component';
+import { ListAllSpecializationComponent } from './presentation/components/list-all-specialization/list-all-specialization.component';
+import { SpecializationCreateComponent } from './presentation/components/specialization-create/specialization-create.component';
 
 
 @NgModule({
@@ -45,7 +47,6 @@ import { ThreejsViewerComponent } from './presentation/components/threejs-viewer
     AllergyUpdateComponent,
     AllergyListComponent,
     ThreejsViewerComponent,
-
   ],
   imports: [
     BrowserModule,
