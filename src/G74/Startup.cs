@@ -149,6 +149,9 @@ public class Startup
         services.AddScoped<IStaffRepository, StaffRepository>();
         services.AddScoped<IStaffService, StaffService>();
         services.AddScoped<StaffController>();
+        services.AddScoped<ISpecializationRepository, SpecializationRepository>();
+        services.AddScoped<ISpecializationService, SpecializationService>();
+        services.AddScoped<SpecializationController>();
         services.AddScoped<IOperationTypeRepository,OperationTypeRepository>();
         services.AddScoped<IAppointmentRepository,AppointmentRepository>();
         services.AddScoped<IAppServiceAppointment,AppServiceAppointment>();

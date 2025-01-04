@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class StaffViewModel {
   staffRepository = inject(StaffService);
+  
 
   createStaffProfile(staff: Staff): Observable<Staff> {
     return this.staffRepository.createStaffProfile(staff);

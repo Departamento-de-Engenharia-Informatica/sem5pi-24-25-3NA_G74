@@ -1,0 +1,16 @@
+<form [formGroup]="specializationForm" (ngSubmit)="handleSubmit()" class="p-4">
+    <div class="mb-3">
+        <label for="code" class="form-label">Code:</label>
+        <input id="code" type="text" formControlName="code" class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <label for="designation" class="form-label">Designation:</label>
+        <input id="designation" type="text" formControlName="designation" class="form-control">
+    </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="!specializationForm.valid">Submit</button>
+</form>
+@if (message) {
+<p>{{ message }}</p>
+}
