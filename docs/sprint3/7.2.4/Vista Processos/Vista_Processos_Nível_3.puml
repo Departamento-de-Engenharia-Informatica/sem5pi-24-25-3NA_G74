@@ -1,0 +1,86 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+participant "MedicalConditionRoute" as mcr
+
+participant "MedicalConditionController" as mcc
+
+participant "MedicalConditionService" as mcs
+
+participant "MedicalCondition" as mc
+
+participant "MedicalConditionRepo" as mcrepo
+
+participant "MedicalConditionMapper" as mcm
+
+participant "MedicalConditionSchema" as mcschema
+
+
+-> mcr : POST
+
+activate mcr
+
+mcr -> mcc : createMedicalCondition(req,res,next)
+
+activate mcc
+
+mcc -> mcs : createMedicalCondition(medicalConditionDto)
+
+activate mcs
+
+mcs -> mc : create(medicalConditionDto)
+
+activate mc
+
+mc --> mcs: medicalConditionOrError : Result<MedicalCondition>
+
+deactivate mc
+
+mcs -> mcrepo : save(medicalConditionResult)
+
+activate mcrepo
+
+mcrepo -> mcm : toPersistence(medicalCondition)
+
+activate mcm
+
+mcm --> mcrepo : rawMedicalCondition
+
+deactivate mcm
+
+mcrepo -> mcschema : create(rawMedicalCondition)
+
+activate mcschema
+
+mcschema --> mcrepo : medicalConditionCreated
+
+deactivate mcschema
+
+mcrepo -> mcm : toDomain(medicalConditionCreated)
+
+activate mcm
+
+mcm --> mcrepo : medicalCondition
+
+deactivate mcm
+
+mcrepo --> mcs : savedMedicalCondition : Promise<MedicalCondition>
+
+deactivate mcrepo
+
+mcs -> mcm : toDto(savedMedicalCondition)
+
+activate mcm
+
+mcm --> mcs : medicalConditionDtoResult
+
+deactivate mcm
+
+mcs --> mcc : medicalConditionDto
+
+mcc --> mcr : medicalConditionDto
+
+<-- mcr : medicalConditionDto
+@enduml

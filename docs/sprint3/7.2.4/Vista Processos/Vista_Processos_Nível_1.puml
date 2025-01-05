@@ -1,0 +1,31 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor "Administrator" as admin
+
+participant ":SARM" as sys
+
+
+activate admin
+
+admin -> sys : Asks add new medical condition
+
+activate sys
+
+alt success
+
+    sys --> admin : Confirms adding success
+
+else failure
+
+    sys --> admin : Informs adding was unsuccessful
+
+deactivate sys
+    
+deactivate admin
+
+end
+
+@enduml
