@@ -14,9 +14,9 @@ export default (app: Router) => {
     '', // empty string means this handles the base route /medical-record
     async (req, res, next) => {
       try {
-        const medicalRecordServiceInstance = Container.get(MedicalRecordService);
-        const { records } = await medicalRecordServiceInstance.getAll();
-        return res.status(200).json({ records });
+        const medicalRecordControllerInstance = Container.get(MedicalRecordController);
+        const result = await medicalRecordControllerInstance.getAll();
+        return res.status(200).json(result);
       } catch (e) {
         return next(e);
       }
@@ -33,8 +33,8 @@ export default (app: Router) => {
     async (req, res, next) => {
       try {
         console.log(req.body)
-        const medicalRecordServiceInstance = Container.get(MedicalRecordService);
-        const record = await medicalRecordServiceInstance.getByPatientId(req.params.patientId);
+        const medicalRecordControllerInstance = Container.get(MedicalRecordController);
+        const record = await medicalRecordControllerInstance.getByPatientId(req.params.patientId);
         return res.status(200).json({ record });
       } catch (e) {
         return next(e);

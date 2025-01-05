@@ -25,7 +25,7 @@ export class MedicalRecordViewModel {
     // }
 
     readMedicalRecord(){
-        return this.medicalRecordService.getMedicalRecords();
+        return this.medicalRecordService.readMedicalRecord();
     }
     searchMedicalRecordByMedicalCondition(medicalCondition: string){
         return this.medicalRecordService.searchByMedicalCondition(medicalCondition);

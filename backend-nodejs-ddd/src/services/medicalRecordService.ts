@@ -1,30 +1,51 @@
 import { Service, Inject } from 'typedi';
 import MedicalRecordRepo from '../repos/medicalRecordRepo';
 import IMedicalRecordService from './IServices/IMedicalRecordService';
+import { Result } from '../core/logic/Result';
+import IMedicalRecordDTO from '../dto/IMedicalRecordDTO';
 
 @Service()
 export default class MedicalRecordService implements IMedicalRecordService {
   
   constructor(@Inject('MedicalRecordRepo') private medicalRecordRepo: MedicalRecordRepo) {}
 
-  public async getAll() {
+  public async getAll(): Promise<Result<IMedicalRecordDTO[]>> {
     try {
       const records = await this.medicalRecordRepo.findAll();
-      return { records };
+      const medicalRecordDTOs: IMedicalRecordDTO[] = records.map(record => ({
+        id: record._id.toString(),
+        medicalRecordCode: record.medicalRecordCode,
+        allergies: record.allergies,
+        medicalConditions: record.medicalConditions,
+        freeText: record.freeText,
+        createdAt: record.createdAt.toISOString(),
+        updatedAt: record.updatedAt.toISOString()
+      }));
+      return Result.ok<IMedicalRecordDTO[]>(medicalRecordDTOs);
     } catch (e) {
-      throw e;
+      return Result.fail<IMedicalRecordDTO[]>(e.message);
     }
   }
 
-  public async getByPatientId(patientId: string) {
+  public async getByPatientId(patientId: string): Promise<Result<IMedicalRecordDTO>> {
     try {
+      console.log(patientId);
       const record = await this.medicalRecordRepo.findByPatientId(patientId);
       if (!record) {
-        throw new Error('Medical record not found for this patient');
+        return Result.fail<IMedicalRecordDTO>('Medical record not found for this patient');
       }
-      return { record };
+      const medicalRecordDTO: IMedicalRecordDTO = {
+        id: record._id.toString(),
+        medicalRecordCode: record.medicalRecordCode,
+        allergies: record.allergies,
+        medicalConditions: record.medicalConditions,
+        freeText: record.freeText,
+        createdAt: record.createdAt.toISOString(),
+        updatedAt: record.updatedAt.toISOString()
+      };
+      return Result.ok<IMedicalRecordDTO>(medicalRecordDTO);
     } catch (e) {
-      throw e;
+      return Result.fail<IMedicalRecordDTO>(e.message);
     }
   }
 

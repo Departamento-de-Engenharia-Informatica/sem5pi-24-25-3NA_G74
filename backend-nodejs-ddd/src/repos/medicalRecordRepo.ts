@@ -49,9 +49,10 @@ export default class MedicalRecordRepo {
     }
   }
 
-  public async findByPatientId(patientId: string) {
+  
+  public async findByPatientId(medicalRecordCode: string) {
     try {
-      const record = await this.medicalRecordSchema.findOne({ patientId });
+      const record = await this.medicalRecordSchema.findOne({ medicalRecordCode });
       return record;
     } catch (err) {
       throw err;

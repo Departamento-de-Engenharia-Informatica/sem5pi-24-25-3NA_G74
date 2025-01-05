@@ -19,17 +19,15 @@ export class MedicalRecordService {
   
     constructor() {}
 
-    getMedicalRecords(): Observable<{records: MedicalRecordDTO[] }> {
-        return this.http.get<{ records: MedicalRecord[] }>(this.apiUrl).pipe(
-            map(response => ({
-                records: response.records.map(record => ({
-                    medicalRecordCode: record.medicalRecordCode,
-                    medicalConditions: record.medicalConditions,
-                    allergies: record.allergies,
-                    freeText: record.freeText
-                }))
-            }))
-        );
+    readMedicalRecord(): Observable<{ isSuccess: boolean; isFailure: boolean; error: any; _value: MedicalRecordDTO[] }> {
+        // return this.http.get<{ records: MedicalRecordDTO[] }>(this.apiUrl).pipe(
+        //     tap(response => console.log('Received response from backend 2:', response)), // Log successful response
+        //         catchError(error => {
+        //             console.error('Error response from backend:', error); // Log error response
+        //             throw error; // Re-throw error to be handled by calling service
+        //         })
+        // );
+        return this.http.get<{ isSuccess: boolean; isFailure: boolean; error: any; _value: MedicalRecordDTO[] }>(this.apiUrl);
     }
 
     searchByMedicalCondition(medicalCondition: string): Observable<{records: MedicalRecordDTO[]}>{

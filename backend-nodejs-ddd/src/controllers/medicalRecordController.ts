@@ -54,5 +54,13 @@ export default class MedicalRecordController extends BaseController implements I
     }
     throw new Error('Method not implemented.');
   }
+
+  getByPatientId(patientId: string){
+    return this.medicalRecordServiceInstance.getByPatientId(patientId);
+  }
+
+  getAll(){
+    return this.medicalRecordServiceInstance.getAll();
+  }
   
 }

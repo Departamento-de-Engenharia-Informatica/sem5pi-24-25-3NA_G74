@@ -148,7 +148,7 @@ export class MedicalRecordDashComponent implements OnInit {
           }
       )
         this.isLoading = false;
-        if (!results || !results.length) {
+        if (!Array.isArray(results) || !results.length) {
           this.message = 'No allergy found.';
         }
       });
@@ -156,13 +156,17 @@ export class MedicalRecordDashComponent implements OnInit {
 
   fetchMedicalRecords(): void {
     this.isLoading = true;
-   
+    this.message = '';
 
     this.medicalRecordViewModel.readMedicalRecord().subscribe({
-      next: (response: { records: MedicalRecordDTO[] }) => {
-        this.medicalRecords = response.records; 
-        console.log(this.medicalRecords);
-        
+      next: (response: { isSuccess: boolean; isFailure: boolean; error: any; _value: MedicalRecordDTO[] }) => {
+        if (response.isSuccess && Array.isArray(response._value)) {
+          this.medicalRecords = response._value;
+          console.log('Fetched medical records:', this.medicalRecords);
+        } else {
+          this.medicalRecords = [];
+          this.message = 'No medical records found.';
+        }
         this.isLoading = false;
       },
       error: (error) => {
@@ -171,8 +175,7 @@ export class MedicalRecordDashComponent implements OnInit {
         console.error('Error fetching medical records:', error);
       }
     });
-
-  }
+}
 
   fetchPatients(): void {
     this.isLoading = true;
