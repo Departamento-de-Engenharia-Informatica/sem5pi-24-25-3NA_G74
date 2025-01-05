@@ -5,7 +5,7 @@ autonumber
 
 actor "Doctor" as doc
 
-title "Put Medical Record"
+title "FindById Medical Record"
 
 box "<<Context (C4)>>\n Surgical Appointment and Resource Management"
 participant Visualization as ui <<Container(C4)>>
@@ -14,11 +14,11 @@ participant Backoffice as bo <<Container(C4)>>
 
 activate doc
 
-doc -> ui : Put Medical Record
+doc -> ui : FindById Medical Record
 
 activate ui
 
-ui -> bo : Put Medical Record
+ui -> bo : FindById Medical Record
 
 activate bo
 

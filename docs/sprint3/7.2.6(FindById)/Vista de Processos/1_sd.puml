@@ -1,6 +1,6 @@
 @startuml
 
-title "PUT Medical Record"
+title "FindById Medical Record"
 
 actor Doctor as doc
 
@@ -8,7 +8,7 @@ participant ":SARM"  as sys
 
 activate doc
 
-doc -> sys : put medical record
+doc -> sys : FindById medical record
 
 activate sys
 
