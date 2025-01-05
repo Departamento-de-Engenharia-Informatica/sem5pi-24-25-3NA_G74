@@ -20,16 +20,20 @@ export default class MedicalRecordRepo {
   public async create(recordData) {
     try {
       // First check if a record with this patientId already exists
-      const existingRecord = await this.medicalRecordSchema.findOne({ patientId: recordData.patientId });
+      const existingRecord = await this.medicalRecordSchema.findOne({ medicalRecordCode: recordData.medicalRecordCode });
+      
       if (existingRecord) {
         throw new Error('Medical record already exists for this patient');
       }
 
       const record = new this.medicalRecordSchema(recordData);
+      
       const savedRecord = await record.save();
+      
       return savedRecord;
     } catch (err) {
       if (err.code === 11000) {
+        
         throw new Error('Medical record already exists for this patient');
       }
       throw err;
@@ -45,19 +49,20 @@ export default class MedicalRecordRepo {
     }
   }
 
-  public async findByPatientId(patientId: string) {
+  
+  public async findByPatientId(medicalRecordCode: string) {
     try {
-      const record = await this.medicalRecordSchema.findOne({ patientId });
+      const record = await this.medicalRecordSchema.findOne({ medicalRecordCode });
       return record;
     } catch (err) {
       throw err;
     }
   }
 
-  public async updateByPatientId(patientId: string, updateData: any) {
+  public async updateByPatientId(medicalRecordCode: string, updateData: any) {
     try {
       const updatedRecord = await this.medicalRecordSchema.findOneAndUpdate(
-        { patientId },
+        { medicalRecordCode },
         { $set: updateData },
         { new: true, runValidators: true },
       );

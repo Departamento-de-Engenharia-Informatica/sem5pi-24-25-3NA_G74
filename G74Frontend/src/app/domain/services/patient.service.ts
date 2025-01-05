@@ -26,7 +26,7 @@ export class PatientService{
             throw error; // Re-throw error to be handled by calling service
           })
         );
-      }
+    }
     
     updatePatientProfile(patient: Partial<Patient>, medicalRecordNumber: string): Observable<Patient> {
         const url = `${this.apiUrl}${medicalRecordNumber}`;

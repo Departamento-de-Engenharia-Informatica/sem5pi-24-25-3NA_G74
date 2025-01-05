@@ -27,9 +27,9 @@
       
       <form (ngSubmit)="addMedicalRecord()">
           <div>
-              <label for="patientId">Patient ID:</label>
+              <label for="patientId">Medical Record Number:</label>
               <br>
-              <select id="patientId" [(ngModel)]="medicalRecord.patientId" name="patientId" required>
+              <select id="patientId" [(ngModel)]="medicalRecord.medicalRecordCode" name="patientId" required>
                 <option *ngFor="let patient of patients" [value]="patient.medicalRecordNumber">{{ patient.medicalRecordNumber }}</option>
               </select>
           </div>
@@ -38,7 +38,7 @@
               <br>
               <select id="medicalConditions" name="medicalConditions" multiple
                 (change)="onMedicalConditionsChange($event)">
-              <option *ngFor="let condition of medicalConditions" [value]="condition.medicalConditionCode">
+              <option *ngFor="let condition of medicalConditions" [value]="condition.designation">
                 {{ condition.designation }}
               </option>
             </select>
@@ -48,7 +48,7 @@
               <br>
               <select id="allergies" name="allergies" multiple
                 (change)="onAllergiesChange($event)">
-                <option *ngFor="let allergy of allergies" [value]="allergy.code">
+                <option *ngFor="let allergy of allergies" [value]="allergy.designation">
                   {{ allergy.designation }}
                 </option>
               </select>
@@ -78,7 +78,7 @@
     <div *ngFor="let record of medicalRecords; let i = index; trackBy: trackByIndex" class="medical-record">
 
       <ng-template #viewMode>
-        <div><strong>Patient ID:</strong> {{ record.patientId }}</div>
+        <div><strong>Medical Record Number:</strong> {{ record.medicalRecordCode }}</div>
         <div><strong>Alergies:</strong> {{ record.allergies.join(', ') }}</div>
         <div><strong>Medical Conditions:</strong> {{ record.medicalConditions.join(', ') }}</div>
         <div><strong>Free Text:</strong> {{ record.freeText }}</div>
@@ -88,44 +88,38 @@
       </ng-template>
 
         <!--If edit button is pressed-->
-        <div *ngIf="selectedForUpdate && selectedForUpdate.patientId === record.patientId; else viewMode" class="medical-record">
+        <div *ngIf="selectedForUpdate && selectedForUpdate.medicalRecordCode === record.medicalRecordCode; else viewMode" class="medical-record">
           <form (ngSubmit)="editMedicalRecord(selectedForUpdate)">
-            
             <div>
-                <div><strong>Patient ID:</strong> {{ selectedForUpdate.patientId }}</div>
-                
-
-
-                <label for="medicalConditions">Medical Conditions:</label>
-                <br>
-                <select id="medicalConditions" name="medicalConditions" multiple
-                  (change)="onMedicalConditionsChange($event)">
-                <option *ngFor="let condition of medicalConditions" [value]="condition.medicalConditionCode">
+              <div><strong>Medical Record Number:</strong> {{ selectedForUpdate.medicalRecordCode }}</div>
+        
+              <label for="medicalConditions">Medical Conditions:</label>
+              <br>
+              <select id="medicalConditions" name="medicalConditions" multiple [(ngModel)]="selectedForUpdate.medicalConditions">
+                <option *ngFor="let condition of medicalConditions" [value]="condition.designation">
                   {{ condition.designation }}
                 </option>
               </select>
             </div>
             <div>
-                <label for="allergies">Allergies:</label>
-                <br>
-                <select id="allergies" name="allergies" multiple
-                  (change)="onAllergiesChange($event)">
-                  <option *ngFor="let allergy of allergies" [value]="allergy.code">
-                    {{ allergy.designation }}
-                  </option>
-                </select>
+              <label for="allergies">Allergies:</label>
+              <br>
+              <select id="allergies" name="allergies" multiple [(ngModel)]="selectedForUpdate.allergies">
+                <option *ngFor="let allergy of allergies" [value]="allergy.designation">
+                  {{ allergy.designation }}
+                </option>
+              </select>
             </div>
             <div>
-                <label for="freeText">Free Text:</label>
-                <textarea type="text" id="freeText" [(ngModel)]="medicalRecord.freeText" name="freeText" required style="height: 200px;width: 100%;text-align: left; vertical-align: top;"></textarea>
+              <label for="freeText">Free Text:</label>
+              <textarea type="text" id="freeText" [(ngModel)]="selectedForUpdate.freeText" name="freeText" required style="height: 200px;width: 100%;text-align: left; vertical-align: top;"></textarea>
             </div>
             <div style="margin-top: 15px;">
-              <button type="submit" class="edit-btn" style="margin-right: 5px;" (click)="onSubmit()" >Save</button>
+              <button type="submit" class="edit-btn" style="margin-right: 5px;" (click)="update()">Save</button>
               <button type="button" class="edit-btn" (click)="cancelEdit()">Cancel</button>
             </div>
             <hr>
-        </form>
-
+          </form>
         </div>
         <hr>
     </div>

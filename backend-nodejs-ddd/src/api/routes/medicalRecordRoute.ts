@@ -14,9 +14,9 @@ export default (app: Router) => {
     '', // empty string means this handles the base route /medical-record
     async (req, res, next) => {
       try {
-        const medicalRecordServiceInstance = Container.get(MedicalRecordService);
-        const { records } = await medicalRecordServiceInstance.getAll();
-        return res.status(200).json({ records });
+        const medicalRecordControllerInstance = Container.get(MedicalRecordController);
+        const result = await medicalRecordControllerInstance.getAll();
+        return res.status(200).json(result);
       } catch (e) {
         return next(e);
       }
@@ -33,8 +33,8 @@ export default (app: Router) => {
     async (req, res, next) => {
       try {
         console.log(req.body)
-        const medicalRecordServiceInstance = Container.get(MedicalRecordService);
-        const record = await medicalRecordServiceInstance.getByPatientId(req.params.patientId);
+        const medicalRecordControllerInstance = Container.get(MedicalRecordController);
+        const record = await medicalRecordControllerInstance.getByPatientId(req.params.patientId);
         return res.status(200).json({ record });
       } catch (e) {
         return next(e);
@@ -46,7 +46,7 @@ export default (app: Router) => {
     '',
     celebrate({
       body: Joi.object({
-        patientId: Joi.string().required(),
+        medicalRecordCode: Joi.string(),
         allergies: Joi.array().items(Joi.string().required()).optional(),
         medicalConditions: Joi.array().items(Joi.string().required()).optional(),
         freeText: Joi.string(),
@@ -64,12 +64,13 @@ export default (app: Router) => {
   );
 
   route.patch(
-    '/:patientId',
+    '/:medicalRecordCode',
     celebrate({
       params: Joi.object({
-        patientId: Joi.string().required(),
+        medicalRecordCode: Joi.string().required(),
       }),
       body: Joi.object({
+        medicalRecordCode: Joi.string(),
         freeText: Joi.string().allow('', null),
         allergies: Joi.array().items(Joi.string().required()).optional(),
         medicalConditions: Joi.array().items(Joi.string().required()).optional(),
@@ -79,7 +80,7 @@ export default (app: Router) => {
       try {
         
         const medicalRecordControllerInstance = Container.get(MedicalRecordController);
-        const record = await medicalRecordControllerInstance.updateByPatientId(req.params.patientId, req.body);
+        const record = await medicalRecordControllerInstance.updateByPatientId(req.params.medicalRecordCode, req.body);
         return res.status(200).json({ record });
       } catch (e) {
         return next(e);

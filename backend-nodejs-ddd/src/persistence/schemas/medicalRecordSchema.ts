@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const MedicalRecordSchema = new mongoose.Schema(
   {
-    patientId: {
+    medicalRecordCode: {
       type: String,
       required: true,
       unique: true,

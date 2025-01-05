@@ -1,7 +1,7 @@
 %Instruções: Activar os writes em inicializar para escolher condições de seleção e dimensão dos dados.
 %Usar generate. para correr o algoritmo.
 %Variar as condições de paragem caso desejado, nº gerações, tempo, valor otimo e consistencia.
-
+	
 :-dynamic generations/1.
 :-dynamic population/1.
 :-dynamic prob_crossover/1.
@@ -18,9 +18,9 @@
 :-dynamic best_solution_storage/1.
 :-dynamic agenda_staff2/3.
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 agenda_staff(d001,20241028,[(720,790,m01),(1080,1140,c01)]).
-agenda_staff(d002,20241028,[(850,900,m02),(901,960,m02),(1380,1440,c02)]).
+agenda_staff(d002,20241028,[(1380,1440,c02)]).
 agenda_staff(d003,20241028,[(720,790,m01),(910,980,m02)]).
 agenda_staff(da001,20241028,[]).
 agenda_staff(da002,20241028,[]).
@@ -85,17 +85,15 @@ assignment_surgery(so100007,d003).
 
 agenda_operation_room(or1,20241028,[(520,579,so100000),(1000,1059,so099999)]).
 agenda_operation_room(or2,20241028,[]).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Predicado principal para atribuir as salas às cirurgias
 assign_surgery_room:-
     % Lista todas as salas disponíveis
     findall(Room, agenda_operation_room(Room, _, _), Rooms),
-    %write('Rooms'),write(Rooms),nl,
     % Recupera todas as cirurgias a serem agendadas
     findall(Surgery, surgery_to_schedule(Surgery,_),Surgeries),
     findall(Type, surgery_to_schedule(_,Type),Types),
-    %write('Surgeries'),write(Surgeries),nl,
-    %write('Type'),write(Types),nl,
     % Atribui as salas às cirurgias de forma sequencial
     assign_rooms_to_surgeries(Surgeries,Types,Rooms,0).
 
@@ -105,73 +103,44 @@ assign_rooms_to_surgeries([Surgery|Rest],[Type|RestTypes],Rooms,Index) :-
     % Calcula o índice da sala atual (cíclico)
     length(Rooms, NumRooms),
     RoomIndex is Index mod NumRooms,
-    %write('RoomIndex'),write(RoomIndex),nl,
-    nth0(RoomIndex, Rooms, AssignedRoom), % Obtém a sala correspondente
-    %write('AssignedRoom'),write(AssignedRoom),nl,
-    % Faz o assert para a cirurgia com a sala atribuída
-    %write('aqui'),
-    assertz(surgery_id(Surgery,Type,AssignedRoom)), % Insere o novo fato com a sala atribuída
+    nth0(RoomIndex, Rooms, AssignedRoom),
+    assertz(surgery_id(Surgery,Type,AssignedRoom)), 
     % Passa para a próxima cirurgia e incrementa o índice
     NextIndex is Index + 1,
     assign_rooms_to_surgeries(Rest,RestTypes,Rooms,NextIndex).
 
-trueStartGA(Day):-
-    retractall(agenda_staff1(_,_,_)),
-    retractall(availability(_,_,_)),
-    startGA(Day).
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Começo do algoritmo:
 startGA(Day):-
     findall(Room,agenda_operation_room(Room,_,_),Rooms),
-    %write(Rooms),
-    %length(Rooms,NumRooms),
     retractall(surgery_id(_,_,_)),
     retractall(best_solution_storage(_)),
     assign_surgery_room,
-    %findall(Surgery,surgery_id(Surgery,_,_),Surgeries),
-    %write('Surgeries'),write(Surgeries),nl,
     run(Rooms,Day),
     findall(Solution, best_solution_storage(Solution), BestSolutions),
-    %write('BestSolutions'),write(BestSolutions),nl,
-    %write('Rooms'),write(Rooms),nl,
-    %retractall(agenda_staff1(_,_,_)),
     retractall(agenda_operation_room1(_,_,_)),
     retractall(availability(_,_,_)),
     retractall(agenda_staff2(_,_,_)),
     definitive_schedule(BestSolutions,Day,Rooms),
     write("\nAgendas do staff:\n"),
     findall(Staff, agenda_staff2(Staff, Day, _), Staffs),
-    %write(Staffs),
     sort(Staffs,SortedStaff),
-    %write(SortedStaff),
         forall(member(Staff, Staffs),
            (agenda_staff2(Staff, Day, AgendaStaffs),
             format("  Staff ~w: ~w~n", [Staff, AgendaStaffs]))
-    )
-    .
-
+    ).
 
 definitive_schedule([],_,_):-!.
 definitive_schedule([LOpCode|Rest],Day,[Room|RestRooms]):-
-    %write('Before'),nl,
-    %write('LOpCode'),write(LOpCode),nl,
-    %write('Room'),write(Room),nl,
-    %retractall(agenda_staff1(_,_,_)),
     retractall(agenda_operation_room1(_,_,_)),
-    %retractall(availability(_,_,_)),
-    %schedule_best_solution(Room,Day,LOpCode),
     schedule_all_surgeries(Room,Day,LOpCode,TFin),
-    %write('After'),nl,
-    %write('LOpCode'),write(LOpCode),nl,
-    %write('Room'),write(Room),nl,
     format("Sala de Operações ~w~n", [Room]),
     (   agenda_operation_room1(Room, Day, AgendaRoom),
         AgendaRoom \= [] ->
         format("  Agenda para sala ~w no dia ~w: ~w~n", [Room, Day, AgendaRoom])
     ;   write("  Nenhuma cirurgia agendada.\n")
     ),
-    %write('AfterAfter'),nl,
     findall(Staff, agenda_staff1(Staff, Day, _), Staffs),
-    %write('Staffs'),write(Staffs),nl,
     forall(
         member(Staff, Staffs),
         (
@@ -181,69 +150,42 @@ definitive_schedule([LOpCode|Rest],Day,[Room|RestRooms]):-
             assertz(agenda_staff2(Staff, Day, TotalAgenda))
         )
     ),
-    %write('TotalAgenda'),write(TotalAgenda),nl,
     definitive_schedule(Rest,Day,RestRooms).
 
 
 run([],_):-!.
 run([Room|Rest],Day):-
-    %write('Room'),write(Room),nl,
-    %write('Rest'),write(Rest),nl,
-    %write('Day'),write(Day),nl,
     generate(Room,Day,BestSolution),
-
     % Extrair apenas a parte relevante da solução.
     extract_solution(BestSolution, CleanSolution),
-    %write('CleanSolution: '), write(CleanSolution), nl,
-
     % Adicionar a solução à variável dinâmica.
     assertz(best_solution_storage(CleanSolution)),
     run(Rest,Day).
 
-
 % Extrai apenas a lista de termos do formato [so100002, so100006, so100004]*1125.
 extract_solution(Solution*_, Solution) :- !. % Descarta tudo após o '*'.
-
 
 %Ler e organizar os parametros iniciais.
 % parameters initialization
 initialize:-
-    % Recebe numero geraçoes
-    %write('Number of new generations: '),read(NG),
     (retract(generations(5));true), asserta(generations(5)),
-    % Recebe tamanho populaçao
-%write('Population size: '),read(PS),
-(retract(population(5));true), asserta(population(5)),
-    %Recebe probabilidade crossover
-%write('Probability of crossover (%):'), read(P1),
-%PC is P1/100,
+	(retract(population(5));true), asserta(population(5)),
     PC is 50/100,
-(retract(prob_crossover(50));true), asserta(prob_crossover(PC)),
-    %Recebe probabilidade mutaçao
-%write('Probability of mutation (%):'), read(P2),
-%PM is P2/100,
+	(retract(prob_crossover(50));true), asserta(prob_crossover(PC)),
     PM is 50/100,
-(retract(prob_mutation(50));true), asserta(prob_mutation(PM)).
+	(retract(prob_mutation(50));true), asserta(prob_mutation(PM)).
 
 generate(Room,Day,BestSolution):-
-    %Recebe dados do user
     initialize,
     %Gera populaçao inicial de individuos
     findall(OpCode,surgery_id(OpCode,_,Room),LOpCode),
     length(LOpCode, NumT),
     assertz(tasks(NumT)),
     generate_population(Room,Pop),
-    %write('Pop='),write(Pop),nl,
     evaluate_population(Room,Day,Pop,PopValue),
-    %write('PopValue='),write(PopValue),nl,
     order_population(PopValue,PopOrd),
     generations(NG),
-    %write(NG),
     get_time(StartTime),
-    %write(StartTime),
-    %Aqui é onde serao geradas as proximas geraçoes depois da 0 de acordo com
-    %O numero de geraçoes escolhidas NG
-    %write("Start"),nl,
    
     % Variável para controlar se uma solução foi encontrada
     assertz(solution_found(false)),
@@ -286,37 +228,16 @@ generate(Room,Day,BestSolution):-
 generate_population(Room,Pop):-
     %Tamanho da populaçao
     population(PopSize),
-    %write(PopSize),
-    %total de tarefas
-    %tasks(NumT),
-    %Cria a lista com as tarefas
-    %findall(Task,task(Task,_,_,_),TasksList),
-    %write('aqui'),
     findall(OpCode,surgery_id(OpCode,_,Room),LOpCode),
     length(LOpCode, NumT),
-    %write(LOpCode),
-    %write('passou'),
-    %Gera populaçoes
-    %write(PopSize),
-    %write(LOpCode),
-    %write(NumT),
-    %write(Pop),
     generate_population(PopSize,LOpCode,NumT,Pop).
+
 generate_population(0,_,_,[]):-!.
 generate_population(PopSize,LOpCode,NumT,[Ind|Rest]):-
-    %write('PopSize'),write(PopSize),nl,
-    %write('LOpCode'),write(LOpCode),nl,
-    %write('NumT'),write(NumT),nl,
     PopSize1 is PopSize-1,
     generate_population(PopSize1,LOpCode,NumT,Rest),
     %Gera individuo
-    %write('PopSize'),write(PopSize),nl,
-    %write('LOpCode'),write(LOpCode),nl,
-    %write('NumT'),write(NumT),nl,
     generate_individual(LOpCode,NumT,Ind),
-    %write('PopSize'),write(PopSize),nl,
-    %write('LOpCode'),write(LOpCode),nl,
-    %write('NumT'),write(NumT),nl,
     %Verifica se não é duplicado
     not(member(Ind,Rest)).
 generate_population(PopSize,LOpCode,NumT,L):-
@@ -342,19 +263,8 @@ remove(N,[G1|Rest],G,[G1|Rest1]):- N1 is N-1,
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 evaluate_population(_,_,[],[]).
 evaluate_population(Room,Day,[Ind|Rest],[Ind*TFin|EvaluatedRest]) :-
-    %write('Before schedule'),nl,
-    %write('Room'),write(Room),nl,
-    %write('Day'),write(Day),nl,
-    %write('Ind'),write(Ind),nl,
-    %write('TFin'),write(TFin),nl,
     schedule_all_surgeries(Room,Day,Ind,TFin),
-    %write('Afterschedule'),nl,
-    %write('Room'),write(Room),nl,
-    %write('Day'),write(Day),nl,
-    %write('Ind'),write(Ind),nl,
-    %write('TFin'),write(TFin),nl,
     evaluate_population(Room,Day,Rest,EvaluatedRest).
-
 
 %Ordena populaçao do mais forte para o mais fraco(numero menor melhor resultado)
 order_population(PopValue,PopValueOrd):-
