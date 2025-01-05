@@ -1,0 +1,28 @@
+@startuml
+
+title "CREATE Medical Record"
+
+actor Doctor as doc
+
+participant ":SARM"  as sys
+
+activate doc
+
+doc -> sys : create medical record
+
+activate sys
+
+alt success
+
+sys --> doc : 201 Status
+
+else failure
+
+sys --> doc : Error Code
+
+end
+
+
+
+
+@enduml

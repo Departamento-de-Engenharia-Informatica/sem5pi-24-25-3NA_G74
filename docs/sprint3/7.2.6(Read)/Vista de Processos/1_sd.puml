@@ -1,0 +1,28 @@
+@startuml
+
+title "READ Medical Record"
+
+actor Doctor as doc
+
+participant ":SARM"  as sys
+
+activate doc
+
+doc -> sys : READ medical record
+
+activate sys
+
+alt success
+
+sys --> doc : 200 Status
+
+else failure
+
+sys --> doc : Error Code
+
+end
+
+
+
+
+@enduml

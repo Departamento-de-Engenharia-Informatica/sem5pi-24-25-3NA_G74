@@ -1,0 +1,21 @@
+@startuml
+actor Doctor
+participant MedicalRecordRouter as MedicalRecordRouter
+participant MedicalRecordController as MedicalRecordController
+participant MedicalRecordService as MedicalRecordService
+participant MedicalRecordRepo as MedicalRecordRepo
+database MongoDB
+
+Doctor -> MedicalRecordRouter: GET /medical-record/{patientId}
+MedicalRecordRouter -> MedicalRecordController: getByPatientId(patientId)
+
+MedicalRecordController -> MedicalRecordService: getByPatientId(patientId)
+MedicalRecordService -> MedicalRecordRepo: findByPatientId(patientId)
+
+MedicalRecordRepo -> MongoDB: Query record with patientId = {patientId}
+MongoDB --> MedicalRecordRepo: Medical record (or null)
+MedicalRecordRepo --> MedicalRecordService: Medical record (or null)
+MedicalRecordService --> MedicalRecordController: Medical record (or null)
+MedicalRecordController --> MedicalRecordRouter: Medical record (or error)
+MedicalRecordRouter --> Doctor: Success (200 OK) or Error (404 Not Found)
+@enduml

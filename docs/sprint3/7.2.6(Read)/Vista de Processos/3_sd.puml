@@ -1,0 +1,21 @@
+@startuml
+actor Doctor
+participant MedicalRecordRouter as MedicalRecordRouter
+participant MedicalRecordController as MedicalRecordController
+participant MedicalRecordService as MedicalRecordService
+participant MedicalRecordRepo as MedicalRecordRepo
+database MongoDB
+
+Doctor -> MedicalRecordRouter: GET /medical-record
+MedicalRecordRouter -> MedicalRecordController: getAll()
+
+MedicalRecordController -> MedicalRecordService: getAll()
+MedicalRecordService -> MedicalRecordRepo: findAll()
+
+MedicalRecordRepo -> MongoDB: Query all records
+MongoDB --> MedicalRecordRepo: List of all medical records
+MedicalRecordRepo --> MedicalRecordService: List of medical records
+MedicalRecordService --> MedicalRecordController: List of medical records
+MedicalRecordController --> MedicalRecordRouter: List of medical records
+MedicalRecordRouter --> Doctor: Success (200 OK)\n[List of medical records]
+@enduml

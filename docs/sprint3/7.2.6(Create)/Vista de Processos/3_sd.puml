@@ -1,0 +1,32 @@
+@startuml
+actor Doctor
+participant MedicalRecordRouter as MedicalRecordRouter
+participant MedicalRecordController as MedicalRecordController
+participant MedicalRecordService as MedicalRecordService
+participant MedicalRecordRepo as MedicalRecordRepo
+database MongoDB
+
+Doctor -> MedicalRecordRouter: POST /medical-record\n{ medicalRecordCode, allergies, ... }
+MedicalRecordRouter -> MedicalRecordRouter: Validate request body (Joi)
+MedicalRecordRouter -> MedicalRecordController: create(req.body)
+
+MedicalRecordController -> MedicalRecordService: create(recordData)
+MedicalRecordService -> MedicalRecordRepo: findOne({ medicalRecordCode })
+
+MedicalRecordRepo -> MongoDB: Query by medicalRecordCode
+MongoDB --> MedicalRecordRepo: Record (or null)
+
+alt Record exists
+    MedicalRecordRepo -> MedicalRecordService: Throw Error ("Record already exists")
+    MedicalRecordService --> MedicalRecordController: Error
+    MedicalRecordController --> MedicalRecordRouter: Error (400 Bad Request)
+    MedicalRecordRouter --> Doctor: Error response
+else Record does not exist
+    MedicalRecordRepo -> MongoDB: Insert recordData
+    MongoDB --> MedicalRecordRepo: Saved record
+    MedicalRecordRepo --> MedicalRecordService: Saved record
+    MedicalRecordService --> MedicalRecordController: Saved record
+    MedicalRecordController --> MedicalRecordRouter: Saved record
+    MedicalRecordRouter --> Doctor: Success (201 Created)
+end
+@enduml

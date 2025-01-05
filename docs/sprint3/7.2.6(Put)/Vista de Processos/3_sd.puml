@@ -1,0 +1,32 @@
+@startuml
+actor Doctor
+participant MedicalRecordRouter as MedicalRecordRouter
+participant MedicalRecordController as MedicalRecordController
+participant MedicalRecordService as MedicalRecordService
+participant MedicalRecordRepo as MedicalRecordRepo
+database MongoDB
+
+Doctor -> MedicalRecordRouter: PUT /medical-record/{patientId}\n{ freeText, allergies, ... }
+MedicalRecordRouter -> MedicalRecordRouter: Validate path and body (Joi)
+MedicalRecordRouter -> MedicalRecordController: updateByPatientId(patientId, req.body)
+
+MedicalRecordController -> MedicalRecordService: updateByPatientId(patientId, updateData)
+MedicalRecordService -> MedicalRecordRepo: findByPatientId(patientId)
+
+MedicalRecordRepo -> MongoDB: Query by patientId
+MongoDB --> MedicalRecordRepo: Record (or null)
+
+alt Record does not exist
+    MedicalRecordRepo -> MedicalRecordService: Throw Error ("Record not found")
+    MedicalRecordService --> MedicalRecordController: Error
+    MedicalRecordController --> MedicalRecordRouter: Error (404 Not Found)
+    MedicalRecordRouter --> Doctor: Error response
+else Record exists
+    MedicalRecordRepo -> MongoDB: Update record with updateData
+    MongoDB --> MedicalRecordRepo: Updated record
+    MedicalRecordRepo --> MedicalRecordService: Updated record
+    MedicalRecordService --> MedicalRecordController: Updated record
+    MedicalRecordController --> MedicalRecordRouter: Updated record
+    MedicalRecordRouter --> Doctor: Success (200 OK)
+end
+@enduml
