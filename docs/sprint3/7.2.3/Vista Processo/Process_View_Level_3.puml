@@ -1,0 +1,111 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+box "<<Context (C4)>>\n Visualization UI"
+
+participant "allergy-list component" as pcc
+
+participant "allergy viewmodel" as pvm
+
+participant "allergy service" as ps
+end box
+
+box "<<Context (C4)>>\n Backoffice 2 Web Application"
+
+participant "allergy controller" as ac
+
+participant "allergy service" as as
+
+participant "allergy : Allergy" as a
+
+participant "allergy mapper" as am
+
+participant "allergy repository" as ar
+participant "allergy schema" as asc
+participant "database" as db
+end box
+
+-> pcc : Asks to search for allergies
+
+activate pcc
+
+pcc -> pvm : searchAllergy() 
+
+activate pvm
+
+pvm -> ps : searchAllergy()
+
+activate ps
+
+ps -> ac : GET
+
+activate ac
+
+ac -> as : searchAllergy(allergyDTO)
+
+activate as
+
+as -> a : create(allergyDTO)
+
+as -> ar : findByCode(code)
+
+activate ar
+
+ar -> asc : findByCode(code)
+
+activate asc
+
+asc --> ar : allergyRecord
+deactivate asc
+ar -> db : get(allergyRecord)
+
+
+
+ar -> am : toDomain(allergyRecord)
+
+activate am
+
+am --> ar : allergy
+
+deactivate am
+
+
+
+ar --> as : allergyResult
+
+deactivate ar
+
+as -> am : toDto(allergyResult)
+
+activate am
+
+am --> as : allergyDTO
+
+deactivate am
+
+
+
+as --> ac : response
+
+deactivate as
+
+ac --> ps : response
+
+deactivate ac
+
+ps --> pvm : response
+
+deactivate ps
+
+pvm --> pcc : response
+
+deactivate pvm
+
+<-- pcc : Shows the allergies list in UI
+
+deactivate pcc
+
+
+
+@enduml

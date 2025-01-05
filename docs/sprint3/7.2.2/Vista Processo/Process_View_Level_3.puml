@@ -1,0 +1,111 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+box "<<Context (C4)>>\n Visualization UI"
+
+participant "allergy-create component" as pcc
+
+participant "allergy viewmodel" as pvm
+
+participant "allergy service" as ps
+end box
+
+box "<<Context (C4)>>\n Backoffice 2 Web Application"
+
+participant "allergy controller" as ac
+
+participant "allergy service" as as
+
+participant "allergy : Allergy" as a
+
+participant "allergy mapper" as am
+
+participant "allergy repository" as ar
+participant "allergy schema" as asc
+participant "database" as db
+end box
+
+-> pcc : Clicks create button
+
+activate pcc
+
+pcc -> pvm : createAllergy(allergy) 
+
+activate pvm
+
+pvm -> ps : createAllergy(allergy)
+
+activate ps
+
+ps -> ac : POST
+
+activate ac
+
+ac -> as : createAllergy(allergyDTO)
+
+activate as
+
+as -> a : create(allergyDTO)
+
+as -> ar : save(allergy)
+
+activate ar
+
+ar -> asc : create(allergy)
+
+activate asc
+
+asc --> ar : allergyCreated
+deactivate asc
+ar -> db : save()
+
+
+
+ar -> am : toDomain(allergyCreated)
+
+activate am
+
+am --> ar : allergy
+
+deactivate am
+
+
+
+ar --> as : allergyResult
+
+deactivate ar
+
+as -> am : toDto(allergyResult)
+
+activate am
+
+am --> as : allergyDTO
+
+deactivate am
+
+
+
+as --> ac : response
+
+deactivate as
+
+ac --> ps : response
+
+deactivate ac
+
+ps --> pvm : response
+
+deactivate ps
+
+pvm --> pcc : response
+
+deactivate pvm
+
+<-- pcc : Informs registration success/failure
+
+deactivate pcc
+
+
+
+@enduml

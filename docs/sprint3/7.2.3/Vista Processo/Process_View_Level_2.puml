@@ -1,0 +1,48 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor "Doctor" as admin
+
+
+box "<<Context (C4)>>\n Surgical Appointment and Resource Management"
+
+participant Visualization as ui <<Container(C4)>>
+participant Backoffice as bo <<Container(C4)>>
+
+activate admin
+
+admin -> ui : Asks to search for allergies
+
+activate ui
+
+ui --> admin : Shows the allergies list in UI
+
+
+ui -> bo : GET list allergies
+
+activate bo
+
+alt success
+
+bo --> ui : Status Code 201, allergy list
+
+
+deactivate bo
+
+alt Filters
+
+admin -> ui : Adds filter information
+ui -> bo : GET list allergies
+activate bo
+bo --> ui : Status Code 201, allergy list
+deactivate bo
+ui --> admin : Shows filtered list of allergies
+
+deactivate ui
+
+end
+
+
+@enduml

@@ -1,0 +1,33 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+
+actor "Doctor" as admin
+
+participant ":SARM" as sys
+
+activate admin
+
+admin -> sys : Asks to search for allergies
+
+activate sys
+
+sys --> admin : Shows the allergies list in UI
+
+
+alt Filters
+
+admin -> sys : Adds filter information
+
+else failure
+
+sys --> admin : Shows filtered list of allergies
+
+deactivate sys
+deactivate admin
+
+end
+
+@enduml

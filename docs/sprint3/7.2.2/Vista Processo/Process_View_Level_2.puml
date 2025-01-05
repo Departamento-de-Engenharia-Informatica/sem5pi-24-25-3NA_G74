@@ -1,0 +1,48 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor "Administrator" as admin
+
+
+box "<<Context (C4)>>\n Surgical Appointment and Resource Management"
+
+participant Visualization as ui <<Container(C4)>>
+participant Backoffice as bo <<Container(C4)>>
+
+activate admin
+
+admin -> ui : Asks to create allergy
+
+activate ui
+
+ui --> admin : Shows the create form
+
+admin -> ui: Fills the create form and submits
+
+
+ui -> bo : POST create allergy
+
+activate bo
+
+alt success
+
+bo --> ui : Status Code 201, allergy created
+
+ui --> admin : Confirms creation success
+
+else failure
+
+bo --> ui:  Client/Server error Status Code 402
+
+deactivate bo
+
+ui --> admin: Informs creation failure
+
+deactivate ui
+
+end
+
+
+@enduml

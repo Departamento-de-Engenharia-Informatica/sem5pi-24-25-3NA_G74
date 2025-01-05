@@ -1,0 +1,145 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+box "<<Context (C4)>>\n Visualization UI"
+
+participant "allergy-update component" as pcc
+
+participant "allergy viewmodel" as pvm
+
+participant "allergy service" as ps
+end box
+
+box "<<Context (C4)>>\n Backoffice 2 Web Application"
+
+participant "allergy controller" as ac
+
+participant "allergy service" as as
+
+participant "allergy : Allergy" as a
+
+participant "allergy mapper" as am
+
+participant "allergy repository" as ar
+participant "allergy schema" as asc
+participant "database" as db
+end box
+
+-> pcc : Clicks update button
+
+activate pcc
+
+<-- pcc : Present update form
+
+-> pcc : Enters information and submit
+
+pcc -> pvm : updateAllergy(allergy) 
+
+activate pvm
+
+pvm -> ps : updateAllergy(allergy)
+
+activate ps
+
+ps -> ac : PATCH
+
+activate ac
+
+ac -> as : updateAllergy(allergyDTO)
+
+activate as
+
+as -> a : create(allergyDTO)
+
+as -> ar : findByCode(code)
+
+activate ar
+
+ar -> asc : findByCode(code)
+
+activate asc
+
+asc --> ar : allergyRecord
+deactivate asc
+ar -> db : get(allergyRecord)
+
+
+
+ar -> am : toDomain(allergyRecord)
+
+activate am
+
+am --> ar : allergy
+
+deactivate am
+
+
+
+ar --> as : allergyResult
+
+deactivate ar
+
+
+
+as -> ar : save(allergy)
+
+activate ar
+
+ar -> asc : update(allergy)
+
+activate asc
+
+asc --> ar : allergyUpdated
+deactivate asc
+ar -> db : save()
+
+
+
+ar -> am : toDomain(allergyUpdated)
+
+activate am
+
+am --> ar : allergy
+
+deactivate am
+
+
+
+ar --> as : allergyResult
+
+deactivate ar
+
+as -> am : toDto(allergyResult)
+
+activate am
+
+am --> as : allergyDTO
+
+deactivate am
+
+
+
+as --> ac : response
+
+deactivate as
+
+ac --> ps : response
+
+deactivate ac
+
+ps --> pvm : response
+
+deactivate ps
+
+pvm --> pcc : response
+
+deactivate pvm
+
+<-- pcc : Informs update success/failure
+
+deactivate pcc
+
+
+
+@enduml
