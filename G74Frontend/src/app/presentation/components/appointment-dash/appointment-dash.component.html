@@ -1,0 +1,33 @@
+<p>Appointment Dashboard</p>
+
+<form (ngSubmit)="onSubmit()" #appointmentForm="ngForm">
+  <div>
+    <label for="operationRequestId">Operation Request ID:</label>
+    <input type="number" id="operationRequestId" name="operationRequestId" [(ngModel)]="appointment.operationRequestId" required>
+  </div>
+  <div>
+    <label for="operationTypeId">Operation Type ID:</label>
+    <input type="text" id="operationTypeId" name="operationTypeId" [(ngModel)]="appointment.operationTypeId" required>
+  </div>
+  <div>
+    <label for="surgeryRoomId">Surgery Room ID:</label>
+    <input type="number" id="surgeryRoomId" name="surgeryRoomId" [(ngModel)]="appointment.surgeryRoomId" required>
+  </div>
+  <div>
+    <label for="date">Date:</label>
+    <input type="datetime-local" id="date" name="date" [(ngModel)]="appointment.date" required>
+  </div>
+  <div>
+    <label for="time">Time:</label>
+    <input type="number" id="time" name="time" [(ngModel)]="appointment.time" required>
+  </div>
+  <div>
+    <label for="status">Status:</label>
+    <select id="status" name="status" [(ngModel)]="appointment.status" required>
+      <option value="Scheduled">Scheduled</option>
+      <option value="Completed">Completed</option>
+      <option value="Canceled">Canceled</option>
+    </select>
+  </div>
+  <button type="submit">Create Appointment</button>
+</form>

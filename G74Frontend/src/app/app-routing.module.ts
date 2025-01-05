@@ -35,6 +35,7 @@ import {AllergyUpdateComponent} from './presentation/components/allergy-update/a
 import {AllergyListComponent} from './presentation/components/allergy-list/allergy-list.component';
 import { MedicalRecordDashComponent } from './presentation/components/medical-record-dash/medical-record-dash.component';
 import { ThreejsViewerComponent } from './presentation/components/threejs-viewer/threejs-viewer.component';
+import { AppointmentDashComponent } from './presentation/components/appointment-dash/appointment-dash.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/main', pathMatch: 'full' },
@@ -79,6 +80,7 @@ const routes: Routes = [
       { path: 'doctor/list-allergy', component: AllergyListComponent },
       { path: 'doctor/medical-records', component: MedicalRecordDashComponent, canActivate: [AuthGuard], data: { role: 'Doctor' } },
       { path: 'doctor/hospital3D-viewer', component: ThreejsViewerComponent, canActivate: [AuthGuard], data: { role: 'Doctor' } },
+      { path: 'doctor/appointments', component: AppointmentDashComponent, canActivate: [AuthGuard], data: { role: 'Doctor' } },
 
     ]
 

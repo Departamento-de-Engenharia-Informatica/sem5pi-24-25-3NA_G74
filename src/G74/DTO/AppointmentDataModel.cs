@@ -6,7 +6,7 @@ namespace G74.DTO;
 
 public class AppointmentDataModel : Entity<Guid>
 {
-    public int AppointmentId {get; set;}
+    
     public int OperationRequestId { get;  set; }
     public int SurgeryRoomId { get;  set; }
     public string Date { get;  set; }
