@@ -11,22 +11,38 @@ participant MedicalRecordRoute as route
 participant MedicalRecordController as controller
 participant MedicalRecordService as service
 participant MedicalRecordRepo as repo
-participant MedicalRecordSchema as schema
+participant "MedicalRecordSchema:DB Mongo" as db
+
+participant MedicalRecordMapper as mapper
+participant MedicalRecordDTO as dto
+participant MedicalRecord as medicalRecord
 end box
 
 doc -> route: PATCH /medical-record/:medicalRecordCode\n{body: {...}}
 route -> controller: updateByPatientId(medicalRecordCode, body)
 controller -> service: updateByPatientId(medicalRecordCode, body)
 service -> repo: findByPatientId(medicalRecordCode)
-repo -> schema: findOne({medicalRecordCode})
-schema --> repo: MedicalRecord
-repo --> service: MedicalRecord
-service -> repo: updateByPatientId(medicalRecordCode, updateData)
-repo -> schema: findOneAndUpdate({medicalRecordCode}, {...}, options)
-schema --> repo: Updated MedicalRecord
-repo --> service: Updated MedicalRecord
-service --> controller: Updated MedicalRecord
-controller --> route: Updated MedicalRecord
+repo -> db: findOne({medicalRecordCode})
+db --> repo: medicalRecordSchema
+repo -> mapper: toDomain(medicalRecordSchema)
+mapper -> medicalRecord: new MedicalRecord(updated medicalRecordSchema)
+medicalRecord --> mapper: medicalRecord
+mapper --> repo: medicalRecord
+repo --> service: medicalRecord
+service -> repo: updateByPatientId(medicalRecordCode, medicalRecord)
+repo -> db: findOneAndUpdate({medicalRecordCode}, {...}, options)
+db --> repo: updated medicalRecordSchema
+repo -> mapper: toDomain(updated medicalRecordSchema)
+mapper -> medicalRecord: new MedicalRecord(updated medicalRecordSchema)
+medicalRecord --> mapper: medicalRecord
+mapper --> repo: updated medicalRecord
+repo --> service: updated medicalRecord
+service -> mapper: toDTO(Updated MedicalRecord)
+mapper -> dto: new MedicalRceordDTO(medicalRecord)
+dto --> mapper: dto
+mapper --> service: Updated MedicalRecordDTO
+service --> controller: Updated MedicalRecordDTO
+controller --> route: Updated MedicalRecordDTO
 route --> doc: HTTP 200 {record: Updated MedicalRecord}
 
 @enduml
