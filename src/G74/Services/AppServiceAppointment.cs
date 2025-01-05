@@ -18,4 +18,12 @@ public class AppServiceAppointment : IAppServiceAppointment
         return operationData;
     }
 
+    public async Task<AppointmentDataModel> Update(AppointmentDataModel appointmentDataModel, long id)
+    {
+        await _appointmentRepository.Update(appointmentDataModel, id);
+        return appointmentDataModel;
+    }
+
+    
+
 }

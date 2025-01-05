@@ -14,8 +14,15 @@ public class AppointmentController : ControllerBase
     [HttpPost]
     public async Task<AppointmentDataModel> Create([FromBody] AppointmentDataModel appointmentDataModel)
     {
-        Console.WriteLine("Cheguei");
+        
         await _appServiceAppointment.RegisterAppointment(appointmentDataModel);
+        return appointmentDataModel;
+    }
+
+    [HttpPut("{id}")]
+    public async Task<AppointmentDataModel> Update([FromBody] AppointmentDataModel appointmentDataModel, long id)
+    {
+        await _appServiceAppointment.Update(appointmentDataModel, id);
         return appointmentDataModel;
     }
     

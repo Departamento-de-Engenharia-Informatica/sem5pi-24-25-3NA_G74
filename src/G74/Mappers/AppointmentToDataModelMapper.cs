@@ -18,22 +18,22 @@ public class AppointmentToDataModelMapper
     public static Appointment FromDataModelToDomain(AppointmentDataModel appointmentDataModel){
         StatusAppointment statusAppointment = StatusAppointment.canceled;
 
-        if(appointmentDataModel.status=="scheduled"){
+        if(appointmentDataModel.Status=="scheduled"){
             statusAppointment = StatusAppointment.scheduled;
         }
-        if(appointmentDataModel.status=="completed"){
+        if(appointmentDataModel.Status=="completed"){
             statusAppointment = StatusAppointment.completed;
         }
-        if(appointmentDataModel.status == "canceled"){
+        if(appointmentDataModel.Status == "canceled"){
             statusAppointment = StatusAppointment.canceled;
         }
         
         return new 
              Appointment(
-                appointmentDataModel.operationRequestId,
-                appointmentDataModel.surgeryRoomId,
-                appointmentDataModel.date,
-                appointmentDataModel.time,
+                appointmentDataModel.OperationRequestId,
+                appointmentDataModel.SurgeryRoomId,
+                DateTime.Parse(appointmentDataModel.Date),
+                appointmentDataModel.Time,
                 statusAppointment
             );
         
