@@ -1,0 +1,35 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor "Administrator" as admin
+
+participant ":SARM" as sys
+
+
+activate admin
+
+admin -> sys : Asks to update medical condition
+
+activate sys
+
+sys --> admin : Shows fields that can be updated
+
+admin -> sys : Updates chosen fields
+
+alt success
+
+    sys --> admin : Confirms update success
+
+else failure
+
+    sys --> admin : Informs update was unsuccessful
+
+deactivate sys
+    
+deactivate admin
+
+end
+
+@enduml
