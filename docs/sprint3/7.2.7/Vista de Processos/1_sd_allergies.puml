@@ -1,0 +1,28 @@
+@startuml
+
+title "GET Medical Record by Allergy"
+
+actor Doctor as doc
+
+participant ":SARM"  as sys
+
+activate doc
+
+doc -> sys : get medical record by allergy
+
+activate sys
+
+alt success
+
+sys --> doc : 200 OK Status
+
+else failure
+
+sys --> doc : Error Code
+
+end
+
+
+
+
+@enduml

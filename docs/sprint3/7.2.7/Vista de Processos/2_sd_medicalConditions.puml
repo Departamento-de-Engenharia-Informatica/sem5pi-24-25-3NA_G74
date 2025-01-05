@@ -1,0 +1,44 @@
+@startuml
+
+
+autonumber
+
+actor "Doctor" as doc
+
+title "GET Medical Record by Allergy"
+
+box "<<Context (C4)>>\n Surgical Appointment and Resource Management"
+participant Visualization as ui <<Container(C4)>>
+participant Backoffice as bo <<Container(C4)>>
+
+
+activate doc
+
+doc -> ui : Get Medical Record by Medical Condition
+
+activate ui
+
+ui -> bo : Get Medical Record by Medical Condition
+
+activate bo
+
+
+alt success
+
+bo --> ui : Status Code 200
+
+else failure
+
+bo --> ui:  Error Status Code
+
+end
+
+deactivate bo
+
+
+
+
+
+
+
+@enduml

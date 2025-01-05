@@ -1,0 +1,35 @@
+@startuml
+actor Doctor
+participant "Router" as Router
+participant "MedicalRecordController" as Controller
+participant "MedicalRecordService" as Service
+participant "MedicalRecordRepo" as Repo
+participant "MedicalRecordMapper" as Mapper
+participant "MedicalRecord" as MedicalRecord
+participant "MedicalRecordDTO" as dto
+participant "MedicalRecordSchema:DB" as schema
+
+
+Doctor -> Router : GET /medical-record/medicalCondition/{medicalConditionCode}
+Router -> Controller : findByMedicalCondition(medicalConditionCode)
+Controller -> Service : findByMedicalCondition(medicalConditionCode)
+Service -> Repo : findAll()
+Repo -> schema : find({})
+schema --> Repo : [list of all records]
+Repo --> Service : [list of all records]
+loop "for record in list of all records"
+    alt "if record.medicalConditionCode == medicalConditionCode"
+        Service -> Service : add record to filteredRecords
+    end 
+end
+loop "for record in filteredRecords"
+    Service -> Mapper : mapToDTO(record)
+    Mapper -> dto : new Instance(record)
+    dto --> Mapper : dto
+    Mapper --> Service : dto
+    Service -> Service : add dto to list
+end
+Service --> Controller : [filtered dtos]
+Controller --> Router : [filtered dtos]
+Router --> Doctor : HTTP 200 OK (filtered dtos)
+@enduml
