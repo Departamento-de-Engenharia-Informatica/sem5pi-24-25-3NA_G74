@@ -8,4 +8,7 @@ public interface IAppointmentRepository
     Task<bool> AppointmentExists(string id);
     Task ExportAppointmentDataToProlog();
     Task<Appointment> Create(AppointmentDataModel app);
+
+    Task<Appointment> Update(AppointmentDataModel apppointmentDataModel, long id);
+    
 }

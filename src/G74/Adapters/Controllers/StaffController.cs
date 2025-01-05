@@ -19,7 +19,7 @@ public class StaffController : ControllerBase
     }
 
     // GET: api/Staff/
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [HttpGet]
     public async Task<ActionResult<StaffDto>> GetStaff()
     {
@@ -31,7 +31,7 @@ public class StaffController : ControllerBase
     // TODO: delete console logs and sql logs in console
 
     // GET: api/Staff/licence/682468
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [HttpGet("licence/{licenceNumber}")]
     public async Task<ActionResult<StaffDto>> GetStaffByLicenceNumber(long licenceNumber)
     {
@@ -46,7 +46,7 @@ public class StaffController : ControllerBase
 
     // POST: api/Staff
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<ActionResult<StaffDto>> RegisterStaff([FromBody] StaffDto staffDto)
     {
